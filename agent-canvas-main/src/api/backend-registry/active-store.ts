@@ -68,9 +68,19 @@ function computeSnapshot(
   };
 }
 
-let snapshot: Snapshot = computeSnapshot(
-  readStoredBackends(),
-  readStoredActiveBackend(),
+let madagascarRuntimeBackend: Backend | null = null;
+
+function applyMadagascarRuntime(snapshot: Snapshot): Snapshot {
+  return madagascarRuntimeBackend
+    ? {
+        ...snapshot,
+        active: { backend: madagascarRuntimeBackend, orgId: null },
+      }
+    : snapshot;
+}
+
+let snapshot: Snapshot = applyMadagascarRuntime(
+  computeSnapshot(readStoredBackends(), readStoredActiveBackend()),
 );
 
 const listeners = new Set<Listener>();
@@ -110,8 +120,23 @@ export function getSnapshot(): Snapshot {
 }
 
 export function setActiveSelection(selection: BackendSelection | null): void {
+  madagascarRuntimeBackend = null;
   writeStoredActiveBackend(selection);
-  snapshot = computeSnapshot(snapshot.backends, selection);
+  snapshot = applyMadagascarRuntime(
+    computeSnapshot(snapshot.backends, selection),
+  );
+  notify();
+}
+
+/**
+ * Select the native Madagascar runtime without writing its short-lived session
+ * credential to the persistent backend registry.
+ */
+export function setMadagascarRuntimeBackend(backend: Backend | null): void {
+  madagascarRuntimeBackend = backend;
+  snapshot = applyMadagascarRuntime(
+    computeSnapshot(snapshot.backends, snapshot.selection),
+  );
   notify();
 }
 
@@ -127,7 +152,7 @@ export function setRegisteredBackends(backends: Backend[]): void {
     writeStoredActiveBackend(null);
   }
 
-  snapshot = computeSnapshot(backends, nextSelection);
+  snapshot = applyMadagascarRuntime(computeSnapshot(backends, nextSelection));
   notify();
 }
 
@@ -141,6 +166,7 @@ export function subscribeActiveBackend(listener: Listener): () => void {
 /** Test-only: re-read storage and clear listeners. */
 
 export function __resetActiveStoreForTests(): void {
+  madagascarRuntimeBackend = null;
   snapshot = computeSnapshot(readStoredBackends(), readStoredActiveBackend());
   listeners.clear();
 }

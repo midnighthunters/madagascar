@@ -1,7 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Outfit:wght@100..900&display=swap");
-
 :root {
+  /* Madagascar keeps the desktop shell self-contained; no remote font fetch is required. */
+  --madagascar-forest-950: #07110d;
+  --madagascar-forest-900: #0d1f17;
+  --madagascar-forest-800: #153126;
+  --madagascar-leaf-500: #6ee7a8;
+  --madagascar-leaf-400: #9af2bf;
+  --madagascar-amber-400: #f5c76b;
+  --madagascar-text: #e8f3eb;
+  --madagascar-muted: #8da99a;
+  --madagascar-border: rgba(154, 242, 191, 0.18);
+  --madagascar-danger: #ffb07c;
+
   --oh-bg-dark: var(--cool-grey-950);
   --oh-bg-light: var(--cool-grey-900);
   --oh-bg-input: var(--cool-grey-800);
@@ -11,7 +20,11 @@
   --oh-bg-editor-sidebar: var(--cool-grey-925);
   --oh-bg-editor-active: var(--cool-grey-900);
   --oh-border-editor-sidebar: var(--cool-grey-800);
-  --oh-bg-neutral-muted: color-mix(in srgb, var(--cool-grey-300) 20%, transparent);
+  --oh-bg-neutral-muted: color-mix(
+    in srgb,
+    var(--cool-grey-300) 20%,
+    transparent
+  );
   --bg-dark: var(--oh-bg-dark);
   --bg-light: var(--oh-bg-light);
   --bg-input: var(--oh-bg-input);
@@ -25,19 +38,19 @@
   background-color: var(--oh-color-base) !important;
 
   /* ── Cool Grey Scale (13 shades + 2 pure anchors: white / black) ──────── */
-  --cool-grey-50:  #F7F9FC;
-  --cool-grey-100: #EEF2F7;
-  --cool-grey-200: #DCE3EE;
-  --cool-grey-300: #C3CDDC;
-  --cool-grey-400: #A3B0C4;
-  --cool-grey-500: #7E8A9E;
-  --cool-grey-600: #626D82;
-  --cool-grey-700: #4B5468;
-  --cool-grey-800: #383F50;
-  --cool-grey-900: #2C313F;
-  --cool-grey-925: #21252F;
-  --cool-grey-950: #0B0E14; /* intentional override: preserves original app-shell depth */
-  --cool-grey-975: #05070A;
+  --cool-grey-50: #f7f9fc;
+  --cool-grey-100: #eef2f7;
+  --cool-grey-200: #dce3ee;
+  --cool-grey-300: #c3cddc;
+  --cool-grey-400: #a3b0c4;
+  --cool-grey-500: #7e8a9e;
+  --cool-grey-600: #626d82;
+  --cool-grey-700: #4b5468;
+  --cool-grey-800: #383f50;
+  --cool-grey-900: #2c313f;
+  --cool-grey-925: #21252f;
+  --cool-grey-950: #0b0e14; /* intentional override: preserves original app-shell depth */
+  --cool-grey-975: #05070a;
   /* ─────────────────────────────────────────────────────────────────────── */
 }
 
@@ -133,4 +146,128 @@ code {
 
 .environment-switch-overlay > div {
   animation: environment-switch-overlay-fade 980ms ease-in-out forwards;
+}
+
+.madagascar-workbench-bar {
+  align-items: center;
+  background: linear-gradient(
+    90deg,
+    var(--madagascar-forest-950),
+    var(--madagascar-forest-900)
+  );
+  border-bottom: 1px solid var(--madagascar-border);
+  color: var(--madagascar-text);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  min-height: 3.25rem;
+  padding: 0.5rem 0.85rem;
+  user-select: none;
+}
+
+.madagascar-brand-lockup,
+.madagascar-workbench-controls,
+.madagascar-control,
+.madagascar-workspace-summary {
+  align-items: center;
+  display: flex;
+}
+
+.madagascar-brand-lockup,
+.madagascar-workbench-controls {
+  gap: 0.55rem;
+}
+
+.madagascar-brand-mark {
+  font-size: 1.1rem;
+}
+
+.madagascar-brand-name {
+  color: var(--madagascar-leaf-400);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.madagascar-local-badge {
+  border: 1px solid var(--madagascar-border);
+  border-radius: 999px;
+  color: var(--madagascar-muted);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  padding: 0.15rem 0.4rem;
+}
+
+.madagascar-workspace-summary {
+  color: var(--madagascar-muted);
+  flex: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  min-width: 0;
+}
+
+.madagascar-workspace-path {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.madagascar-workspace-dot {
+  background: var(--madagascar-leaf-500);
+  border-radius: 999px;
+  box-shadow: 0 0 0 3px rgba(110, 231, 168, 0.12);
+  flex: 0 0 auto;
+  height: 0.45rem;
+  width: 0.45rem;
+}
+
+.madagascar-control {
+  background: rgba(7, 17, 13, 0.55);
+  border: 1px solid var(--madagascar-border);
+  border-radius: 0.45rem;
+  color: var(--madagascar-text);
+  gap: 0.35rem;
+  padding: 0.25rem 0.45rem;
+}
+
+.madagascar-control select {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font-size: 0.72rem;
+  max-width: 13rem;
+  outline: 0;
+}
+
+.madagascar-control option {
+  background: var(--madagascar-forest-900);
+  color: var(--madagascar-text);
+}
+
+.madagascar-approval-count {
+  color: var(--madagascar-leaf-400);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.madagascar-approval-count.is-pending {
+  color: var(--madagascar-danger);
+}
+
+@media (max-width: 768px) {
+  .madagascar-workbench-bar {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .madagascar-workspace-summary {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .madagascar-control select {
+    max-width: 7rem;
+  }
 }

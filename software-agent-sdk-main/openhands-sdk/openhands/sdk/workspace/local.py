@@ -1,6 +1,9 @@
+import os
 import shutil
 from pathlib import Path
 from typing import Any
+
+from pydantic import PrivateAttr
 
 from openhands.sdk.git.git_changes import get_git_changes
 from openhands.sdk.git.git_diff import get_git_diff
@@ -17,9 +20,10 @@ logger = get_logger(__name__)
 class LocalWorkspace(BaseWorkspace):
     """Local workspace implementation that operates on the host filesystem.
 
-    LocalWorkspace provides direct access to the local filesystem and command execution
-    environment. It's suitable for development and testing scenarios where the agent
-    should operate directly on the host system.
+    When the Madagascar runtime sets ``MADAGASCAR_WORKSPACE_ROOT``, paths are
+    canonicalized before use and must remain below that root unless the user
+    explicitly chose unrestricted access. This is a host-process guardrail,
+    not a replacement for OS-level sandboxing.
 
     Example:
         >>> workspace = LocalWorkspace(working_dir="/path/to/project")
@@ -28,10 +32,79 @@ class LocalWorkspace(BaseWorkspace):
         ...     content = workspace.read_file("README.md")
     """
 
-    def __init__(self, *, working_dir: str | Path, **kwargs: Any):
+    _project_root: Path | None = PrivateAttr(default=None)
+    _permission: str = PrivateAttr(default="unrestricted")
+
+    def __init__(
+        self,
+        *,
+        working_dir: str | Path,
+        workspace_root: str | Path | None = None,
+        permission: str | None = None,
+        **kwargs: Any,
+    ):
+        project_root_value = workspace_root or os.getenv("MADAGASCAR_WORKSPACE_ROOT")
+        resolved_root = (
+            Path(project_root_value).expanduser().resolve()
+            if project_root_value is not None
+            else None
+        )
+        if resolved_root is not None and not resolved_root.is_dir():
+            raise ValueError(
+                f"Madagascar workspace root must be an existing directory: "
+                f"{resolved_root}"
+            )
+
+        resolved_permission = permission or os.getenv(
+            "MADAGASCAR_PERMISSION", "unrestricted"
+        )
+        if resolved_permission not in {
+            "read",
+            "edit",
+            "execute",
+            "network",
+            "unrestricted",
+        }:
+            raise ValueError(
+                f"Unsupported Madagascar permission: {resolved_permission}"
+            )
+
+        resolved_working_dir = self._resolve_path(
+            Path(working_dir), resolved_root, resolved_permission
+        )
         # Accept Path in signature for ergonomics and type checkers,
         # but normalize to str for the underlying model field.
-        super().__init__(working_dir=str(working_dir), **kwargs)
+        super().__init__(working_dir=str(resolved_working_dir), **kwargs)
+        self._project_root = resolved_root
+        self._permission = resolved_permission
+
+    @staticmethod
+    def _resolve_path(
+        path: Path,
+        project_root: Path | None,
+        permission: str,
+    ) -> Path:
+        if project_root is None:
+            return path
+
+        candidate = path if path.is_absolute() else project_root / path
+        resolved = candidate.expanduser().resolve()
+        if permission != "unrestricted" and (
+            resolved != project_root and not resolved.is_relative_to(project_root)
+        ):
+            raise PermissionError(
+                f"Path is outside the Madagascar workspace root: {resolved}"
+            )
+        return resolved
+
+    def _require_permission(self, operation: str, allowed: set[str]) -> None:
+        if self._permission not in allowed:
+            raise PermissionError(
+                f"Madagascar permission '{self._permission}' does not allow {operation}"
+            )
+
+    def _workspace_path(self, path: str | Path) -> Path:
+        return self._resolve_path(Path(path), self._project_root, self._permission)
 
     def execute_command(
         self,
@@ -53,10 +126,14 @@ class LocalWorkspace(BaseWorkspace):
             CommandResult: Result with stdout, stderr, exit_code, command, and
                 timeout_occurred
         """
-        logger.debug(f"Executing local bash command: {command} in {cwd}")
+        self._require_permission(
+            "command execution", {"execute", "network", "unrestricted"}
+        )
+        resolved_cwd = self._workspace_path(cwd or self.working_dir)
+        logger.debug(f"Executing local bash command: {command} in {resolved_cwd}")
         result = execute_command(
             command,
-            cwd=str(cwd) if cwd is not None else str(self.working_dir),
+            cwd=str(resolved_cwd),
             timeout=timeout,
             print_output=True,
         )
@@ -85,8 +162,11 @@ class LocalWorkspace(BaseWorkspace):
         Returns:
             FileOperationResult: Result with success status and file information
         """
-        source = Path(source_path)
-        destination = Path(destination_path)
+        self._require_permission(
+            "file writes", {"edit", "execute", "network", "unrestricted"}
+        )
+        source = self._workspace_path(source_path)
+        destination = self._workspace_path(destination_path)
 
         logger.debug(f"Local file upload: {source} -> {destination}")
 
@@ -130,8 +210,11 @@ class LocalWorkspace(BaseWorkspace):
         Returns:
             FileOperationResult: Result with success status and file information
         """
-        source = Path(source_path)
-        destination = Path(destination_path)
+        self._require_permission(
+            "file writes", {"edit", "execute", "network", "unrestricted"}
+        )
+        source = self._workspace_path(source_path)
+        destination = self._workspace_path(destination_path)
 
         logger.debug(f"Local file download: {source} -> {destination}")
 
@@ -170,7 +253,7 @@ class LocalWorkspace(BaseWorkspace):
         Raises:
             Exception: If path is not a git repository or getting changes failed
         """
-        path = Path(self.working_dir) / path
+        path = self._workspace_path(Path(self.working_dir) / path)
         return get_git_changes(path)
 
     def git_diff(self, path: str | Path) -> GitDiff:
@@ -185,7 +268,7 @@ class LocalWorkspace(BaseWorkspace):
         Raises:
             Exception: If path is not a git repository or getting diff failed
         """
-        path = Path(self.working_dir) / path
+        path = self._workspace_path(Path(self.working_dir) / path)
         return get_git_diff(path)
 
     def pause(self) -> None:

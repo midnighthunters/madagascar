@@ -1,4 +1,29 @@
-export const DEFAULT_WORKING_DIR = "workspace/project";
+import type { LocalRuntimeDescriptor } from "#/madagascar/contracts";
+
+export const MADAGASCAR_LOCAL_MODE =
+  import.meta.env.VITE_MADAGASCAR_LOCAL_MODE !== "false";
+
+let madagascarRuntime: LocalRuntimeDescriptor | null = null;
+
+export function isMadagascarLocalMode(): boolean {
+  return MADAGASCAR_LOCAL_MODE;
+}
+
+/** Set only by the native shell; never persist its short-lived session key. */
+export function setMadagascarRuntime(
+  descriptor: LocalRuntimeDescriptor | null,
+): void {
+  madagascarRuntime = descriptor;
+}
+
+export function getMadagascarRuntime(): LocalRuntimeDescriptor | null {
+  return madagascarRuntime;
+}
+
+export const DEFAULT_WORKING_DIR =
+  import.meta.env.VITE_MADAGASCAR_WORKSPACE_ROOT?.trim() ||
+  import.meta.env.VITE_WORKING_DIR?.trim() ||
+  "workspace/project";
 
 export type LockedCloudAuthMode = "api-key" | "cookie";
 
@@ -96,7 +121,13 @@ export function getCookieAuthCloudHost(): string | null {
 }
 
 function getConfiguredBaseUrl(): string | null {
-  return normalizeBaseUrl(import.meta.env.VITE_BACKEND_BASE_URL);
+  return (
+    normalizeBaseUrl(madagascarRuntime?.host) ??
+    normalizeBaseUrl(
+      import.meta.env.VITE_MADAGASCAR_RUNTIME_URL ||
+        import.meta.env.VITE_BACKEND_BASE_URL,
+    )
+  );
 }
 
 /**
@@ -190,10 +221,14 @@ export function getAgentServerBaseUrl(): string | null {
 }
 
 export function getAgentServerSessionApiKey(): string | null {
-  return getBakedSessionApiKey();
+  return madagascarRuntime?.sessionApiKey ?? getBakedSessionApiKey();
 }
 
 export function getAgentServerWorkingDir(): string {
+  if (madagascarRuntime?.workspace.root) {
+    return madagascarRuntime.workspace.root;
+  }
+
   const envDir = import.meta.env.VITE_WORKING_DIR?.trim();
   if (envDir) return envDir;
 

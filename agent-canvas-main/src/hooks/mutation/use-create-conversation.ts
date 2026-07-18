@@ -28,6 +28,9 @@ import {
   toPluginCoordinates,
   type WorkspaceMode,
 } from "#/api/conversation-metadata-store";
+import { isMadagascarLocalMode } from "#/api/agent-server-config";
+import { MadagascarLocalRuntimeAdapter } from "#/madagascar/local-runtime-adapter";
+import { useMadagascarStore } from "#/stores/madagascar-store";
 
 export interface CreateConversationVariables {
   query?: string;
@@ -213,10 +216,23 @@ export const useCreateConversation = () => {
             ]
           : [];
 
+      const isMadagascarRuntime =
+        backend.kind === "local" && isMadagascarLocalMode();
+      const madagascarWorkspace = isMadagascarRuntime
+        ? (useMadagascarStore.getState().runtime?.workspace.root ??
+          useMadagascarStore.getState().projectRoot)
+        : undefined;
+      const animalInstructions = isMadagascarRuntime
+        ? MadagascarLocalRuntimeAdapter.buildAgentInstructions(
+            useMadagascarStore.getState().selectedAnimal,
+            conversationInstructions,
+          )
+        : conversationInstructions;
+
       const conversation =
         await AgentServerConversationService.createConversation(
           query,
-          conversationInstructions,
+          animalInstructions,
           plugins,
           repository
             ? {
@@ -225,8 +241,8 @@ export const useCreateConversation = () => {
                 git_provider: repository.gitProvider,
               }
             : null,
-          workingDir,
-          workspaceMode,
+          workingDir ?? madagascarWorkspace,
+          workspaceMode ?? (isMadagascarRuntime ? "local_repo" : undefined),
           parentConversationId,
           agentType,
           ...profileArgs,
@@ -238,6 +254,9 @@ export const useCreateConversation = () => {
       // (app_conversation_id stays null until the sandbox is READY). Merge so
       // the repo/workspace metadata the service just persisted is preserved.
       const localConversationId = conversation.app_conversation_id;
+      if (localConversationId && backend.kind === "local") {
+        useMadagascarStore.getState().addConversation(localConversationId);
+      }
       // Snapshot the conversation's plugins into client-side metadata so the
       // in-conversation plugins view can show what's loaded (coordinates only
       // — strip parameters, which may carry secrets). The agent-server doesn't

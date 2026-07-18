@@ -12,6 +12,7 @@ import { useActiveConversation } from "#/hooks/query/use-active-conversation";
 import { useAgentState } from "#/hooks/use-agent-state";
 import { useRespondToConfirmation } from "#/hooks/mutation/use-respond-to-confirmation";
 import { SecurityRisk } from "#/types/agent-server/core/base/common";
+import { useMadagascarStore } from "#/stores/madagascar-store";
 
 export function ConversationConfirmationButtons() {
   const submittedEventIds = useEventMessageStore(
@@ -25,6 +26,8 @@ export function ConversationConfirmationButtons() {
   const { data: conversation } = useActiveConversation();
   const { curAgentState } = useAgentState();
   const { mutate: respondToConfirmation } = useRespondToConfirmation();
+  const createApproval = useMadagascarStore((state) => state.createApproval);
+  const updateApproval = useMadagascarStore((state) => state.updateApproval);
   const events = useEventStore((state) => state.events);
 
   const awaitingAction = events
@@ -44,15 +47,32 @@ export function ConversationConfirmationButtons() {
       // Mark event as submitted to prevent duplicate submissions
       addSubmittedEventId(awaitingAction.id);
 
-      // Call the agent-server API endpoint
-      respondToConfirmation({
-        conversationId: conversation.id,
-        conversationUrl: conversation.conversation_url || "",
-        sessionApiKey: conversation.session_api_key,
-        accept,
-      });
+      const approvalId = createApproval(
+        conversation.id,
+        `Confirmation requested for ${isActionEvent(awaitingAction) ? awaitingAction.action : "agent action"}`,
+      );
+      respondToConfirmation(
+        {
+          conversationId: conversation.id,
+          conversationUrl: conversation.conversation_url || "",
+          sessionApiKey: conversation.session_api_key,
+          accept,
+        },
+        {
+          onSuccess: () =>
+            updateApproval(approvalId, accept ? "approved" : "rejected"),
+          onError: () => updateApproval(approvalId, "rejected"),
+        },
+      );
     },
-    [awaitingAction, conversation, addSubmittedEventId, respondToConfirmation],
+    [
+      awaitingAction,
+      conversation,
+      addSubmittedEventId,
+      createApproval,
+      respondToConfirmation,
+      updateApproval,
+    ],
   );
 
   // Handle keyboard shortcuts

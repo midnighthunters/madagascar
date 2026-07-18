@@ -1,0 +1,32 @@
+{
+  "productName": "Madagascar",
+  "version": "0.1.0",
+  "identifier": "com.zemolabs.madagascar",
+  "build": {
+    "beforeDevCommand": "npm --prefix ../../../agent-canvas-main run dev:frontend",
+    "devUrl": "http://localhost:3001",
+    "frontendDist": "../../../agent-canvas-main/build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Madagascar",
+        "width": 1440,
+        "height": 900,
+        "minWidth": 1024,
+        "minHeight": 640,
+        "decorations": true,
+        "resizable": true
+      }
+    ],
+    "withGlobalTauri": true,
+    "security": {
+      "csp": "default-src 'self' http://127.0.0.1:* ws://127.0.0.1:*; connect-src 'self' http://127.0.0.1:* ws://127.0.0.1:*"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "resources": ["../../../software-agent-sdk-main"]
+  }
+}
