@@ -1,40 +1,38 @@
 # Development
 
-This document is for contributors working on `agent-canvas` itself.
+This document is for contributors working on the Madagascar UI and local runtime integration. The authoritative local setup is also summarized in the [README](../README.md).
 
-## Recommended local workflow
+## Madagascar local workflow
 
-`npm run dev` runs the full local stack (agent-server + automation backend via
-`uvx`, Vite dev server with live reload, and an ingress proxy) — all without
-Docker.
-
-For a static frontend build (better for slow networks, remote access, tunnels):
+`npm run dev` is the default local path. It starts the checked-in `../software-agent-sdk-main` Agent Server via `uv` (offline by default), binds it to `127.0.0.1`, and runs the Vite workbench. It starts no Docker containers, cloud clients, remote Agent Servers, ingress proxy, or automation service.
 
 ```sh
-npm run dev:static
+npm ci
+npm run dev
 ```
 
-The published `agent-canvas` binary also supports partial-stack modes when you want to run the frontend and backend processes separately:
+Set `MADAGASCAR_WORKSPACE_ROOT` to choose the workspace. The launcher passes its resolved workspace, loopback host, and ephemeral session key through `VITE_MADAGASCAR_*` values; do not manually copy the session key into project files. `MADAGASCAR_FRONTEND_PORT` defaults to `3001`.
+
+For native-shell integration without Vite, run only the local runtime:
 
 ```sh
-agent-canvas --frontend-only
-agent-canvas --backend-only
+npm run runtime:local -- --workspace /absolute/path/to/project
 ```
 
-Both modes still start the ingress proxy; the proxy only routes to the services started by that mode.
+### Legacy compatibility workflows
 
-The dev stack uses `uvx` to run a temporary `agent-server`
-installation on `127.0.0.1:18000` and points the frontend at it. It isolates
-conversation persistence by setting separate `OH_CONVERSATIONS_PATH`,
-`OH_BASH_EVENTS_DIR`, and `OH_VSCODE_PORT` values under `.openhands-dev/`, and
-keeps its tmux sockets under `~/.openhands/agent-canvas/tmux` (via
-`TMUX_TMPDIR`), so it does not collide with other local or cloud-backed
-OpenHands sessions. If `$HOME` is on a filesystem that does not support Unix
-domain sockets (some devcontainers, NFS/CIFS homes), set the standard
-`TMUX_TMPDIR` env var to a local path such as `/tmp` and the dev stack will use
-it instead.
+The following commands remain available through Madagascar 2.0 for existing Agent Canvas consumers but are not Madagascar defaults:
 
-### Environment Variables
+```sh
+npm run legacy:dev:automation  # agent-server + automation via uvx + ingress
+npm run legacy:dev:minimal     # legacy agent-server + Vite
+npm run legacy:dev:static      # legacy static frontend stack
+agent-canvas --help            # published legacy compatibility CLI
+```
+
+The legacy `agent-canvas` process may use `uvx`, the old `OH_*` state/configuration names, and automation or cloud-oriented client paths. See [legacy-naming-inventory.md](legacy-naming-inventory.md) before changing those boundaries.
+
+### Legacy Environment Variables
 
 | Variable                  | Description                    | Default |
 | ------------------------- | ------------------------------ | ------- |

@@ -19,6 +19,13 @@
 - Verification command: `npm run typecheck && npm run build`.
 - GitHub automation now includes `.github/workflows/ci.yml` for `npm ci`, `npm test`, and `npm run build`, plus `.github/dependabot.yml` with weekly npm/github-actions updates gated by a 7-day cooldown.
 
+## Madagascar local default
+
+- `npm run dev` starts Madagascar's local path: the checked-in `../software-agent-sdk-main` Agent Server via `uv`, then the Vite workbench on loopback. It does not start Docker, `uvx`, cloud/remote backends, ingress, or automations.
+- `npm run runtime:local` (and the `madagascar` binary) own only the local Agent Server lifecycle for a desktop shell.
+- The prior `agent-canvas` full stack is retained through Madagascar 2.0 as explicit `legacy:dev:*` commands and the `agent-canvas` compatibility executable. Do not make new local-default features depend on it.
+- Legacy `OH_*` / `VITE_*` configuration and browser-state migration live only in `src/madagascar/compatibility.ts`, `scripts/madagascar-compatibility.mjs`, and `src/madagascar/project-state.ts`; Madagascar names take precedence.
+
 ## PR Description Human Check
 
 The `HUMAN:` section and the `A human has tested these changes.` checkbox in

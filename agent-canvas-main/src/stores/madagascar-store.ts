@@ -15,7 +15,7 @@ import {
   DEFAULT_MADAGASCAR_PROJECT_ROOT,
   getDefaultProjectState,
   readDesktopProjectState,
-  readProjectState,
+  readProjectStateWithMigration,
   writeProjectState,
 } from "#/madagascar/project-state";
 
@@ -56,6 +56,10 @@ interface MadagascarStore {
   ) => string;
   updateDelegation: (id: string, status: DelegatedTaskStatus) => void;
   resetProject: () => void;
+}
+
+function readProjectState(projectRoot = DEFAULT_MADAGASCAR_PROJECT_ROOT) {
+  return readProjectStateWithMigration(projectRoot).state;
 }
 
 const initialProjectState = readProjectState(DEFAULT_MADAGASCAR_PROJECT_ROOT);

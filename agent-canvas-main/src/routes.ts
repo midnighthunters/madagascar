@@ -29,9 +29,11 @@ export default [
       route("app", "routes/app-settings.tsx"),
       route("secrets", "routes/secrets-settings.tsx"),
     ]),
-    route("oauth/device/verify", "routes/device-verify.tsx"),
-    route("automations", "routes/automations-list.tsx"),
-    route("automations/:automationId", "routes/automation-detail.tsx"),
+    // Retained only for compatibility while their cloud and automation clients
+    // are isolated from Madagascar's local-default navigation.
+    route("legacy/oauth/device/verify", "routes/device-verify.tsx"),
+    route("legacy/automations", "routes/automations-list.tsx"),
+    route("legacy/automations/:automationId", "routes/automation-detail.tsx"),
   ]),
   route(
     "shared/conversations/:conversationId",

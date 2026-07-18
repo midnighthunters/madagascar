@@ -1,4 +1,7 @@
+import { getMadagascarBrowserConfig } from "#/madagascar/compatibility";
 import type { LocalRuntimeDescriptor } from "#/madagascar/contracts";
+
+const madagascarBrowserConfig = getMadagascarBrowserConfig();
 
 export const MADAGASCAR_LOCAL_MODE =
   import.meta.env.VITE_MADAGASCAR_LOCAL_MODE !== "false";
@@ -21,9 +24,7 @@ export function getMadagascarRuntime(): LocalRuntimeDescriptor | null {
 }
 
 export const DEFAULT_WORKING_DIR =
-  import.meta.env.VITE_MADAGASCAR_WORKSPACE_ROOT?.trim() ||
-  import.meta.env.VITE_WORKING_DIR?.trim() ||
-  "workspace/project";
+  madagascarBrowserConfig.workspaceRoot || "workspace/project";
 
 export type LockedCloudAuthMode = "api-key" | "cookie";
 
@@ -123,10 +124,7 @@ export function getCookieAuthCloudHost(): string | null {
 function getConfiguredBaseUrl(): string | null {
   return (
     normalizeBaseUrl(madagascarRuntime?.host) ??
-    normalizeBaseUrl(
-      import.meta.env.VITE_MADAGASCAR_RUNTIME_URL ||
-        import.meta.env.VITE_BACKEND_BASE_URL,
-    )
+    normalizeBaseUrl(madagascarBrowserConfig.runtimeUrl)
   );
 }
 
@@ -148,7 +146,7 @@ function getConfiguredBaseUrl(): string | null {
  * instead of the onboarding flow.
  */
 export function getBakedSessionApiKey(): string | null {
-  const envKey = trimToNull(import.meta.env.VITE_SESSION_API_KEY);
+  const envKey = madagascarBrowserConfig.sessionApiKey;
   if (envKey) return envKey;
 
   if (typeof window !== "undefined") {
@@ -229,7 +227,7 @@ export function getAgentServerWorkingDir(): string {
     return madagascarRuntime.workspace.root;
   }
 
-  const envDir = import.meta.env.VITE_WORKING_DIR?.trim();
+  const envDir = madagascarBrowserConfig.workspaceRoot;
   if (envDir) return envDir;
 
   return DEFAULT_WORKING_DIR;

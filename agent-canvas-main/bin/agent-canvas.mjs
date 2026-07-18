@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 /**
- * CLI entry point for @openhands/agent-canvas
+ * Legacy compatibility CLI for the published @openhands/agent-canvas package.
+ * Use `madagascar` or `npm run dev:madagascar` for the local-first default.
+ * This automation stack remains available through Madagascar 2.0.
  *
- * Runs the full Agent Canvas stack locally by default:
+ * Runs the legacy full Agent Canvas stack locally:
  * - Agent-server via uvx
  * - Automation backend via uvx
  * - Pre-built static frontend
@@ -57,10 +59,10 @@ const isBackendOnly = args.includes("--backend-only");
 
 if (args.includes("-h") || args.includes("--help")) {
   console.log(`
-@openhands/agent-canvas - Run the Agent Canvas UI with agent-server
+agent-canvas (legacy compatibility command)
 
-Runs the full stack with agent-server and automation backend via uvx,
-and serves pre-built static frontend assets.
+Use the madagascar command for the default local-only Agent Server path. This retained
+command starts the legacy automation stack with uvx and static frontend assets.
 
 USAGE:
   npx @openhands/agent-canvas [options]
@@ -159,7 +161,7 @@ try {
 }
 
 main({
-  bannerTitle: "Agent Canvas",
+  bannerTitle: "Agent Canvas (legacy compatibility)",
   staticMode: true,
   staticDir: BUILD_DIR,
   mode: "agent-canvas",

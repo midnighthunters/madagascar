@@ -11,6 +11,7 @@ import {
   isProcessRunning,
   signalProcessTree,
 } from "./dev-process-utils.mjs";
+import { readMadagascarRuntimeEnvironment } from "./madagascar-compatibility.mjs";
 
 const LOOPBACK_HOST = "127.0.0.1";
 const DEFAULT_PORT = 18000;
@@ -85,8 +86,8 @@ function getPermission(value) {
   return permission;
 }
 
-function makeSessionApiKey() {
-  return process.env.MADAGASCAR_SESSION_API_KEY || randomBytes(32).toString("hex");
+function makeSessionApiKey(configuredSessionApiKey) {
+  return configuredSessionApiKey || randomBytes(32).toString("hex");
 }
 
 /**
@@ -99,28 +100,29 @@ function makeSessionApiKey() {
 export class MadagascarLocalRuntime extends EventEmitter {
   constructor(options = {}) {
     super();
+    const compatibility = readMadagascarRuntimeEnvironment();
     this.workspaceRoot = requireDirectory(
-      options.workspaceRoot || process.env.MADAGASCAR_WORKSPACE_ROOT || process.cwd(),
+      options.workspaceRoot || compatibility.workspaceRoot || process.cwd(),
       "Workspace root",
     );
     this.sdkRoot = requireDirectory(
-      options.sdkRoot || process.env.MADAGASCAR_SDK_PATH || DEFAULT_SDK_ROOT,
+      options.sdkRoot || compatibility.sdkRoot || DEFAULT_SDK_ROOT,
       "SDK root",
     );
     this.stateDir = resolve(
       options.stateDir ||
-        process.env.MADAGASCAR_STATE_DIR ||
+        compatibility.stateDir ||
         join(homedir(), ".madagascar", "runtime"),
     );
     this.permission = getPermission(
       options.permission || process.env.MADAGASCAR_PERMISSION,
     );
-    this.preferredPort = Number(
-      options.port || process.env.MADAGASCAR_AGENT_SERVER_PORT || DEFAULT_PORT,
-    );
+    this.preferredPort = Number(options.port || compatibility.port || DEFAULT_PORT);
     this.process = null;
     this.descriptor = null;
-    this.sessionApiKey = makeSessionApiKey();
+    this.sessionApiKey = makeSessionApiKey(
+      options.sessionApiKey || compatibility.sessionApiKey,
+    );
     this.exitPromise = null;
   }
 
@@ -253,8 +255,10 @@ export function getCliOptions(argv = process.argv.slice(2)) {
   };
 }
 
-async function main() {
-  const runtime = new MadagascarLocalRuntime(getCliOptions());
+export async function runMadagascarLocalRuntime(
+  argv = process.argv.slice(2),
+) {
+  const runtime = new MadagascarLocalRuntime(getCliOptions(argv));
   runtime.on("log", (message) => process.stderr.write(message));
   runtime.on("error", (error) => process.stderr.write(`${error.message}\n`));
   const shutdown = () => void runtime.stop().finally(() => process.exit(0));
@@ -268,7 +272,7 @@ async function main() {
 const isMain = process.argv[1]
   ? resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url))
   : false;
-if (isMain) main().catch((error) => {
+if (isMain) runMadagascarLocalRuntime().catch((error) => {
   process.stderr.write(`${error.stack || error.message}\n`);
   process.exitCode = 1;
 });

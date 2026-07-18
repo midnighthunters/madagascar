@@ -39,11 +39,29 @@ describe("agent-canvas CLI", () => {
 
     expect(code).toBe(0);
     expect(stderr).toBe("");
-    expect(stdout).toContain("@openhands/agent-canvas");
+    expect(stdout).toContain("agent-canvas (legacy compatibility command)");
+    expect(stdout).toContain("Use the madagascar command");
     expect(stdout).toContain("USAGE:");
     expect(stdout).toContain("--frontend-only");
     expect(stdout).toContain("--backend-only");
     expect(stdout).toContain("--help");
+  });
+
+  it("shows the Madagascar local-runtime help without loading legacy services", async () => {
+    const child = spawn(process.execPath, ["bin/madagascar.mjs", "--help"], {
+      cwd: repoRoot,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    let stdout = "";
+    child.stdout.on("data", (chunk) => {
+      stdout += chunk.toString();
+    });
+
+    const [code] = await once(child, "exit");
+
+    expect(code).toBe(0);
+    expect(stdout).toContain("Madagascar local runtime");
+    expect(stdout).toContain("does not\nstart Docker");
   });
 
   it("does not require build/ in --backend-only mode", async () => {

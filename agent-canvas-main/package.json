@@ -1,7 +1,7 @@
 {
   "name": "@openhands/agent-canvas",
   "version": "1.5.0",
-  "description": "Agent Canvas UI for OpenHands - run AI coding agents with a visual interface",
+  "description": "Madagascar local-first IDE for coding agents (published under the legacy Agent Canvas package during the compatibility window)",
   "license": "MIT",
   "private": false,
   "type": "module",
@@ -14,6 +14,7 @@
     "url": "https://github.com/OpenHands/agent-canvas/issues"
   },
   "bin": {
+    "madagascar": "bin/madagascar.mjs",
     "agent-canvas": "bin/agent-canvas.mjs"
   },
   "engines": {
@@ -72,14 +73,20 @@
     "zustand": "5.0.12"
   },
   "scripts": {
-    "dev": "node --env-file-if-exists=.env scripts/dev-with-automation.mjs",
-    "dev:static": "node --env-file-if-exists=.env scripts/dev-static.mjs",
-    "dev:extra-backend": "node --env-file-if-exists=.env scripts/dev-extra-backend.mjs",
-    "dev:minimal": "node --env-file-if-exists=.env scripts/dev-safe.mjs",
+    "dev": "npm run dev:madagascar",
+    "dev:madagascar": "node --env-file-if-exists=.env scripts/dev-madagascar.mjs",
     "runtime:local": "node --env-file-if-exists=.env scripts/madagascar-local-runtime.mjs",
+    "dev:static": "npm run legacy:dev:static",
+    "dev:extra-backend": "npm run legacy:dev:extra-backend",
+    "dev:minimal": "npm run legacy:dev:minimal",
+    "legacy:dev:automation": "node --env-file-if-exists=.env scripts/dev-with-automation.mjs",
+    "legacy:dev:static": "node --env-file-if-exists=.env scripts/dev-static.mjs",
+    "legacy:dev:extra-backend": "node --env-file-if-exists=.env scripts/dev-extra-backend.mjs",
+    "legacy:dev:minimal": "node --env-file-if-exists=.env scripts/dev-safe.mjs",
     "dev:frontend": "npm run make-i18n && cross-env VITE_MOCK_API=false react-router dev",
     "dev:mock": "npm run make-i18n && cross-env VITE_MOCK_API=true react-router dev",
-    "build": "npm run build:app",
+    "build": "npm run build:madagascar",
+    "build:madagascar": "npm run build:app",
     "build:mock": "npm run make-i18n && cross-env VITE_MOCK_API=true react-router build",
     "start": "npx sirv-cli build/ --single",
     "test": "npm run make-i18n && vitest run",
