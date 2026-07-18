@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string -- Madagascar product branding deliberately replaces the legacy catalog title. */
 import React from "react";
 import {
   useRouteError,
@@ -23,6 +24,7 @@ import { ReactRouterNavigationProvider } from "./react-router-navigation-provide
 import { OnboardingHost } from "#/components/features/onboarding";
 import { isOnboardingPreviewActive } from "#/components/features/onboarding/onboarding-preview";
 import { MadagascarWorkbenchBar } from "#/components/features/madagascar/madagascar-workbench-bar";
+import { isMadagascarLocalMode } from "#/api/agent-server-config";
 
 const EnvironmentSwitchOverlay = React.lazy(
   () => import("#/components/features/backends/environment-switch-overlay"),
@@ -106,7 +108,8 @@ export default function MainApp() {
   const hideMobileSidebarMenuBar = /^\/conversations\/[^/]+/.test(
     location.pathname,
   );
-  const showOnboardingPreview = isOnboardingPreviewActive(location.search);
+  const showOnboardingPreview =
+    !isMadagascarLocalMode() && isOnboardingPreviewActive(location.search);
 
   return (
     <ReactRouterNavigationProvider>
@@ -145,8 +148,12 @@ export default function MainApp() {
             </div>
           </div>
         </div>
+        {!isMadagascarLocalMode() ? (
+          <React.Suspense fallback={null}>
+            <EnvironmentSwitchOverlay />
+          </React.Suspense>
+        ) : null}
         <React.Suspense fallback={null}>
-          <EnvironmentSwitchOverlay />
           <CommandMenu />
         </React.Suspense>
         {showOnboardingPreview ? <OnboardingHost /> : null}

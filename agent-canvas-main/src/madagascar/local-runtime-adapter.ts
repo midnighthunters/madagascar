@@ -2,8 +2,8 @@ import type {
   AppConversationStartTask,
   MessageContent,
 } from "#/api/conversation-service/agent-server-conversation-service.types";
-import { AgentServerConversationService } from "#/api/conversation-service/agent-server-conversation-service.api";
-import { AgentServerRuntimeService } from "#/api/runtime-service/agent-server-runtime-service";
+import AgentServerConversationService from "#/api/conversation-service/agent-server-conversation-service.api";
+import AgentServerRuntimeService from "#/api/runtime-service/agent-server-runtime-service";
 import EventService from "#/api/event-service/event-service.api";
 import type { AnimalId } from "./animal-registry";
 import { DEFAULT_ANIMAL_ID, getAnimalAgent } from "./animal-registry";
@@ -18,6 +18,7 @@ export interface MadagascarConversationOptions {
   initialMessage?: string;
   conversationInstructions?: string;
   workspaceRoot?: string;
+  parentConversationId?: string;
 }
 
 export interface MadagascarCommandResult {
@@ -60,6 +61,7 @@ export class MadagascarLocalRuntimeAdapter {
       null,
       options.workspaceRoot,
       "local_repo",
+      options.parentConversationId,
     );
   }
 

@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string -- This Madagascar review label has no equivalent legacy catalog key. */
 import { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { I18nKey } from "#/i18n/declaration";
@@ -13,6 +14,15 @@ import { useAgentState } from "#/hooks/use-agent-state";
 import { useRespondToConfirmation } from "#/hooks/mutation/use-respond-to-confirmation";
 import { SecurityRisk } from "#/types/agent-server/core/base/common";
 import { useMadagascarStore } from "#/stores/madagascar-store";
+
+function toApprovalRisk(
+  risk: SecurityRisk,
+): "low" | "medium" | "high" | "unknown" {
+  if (risk === SecurityRisk.HIGH) return "high";
+  if (risk === SecurityRisk.MEDIUM) return "medium";
+  if (risk === SecurityRisk.LOW) return "low";
+  return "unknown";
+}
 
 export function ConversationConfirmationButtons() {
   const submittedEventIds = useEventMessageStore(
@@ -47,9 +57,27 @@ export function ConversationConfirmationButtons() {
       // Mark event as submitted to prevent duplicate submissions
       addSubmittedEventId(awaitingAction.id);
 
+      const actionName = isActionEvent(awaitingAction)
+        ? awaitingAction.action
+        : "agent action";
+      const actionRisk = isActionEvent(awaitingAction)
+        ? awaitingAction.security_risk
+        : SecurityRisk.UNKNOWN;
       const approvalId = createApproval(
         conversation.id,
-        `Confirmation requested for ${isActionEvent(awaitingAction) ? awaitingAction.action : "agent action"}`,
+        `Confirmation requested for ${actionName}`,
+        {
+          kind: "agent-action",
+          risk: toApprovalRisk(actionRisk),
+          sourceEventId: awaitingAction.id,
+          preview: JSON.stringify(
+            isActionEvent(awaitingAction)
+              ? awaitingAction.action
+              : awaitingAction,
+            null,
+            2,
+          ),
+        },
       );
       respondToConfirmation(
         {
@@ -82,14 +110,18 @@ export function ConversationConfirmationButtons() {
     }
 
     const handleCancelShortcut = (event: KeyboardEvent) => {
-      if (event.shiftKey && event.metaKey && event.key === "Backspace") {
+      if (
+        event.shiftKey &&
+        (event.metaKey || event.ctrlKey) &&
+        event.key === "Backspace"
+      ) {
         event.preventDefault();
         handleConfirmation(false);
       }
     };
 
     const handleContinueShortcut = (event: KeyboardEvent) => {
-      if (event.metaKey && event.key === "Enter") {
+      if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
         event.preventDefault();
         handleConfirmation(true);
       }
@@ -133,6 +165,20 @@ export function ConversationConfirmationButtons() {
           title={t(I18nKey.COMMON$HIGH_RISK)}
         />
       )}
+      <details className="text-xs text-gray-300">
+        <summary className="cursor-pointer">
+          Review planned action before continuing
+        </summary>
+        <pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap rounded bg-black/20 p-2">
+          {JSON.stringify(
+            isActionEvent(awaitingAction)
+              ? awaitingAction.action
+              : awaitingAction,
+            null,
+            2,
+          )}
+        </pre>
+      </details>
       <div className="flex justify-between items-center">
         <p className="text-sm font-normal text-white">
           {t(I18nKey.CHAT_INTERFACE$USER_ASK_CONFIRMATION)}

@@ -271,3 +271,53 @@ code {
     max-width: 7rem;
   }
 }
+.madagascar-workspace-summary input {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  min-width: 0;
+  outline: 0;
+  width: 100%;
+}
+
+.madagascar-workspace-summary:focus-within {
+  outline: 2px solid var(--madagascar-leaf-500);
+  outline-offset: 0.2rem;
+}
+
+.madagascar-runtime-button {
+  background: transparent;
+  border: 1px solid var(--madagascar-border);
+  border-radius: 0.45rem;
+  color: var(--madagascar-text);
+  cursor: pointer;
+  font-size: 0.72rem;
+  padding: 0.25rem 0.45rem;
+}
+
+.madagascar-runtime-button:hover,
+.madagascar-runtime-button:focus-visible {
+  border-color: var(--madagascar-leaf-500);
+  color: var(--madagascar-leaf-400);
+  outline: 0;
+}
+.madagascar-delegation-input {
+  background: rgba(7, 17, 13, 0.55);
+  border: 1px solid var(--madagascar-border);
+  border-radius: 0.45rem;
+  color: var(--madagascar-text);
+  font-size: 0.72rem;
+  min-width: 7rem;
+  padding: 0.25rem 0.45rem;
+}
+
+.madagascar-delegation-input:focus-visible {
+  border-color: var(--madagascar-leaf-500);
+  outline: 0;
+}
+
+.madagascar-delegation-error {
+  color: var(--madagascar-danger);
+  font-size: 0.72rem;
+}

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::fs;
-use std::io::{BufRead, BufReader};
+use std::io::{BufRead, BufReader, Read};
 use std::net::{TcpListener, TcpStream};
 use std::path::PathBuf;
 use std::process::{Child, Command, Stdio};
@@ -22,8 +22,14 @@ pub struct RuntimeState {
 pub struct StartRuntimeRequest {
     pub workspace_root: String,
     pub sdk_root: Option<String>,
-    pub state_dir: Option<String>,
     pub permission: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct WriteProjectStateRequest {
+    pub workspace_root: String,
+    pub state: serde_json::Value,
 }
 
 #[derive(Debug, Serialize, Clone)]
@@ -52,6 +58,10 @@ pub struct WorkspaceInfo {
     pub workspace_root: Option<String>,
     pub permission: String,
     pub runtime_running: bool,
+}
+
+fn project_state_path(workspace: &PathBuf) -> PathBuf {
+    workspace.join(".madagascar").join("project-state.json")
 }
 
 fn canonical_directory(value: &str, label: &str) -> Result<PathBuf, String> {
@@ -147,12 +157,45 @@ fn wait_for_loopback_port(child: &mut Child, port: u16) -> Result<(), String> {
     Err(format!("Timed out waiting for the local Agent Server at {address}"))
 }
 
-fn session_key() -> String {
-    let nanos = std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .map(|duration| duration.as_nanos())
-        .unwrap_or_default();
-    format!("madagascar-{nanos:x}")
+#[cfg(target_os = "windows")]
+#[link(name = "bcrypt")]
+extern "system" {
+    fn BCryptGenRandom(
+        algorithm: *mut std::ffi::c_void,
+        buffer: *mut u8,
+        buffer_len: u32,
+        flags: u32,
+    ) -> i32;
+}
+
+#[cfg(target_os = "windows")]
+fn random_session_bytes(bytes: &mut [u8; 32]) -> Result<(), String> {
+    const BCRYPT_USE_SYSTEM_PREFERRED_RNG: u32 = 0x0000_0002;
+    let status = unsafe {
+        BCryptGenRandom(
+            std::ptr::null_mut(),
+            bytes.as_mut_ptr(),
+            bytes.len() as u32,
+            BCRYPT_USE_SYSTEM_PREFERRED_RNG,
+        )
+    };
+    if status < 0 {
+        return Err(format!("Windows could not generate a secure session key: {status}"));
+    }
+    Ok(())
+}
+
+#[cfg(not(target_os = "windows"))]
+fn random_session_bytes(bytes: &mut [u8; 32]) -> Result<(), String> {
+    fs::File::open("/dev/urandom")
+        .and_then(|mut source| source.read_exact(bytes))
+        .map_err(|error| format!("Could not generate a secure session key: {error}"))
+}
+
+fn session_key() -> Result<String, String> {
+    let mut bytes = [0_u8; 32];
+    random_session_bytes(&mut bytes)?;
+    Ok(bytes.iter().map(|byte| format!("{byte:02x}")).collect())
 }
 
 fn emit_process_output<R: std::io::Read + Send + 'static>(app: AppHandle, reader: R, stream: &'static str) {
@@ -198,17 +241,14 @@ pub fn start_local_runtime(
     }
 
     let port = free_loopback_port()?;
-    let state_dir = request
-        .state_dir
-        .map(PathBuf::from)
-        .unwrap_or_else(|| workspace.join(".madagascar"));
+    let state_dir = workspace.join(".madagascar");
     fs::create_dir_all(&state_dir)
         .map_err(|error| format!("Could not create Madagascar state directory: {error}"))?;
     let conversations = state_dir.join("conversations");
     let bash_events = state_dir.join("bash-events");
     fs::create_dir_all(&conversations).map_err(|error| error.to_string())?;
     fs::create_dir_all(&bash_events).map_err(|error| error.to_string())?;
-    let api_key = session_key();
+    let api_key = session_key()?;
 
     let mut command = Command::new("uv");
     command
@@ -224,7 +264,6 @@ pub fn start_local_runtime(
         .env("OH_PERSISTENCE_DIR", &state_dir)
         .env("OH_CONVERSATIONS_PATH", &conversations)
         .env("OH_BASH_EVENTS_DIR", &bash_events)
-        .env("OH_VSCODE_PORT", "0")
         .env("MADAGASCAR_WORKSPACE_ROOT", &workspace)
         .env("MADAGASCAR_PERMISSION", &permission)
         .stdout(Stdio::piped())
@@ -308,6 +347,35 @@ pub fn workspace_info(state: State<'_, RuntimeState>) -> Result<WorkspaceInfo, S
 }
 
 #[tauri::command]
+pub fn read_project_state(workspace_root: String) -> Result<Option<serde_json::Value>, String> {
+    let workspace = canonical_directory(&workspace_root, "Workspace root")?;
+    let path = project_state_path(&workspace);
+    if !path.is_file() {
+        return Ok(None);
+    }
+    let contents = fs::read_to_string(&path)
+        .map_err(|error| format!("Could not read Madagascar project state: {error}"))?;
+    serde_json::from_str(&contents)
+        .map(Some)
+        .map_err(|error| format!("Madagascar project state is invalid JSON: {error}"))
+}
+
+#[tauri::command]
+pub fn write_project_state(request: WriteProjectStateRequest) -> Result<(), String> {
+    let workspace = canonical_directory(&request.workspace_root, "Workspace root")?;
+    let path = project_state_path(&workspace);
+    let directory = path
+        .parent()
+        .ok_or_else(|| "Madagascar project state has no parent directory".to_string())?;
+    fs::create_dir_all(directory)
+        .map_err(|error| format!("Could not create Madagascar state directory: {error}"))?;
+    let contents = serde_json::to_string_pretty(&request.state)
+        .map_err(|error| format!("Could not serialize Madagascar project state: {error}"))?;
+    fs::write(&path, contents)
+        .map_err(|error| format!("Could not write Madagascar project state: {error}"))
+}
+
+#[tauri::command]
 pub fn set_permission_mode(
     state: State<'_, RuntimeState>,
     permission: String,
@@ -329,6 +397,8 @@ pub fn run() {
             start_local_runtime,
             stop_local_runtime,
             workspace_info,
+            read_project_state,
+            write_project_state,
             set_permission_mode
         ])
         .run(tauri::generate_context!())

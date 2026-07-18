@@ -21,6 +21,17 @@ export type ApprovalStatus =
   | "applied"
   | "undone";
 
+export type ApprovalRisk = "low" | "medium" | "high" | "unknown";
+
+export type ApprovalKind = "plan" | "edit" | "command" | "agent-action";
+
+export type DelegatedTaskStatus =
+  | "planned"
+  | "running"
+  | "cancelled"
+  | "failed"
+  | "completed";
+
 export type AgentCapability =
   | "plan"
   | "read-context"
@@ -51,6 +62,20 @@ export interface ApprovalRecord {
   conversationId: string;
   summary: string;
   status: ApprovalStatus;
+  kind: ApprovalKind;
+  risk: ApprovalRisk;
+  sourceEventId?: string;
+  preview?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DelegatedTask {
+  id: string;
+  conversationId: string;
+  assignee: string;
+  summary: string;
+  status: DelegatedTaskStatus;
   createdAt: string;
   updatedAt: string;
 }

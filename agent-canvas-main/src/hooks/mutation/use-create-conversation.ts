@@ -229,24 +229,30 @@ export const useCreateConversation = () => {
           )
         : conversationInstructions;
 
-      const conversation =
-        await AgentServerConversationService.createConversation(
-          query,
-          animalInstructions,
-          plugins,
-          repository
-            ? {
-                selected_repository: repository.name,
-                selected_branch: repository.branch ?? null,
-                git_provider: repository.gitProvider,
-              }
-            : null,
-          workingDir ?? madagascarWorkspace,
-          workspaceMode ?? (isMadagascarRuntime ? "local_repo" : undefined),
-          parentConversationId,
-          agentType,
-          ...profileArgs,
-        );
+      const conversation = isMadagascarRuntime
+        ? await MadagascarLocalRuntimeAdapter.createConversation({
+            animalId: useMadagascarStore.getState().selectedAnimal,
+            initialMessage: query,
+            conversationInstructions,
+            workspaceRoot: workingDir ?? madagascarWorkspace,
+          })
+        : await AgentServerConversationService.createConversation(
+            query,
+            animalInstructions,
+            plugins,
+            repository
+              ? {
+                  selected_repository: repository.name,
+                  selected_branch: repository.branch ?? null,
+                  git_provider: repository.gitProvider,
+                }
+              : null,
+            workingDir ?? madagascarWorkspace,
+            workspaceMode ?? (isMadagascarRuntime ? "local_repo" : undefined),
+            parentConversationId,
+            agentType,
+            ...profileArgs,
+          );
 
       // Stamp the active LLM profile onto the (local) conversation so the
       // chat switcher shows the exact profile even when several profiles

@@ -156,7 +156,6 @@ export class MadagascarLocalRuntime extends EventEmitter {
       OH_PERSISTENCE_DIR: this.stateDir,
       OH_CONVERSATIONS_PATH: conversationsPath,
       OH_BASH_EVENTS_DIR: bashEventsPath,
-      OH_VSCODE_PORT: "0",
       MADAGASCAR_WORKSPACE_ROOT: this.workspaceRoot,
       MADAGASCAR_PERMISSION: this.permission,
     };
