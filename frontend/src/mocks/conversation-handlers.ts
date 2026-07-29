@@ -4,6 +4,12 @@ import {
   GetMicroagentsResponse,
   ResultSet,
 } from "#/api/open-hands.types";
+import {
+  V1AppConversation,
+  V1AppConversationStartTask,
+  V1AppConversationStartRequest,
+} from "#/api/conversation-service/v1-conversation-service.types";
+import { V1ExecutionStatus } from "#/types/v1/core/base/common";
 
 const conversations: Conversation[] = [
   {
@@ -54,6 +60,35 @@ const conversations: Conversation[] = [
 const CONVERSATIONS = new Map<string, Conversation>(
   conversations.map((c) => [c.conversation_id, c]),
 );
+
+const v1Conversations: V1AppConversation[] = [
+  {
+    id: "1",
+    created_by_user_id: "user-1",
+    sandbox_id: "sandbox-1",
+    selected_repository: null,
+    selected_branch: null,
+    git_provider: null,
+    title: "My New Project",
+    trigger: null,
+    pr_number: [],
+    llm_model: "gpt-4o",
+    metrics: null,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    sandbox_status: "RUNNING",
+    execution_status: V1ExecutionStatus.PAUSED,
+    conversation_url: null,
+    session_api_key: null,
+    sub_conversation_ids: [],
+  },
+];
+
+const V1_CONVERSATIONS = new Map<string, V1AppConversation>(
+  v1Conversations.map((c) => [c.id, c]),
+);
+
+const START_TASKS = new Map<string, V1AppConversationStartTask>();
 
 export const CONVERSATION_HANDLERS = [
   http.get("/api/conversations", async () => {
@@ -124,6 +159,88 @@ export const CONVERSATION_HANDLERS = [
     "/api/v1/conversations/:conversationId/pending-messages",
     async () => HttpResponse.json({ id: "mock-pending-id", position: 0 }),
   ),
+
+  http.post("/api/v1/app-conversations", async ({ request }) => {
+    await delay();
+    const reqBody = (await request
+      .json()
+      .catch(() => ({}))) as V1AppConversationStartRequest;
+    const conversationId = Math.floor(Math.random() * 1000).toString();
+    const taskId = `task-mock-${conversationId}`;
+
+    const conversation: V1AppConversation = {
+      id: conversationId,
+      created_by_user_id: "user-1",
+      sandbox_id: "sandbox-1",
+      selected_repository: reqBody?.selected_repository || null,
+      selected_branch: reqBody?.selected_branch || null,
+      git_provider: reqBody?.git_provider || null,
+      title: reqBody?.title || "New Conversation",
+      trigger: reqBody?.trigger || null,
+      pr_number: reqBody?.pr_number || [],
+      llm_model: reqBody?.llm_model || "gpt-4o",
+      metrics: null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      sandbox_status: "RUNNING",
+      execution_status: V1ExecutionStatus.PAUSED,
+      conversation_url: null,
+      session_api_key: null,
+      sub_conversation_ids: [],
+    };
+    V1_CONVERSATIONS.set(conversationId, conversation);
+
+    const startTask: V1AppConversationStartTask = {
+      id: taskId,
+      created_by_user_id: "user-1",
+      status: "READY",
+      detail: null,
+      app_conversation_id: conversationId,
+      sandbox_id: "sandbox-1",
+      agent_server_url: null,
+      request: reqBody,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    START_TASKS.set(taskId, startTask);
+
+    return HttpResponse.json(startTask, { status: 201 });
+  }),
+
+  http.get("/api/v1/app-conversations/start-tasks", async ({ request }) => {
+    const url = new URL(request.url);
+    const ids = url.searchParams.getAll("ids");
+    const tasks = ids.map((id) => START_TASKS.get(id) || null);
+    return HttpResponse.json(tasks);
+  }),
+
+  http.get("/api/v1/app-conversations/start-tasks/search", async () => {
+    return HttpResponse.json({
+      items: Array.from(START_TASKS.values()),
+      next_page_id: null,
+    });
+  }),
+
+  http.get("/api/v1/app-conversations/search", async () => {
+    return HttpResponse.json({
+      items: Array.from(V1_CONVERSATIONS.values()),
+      next_page_id: null,
+    });
+  }),
+
+  http.get("/api/v1/app-conversations", async ({ request }) => {
+    const url = new URL(request.url);
+    const ids = url.searchParams.getAll("ids");
+    const result = ids.map((id) => V1_CONVERSATIONS.get(id) || null);
+    return HttpResponse.json(result);
+  }),
+
+  http.get("/api/v1/app-conversations/:id", async ({ params }) => {
+    const id = params.id as string;
+    const conversation = V1_CONVERSATIONS.get(id);
+    if (conversation) return HttpResponse.json(conversation);
+    return HttpResponse.json(null, { status: 404 });
+  }),
 
   http.get("/api/conversations/:conversationId/microagents", async () => {
     const response: GetMicroagentsResponse = {
