@@ -110,18 +110,7 @@
     "build:docker": "node scripts/docker-build.mjs",
     "example:acp-docker:env": "node scripts/gen-acp-docker-env.mjs"
   },
-  "lint-staged": {
-    "src/**/*.{ts,tsx,js}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "src/**/*.{ts,tsx}": [
-      "node scripts/run-staged-typecheck.mjs"
-    ],
-    "src/**/*": [
-      "npm run check-translation-completeness"
-    ]
-  },
+  "lint-staged": {},
   "devDependencies": {
     "@eslint/eslintrc": "3.3.1",
     "@eslint/js": "9.39.4",

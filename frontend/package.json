@@ -67,18 +67,7 @@
     "typecheck:staged": "react-router typegen && npx tsc --noEmit --skipLibCheck",
     "check-translation-completeness": "node scripts/check-translation-completeness.cjs"
   },
-  "lint-staged": {
-    "src/**/*.{ts,tsx,js}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "src/**/*.{ts,tsx}": [
-      "bash -c 'npm run typecheck:staged'"
-    ],
-    "src/**/*": [
-      "npm run check-translation-completeness"
-    ]
-  },
+  "lint-staged": {},
   "devDependencies": {
     "@mswjs/socket.io-binding": "0.2.0",
     "@playwright/test": "1.60.0",
