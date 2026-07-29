@@ -11,4 +11,9 @@ cd ..
 # unrelated files. The previous ``--files openhands/**/* evaluation/**/* tests/**/*``
 # argument relied on bash globstar which husky's /bin/sh does not enable, so the
 # patterns matched only one directory level deep and silently skipped most files.
-poetry run pre-commit run --show-diff-on-failure --config ./dev_config/python/.pre-commit-config.yaml
+if command -v poetry >/dev/null 2>&1; then
+  poetry run pre-commit run --show-diff-on-failure --config ./dev_config/python/.pre-commit-config.yaml
+else
+  echo "poetry not found in PATH, skipping backend pre-commit..."
+fi
+
