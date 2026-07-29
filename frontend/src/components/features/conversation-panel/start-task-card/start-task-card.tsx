@@ -4,6 +4,7 @@ import { cn } from "#/utils/utils";
 import { I18nKey } from "#/i18n/declaration";
 import { StartTaskCardHeader } from "./start-task-card-header";
 import { StartTaskCardFooter } from "./start-task-card-footer";
+import { AnimalAvatar } from "#/components/shared/animal-avatar";
 
 interface StartTaskCardProps {
   task: V1AppConversationStartTask;
@@ -30,12 +31,14 @@ export function StartTaskCard({ task, onClick }: StartTaskCardProps) {
       data-testid="start-task-card"
       onClick={onClick}
       className={cn(
-        "relative h-auto w-full p-3.5 border-b border-neutral-600 cursor-pointer",
-        "hover:bg-[#454545]",
+        "relative h-auto w-full p-3.5 my-1.5 rounded-2xl backdrop-blur-xl bg-amber-500/10 border border-amber-400/30 cursor-pointer transition-all duration-200 hover:bg-amber-500/20 shadow-lg",
       )}
     >
-      <div className="flex items-center justify-between w-full">
-        <StartTaskCardHeader title={title} taskStatus={task.status} />
+      <div className="flex items-center justify-between w-full gap-2">
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          <AnimalAvatar animal="rabbit" size="xs" status="executing" />
+          <StartTaskCardHeader title={title} taskStatus={task.status} />
+        </div>
       </div>
 
       <StartTaskCardFooter

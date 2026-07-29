@@ -7,6 +7,7 @@ import { SlashCommandMenu } from "./slash-command-menu";
 import { useConversationStore } from "#/stores/conversation-store";
 import { cn } from "#/utils/utils";
 import { SlashCommandItem } from "#/hooks/chat/use-slash-command";
+import { SubagentSquadBar } from "#/components/shared/subagent-squad-bar";
 
 interface ChatInputContainerProps {
   chatContainerRef: React.RefObject<HTMLDivElement | null>;
@@ -63,20 +64,28 @@ export function ChatInputContainer({
     <div
       ref={chatContainerRef}
       className={cn(
-        "bg-[#25272D] box-border content-stretch flex flex-col items-start justify-center p-4 pt-3 relative rounded-[15px] w-full",
-        conversationMode === "plan" && "border border-[#597FF4]",
+        "backdrop-blur-2xl bg-neutral-900/70 border border-white/15 shadow-2xl box-border flex flex-col items-start justify-center p-4 pt-3.5 relative rounded-3xl w-full transition-all duration-300 focus-within:border-amber-400/50 focus-within:shadow-[0_0_30px_rgba(245,158,11,0.15)]",
+        conversationMode === "plan" &&
+          "border-amber-400/60 shadow-[0_0_25px_rgba(245,158,11,0.2)]",
       )}
       onDragOver={(e) => onDragOver(e, disabled)}
       onDragLeave={(e) => onDragLeave(e, disabled)}
       onDrop={(e) => onDrop(e, disabled)}
     >
+      {/* Subagent Squad Header Bar */}
+      <div className="w-full flex items-center justify-between mb-2">
+        <SubagentSquadBar />
+        <span className="text-[10px] uppercase font-bold tracking-widest text-amber-300/80 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">
+          iOS Agent IDE
+        </span>
+      </div>
+
       {/* Drag Over UI */}
       {isDragOver && <DragOver />}
 
       <UploadedFiles />
 
-      {/* Wrapper so the slash menu anchors just above the input row,
-          not above the entire (possibly resized) container */}
+      {/* Wrapper for slash menu */}
       <div className="relative w-full">
         {isSlashMenuOpen && onSlashSelect && (
           <SlashCommandMenu

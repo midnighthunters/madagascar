@@ -38,17 +38,17 @@ export function GitControlBarBranchButton({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "group flex flex-row items-center justify-between gap-2 pl-2.5 pr-2.5 py-1 rounded-[100px] w-fit flex-shrink-0 max-w-[200px] truncate relative",
+        "group flex flex-row items-center justify-between gap-2 px-3 py-1.5 rounded-full w-fit flex-shrink-0 max-w-[200px] truncate relative transition-all duration-200 shadow-sm",
         hasBranch
-          ? "border border-[#525252] bg-transparent hover:border-[#454545] cursor-pointer"
-          : "border border-[rgba(71,74,84,0.50)] bg-transparent cursor-not-allowed min-w-[108px]",
+          ? "backdrop-blur-xl bg-white/10 border border-white/20 hover:bg-white/15 hover:border-white/30 cursor-pointer"
+          : "backdrop-blur-xl bg-white/5 border border-white/10 cursor-not-allowed opacity-60 min-w-[108px]",
       )}
     >
-      <div className="w-3 h-3 flex items-center justify-center flex-shrink-0">
-        <BranchIcon width={12} height={12} color="white" />
+      <div className="w-3.5 h-3.5 flex items-center justify-center flex-shrink-0 text-white/80">
+        <BranchIcon width={13} height={13} />
       </div>
       <div
-        className="font-normal text-white text-sm leading-5 truncate"
+        className="font-medium text-white text-xs leading-5 truncate"
         title={buttonText}
       >
         {buttonText}

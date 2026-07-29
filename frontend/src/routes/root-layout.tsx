@@ -87,36 +87,21 @@ export default function MainApp() {
 
   const [consentFormIsOpen, setConsentFormIsOpen] = React.useState(false);
 
-  // Accept a pending invitation token once authenticated
   useAutoAcceptInvitation();
-
-  // Auto-login if login method is stored in local storage
   useAutoLogin();
-
-  // Handle authentication callback and set login method after successful authentication
   useAuthCallback();
-
-  // Initialize Reo.dev tracking in SaaS mode
   useReoTracking();
-
-  // Sync PostHog opt-in/out state with backend setting on mount
   useSyncPostHogConsent();
-
-  // Identify the user to PostHog using the same distinct_id as the server
   usePostHogIdentify();
-
-  // Auto-select the first organization when none is selected
   useAutoSelectOrganization();
 
   React.useEffect(() => {
-    // Don't change language when on intermediate pages (TOS, profile questions)
     if (!isOnIntermediatePage && settings?.language) {
       i18n.changeLanguage(settings.language);
     }
   }, [settings?.language, isOnIntermediatePage]);
 
   React.useEffect(() => {
-    // Don't show consent form when on intermediate pages
     if (!isOnIntermediatePage) {
       const consentFormModalIsOpen =
         settings?.user_consents_to_analytics === null;
@@ -126,38 +111,32 @@ export default function MainApp() {
   }, [settings, isOnIntermediatePage]);
 
   React.useEffect(() => {
-    // Don't migrate user consent when on intermediate pages
     if (!isOnIntermediatePage) {
-      // Migrate user consent to the server if it was previously stored in localStorage
       migrateUserConsent({
         handleAnalyticsWasPresentInLocalStorage: () => {
           setConsentFormIsOpen(false);
         },
       });
     }
-  }, [isOnIntermediatePage]);
+  }, [isOnIntermediatePage, migrateUserConsent]);
 
   React.useEffect(() => {
     if (settings?.is_new_user && config.data?.app_mode === "saas") {
       displaySuccessToast(t(I18nKey.BILLING$YOURE_IN));
     }
-  }, [settings?.is_new_user, config.data?.app_mode]);
+  }, [settings?.is_new_user, config.data?.app_mode, t]);
 
-  // Function to check if login method exists in local storage
   const checkLoginMethodExists = React.useCallback(() => {
-    // Only check localStorage if we're in a browser environment
     if (typeof window !== "undefined" && window.localStorage) {
       return localStorage.getItem(LOCAL_STORAGE_KEYS.LOGIN_METHOD) !== null;
     }
     return false;
   }, []);
 
-  // State to track if login method exists
   const [loginMethodExists, setLoginMethodExists] = React.useState(
     checkLoginMethodExists(),
   );
 
-  // Listen for storage events to update loginMethodExists when logout happens
   React.useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === LOCAL_STORAGE_KEYS.LOGIN_METHOD) {
@@ -165,7 +144,6 @@ export default function MainApp() {
       }
     };
 
-    // Also check on window focus, as logout might happen in another tab
     const handleWindowFocus = () => {
       setLoginMethodExists(checkLoginMethodExists());
     };
@@ -179,16 +157,12 @@ export default function MainApp() {
     };
   }, [checkLoginMethodExists]);
 
-  // Check login method status when auth status changes
   React.useEffect(() => {
-    // When auth status changes (especially on logout), recheck login method
     setLoginMethodExists(checkLoginMethodExists());
   }, [isAuthed, checkLoginMethodExists]);
 
-  // Show loading spinner while config or auth is loading
   const isLoading = config.isLoading || isAuthLoading;
 
-  // Only decide to redirect AFTER loading completes
   const shouldRedirectToLogin =
     !isLoading &&
     !isAuthed &&
@@ -199,7 +173,6 @@ export default function MainApp() {
 
   React.useEffect(() => {
     if (shouldRedirectToLogin) {
-      // Include search params in returnTo to preserve query string (e.g., user_code for device OAuth)
       const searchString = searchParams.toString();
       let fullPath = "";
       if (pathname !== "/") {
@@ -212,10 +185,9 @@ export default function MainApp() {
     }
   }, [shouldRedirectToLogin, pathname, searchParams, navigate]);
 
-  // Show loading spinner while loading OR when about to redirect
   if (isLoading || shouldRedirectToLogin) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-base">
+      <div className="min-h-screen flex items-center justify-center bg-[#090b0e]">
         <LoadingSpinner size="large" />
       </div>
     );
@@ -233,14 +205,18 @@ export default function MainApp() {
     <div
       data-testid="root-layout"
       className={cn(
-        "h-screen lg:min-w-5xl flex flex-col md:flex-row bg-base overflow-hidden",
+        "h-screen lg:min-w-5xl flex flex-col md:flex-row bg-[#080a0d] text-slate-100 overflow-hidden relative",
         pathname === "/" ? "p-0" : "p-0 md:p-3 md:pl-0",
       )}
     >
+      {/* Background iOS Ambient Glow Effects */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-amber-500/10 blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 -right-40 w-96 h-96 rounded-full bg-blue-500/10 blur-[120px] pointer-events-none" />
+
       <title>{appTitle}</title>
       <Sidebar />
 
-      <div className="flex flex-col w-full min-w-0 h-[calc(100%-50px)] md:h-full gap-3">
+      <div className="flex flex-col w-full min-w-0 h-[calc(100%-50px)] md:h-full gap-3 z-10">
         {config.data &&
           (config.data.maintenance_start_time ||
             (config.data.faulty_models &&

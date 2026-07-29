@@ -27,17 +27,15 @@ export function ConversationPanelButton({
         aria-label={label}
         onClick={onClick}
         disabled={disabled}
-        className="p-0 bg-transparent border-0"
+        className={cn(
+          "w-9 h-9 rounded-2xl flex items-center justify-center backdrop-blur-xl border border-white/20 transition-all duration-300 shadow-md",
+          isOpen
+            ? "bg-white/20 text-white border-white/40 shadow-lg scale-105"
+            : "bg-white/10 text-white/80 hover:bg-white/15 hover:text-white",
+          disabled && "opacity-50 pointer-events-none",
+        )}
       >
-        <ListIcon
-          width={24}
-          height={24}
-          className={cn(
-            "cursor-pointer",
-            isOpen ? "text-white" : "text-[#B1B9D3]",
-            disabled && "opacity-50",
-          )}
-        />
+        <ListIcon width={18} height={18} />
       </button>
     </StyledTooltip>
   );

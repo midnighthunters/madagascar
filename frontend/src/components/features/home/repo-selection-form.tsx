@@ -2,7 +2,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { useCreateConversation } from "#/hooks/mutation/use-create-conversation";
-// Removed useRepositoryBranches import - GitBranchDropdown manages its own data
 import { useIsCreatingConversation } from "#/hooks/use-is-creating-conversation";
 import { Branch, GitRepository } from "#/types/git";
 import { BrandButton } from "../settings/brand-button";
@@ -14,6 +13,7 @@ import { GitProviderDropdown } from "./git-provider-dropdown";
 import { GitBranchDropdown } from "./git-branch-dropdown";
 import { GitRepoDropdown } from "./git-repo-dropdown";
 import { useHomeStore } from "#/stores/home-store";
+import { AnimalAvatar } from "#/components/shared/animal-avatar";
 
 interface RepositorySelectionFormProps {
   onRepoSelection: (repo: GitRepository | null) => void;
@@ -47,20 +47,16 @@ export function RepositorySelectionForm({
   } = useCreateConversation();
 
   const isCreatingConversationElsewhere = useIsCreatingConversation();
-
   const { t } = useTranslation();
 
-  // Auto-select provider logic
   React.useEffect(() => {
     if (providers.length === 0) return;
 
-    // If there's only one provider, auto-select it
     if (providers.length === 1 && !selectedProvider) {
       setSelectedProvider(providers[0]);
       return;
     }
 
-    // If there are multiple providers and none is selected, try to use the last selected one
     if (providers.length > 1 && !selectedProvider) {
       const lastSelected = getLastSelectedProvider();
       if (lastSelected && providers.includes(lastSelected)) {
@@ -69,12 +65,8 @@ export function RepositorySelectionForm({
     }
   }, [providers, selectedProvider, getLastSelectedProvider]);
 
-  // We check for isSuccess because the app might require time to render
-  // into the new conversation screen after the conversation is created.
   const isCreatingConversation =
     isPending || isSuccess || isCreatingConversationElsewhere;
-
-  // Branch selection is now handled by GitBranchDropdown component
 
   const handleProviderSelection = (provider: Provider | null) => {
     if (provider === selectedProvider) {
@@ -82,19 +74,17 @@ export function RepositorySelectionForm({
     }
 
     setSelectedProvider(provider);
-    setLastSelectedProvider(provider); // Store the selected provider
-    setSelectedRepository(null); // Reset repository selection when provider changes
-    setSelectedBranch(null); // Reset branch selection when provider changes
-    onRepoSelection(null); // Reset parent component's selected repo
+    setLastSelectedProvider(provider);
+    setSelectedRepository(null);
+    setSelectedBranch(null);
+    onRepoSelection(null);
   };
 
   const handleBranchSelection = React.useCallback((branch: Branch | null) => {
     setSelectedBranch(branch);
   }, []);
 
-  // Render the provider dropdown
   const renderProviderSelector = () => {
-    // Only render if there are multiple providers
     if (providers.length <= 1) {
       return null;
     }
@@ -111,14 +101,13 @@ export function RepositorySelectionForm({
     );
   };
 
-  // Render the repository selector using our new component
   const renderRepositorySelector = () => {
     const handleRepoSelection = (repository?: GitRepository) => {
       if (repository) {
         onRepoSelection(repository);
         setSelectedRepository(repository);
       } else {
-        onRepoSelection(null); // Notify parent component that repo was cleared
+        onRepoSelection(null);
         setSelectedRepository(null);
         setSelectedBranch(null);
       }
@@ -137,7 +126,6 @@ export function RepositorySelectionForm({
     );
   };
 
-  // Render the branch selector
   const renderBranchSelector = () => {
     const defaultBranch = selectedRepository?.main_branch || null;
     return (
@@ -155,19 +143,22 @@ export function RepositorySelectionForm({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col backdrop-blur-2xl bg-neutral-900/70 border border-white/20 rounded-3xl p-6 shadow-2xl">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-[10px] pb-4">
-          <RepoForkedIcon width={24} height={24} />
-          <span className="leading-5 font-bold text-base text-white">
-            {t(I18nKey.COMMON$OPEN_REPOSITORY)}
-          </span>
+        <div className="flex items-center gap-3 pb-4">
+          <AnimalAvatar animal="monkey" size="xs" showBadge={false} />
+          <div className="flex items-center gap-2">
+            <RepoForkedIcon width={20} height={20} className="text-amber-300" />
+            <span className="leading-5 font-bold text-lg text-white">
+              {t(I18nKey.COMMON$OPEN_REPOSITORY)}
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="flex flex-col gap-[10px] pb-4">
+      <div className="flex flex-col gap-3 pb-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-white font-normal leading-[22px]">
+          <span className="text-xs text-white/80 font-medium">
             {t(I18nKey.HOME$SELECT_OR_INSERT_URL)}
           </span>
           {renderProviderSelector()}
@@ -188,7 +179,6 @@ export function RepositorySelectionForm({
           isLoadingSettings
         }
         onClick={() => {
-          // Persist the repository to recent repositories when launching
           if (selectedRepository) {
             addRecentRepository(selectedRepository);
           }
@@ -207,9 +197,9 @@ export function RepositorySelectionForm({
             },
           );
         }}
-        className="w-full font-semibold"
+        className="w-full font-semibold rounded-2xl py-3 shadow-lg"
       >
-        {!isCreatingConversation && "Launch"}
+        {!isCreatingConversation && "Launch Workspace"}
         {isCreatingConversation && t("HOME$LOADING")}
       </BrandButton>
     </div>

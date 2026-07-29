@@ -10,6 +10,7 @@ import { ConversationCardFooter } from "./conversation-card-footer";
 import { SandboxStatusBadges } from "./sandbox-status-badges";
 import { useDownloadConversation } from "#/hooks/use-download-conversation";
 import type { AgentChip } from "#/utils/agent-display-label";
+import { AnimalAvatar } from "#/components/shared/animal-avatar";
 
 interface ConversationCardProps {
   onClick?: () => void;
@@ -36,7 +37,6 @@ export function ConversationCard({
   showOptions,
   title,
   selectedRepository,
-  // lastUpdatedAt is kept in props for backward compatibility
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   lastUpdatedAt,
   createdAt,
@@ -83,7 +83,6 @@ export function ConversationCard({
     event.preventDefault();
     event.stopPropagation();
 
-    // Fetch the VS Code URL from the API
     if (conversationId) {
       try {
         const data = await ConversationService.getVSCodeUrl(conversationId);
@@ -93,9 +92,8 @@ export function ConversationCard({
             window.open(transformedUrl, "_blank");
           }
         }
-        // VS Code URL not available
       } catch {
-        // Failed to fetch VS Code URL
+        // Failed
       }
     }
 
@@ -122,12 +120,13 @@ export function ConversationCard({
       data-context-menu-open={contextMenuOpen.toString()}
       onClick={onClick}
       className={cn(
-        "relative h-auto w-full p-3.5 border-b border-neutral-600 cursor-pointer",
-        "data-[context-menu-open=false]:hover:bg-[#454545]",
+        "relative h-auto w-full p-3.5 my-1.5 rounded-2xl backdrop-blur-xl bg-white/5 border border-white/10 cursor-pointer transition-all duration-200 hover:bg-white/10 hover:border-white/20 shadow-md",
+        "data-[context-menu-open=true]:bg-white/15",
       )}
     >
-      <div className="flex items-center justify-between w-full">
-        <div className="flex items-center gap-2 flex-1 min-w-0">
+      <div className="flex items-center justify-between w-full gap-2">
+        <div className="flex items-center gap-2.5 flex-1 min-w-0">
+          <AnimalAvatar animal="owl" size="xs" showBadge={false} />
           <ConversationCardHeader
             title={title}
             titleMode={titleMode}

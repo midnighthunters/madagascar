@@ -40,18 +40,18 @@ export function GitControlBarRepoButton({
         target="_blank"
         rel="noopener noreferrer"
         className={cn(
-          "group flex flex-row items-center justify-between gap-2 pl-2.5 pr-2.5 py-1 rounded-[100px] flex-1 truncate relative",
-          "border border-[#525252] bg-transparent hover:border-[#454545] cursor-pointer",
+          "group flex flex-row items-center justify-between gap-2 px-3 py-1.5 rounded-full flex-1 truncate relative",
+          "backdrop-blur-xl bg-white/10 border border-white/20 hover:bg-white/15 cursor-pointer shadow-sm transition-all duration-200",
         )}
       >
-        <div className="w-3 h-3 flex items-center justify-center flex-shrink-0">
+        <div className="w-3.5 h-3.5 flex items-center justify-center flex-shrink-0">
           <GitProviderIcon
             gitProvider={gitProvider as Provider}
-            className="w-3 h-3 inline-flex"
+            className="w-3.5 h-3.5 inline-flex"
           />
         </div>
         <div
-          className="font-normal text-white text-sm leading-5 truncate flex-1 min-w-0"
+          className="font-medium text-white text-xs leading-5 truncate flex-1 min-w-0"
           title={buttonText}
         >
           {buttonText}
@@ -67,18 +67,18 @@ export function GitControlBarRepoButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "group flex flex-row items-center justify-between gap-2 pl-2.5 pr-2.5 py-1 rounded-[100px] flex-1 truncate relative min-w-[170px]",
-        "border border-[rgba(71,74,84,0.50)] bg-transparent",
+        "group flex flex-row items-center justify-between gap-2 px-3 py-1.5 rounded-full flex-1 truncate relative min-w-[170px]",
+        "backdrop-blur-xl bg-white/10 border border-white/20 shadow-sm transition-all duration-200",
         disabled
           ? "cursor-not-allowed opacity-50"
-          : "cursor-pointer hover:border-[#454545]",
+          : "cursor-pointer hover:bg-white/15 hover:border-amber-400/40",
       )}
     >
-      <div className="w-3 h-3 flex items-center justify-center flex-shrink-0">
-        <RepoForkedIcon width={12} height={12} color="white" />
+      <div className="w-3.5 h-3.5 flex items-center justify-center flex-shrink-0 text-amber-300">
+        <RepoForkedIcon width={13} height={13} />
       </div>
       <div
-        className="font-normal text-white text-sm leading-5 truncate flex-1 min-w-0"
+        className="font-medium text-white text-xs leading-5 truncate flex-1 min-w-0"
         title={buttonText}
       >
         {buttonText}

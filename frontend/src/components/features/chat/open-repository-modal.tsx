@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ModalBackdrop } from "#/components/shared/modals/modal-backdrop";
 import { ModalBody } from "#/components/shared/modals/modal-body";
@@ -12,6 +12,7 @@ import { GitBranchDropdown } from "#/components/features/home/git-branch-dropdow
 import { GitProviderDropdown } from "#/components/features/home/git-provider-dropdown/git-provider-dropdown";
 import { useUserProviders } from "#/hooks/use-user-providers";
 import RepoForkedIcon from "#/icons/repo-forked.svg?react";
+import { AnimalAvatar } from "#/components/shared/animal-avatar";
 
 interface OpenRepositoryModalProps {
   isOpen: boolean;
@@ -36,7 +37,6 @@ export function OpenRepositoryModal({
     useState<GitRepository | null>(null);
   const [selectedBranch, setSelectedBranch] = useState<Branch | null>(null);
 
-  // Auto-select provider: single provider auto-selects, multiple uses defaultProvider if available
   useEffect(() => {
     if (providers.length === 1 && !selectedProvider) {
       setSelectedProvider(providers[0]);
@@ -97,16 +97,19 @@ export function OpenRepositoryModal({
     <ModalBackdrop onClose={handleClose}>
       <ModalBody
         width="small"
-        className="items-start border border-tertiary !gap-4"
+        className="items-start backdrop-blur-2xl bg-neutral-900/90 border border-white/20 rounded-3xl p-6 shadow-2xl !gap-4"
       >
         <div className="flex flex-col gap-4 w-full">
-          <div className="flex items-center gap-[10px]">
-            <RepoForkedIcon width={24} height={24} />
-            <BaseModalTitle title={t(I18nKey.CONVERSATION$OPEN_REPOSITORY)} />
+          <div className="flex items-center gap-3">
+            <AnimalAvatar animal="monkey" size="sm" showBadge={false} />
+            <div className="flex items-center gap-2">
+              <RepoForkedIcon width={20} height={20} className="text-amber-300" />
+              <BaseModalTitle title={t(I18nKey.CONVERSATION$OPEN_REPOSITORY)} />
+            </div>
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-sm text-white font-normal leading-[22px]">
+            <span className="text-xs text-white/80 font-medium leading-[22px]">
               {t(I18nKey.CONVERSATION$SELECT_OR_INSERT_LINK)}
             </span>
             {providers.length > 1 && (
@@ -120,7 +123,7 @@ export function OpenRepositoryModal({
           </div>
         </div>
 
-        <div className="flex flex-col gap-[10px] w-full">
+        <div className="flex flex-col gap-3 w-full">
           <GitRepoDropdown
             provider={activeProvider}
             value={selectedRepository?.id || null}
@@ -143,14 +146,14 @@ export function OpenRepositoryModal({
         </div>
 
         <div
-          className="flex flex-col gap-2 w-full"
+          className="flex flex-col gap-2.5 w-full mt-2"
           onClick={(event) => event.stopPropagation()}
         >
           <BrandButton
             type="button"
             variant="primary"
             onClick={handleLaunch}
-            className="w-full"
+            className="w-full rounded-2xl py-2.5 bg-amber-400 text-black font-semibold hover:bg-amber-300"
             isDisabled={!canLaunch}
           >
             {t(I18nKey.BUTTON$LAUNCH)}
@@ -159,7 +162,7 @@ export function OpenRepositoryModal({
             type="button"
             variant="secondary"
             onClick={handleClose}
-            className="w-full"
+            className="w-full rounded-2xl py-2.5"
           >
             {t(I18nKey.BUTTON$CANCEL)}
           </BrandButton>

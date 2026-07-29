@@ -20,6 +20,7 @@ import { useConfig } from "#/hooks/query/use-config";
 import { ConversationCard } from "./conversation-card/conversation-card";
 import { StartTaskCard } from "./start-task-card/start-task-card";
 import { ConversationCardSkeleton } from "./conversation-card/conversation-card-skeleton";
+import { AnimalBadge } from "#/components/shared/animal-avatar";
 
 interface ConversationPanelProps {
   onClose: () => void;
@@ -61,10 +62,8 @@ export function ConversationPanel({ onClose }: ConversationPanelProps) {
     fetchNextPage,
   } = usePaginatedConversations();
 
-  // Fetch in-progress start tasks
   const { data: startTasks } = useStartTasks();
 
-  // Flatten all pages into a single array of conversations (V1 uses 'items' instead of 'results')
   const conversations = data?.pages.flatMap((page) => page.items) ?? [];
 
   const { mutate: deleteConversation } = useDeleteConversation();
@@ -72,12 +71,11 @@ export function ConversationPanel({ onClose }: ConversationPanelProps) {
     useUnifiedPauseConversationSandbox();
   const { mutate: updateConversation } = useUpdateConversation();
 
-  // Set up infinite scroll
   const scrollContainerRef = useInfiniteScroll({
     hasNextPage: !!hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-    threshold: 200, // Load more when 200px from bottom
+    threshold: 200,
   });
 
   const handleDeleteProject = (conversationId: string, title: string) => {
@@ -135,14 +133,25 @@ export function ConversationPanel({ onClose }: ConversationPanelProps) {
   return (
     <div
       ref={(node) => {
-        // TODO: Combine both refs somehow
         if (ref.current !== node) ref.current = node;
         if (scrollContainerRef.current !== node)
           scrollContainerRef.current = node;
       }}
       data-testid="conversation-panel"
-      className="w-full md:w-[400px] h-full border border-[#525252] bg-[#25272D] rounded-lg overflow-y-auto absolute custom-scrollbar-always"
+      className="w-full md:w-[400px] h-[85vh] backdrop-blur-2xl bg-neutral-900/90 border border-white/20 rounded-3xl shadow-2xl overflow-y-auto absolute left-2 top-14 z-50 p-3 custom-scrollbar-always"
     >
+      <div className="flex items-center justify-between p-2 mb-2 border-b border-white/10">
+        <AnimalBadge animal="owl" label="Recent Animal IDE Workspaces" />
+        <button
+          type="button"
+          onClick={onClose}
+          className="text-white/60 hover:text-white text-xs px-2 py-1 rounded-full bg-white/10 hover:bg-white/20 transition-all"
+        >
+          {/* eslint-disable-next-line i18next/no-literal-string */}
+          Close
+        </button>
+      </div>
+
       {isFetching && conversations.length === 0 && (
         <div className="space-y-2">
           {Array.from({ length: 5 }).map((_, index) => (
@@ -163,7 +172,6 @@ export function ConversationPanel({ onClose }: ConversationPanelProps) {
           </p>
         </div>
       )}
-      {/* Render in-progress start tasks first */}
       {startTasks?.map((task) => (
         <NavLink
           key={task.id}
@@ -173,7 +181,6 @@ export function ConversationPanel({ onClose }: ConversationPanelProps) {
           <StartTaskCard task={task} />
         </NavLink>
       ))}
-      {/* Then render completed conversations */}
       {conversations?.map((conversation) => (
         <NavLink
           key={conversation.id}
@@ -214,7 +221,6 @@ export function ConversationPanel({ onClose }: ConversationPanelProps) {
         </NavLink>
       ))}
 
-      {/* Loading indicator for fetching more conversations */}
       {isFetchingNextPage && (
         <div className="flex justify-center py-4">
           <LoadingSpinner size="small" />

@@ -41,8 +41,6 @@ export function Sidebar() {
       settingsIsError &&
       settingsError?.status !== 404
     ) {
-      // We don't show toast errors for settings in the global error handler
-      // because we have a special case for 404 errors
       displayErrorToast(
         "Something went wrong while fetching settings. Please reload the page.",
       );
@@ -67,12 +65,12 @@ export function Sidebar() {
       <aside
         aria-label={t(I18nKey.SIDEBAR$NAVIGATION_LABEL)}
         className={cn(
-          "h-[54px] p-3 md:p-0 md:h-[40px] md:h-auto flex flex-row md:flex-col gap-1 bg-base md:w-[75px] md:min-w-[75px] sm:pt-0 sm:px-2 md:pt-[14px] md:px-0",
-          pathname === "/" && "md:pt-6.5 md:pb-3",
+          "h-[54px] p-2 md:p-2 md:h-auto flex flex-row md:flex-col gap-2 backdrop-blur-2xl bg-neutral-900/60 border border-white/10 shadow-2xl md:w-[75px] md:min-w-[75px] md:m-2 md:rounded-3xl z-40 transition-all duration-300",
+          pathname === "/" && "md:pt-4 md:pb-4",
         )}
       >
-        <nav className="flex flex-row md:flex-col items-center justify-between w-full h-auto md:w-auto md:h-full">
-          <div className="flex flex-row md:flex-col items-center gap-[26px]">
+        <nav className="flex flex-row md:flex-col items-center justify-between w-full h-auto md:w-auto md:h-full gap-3">
+          <div className="flex flex-row md:flex-col items-center gap-4">
             <div className="flex items-center justify-center">
               <OpenHandsLogoButton />
             </div>
@@ -95,7 +93,7 @@ export function Sidebar() {
             )}
           </div>
 
-          <div className="flex flex-row md:flex-col md:items-center gap-[26px]">
+          <div className="flex flex-row md:flex-col md:items-center gap-4">
             <UserActions
               user={
                 user.data ? { avatar_url: user.data.avatar_url } : undefined
