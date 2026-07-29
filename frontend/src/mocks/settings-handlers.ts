@@ -427,6 +427,16 @@ const MOCK_MODELS = [
   "openhands/claude-haiku-4-5-20251001",
   "openhands/claude-opus-4-5-20251101",
   "openhands/minimax-m2.7",
+  "gemini/gemini-2.5-pro",
+  "gemini/gemini-2.5-flash",
+  "gemini/gemini-2.5-flash-lite",
+  "gemini/gemini-2.0-flash",
+  "gemini/gemini-1.5-pro",
+  "gemini/gemini-1.5-flash",
+  "gemini/gemini-3-flash",
+  "gemini/gemini-3-pro",
+  "gemini/gemini-3.1-pro",
+  "gemini/gemini-3.1-pro-preview",
   "sambanova/Meta-Llama-3.1-8B-Instruct",
 ];
 
@@ -436,6 +446,15 @@ const MOCK_VERIFIED_MODELS = new Set([
   "openhands/claude-opus-4-5-20251101",
   "openhands/claude-sonnet-4-5-20250929",
   "openhands/minimax-m2.7",
+  "gemini/gemini-2.5-pro",
+  "gemini/gemini-2.5-flash",
+  "gemini/gemini-2.0-flash",
+  "gemini/gemini-1.5-pro",
+  "gemini/gemini-1.5-flash",
+  "gemini/gemini-3-flash",
+  "gemini/gemini-3-pro",
+  "gemini/gemini-3.1-pro",
+  "gemini/gemini-3.1-pro-preview",
 ]);
 
 const MOCK_VERIFIED_PROVIDERS = [

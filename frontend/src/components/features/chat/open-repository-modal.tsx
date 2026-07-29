@@ -103,7 +103,11 @@ export function OpenRepositoryModal({
           <div className="flex items-center gap-3">
             <AnimalAvatar animal="monkey" size="sm" showBadge={false} />
             <div className="flex items-center gap-2">
-              <RepoForkedIcon width={20} height={20} className="text-amber-300" />
+              <RepoForkedIcon
+                width={20}
+                height={20}
+                className="text-amber-300"
+              />
               <BaseModalTitle title={t(I18nKey.CONVERSATION$OPEN_REPOSITORY)} />
             </div>
           </div>

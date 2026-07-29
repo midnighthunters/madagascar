@@ -51,6 +51,7 @@ class TestAssignProvider:
             llm_utils, '_BARE_ANTHROPIC_MODELS', {'claude-sonnet-4-5-20250929'}
         )
         monkeypatch.setattr(llm_utils, '_BARE_MISTRAL_MODELS', {'mistral-large-latest'})
+        monkeypatch.setattr(llm_utils, '_BARE_GEMINI_MODELS', {'gemini-3-flash'})
 
         assert _assign_provider('gpt-5.2') == 'openai/gpt-5.2'
         assert (
@@ -60,12 +61,14 @@ class TestAssignProvider:
         assert (
             _assign_provider('mistral-large-latest') == 'mistral/mistral-large-latest'
         )
+        assert _assign_provider('gemini-3-flash') == 'gemini/gemini-3-flash'
 
     def test_prefixed_models_remain_unchanged(self, monkeypatch):
         """Test that already-prefixed models are returned untouched."""
         monkeypatch.setattr(llm_utils, '_BARE_OPENAI_MODELS', {'gpt-5.2'})
         monkeypatch.setattr(llm_utils, '_BARE_ANTHROPIC_MODELS', set())
         monkeypatch.setattr(llm_utils, '_BARE_MISTRAL_MODELS', set())
+        monkeypatch.setattr(llm_utils, '_BARE_GEMINI_MODELS', set())
 
         assert _assign_provider('openai/gpt-5.2') == 'openai/gpt-5.2'
 
@@ -74,6 +77,7 @@ class TestAssignProvider:
         monkeypatch.setattr(llm_utils, '_BARE_OPENAI_MODELS', set())
         monkeypatch.setattr(llm_utils, '_BARE_ANTHROPIC_MODELS', set())
         monkeypatch.setattr(llm_utils, '_BARE_MISTRAL_MODELS', set())
+        monkeypatch.setattr(llm_utils, '_BARE_GEMINI_MODELS', set())
 
         assert _assign_provider('totally-made-up-model-xyz') == (
             'totally-made-up-model-xyz'
@@ -84,11 +88,9 @@ class TestAssignProvider:
         monkeypatch.setattr(llm_utils, '_BARE_OPENAI_MODELS', set())
         monkeypatch.setattr(llm_utils, '_BARE_ANTHROPIC_MODELS', set())
         monkeypatch.setattr(llm_utils, '_BARE_MISTRAL_MODELS', set())
+        monkeypatch.setattr(llm_utils, '_BARE_GEMINI_MODELS', set())
 
-        # gemini-* lives bare in litellm.model_cost; LiteLLM routes it to
-        # vertex_ai. Without the fallback the frontend's provider filter
-        # drops it entirely.
-        assert _assign_provider('gemini-2.0-flash') == 'vertex_ai/gemini-2.0-flash'
+        assert _assign_provider('gemini-2.0-flash') == 'gemini/gemini-2.0-flash'
         # cohere.<model>:<rev> is the Bedrock-style ID for Cohere models;
         # LiteLLM resolves it to bedrock.
         assert (
@@ -100,6 +102,7 @@ class TestAssignProvider:
         monkeypatch.setattr(llm_utils, '_BARE_OPENAI_MODELS', set())
         monkeypatch.setattr(llm_utils, '_BARE_ANTHROPIC_MODELS', set())
         monkeypatch.setattr(llm_utils, '_BARE_MISTRAL_MODELS', set())
+        monkeypatch.setattr(llm_utils, '_BARE_GEMINI_MODELS', set())
 
         def _boom(*_args, **_kwargs):
             raise RuntimeError('litellm exploded')

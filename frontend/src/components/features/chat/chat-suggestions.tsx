@@ -26,14 +26,20 @@ export function ChatSuggestions({ onSuggestionsClick }: ChatSuggestionsProps) {
           className="absolute top-0 left-0 right-0 bottom-[151px] flex flex-col items-center justify-center pointer-events-auto px-4 z-10"
         >
           <div className="flex flex-col items-center p-6 rounded-3xl backdrop-blur-2xl bg-neutral-900/60 border border-white/15 shadow-2xl max-w-lg w-full text-center">
-            <AnimalAvatar animal="owl" size="xl" status="lead" className="mb-3" />
+            <AnimalAvatar
+              animal="owl"
+              size="xl"
+              status="lead"
+              className="mb-3"
+            />
             {/* eslint-disable-next-line i18next/no-literal-string */}
             <span className="text-2xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-200 to-white pb-1">
               Madagascar Animal AI IDE
             </span>
             {/* eslint-disable-next-line i18next/no-literal-string */}
             <p className="text-xs text-white/70 mb-4 max-w-xs">
-              {t(I18nKey.LANDING$TITLE)} — Powered by your team of specialized Animal Subagents.
+              {t(I18nKey.LANDING$TITLE)} — Powered by your team of specialized
+              Animal Subagents.
             </p>
             <div className="flex flex-wrap justify-center gap-1.5 mb-5">
               <AnimalBadge animal="dog" label="Coder Dog" />

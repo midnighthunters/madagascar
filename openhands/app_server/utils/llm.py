@@ -21,6 +21,9 @@ from openhands.sdk.llm.utils.verified_models import (  # noqa: E402
     VERIFIED_ANTHROPIC_MODELS as _SDK_ANTHROPIC,
 )
 from openhands.sdk.llm.utils.verified_models import (
+    VERIFIED_GEMINI_MODELS as _SDK_GEMINI,
+)
+from openhands.sdk.llm.utils.verified_models import (
     VERIFIED_MISTRAL_MODELS as _SDK_MISTRAL,
 )
 from openhands.sdk.llm.utils.verified_models import (
@@ -64,6 +67,7 @@ VERIFIED_PROVIDERS: list[str] = list(_SDK_VERIFIED_MODELS.keys())
 _BARE_OPENAI_MODELS: set[str] = set(_SDK_OPENAI)
 _BARE_ANTHROPIC_MODELS: set[str] = set(_SDK_ANTHROPIC)
 _BARE_MISTRAL_MODELS: set[str] = set(_SDK_MISTRAL)
+_BARE_GEMINI_MODELS: set[str] = set(_SDK_GEMINI)
 
 DEFAULT_OPENHANDS_MODEL = 'openhands/minimax-m2.7'
 
@@ -241,6 +245,8 @@ def _assign_provider(model: str) -> str:
         return f'anthropic/{model}'
     if model in _BARE_MISTRAL_MODELS:
         return f'mistral/{model}'
+    if model in _BARE_GEMINI_MODELS or model.startswith('gemini-'):
+        return f'gemini/{model}'
 
     try:
         _, provider, _, _ = get_llm_provider(model)
