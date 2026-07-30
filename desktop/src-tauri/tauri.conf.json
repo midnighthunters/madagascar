@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "identifier": "com.zemolabs.madagascar",
   "build": {
-    "beforeDevCommand": "npm --prefix ../../../frontend run dev",
+    "beforeDevCommand": "npm --prefix ../../frontend run dev",
     "devUrl": "http://localhost:3001",
-    "frontendDist": "../../../frontend/build/client"
+    "frontendDist": "../../frontend/build/client"
   },
   "app": {
     "windows": [
@@ -27,6 +27,6 @@
   "bundle": {
     "active": true,
     "targets": "all",
-    "resources": ["../../../software-agent-sdk-main"]
+    "resources": ["../../agentcore"]
   }
 }

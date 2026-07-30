@@ -1,6 +1,6 @@
 # Madagascar Desktop
 
-Madagascar is a local-first desktop IDE. Tauri owns the native lifecycle; the checked-in `software-agent-sdk-main` Agent Server runs only on loopback for the selected project.
+Madagascar is a local-first desktop IDE. Tauri owns the native lifecycle; the checked-in `agentcore` Agent Server runs only on loopback for the selected project.
 
 ## Supported hosts
 
@@ -20,9 +20,9 @@ Install dependencies for `frontend`, Rust, Python, and `uv`. The Tauri configura
 npm --prefix frontend run dev
 ```
 
-Then use the Tauri development command from `apps/madagascar-desktop/src-tauri`. The packaged shell consumes `frontend/build/client` and bundles `software-agent-sdk-main` as a resource.
+Then use the Tauri development command from `desktop/src-tauri`. The packaged shell consumes `frontend/build/client` and bundles `agentcore` as a resource.
 
-`uv` must already have the SDK workspace dependencies available. The desktop runtime deliberately uses `uv run --offline --project software-agent-sdk-main --package openhands-agent-server`; it never resolves a published package or requires Docker.
+`uv` must already have the SDK workspace dependencies available. The desktop runtime deliberately uses `uv run --offline --project agentcore --package openhands-agent-server`; it never resolves a published package or requires Docker.
 
 ## Runtime and state
 

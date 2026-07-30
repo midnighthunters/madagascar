@@ -79,7 +79,7 @@ fn default_sdk_root(app: &AppHandle) -> Result<PathBuf, String> {
     }
 
     let development_root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../../software-agent-sdk-main");
+        .join("../../agentcore");
     if development_root.is_dir() {
         return canonical_directory(
             development_root.to_string_lossy().as_ref(),
@@ -91,7 +91,7 @@ fn default_sdk_root(app: &AppHandle) -> Result<PathBuf, String> {
         .path()
         .resource_dir()
         .map_err(|error| format!("Could not resolve application resources: {error}"))?
-        .join("software-agent-sdk-main");
+        .join("agentcore");
     canonical_directory(resource_root.to_string_lossy().as_ref(), "SDK root")
 }
 
