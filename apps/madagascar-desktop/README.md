@@ -14,13 +14,13 @@ Do not combine a Windows desktop process with a WSL workspace path. If a native 
 
 ## Development
 
-Install dependencies for `agent-canvas-main`, Rust, Python, and `uv`. The Tauri configuration starts the UI with:
+Install dependencies for `frontend`, Rust, Python, and `uv`. The Tauri configuration starts the UI with:
 
 ```powershell
-npm --prefix agent-canvas-main run dev:frontend
+npm --prefix frontend run dev
 ```
 
-Then use the Tauri development command from `apps/madagascar-desktop/src-tauri`. The packaged shell consumes `agent-canvas-main/build` and bundles `software-agent-sdk-main` as a resource.
+Then use the Tauri development command from `apps/madagascar-desktop/src-tauri`. The packaged shell consumes `frontend/build/client` and bundles `software-agent-sdk-main` as a resource.
 
 `uv` must already have the SDK workspace dependencies available. The desktop runtime deliberately uses `uv run --offline --project software-agent-sdk-main --package openhands-agent-server`; it never resolves a published package or requires Docker.
 

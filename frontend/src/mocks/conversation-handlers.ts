@@ -214,19 +214,19 @@ export const CONVERSATION_HANDLERS = [
     return HttpResponse.json(tasks);
   }),
 
-  http.get("/api/v1/app-conversations/start-tasks/search", async () => {
-    return HttpResponse.json({
+  http.get("/api/v1/app-conversations/start-tasks/search", async () =>
+    HttpResponse.json({
       items: Array.from(START_TASKS.values()),
       next_page_id: null,
-    });
-  }),
+    }),
+  ),
 
-  http.get("/api/v1/app-conversations/search", async () => {
-    return HttpResponse.json({
+  http.get("/api/v1/app-conversations/search", async () =>
+    HttpResponse.json({
       items: Array.from(V1_CONVERSATIONS.values()),
       next_page_id: null,
-    });
-  }),
+    }),
+  ),
 
   http.get("/api/v1/app-conversations", async ({ request }) => {
     const url = new URL(request.url);

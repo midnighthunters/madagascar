@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "identifier": "com.zemolabs.madagascar",
   "build": {
-    "beforeDevCommand": "npm --prefix ../../../agent-canvas-main run dev:frontend",
+    "beforeDevCommand": "npm --prefix ../../../frontend run dev",
     "devUrl": "http://localhost:3001",
-    "frontendDist": "../../../agent-canvas-main/build"
+    "frontendDist": "../../../frontend/build/client"
   },
   "app": {
     "windows": [
