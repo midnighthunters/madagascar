@@ -1,0 +1,12 @@
+[package]
+license = "Apache-2.0"
+name = "xai-mad-version"
+version = "0.2.114"
+edition.workspace = true
+description = "Lockstepped mad CLI version."
+
+[dependencies]
+semver = { workspace = true }
+
+[lints]
+workspace = true

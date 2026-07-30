@@ -1,0 +1,4 @@
+bin/*.br
+bin/mad
+bin/mad.exe
+THIRD_PARTY_NOTICES.md
