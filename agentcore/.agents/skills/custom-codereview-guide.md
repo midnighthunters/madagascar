@@ -1,13 +1,13 @@
 ---
 name: custom-codereview-guide
-description: Repo-specific code review guidelines for OpenHands/software-agent-sdk. Provides SDK-specific review rules in addition to the default code review skill.
+description: Repo-specific code review guidelines for Madagascar/software-agent-sdk. Provides SDK-specific review rules in addition to the default code review skill.
 triggers:
 - /codereview
 ---
 
-# OpenHands/software-agent-sdk Code Review Guidelines
+# Madagascar/software-agent-sdk Code Review Guidelines
 
-You are an expert code reviewer for the **OpenHands/software-agent-sdk** repository. This skill provides repo-specific review guidelines. Be direct but constructive.
+You are an expert code reviewer for the **Madagascar/software-agent-sdk** repository. This skill provides repo-specific review guidelines. Be direct but constructive.
 
 ## Review Decisions
 
@@ -28,7 +28,7 @@ explicitly flag it for a human maintainer to decide after running lightweight ev
 #### Exception – eval evidence provided
 
 If the PR description **or** PR comments contain a link to the eval monitor
-(`openhands-eval-monitor.vercel.app`) showing a completed benchmark run **and**
+(`madagascar-eval-monitor.vercel.app`) showing a completed benchmark run **and**
 a human maintainer has commented confirming the results (e.g., "Human review done",
 "eval looks good", or similar), treat the eval-risk requirement as satisfied and
 follow the normal approval policy. The eval monitor link is authoritative proof of
@@ -127,7 +127,7 @@ When reviewing or QA-ing such a PR:
 - Treat any of the following as authoritative validation instead:
   1. A successful integration-runner workflow run for this PR.
   2. A run for this model on
-     [openhands-eval-monitor.vercel.app](https://openhands-eval-monitor.vercel.app/).
+     [madagascar-eval-monitor.vercel.app](https://madagascar-eval-monitor.vercel.app/).
   3. The author's explicit confirmation (e.g. screenshot) that the model is
      reachable via the proxy.
 
@@ -194,7 +194,7 @@ If the updated package was uploaded **within the last 7 days**, treat it as a re
 - **Persistence Paths**: Code that computes persistence directories must not double-append the conversation hex — see the [Persistence Paths](#persistence-path-construction) section below
 - **Server-Side Cleanup**: Endpoints that create persistent state (directories, files) must have rollback logic for partial failures — see the [Server Error Handling](#server-side-error-handling) section below
 - **Cross-File Data Flow**: When new code calls existing APIs (constructors, factory methods), trace 1–2 levels into those APIs to verify the caller uses them correctly. Bugs often hide at layer boundaries where the caller's assumptions don't match the callee's behavior
-- **Secret Serialization**: Fields that carry secrets must use `serialize_secret()` from `openhands.sdk.utils.pydantic_secrets`. For `dict[str, str]` secret fields, wrap each value in `SecretStr` and call `serialize_secret` per value. Do not hand-roll redaction logic (e.g. custom sentinels or inline `expose_secrets` checks) in field serializers
+- **Secret Serialization**: Fields that carry secrets must use `serialize_secret()` from `madagascar.sdk.utils.pydantic_secrets`. For `dict[str, str]` secret fields, wrap each value in `SecretStr` and call `serialize_secret` per value. Do not hand-roll redaction logic (e.g. custom sentinels or inline `expose_secrets` checks) in field serializers
 - **Info-Log Payloads**: `logger.info(...)` must not dump objects, dicts, or variable-length lists — see [Logging Hygiene](#logging-hygiene)
 
 ## Directory-Based Examples
@@ -229,7 +229,7 @@ When reviewing PRs that modify event types (e.g., `TextContent`, `Message`, `Eve
 ### Example Pattern (Required)
 
 ```python
-from openhands.sdk.utils.deprecation import handle_deprecated_model_fields
+from madagascar.sdk.utils.deprecation import handle_deprecated_model_fields
 
 class MyModel(BaseModel):
     model_config = ConfigDict(extra="forbid")

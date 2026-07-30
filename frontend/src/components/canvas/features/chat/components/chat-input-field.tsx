@@ -24,7 +24,7 @@ export function ChatInputField({
   onFocus,
   onBlur,
 }: ChatInputFieldProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const conversationMode = useConversationStore(
     (state) => state.conversationMode,

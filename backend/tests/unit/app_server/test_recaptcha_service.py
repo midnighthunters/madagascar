@@ -3,8 +3,8 @@ from uuid import uuid4
 
 import pytest
 
-from openhands.app_server.recaptcha.recaptcha_models import RecaptchaLog
-from openhands.app_server.recaptcha.sql_recaptcha_service import RecaptchaService
+from madagascar.app_server.recaptcha.recaptcha_models import RecaptchaLog
+from madagascar.app_server.recaptcha.sql_recaptcha_service import RecaptchaService
 
 
 @pytest.fixture

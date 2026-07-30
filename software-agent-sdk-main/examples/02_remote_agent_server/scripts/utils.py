@@ -1,4 +1,4 @@
-"""Helpers for examples that run a local OpenHands agent-server subprocess."""
+"""Helpers for examples that run a local Madagascar agent-server subprocess."""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ def _stream_output(stream: TextIO, prefix: str, target_stream: TextIO) -> None:
 
 
 class ManagedAPIServer:
-    """Subprocess ``openhands.agent_server``: wait for ``/health``, stop on exit.
+    """Subprocess ``madagascar.agent_server``: wait for ``/health``, stop on exit.
 
     Pass ``extra_env`` for defaults such as ``OH_SECRET_KEY`` (``os.environ`` still
     wins if those variables are set in the environment). With
@@ -58,7 +58,7 @@ class ManagedAPIServer:
         self._max_start_wait_seconds = max_start_wait_seconds
 
     def __enter__(self) -> ManagedAPIServer:
-        print(f"Starting OpenHands API server on {self.base_url}...")
+        print(f"Starting Madagascar API server on {self.base_url}...")
         if self.session_api_key is not None:
             print("Session API key is set; send it as X-Session-API-Key on API calls.")
 
@@ -72,7 +72,7 @@ class ManagedAPIServer:
             [
                 sys.executable,
                 "-m",
-                "openhands.agent_server",
+                "madagascar.agent_server",
                 "--port",
                 str(self.port),
                 "--host",

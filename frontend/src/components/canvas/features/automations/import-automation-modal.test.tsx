@@ -30,7 +30,7 @@ const spec: AutomationSpec = {
     on: "pull_request.opened",
   },
   enabled: true,
-  plugins: ["github:openhands/extensions", "github:acme/review-tools"],
+  plugins: ["github:madagascar/extensions", "github:acme/review-tools"],
 };
 
 describe("ImportAutomationModal", () => {

@@ -3,7 +3,7 @@ import os
 from pydantic import SecretStr
 from tabulate import tabulate
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
@@ -12,8 +12,8 @@ from openhands.sdk import (
     TextContent,
     get_logger,
 )
-from openhands.sdk.tool.spec import Tool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.tool.spec import Tool
+from madagascar.tools.terminal import TerminalTool
 
 
 logger = get_logger(__name__)

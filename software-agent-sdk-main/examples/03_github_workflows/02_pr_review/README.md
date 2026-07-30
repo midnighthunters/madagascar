@@ -1,8 +1,8 @@
 # PR Review Workflow
 
-This example demonstrates how to set up a GitHub Actions workflow for automated pull request reviews using the OpenHands agent SDK. When a PR is labeled with `review-this` or when openhands-agent is added as a reviewer, OpenHands will analyze the changes and provide detailed, constructive feedback.
+This example demonstrates how to set up a GitHub Actions workflow for automated pull request reviews using the Madagascar agent SDK. When a PR is labeled with `review-this` or when madagascar-agent is added as a reviewer, Madagascar will analyze the changes and provide detailed, constructive feedback.
 
-**Note**: The actual review scripts now live in the [OpenHands/extensions](https://github.com/OpenHands/extensions/tree/main/plugins/pr-review) repository. This directory contains an example workflow that references those scripts.
+**Note**: The actual review scripts now live in the [Madagascar/extensions](https://github.com/Madagascar/extensions/tree/main/plugins/pr-review) repository. This directory contains an example workflow that references those scripts.
 
 ## Files
 
@@ -13,7 +13,7 @@ This example demonstrates how to set up a GitHub Actions workflow for automated 
 
 - **Automatic Trigger**: Reviews are triggered when:
   - The `review-this` label is added to a PR, OR
-  - openhands-agent is requested as a reviewer
+  - madagascar-agent is requested as a reviewer
 - **Inline Review Comments**: Posts review comments directly on specific lines of code in the PR diff, rather than a single giant comment. This makes it easier to:
   - See exactly which lines the feedback refers to
   - Address issues one by one
@@ -24,7 +24,7 @@ This example demonstrates how to set up a GitHub Actions workflow for automated 
   - **Smart commenting**: Avoids repeating issues that have already been raised and addressed
   - **Unresolved focus**: Prioritizes unresolved threads that may still need attention
   - **Pagination limits**: Fetches up to 100 threads per page (with pagination) and up to 50 comments per thread. For PRs with extensive review history exceeding these limits, older threads/comments may be omitted.
-- **Skills-Based Review**: Uses public skills from <https://github.com/OpenHands/extensions>:
+- **Skills-Based Review**: Uses public skills from <https://github.com/Madagascar/extensions>:
   - **`/codereview`**: Standard pragmatic code review focusing on simplicity, type safety, and backward compatibility
   - **`/codereview-roasted`**: Linus Torvalds style brutally honest review with emphasis on "good taste" and data structures
 - **Complete Diff Upfront**: The agent receives a per-file diff payload in the initial message, preceded by a `Files Changed` manifest listing every file in the PR (so the agent always knows the full file set even when individual patches are abbreviated)
@@ -44,10 +44,10 @@ This example demonstrates how to set up a GitHub Actions workflow for automated 
 
 ### 1. Copy the workflow file
 
-Copy `workflow.yml` to `.github/workflows/pr-review-by-openhands.yml` in your repository:
+Copy `workflow.yml` to `.github/workflows/pr-review-by-madagascar.yml` in your repository:
 
 ```bash
-cp examples/03_github_workflows/02_pr_review/workflow.yml .github/workflows/pr-review-by-openhands.yml
+cp examples/03_github_workflows/02_pr_review/workflow.yml .github/workflows/pr-review-by-madagascar.yml
 ```
 
 ### 2. Configure secrets
@@ -55,17 +55,17 @@ cp examples/03_github_workflows/02_pr_review/workflow.yml .github/workflows/pr-r
 Set the following secrets in your GitHub repository settings:
 
 - **`LLM_API_KEY`** (required): Your LLM API key
-  - Get one from the [OpenHands LLM Provider](https://docs.all-hands.dev/openhands/usage/llms/openhands-llms)
+  - Get one from the [Madagascar LLM Provider](https://docs.all-hands.dev/madagascar/usage/llms/madagascar-llms)
 
 **Note**: The workflow automatically uses the `GITHUB_TOKEN` secret that's available in all GitHub Actions workflows.
 
 ### 3. Customize the workflow (optional)
 
-Edit `.github/workflows/pr-review-by-openhands.yml` to customize the inputs:
+Edit `.github/workflows/pr-review-by-madagascar.yml` to customize the inputs:
 
 ```yaml
             - name: Run PR Review
-              uses: OpenHands/extensions/plugins/pr-review@main
+              uses: Madagascar/extensions/plugins/pr-review@main
               with:
                   # Customize these inputs as needed
                   llm-model: gpt-5.5
@@ -84,7 +84,7 @@ Create a `review-this` label in your repository:
 1. Go to your repository → Issues → Labels
 2. Click "New label"
 3. Name: `review-this`
-4. Description: `Trigger OpenHands PR review`
+4. Description: `Trigger Madagascar PR review`
 5. Color: Choose any color you prefer
 6. Click "Create label"
 
@@ -105,7 +105,7 @@ There are two ways to trigger an automated review of a pull request:
 
 1. Open the pull request you want reviewed
 2. Click on "Reviewers" in the right sidebar
-3. Search for and select "openhands-agent" as a reviewer
+3. Search for and select "madagascar-agent" as a reviewer
 4. The workflow will automatically start and analyze the changes
 5. Review comments will be posted to the PR when complete
 
@@ -117,7 +117,7 @@ Instead of forking the `agent_script.py`, you can customize the code review beha
 
 ### How It Works
 
-The PR review agent uses skills from the [OpenHands/extensions](https://github.com/OpenHands/extensions) repository by default. When you add a `.agents/skills/code-review.md` file to your repository, it **overrides** the default skill with your custom guidelines.
+The PR review agent uses skills from the [Madagascar/extensions](https://github.com/Madagascar/extensions) repository by default. When you add a `.agents/skills/code-review.md` file to your repository, it **overrides** the default skill with your custom guidelines.
 
 ### Example: Custom Code Review Skill
 
@@ -163,11 +163,11 @@ You are a code reviewer for this project. Follow these guidelines:
 
 ### Reference Example
 
-See the [software-agent-sdk's own code-review skill](https://github.com/OpenHands/software-agent-sdk/blob/main/.agents/skills/code-review.md) for a complete example of a custom code review skill.
+See the [software-agent-sdk's own code-review skill](https://github.com/Madagascar/software-agent-sdk/blob/main/.agents/skills/code-review.md) for a complete example of a custom code review skill.
 
 ## Workflow Configuration
 
-The workflow is configured using inputs to the `OpenHands/extensions/plugins/pr-review` action.
+The workflow is configured using inputs to the `Madagascar/extensions/plugins/pr-review` action.
 
 ### Action Inputs
 
@@ -180,7 +180,7 @@ The workflow is configured using inputs to the `OpenHands/extensions/plugins/pr-
 | `github-token` | GitHub token for API access | `${{ secrets.GITHUB_TOKEN }}` |
 | `lmnr-api-key` | Laminar API key for observability (optional) | `${{ secrets.LMNR_PROJECT_API_KEY }}` |
 
-To use a specific version of the extensions repository, modify the `uses` line in the workflow file, e.g., `uses: OpenHands/extensions/plugins/pr-review@v1.0.0`.
+To use a specific version of the extensions repository, modify the `uses` line in the workflow file, e.g., `uses: Madagascar/extensions/plugins/pr-review@v1.0.0`.
 
 ## A/B Testing with Multiple Models
 
@@ -192,7 +192,7 @@ Specify multiple models as a comma-separated list in the `llm-model` input:
 
 ```yaml
             - name: Run PR Review
-              uses: OpenHands/extensions/plugins/pr-review@main
+              uses: Madagascar/extensions/plugins/pr-review@main
               with:
                   # Multiple models for A/B testing - one will be randomly selected
                   llm-model: 'gpt-5.5,gpt-4'
@@ -242,4 +242,4 @@ Configure a Laminar signal to analyze the evaluation traces:
    - Which comments received human responses
    - Overall review effectiveness score
 
-See [GitHub Issue #1953](https://github.com/OpenHands/software-agent-sdk/issues/1953) for the full implementation details.
+See [GitHub Issue #1953](https://github.com/Madagascar/software-agent-sdk/issues/1953) for the full implementation details.

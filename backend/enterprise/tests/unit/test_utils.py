@@ -7,41 +7,41 @@ from integrations.utils import (
 
 def test_has_exact_mention():
     # Test basic exact match
-    assert has_exact_mention('Hello @openhands!', '@openhands') is True
-    assert has_exact_mention('@openhands at start', '@openhands') is True
-    assert has_exact_mention('End with @openhands', '@openhands') is True
-    assert has_exact_mention('@openhands', '@openhands') is True
+    assert has_exact_mention('Hello @madagascar!', '@madagascar') is True
+    assert has_exact_mention('@madagascar at start', '@madagascar') is True
+    assert has_exact_mention('End with @madagascar', '@madagascar') is True
+    assert has_exact_mention('@madagascar', '@madagascar') is True
 
     # Test no match
-    assert has_exact_mention('No mention here', '@openhands') is False
-    assert has_exact_mention('', '@openhands') is False
+    assert has_exact_mention('No mention here', '@madagascar') is False
+    assert has_exact_mention('', '@madagascar') is False
 
     # Test partial matches (should be False)
-    assert has_exact_mention('Hello @openhands-agent!', '@openhands') is False
-    assert has_exact_mention('Email: user@openhands.com', '@openhands') is False
-    assert has_exact_mention('Text@openhands', '@openhands') is False
-    assert has_exact_mention('@openhandsmore', '@openhands') is False
+    assert has_exact_mention('Hello @madagascar-agent!', '@madagascar') is False
+    assert has_exact_mention('Email: user@madagascar.com', '@madagascar') is False
+    assert has_exact_mention('Text@madagascar', '@madagascar') is False
+    assert has_exact_mention('@madagascarmore', '@madagascar') is False
 
     # Test with special characters in mention
     assert has_exact_mention('Hi @open.hands!', '@open.hands') is True
-    assert has_exact_mention('Using @open-hands', '@open-hands') is True
-    assert has_exact_mention('With @open_hands_ai', '@open_hands_ai') is True
+    assert has_exact_mention('Using @madagascar', '@madagascar') is True
+    assert has_exact_mention('With @madagascar_ai', '@madagascar_ai') is True
 
     # Test case insensitivity (function now handles case conversion internally)
-    assert has_exact_mention('Hi @OpenHands', '@OpenHands') is True
-    assert has_exact_mention('Hi @OpenHands', '@openhands') is True
-    assert has_exact_mention('Hi @openhands', '@OpenHands') is True
-    assert has_exact_mention('Hi @OPENHANDS', '@openhands') is True
+    assert has_exact_mention('Hi @Madagascar', '@Madagascar') is True
+    assert has_exact_mention('Hi @Madagascar', '@madagascar') is True
+    assert has_exact_mention('Hi @madagascar', '@Madagascar') is True
+    assert has_exact_mention('Hi @MADAGASCAR', '@madagascar') is True
 
     # Test multiple mentions
-    assert has_exact_mention('@openhands and @openhands again', '@openhands') is True
-    assert has_exact_mention('@openhands-agent and @openhands', '@openhands') is True
+    assert has_exact_mention('@madagascar and @madagascar again', '@madagascar') is True
+    assert has_exact_mention('@madagascar-agent and @madagascar', '@madagascar') is True
 
     # Test with surrounding punctuation
-    assert has_exact_mention('Hey, @openhands!', '@openhands') is True
-    assert has_exact_mention('(@openhands)', '@openhands') is True
-    assert has_exact_mention('@openhands: hello', '@openhands') is True
-    assert has_exact_mention('@openhands? yes', '@openhands') is True
+    assert has_exact_mention('Hey, @madagascar!', '@madagascar') is True
+    assert has_exact_mention('(@madagascar)', '@madagascar') is True
+    assert has_exact_mention('@madagascar: hello', '@madagascar') is True
+    assert has_exact_mention('@madagascar? yes', '@madagascar') is True
 
 
 def test_markdown_to_jira_markup():
@@ -78,8 +78,8 @@ def test_infer_repo_from_message():
         # Single GitHub URLs
         ('Clone https://github.com/demo123/demo1.git', ['demo123/demo1']),
         (
-            'Check out https://github.com/OpenHands/OpenHands.git for details',
-            ['OpenHands/OpenHands'],
+            'Check out https://github.com/Madagascar/Madagascar.git for details',
+            ['Madagascar/Madagascar'],
         ),
         ('Visit https://github.com/microsoft/vscode', ['microsoft/vscode']),
         # Single GitLab URLs
@@ -96,7 +96,7 @@ def test_infer_repo_from_message():
             ['atlassian/atlassian-connect-express'],
         ),
         # Single direct owner/repo mentions
-        ('Please deploy the OpenHands/OpenHands repo', ['OpenHands/OpenHands']),
+        ('Please deploy the Madagascar/Madagascar repo', ['Madagascar/Madagascar']),
         ('I need help with the microsoft/vscode repository', ['microsoft/vscode']),
         ('Check facebook/react for examples', ['facebook/react']),
         ('The torvalds/linux kernel', ['torvalds/linux']),
@@ -155,12 +155,12 @@ def test_infer_repo_from_message():
         ('repos: user_1/repo-1 and user.2/repo_2', ['user_1/repo-1', 'user.2/repo_2']),
         # Backtick-wrapped repo mentions (common in Slack/Discord messages)
         (
-            '@openhands-exp just echo hello world in `OpenHands/OpenHands-CLI` repository',
-            ['OpenHands/OpenHands-CLI'],
+            '@madagascar-exp just echo hello world in `Madagascar/Madagascar-CLI` repository',
+            ['Madagascar/Madagascar-CLI'],
         ),
         (
-            '@openhands-exp echo hello world with {{OpenHands/OpenHands-CLI}}',
-            ['OpenHands/OpenHands-CLI'],
+            '@madagascar-exp echo hello world with {{Madagascar/Madagascar-CLI}}',
+            ['Madagascar/Madagascar-CLI'],
         ),
         ('Deploy the `test/project` repo', ['test/project']),
         # Colon-wrapped repo mentions

@@ -13,20 +13,20 @@ import pytest
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 
-from openhands.agent_server.models import ConversationInfo, Success
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.agent_server.models import ConversationInfo, Success
+from madagascar.app_server.app_conversation.app_conversation_models import (
     AppConversationInfo,
     ConversationTrigger,
 )
-from openhands.app_server.app_conversation.sql_app_conversation_info_service import (
+from madagascar.app_server.app_conversation.sql_app_conversation_info_service import (
     SQLAppConversationInfoService,
 )
-from openhands.app_server.event_callback.webhook_router import on_conversation_update
-from openhands.app_server.integrations.provider import ProviderType
-from openhands.app_server.sandbox.sandbox_models import SandboxRecord
-from openhands.app_server.user.specifiy_user_context import SpecifyUserContext
-from openhands.app_server.utils.sql_utils import Base
-from openhands.sdk.conversation import ConversationExecutionStatus
+from madagascar.app_server.event_callback.webhook_router import on_conversation_update
+from madagascar.app_server.integrations.provider import ProviderType
+from madagascar.app_server.sandbox.sandbox_models import SandboxRecord
+from madagascar.app_server.user.specifiy_user_context import SpecifyUserContext
+from madagascar.app_server.utils.sql_utils import Base
+from madagascar.sdk.conversation import ConversationExecutionStatus
 
 
 @asynccontextmanager
@@ -146,7 +146,7 @@ class TestOnConversationUpdateParentConversationId:
 
         # Act - call on_conversation_update directly with mocked valid_conversation
         with patch(
-            'openhands.app_server.event_callback.webhook_router.valid_conversation',
+            'madagascar.app_server.event_callback.webhook_router.valid_conversation',
             return_value=existing_conv,
         ):
             result = await on_conversation_update(
@@ -196,7 +196,7 @@ class TestOnConversationUpdateParentConversationId:
 
         # Act - call on_conversation_update directly with mocked valid_conversation
         with patch(
-            'openhands.app_server.event_callback.webhook_router.valid_conversation',
+            'madagascar.app_server.event_callback.webhook_router.valid_conversation',
             return_value=existing_conv,
         ):
             result = await on_conversation_update(
@@ -245,11 +245,11 @@ class TestOnConversationUpdateParentConversationId:
         # Also mock get_event_callback_service since new conversations trigger callback registration
         with (
             patch(
-                'openhands.app_server.event_callback.webhook_router.valid_conversation',
+                'madagascar.app_server.event_callback.webhook_router.valid_conversation',
                 return_value=stub_conv,
             ),
             patch(
-                'openhands.app_server.event_callback.webhook_router.get_event_callback_service',
+                'madagascar.app_server.event_callback.webhook_router.get_event_callback_service',
                 mock_get_event_callback_service,
             ),
         ):
@@ -306,7 +306,7 @@ class TestOnConversationUpdateParentConversationId:
 
         # Act - call on_conversation_update directly with mocked valid_conversation
         with patch(
-            'openhands.app_server.event_callback.webhook_router.valid_conversation',
+            'madagascar.app_server.event_callback.webhook_router.valid_conversation',
             return_value=existing_conv,
         ):
             result = await on_conversation_update(
@@ -378,7 +378,7 @@ class TestOnConversationUpdateParentConversationId:
                 existing = initial_conv
 
             with patch(
-                'openhands.app_server.event_callback.webhook_router.valid_conversation',
+                'madagascar.app_server.event_callback.webhook_router.valid_conversation',
                 return_value=existing,
             ):
                 result = await on_conversation_update(
@@ -436,7 +436,7 @@ class TestOnConversationUpdateParentConversationId:
 
         # Act - call on_conversation_update directly with mocked valid_conversation
         with patch(
-            'openhands.app_server.event_callback.webhook_router.valid_conversation',
+            'madagascar.app_server.event_callback.webhook_router.valid_conversation',
             return_value=existing_conv,
         ):
             result = await on_conversation_update(
@@ -491,11 +491,11 @@ class TestOnConversationUpdateParentConversationId:
         # Also mock get_event_callback_service since title=None triggers callback registration
         with (
             patch(
-                'openhands.app_server.event_callback.webhook_router.valid_conversation',
+                'madagascar.app_server.event_callback.webhook_router.valid_conversation',
                 return_value=existing_conv,
             ),
             patch(
-                'openhands.app_server.event_callback.webhook_router.get_event_callback_service',
+                'madagascar.app_server.event_callback.webhook_router.get_event_callback_service',
                 mock_get_event_callback_service,
             ),
         ):

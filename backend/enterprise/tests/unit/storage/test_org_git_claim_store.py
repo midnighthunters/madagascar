@@ -54,13 +54,13 @@ class TestOrgGitClaimStoreCreate:
             claim = await OrgGitClaimStore.create_claim(
                 org_id=org_id,
                 provider='github',
-                git_organization='OpenHands',
+                git_organization='Madagascar',
                 claimed_by=user_id,
             )
 
         assert claim.org_id == org_id
         assert claim.provider == 'github'
-        assert claim.git_organization == 'OpenHands'
+        assert claim.git_organization == 'Madagascar'
         assert claim.claimed_by == user_id
         assert claim.claimed_at is not None
 

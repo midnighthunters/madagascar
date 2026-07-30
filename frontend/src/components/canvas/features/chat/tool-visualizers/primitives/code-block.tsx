@@ -34,7 +34,7 @@ export function CodeBlock({
   expandable = false,
   wrapLongLines = false,
 }: CodeBlockProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const [isExpanded, setIsExpanded] = React.useState(false);
   const isTruncated = code.length > MAX_CONTENT_LENGTH;
   const display =

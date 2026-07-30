@@ -1,4 +1,4 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 import { Provider } from "#/types/settings";
 
 export type AnalyticsEventResponse = {
@@ -34,7 +34,7 @@ export const analyticsEventsService = {
   trackEvent: async (
     event: FrontendAnalyticsEvent,
   ): Promise<AnalyticsEventResponse> => {
-    const { data } = await openHands.post<AnalyticsEventResponse>(
+    const { data } = await madagascar.post<AnalyticsEventResponse>(
       "/api/analytics/events",
       event,
     );

@@ -3,13 +3,13 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from openhands.tools.file_editor.utils.config import (
+from madagascar.tools.file_editor.utils.config import (
     MAX_RESPONSE_LEN_CHAR,
 )
-from openhands.tools.file_editor.utils.constants import (
+from madagascar.tools.file_editor.utils.constants import (
     CONTENT_TRUNCATED_NOTICE,
 )
-from openhands.tools.file_editor.utils.shell import (
+from madagascar.tools.file_editor.utils.shell import (
     check_tool_installed,
     run_shell_cmd,
 )

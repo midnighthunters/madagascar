@@ -1,4 +1,4 @@
-from openhands.tools.terminal import TerminalTool
+from madagascar.tools.terminal import TerminalTool
 
 
 def test_to_mcp_tool_detailed_type_validation_bash(mock_conversation_state):

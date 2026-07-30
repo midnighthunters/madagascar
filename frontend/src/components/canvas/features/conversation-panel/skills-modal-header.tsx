@@ -23,7 +23,7 @@ export function SkillsModalHeader({
   onRefresh,
   onClose,
 }: SkillsModalHeaderProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const refreshLabel = t(I18nKey.BUTTON$REFRESH);
 
   return (

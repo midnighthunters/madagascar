@@ -21,7 +21,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from storage.org import Org
 from storage.user import User
 
-from openhands.app_server.utils.jsonpatch_compat import deep_merge
+from madagascar.app_server.utils.jsonpatch_compat import deep_merge
 
 
 @dataclass
@@ -156,7 +156,7 @@ class OrgAppSettingsStore:
             exclude={'last_known_updated_at'},  # Don't save this field
         )
         if 'registered_marketplaces' in update_dict:
-            from openhands.app_server.settings.settings_models import (
+            from madagascar.app_server.settings.settings_models import (
                 MarketplaceRegistration,
                 MarketplaceScope,
             )
@@ -189,7 +189,7 @@ class OrgAppSettingsStore:
 
             # Names are the marketplace identity; reject duplicates before persist
             # so a bad write can't break loading/resolution later.
-            from openhands.app_server.settings.marketplace_composition import (
+            from madagascar.app_server.settings.marketplace_composition import (
                 duplicate_marketplace_names,
             )
 

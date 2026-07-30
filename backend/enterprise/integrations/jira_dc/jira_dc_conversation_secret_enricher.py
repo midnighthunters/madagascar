@@ -15,18 +15,18 @@ from server.auth.token_manager import TokenManager
 from storage.jira_dc_integration_store import JiraDcIntegrationStore
 from storage.jira_dc_workspace import JiraDcWorkspace
 
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.app_server.app_conversation.app_conversation_models import (
     ConversationTrigger,
 )
-from openhands.app_server.app_conversation.conversation_secret_enricher import (
+from madagascar.app_server.app_conversation.conversation_secret_enricher import (
     ConversationSecretEnricher,
     ConversationSecretEnrichment,
 )
-from openhands.app_server.services.jwt_service import JwtService
-from openhands.app_server.user.user_context import UserContext
-from openhands.app_server.user.user_models import UserInfo
-from openhands.app_server.utils.logger import openhands_logger as logger
-from openhands.sdk.secret import LookupSecret, SecretSource, StaticSecret
+from madagascar.app_server.services.jwt_service import JwtService
+from madagascar.app_server.user.user_context import UserContext
+from madagascar.app_server.user.user_models import UserInfo
+from madagascar.app_server.utils.logger import madagascar_logger as logger
+from madagascar.sdk.secret import LookupSecret, SecretSource, StaticSecret
 
 JIRA_DC_SECRET_HINT = """You have credentialed access to the Jira Data Center REST API:
 

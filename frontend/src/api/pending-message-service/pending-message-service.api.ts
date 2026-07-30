@@ -6,7 +6,7 @@
  * delivered automatically when the conversation becomes ready.
  */
 
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 import type {
   PendingMessageResponse,
   QueuePendingMessageRequest,
@@ -29,7 +29,7 @@ class PendingMessageService {
     conversationId: string,
     message: QueuePendingMessageRequest,
   ): Promise<PendingMessageResponse> {
-    const { data } = await openHands.post<PendingMessageResponse>(
+    const { data } = await madagascar.post<PendingMessageResponse>(
       `/api/v1/conversations/${conversationId}/pending-messages`,
       message,
     );

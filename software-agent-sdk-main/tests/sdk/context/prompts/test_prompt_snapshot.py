@@ -21,14 +21,14 @@ from uuid import uuid4
 
 import pytest
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.agent.base import _DEFAULT_SOUL
-from openhands.sdk.context.agent_context import AgentContext
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.llm import LLM
-from openhands.sdk.skills import Skill
-from openhands.sdk.tool.spec import Tool
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.agent.base import _DEFAULT_SOUL
+from madagascar.sdk.context.agent_context import AgentContext
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.skills import Skill
+from madagascar.sdk.tool.spec import Tool
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 SNAPSHOT_DIR: Final[Path] = Path(__file__).parent / "snapshots"
@@ -116,7 +116,7 @@ def _build_agent(cell: Cell) -> Agent:
             "llm_security_analyzer": cell.llm_security_analyzer,
             "cli_mode": cell.cli_mode,
             # Pin soul_content to the built-in default so snapshots are
-            # deterministic regardless of whether ~/.openhands/SOUL.md exists
+            # deterministic regardless of whether ~/.madagascar/SOUL.md exists
             # on the machine running the tests.
             "soul_content": _DEFAULT_SOUL,
         },

@@ -5,13 +5,13 @@ PROMPT = """Please implement a TODO comment in a codebase.
 IMPORTANT - Creating a Pull Request:
 - Use the `gh pr create` command to create the PR
 - The GITHUB_TOKEN environment variable is available for authentication
-- PR Title: "[Openhands] {description}"
-- Branch name "openhands/todo/***"
+- PR Title: "[Madagascar] {description}"
+- Branch name "madagascar/todo/***"
 
 Your task is to:
 1. Analyze the TODO comment and understand what needs to be implemented
 2. Search in github for any existing PRs that adress this TODO
-    Filter by title [Openhands]... Don't implement anything if such a PR exists
+    Filter by title [Madagascar]... Don't implement anything if such a PR exists
 2. Create a feature branch for this implementation
 3. Implement what is asked by the TODO
 4. Create a pull request with your changes

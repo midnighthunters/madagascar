@@ -1,6 +1,6 @@
 import pytest
 
-from openhands.app_server.utils.git import (
+from madagascar.app_server.utils.git import (
     ensure_valid_git_branch_name,
     is_valid_git_branch_name,
 )

@@ -7,10 +7,10 @@ from typing import ClassVar
 
 import pytest
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.agent.base import AgentBase
-from openhands.sdk.context.prompts.presets import PromptPreset, create_registry
-from openhands.sdk.llm import LLM
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.agent.base import AgentBase
+from madagascar.sdk.context.prompts.presets import PromptPreset, create_registry
+from madagascar.sdk.llm import LLM
 
 
 def _make_llm() -> LLM:
@@ -154,7 +154,7 @@ def test_planning_filename_routes_through_registry() -> None:
     )
     assert static == expected
     assert static.startswith("You are a Planning Agent")
-    # Standalone composition: the default OpenHands identity must not leak in.
+    # Standalone composition: the default Madagascar identity must not leak in.
     assert "<SOUL>" not in static
 
 

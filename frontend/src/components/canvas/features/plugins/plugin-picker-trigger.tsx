@@ -21,7 +21,7 @@ export function PluginPickerTrigger({
   onClick,
   disabled = false,
 }: PluginPickerTriggerProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <button

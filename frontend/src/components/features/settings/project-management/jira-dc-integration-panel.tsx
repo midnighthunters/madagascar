@@ -589,7 +589,7 @@ export function JiraDcIntegrationPanel() {
 
   // Entry action for a not-yet-linked user. OAuth mode -> Connect your own
   // account. Email mode -> members do nothing (they auto-link on their first
-  // @openhands mention, and must never see the admin setup form -- FDE-87);
+  // @madagascar mention, and must never see the admin setup form -- FDE-87);
   // admins set up / manage the connection, with a note on live Jira queries.
   const renderEntryAction = () => {
     if (jiraDcOAuthHost) {

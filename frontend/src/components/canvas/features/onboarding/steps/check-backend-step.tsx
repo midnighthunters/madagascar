@@ -47,7 +47,7 @@ function ConnectionBanner({
   isConnected: boolean | null;
   lastError: string | null;
 }) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   if (isConnected === true) {
     return (
@@ -118,7 +118,7 @@ export function CheckBackendStep({
   onNext,
   onClose,
 }: CheckBackendStepProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { active, addBackend, setActive, updateBackend } =
     useActiveBackendContext();
   const { backend } = active;

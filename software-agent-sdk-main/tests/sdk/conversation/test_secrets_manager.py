@@ -2,8 +2,8 @@
 
 from pydantic import SecretStr
 
-from openhands.sdk.conversation.secret_registry import SecretRegistry
-from openhands.sdk.secret import SecretSource, StaticSecret
+from madagascar.sdk.conversation.secret_registry import SecretRegistry
+from madagascar.sdk.secret import SecretSource, StaticSecret
 
 
 # NOTE: module-level on purpose. A function-local ``SecretSource``

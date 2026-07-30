@@ -528,7 +528,7 @@ export function ConfigureModal({
                 b: <b />,
                 a: (
                   <a
-                    href="https://docs.all-hands.dev/usage/cloud/openhands-cloud"
+                    href="https://docs.all-hands.dev/usage/cloud/madagascar-cloud"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-500 hover:underline"
@@ -547,7 +547,7 @@ export function ConfigureModal({
                 b: <b />,
                 a: (
                   <a
-                    href="https://docs.all-hands.dev/usage/cloud/openhands-cloud"
+                    href="https://docs.all-hands.dev/usage/cloud/madagascar-cloud"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-500 underline"
@@ -606,7 +606,7 @@ export function ConfigureModal({
 
           {showConfigurationFields && (
             <>
-              {/* Webhook (Jira -> OpenHands). Jira DC: auto-install via a
+              {/* Webhook (Jira -> Madagascar). Jira DC: auto-install via a
                   one-time admin PAT, or reveal the URL + secret for manual
                   setup. Jira Cloud / Linear: a typed webhook secret. */}
               {isJiraDc ? (
@@ -722,7 +722,7 @@ export function ConfigureModal({
                 </div>
               )}
 
-              {/* Service account (OpenHands -> Jira): used to post comments and
+              {/* Service account (Madagascar -> Jira): used to post comments and
                   reactions on every event. Required regardless of webhook mode. */}
               {isJiraDc && (
                 <div>

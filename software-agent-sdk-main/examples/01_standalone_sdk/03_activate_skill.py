@@ -2,7 +2,7 @@ import os
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     AgentContext,
@@ -11,13 +11,13 @@ from openhands.sdk import (
     LLMConvertibleEvent,
     get_logger,
 )
-from openhands.sdk.context import (
+from madagascar.sdk.context import (
     KeywordTrigger,
     Skill,
 )
-from openhands.sdk.tool import Tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.tool import Tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 
 
 logger = get_logger(__name__)
@@ -58,7 +58,7 @@ tools = [
 #       system_prompt_kwargs={"cli_mode": True, "repo": "my-project"},
 #   )
 #
-# See: https://docs.openhands.dev/sdk/guides/skill#customizing-system-prompts
+# See: https://docs.madagascar.dev/sdk/guides/skill#customizing-system-prompts
 agent_context = AgentContext(
     skills=[
         Skill(
@@ -88,7 +88,7 @@ agent_context = AgentContext(
     # user_message_suffix is appended to each user message
     user_message_suffix="The first character of your response should be 'I'",
     # You can also enable automatic load skills from
-    # public registry at https://github.com/OpenHands/extensions
+    # public registry at https://github.com/Madagascar/extensions
     load_public_skills=True,
 )
 

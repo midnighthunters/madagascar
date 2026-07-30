@@ -5,9 +5,9 @@ import os
 
 from pydantic import BaseModel, Field, SecretStr
 
-from openhands.sdk import LLM, Message, TextContent
-from openhands.sdk.logger import get_logger
-from openhands.sdk.tool import Action, Observation, ToolDefinition, ToolExecutor
+from madagascar.sdk import LLM, Message, TextContent
+from madagascar.sdk.logger import get_logger
+from madagascar.sdk.tool import Action, Observation, ToolDefinition, ToolExecutor
 
 
 logger = get_logger(__name__)

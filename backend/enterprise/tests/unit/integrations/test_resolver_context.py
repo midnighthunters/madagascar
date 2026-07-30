@@ -13,12 +13,12 @@ from pydantic import SecretStr
 from enterprise.integrations.resolver_context import ResolverUserContext
 
 # Import the real classes we want to test
-from openhands.app_server.integrations.provider import CustomSecret, ProviderToken
-from openhands.app_server.integrations.service_types import ProviderType
-from openhands.app_server.secrets.secrets_models import Secrets
+from madagascar.app_server.integrations.provider import CustomSecret, ProviderToken
+from madagascar.app_server.integrations.service_types import ProviderType
+from madagascar.app_server.secrets.secrets_models import Secrets
 
 # Import the SDK types we need for testing
-from openhands.sdk.secret import SecretSource, StaticSecret
+from madagascar.sdk.secret import SecretSource, StaticSecret
 
 
 @pytest.fixture
@@ -361,7 +361,7 @@ async def test_get_provider_handler_creates_handler_with_correct_params(
     handler = await resolver_context._get_provider_handler()
 
     # Assert
-    from openhands.app_server.integrations.provider import ProviderHandler
+    from madagascar.app_server.integrations.provider import ProviderHandler
 
     assert isinstance(handler, ProviderHandler)
     assert handler.provider_tokens == provider_tokens

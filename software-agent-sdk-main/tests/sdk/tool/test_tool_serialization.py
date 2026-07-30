@@ -5,8 +5,8 @@ import json
 import pytest
 from pydantic import BaseModel
 
-from openhands.sdk.tool import ToolDefinition
-from openhands.sdk.tool.builtins import FinishTool, ThinkTool
+from madagascar.sdk.tool import ToolDefinition
+from madagascar.sdk.tool.builtins import FinishTool, ThinkTool
 
 
 def test_tool_serialization_deserialization() -> None:

@@ -30,8 +30,8 @@ class NoUselessBackwardCompatibilityTest(SoftwareAgentSDKBehaviorTest):
 
     def _collect_run_async_references(self, repo_dir: Path) -> list[str]:
         search_roots = [
-            repo_dir / "openhands-sdk",
-            repo_dir / "openhands-tools",
+            repo_dir / "madagascar-sdk",
+            repo_dir / "madagascar-tools",
             repo_dir / "tests",
         ]
         refs: list[str] = []
@@ -57,8 +57,8 @@ class NoUselessBackwardCompatibilityTest(SoftwareAgentSDKBehaviorTest):
     def _async_executor_has_submit(self, repo_dir: Path) -> bool:
         executor_path = (
             repo_dir
-            / "openhands-sdk"
-            / "openhands"
+            / "madagascar-sdk"
+            / "madagascar"
             / "sdk"
             / "utils"
             / "async_executor.py"

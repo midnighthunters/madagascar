@@ -19,7 +19,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from starlette.responses import HTMLResponse
 
-DEFAULT_DB_URL = 'postgresql://postgres:postgres@localhost:5432/openhands'
+DEFAULT_DB_URL = 'postgresql://postgres:postgres@localhost:5432/madagascar'
 DEFAULT_PORT = 8080
 
 
@@ -66,7 +66,7 @@ class ConversationsResponse(BaseModel):
 
 
 # Create FastAPI app
-app = FastAPI(title='OpenHands Admin API', version='1.0.0')
+app = FastAPI(title='Madagascar Admin API', version='1.0.0')
 
 # CORS
 app.add_middleware(
@@ -92,7 +92,7 @@ def get_engine(db_url: str):
 
 @app.get('/')
 async def root():
-    return {'message': 'OpenHands Admin API', 'docs': '/docs'}
+    return {'message': 'Madagascar Admin API', 'docs': '/docs'}
 
 
 @app.get(
@@ -359,7 +359,7 @@ def create_standalone_frontend():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenHands Admin Dashboard</title>
+    <title>Madagascar Admin Dashboard</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f0f0f; color: #e0e0e0; min-height: 100vh; }
@@ -408,7 +408,7 @@ def create_standalone_frontend():
 <body>
     <div class="container">
         <header>
-            <h1>🎯 OpenHands Admin Dashboard</h1>
+            <h1>🎯 Madagascar Admin Dashboard</h1>
             <select id="orgSelect" class="org-select">
                 <option value="">Select Organization</option>
             </select>

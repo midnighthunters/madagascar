@@ -3,7 +3,7 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.app_server.app_conversation.app_conversation_models import (
     ACP_SERVER_TAG_KEY,
     AppConversation,
     AppConversationInfo,
@@ -11,15 +11,15 @@ from openhands.app_server.app_conversation.app_conversation_models import (
     AppConversationUpdateRequest,
     PluginSpec,
 )
-from openhands.app_server.event_callback.event_callback_models import (
+from madagascar.app_server.event_callback.event_callback_models import (
     EventCallback,
     EventCallbackProcessor,
 )
-from openhands.app_server.event_callback.event_callback_result_models import (
+from madagascar.app_server.event_callback.event_callback_result_models import (
     EventCallbackResult,
     EventCallbackResultStatus,
 )
-from openhands.sdk import Event
+from madagascar.sdk import Event
 
 
 @pytest.mark.asyncio
@@ -146,8 +146,8 @@ class TestAcpServerProjection:
         conv = AppConversation(**info.model_dump())
         assert conv.acp_server == 'codex'
 
-    def test_none_for_openhands_even_with_stray_tag(self):
-        info = self._acp_info(agent_kind='openhands')
+    def test_none_for_madagascar_even_with_stray_tag(self):
+        info = self._acp_info(agent_kind='madagascar')
         assert info.acp_server is None
 
     def test_none_when_tag_absent(self):

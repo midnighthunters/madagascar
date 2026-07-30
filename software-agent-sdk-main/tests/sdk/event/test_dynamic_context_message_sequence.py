@@ -4,9 +4,9 @@ from typing import cast
 
 import pytest
 
-from openhands.sdk.event.base import LLMConvertibleEvent
-from openhands.sdk.event.llm_convertible import MessageEvent, SystemPromptEvent
-from openhands.sdk.llm import Message, TextContent
+from madagascar.sdk.event.base import LLMConvertibleEvent
+from madagascar.sdk.event.llm_convertible import MessageEvent, SystemPromptEvent
+from madagascar.sdk.llm import Message, TextContent
 
 
 @pytest.mark.parametrize(

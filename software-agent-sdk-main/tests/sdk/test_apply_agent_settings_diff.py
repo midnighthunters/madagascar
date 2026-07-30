@@ -8,20 +8,20 @@ this in several places; this exercises the single SDK owner.
 
 from pydantic import SecretStr
 
-from openhands.sdk import apply_agent_settings_diff, validate_agent_settings
-from openhands.sdk.settings.model import (
+from madagascar.sdk import apply_agent_settings_diff, validate_agent_settings
+from madagascar.sdk.settings.model import (
     AGENT_SETTINGS_SCHEMA_VERSION,
     ACPAgentSettings,
     LLMAgentSettings,
-    OpenHandsAgentSettings,
+    MadagascarAgentSettings,
 )
 
 
 # ── agent_kind is a narrowing gate, not a conversion knob ──────────────
 
 
-def test_switch_openhands_to_acp_replaces_with_fresh_variant() -> None:
-    base = {"agent_kind": "openhands", "llm": {"model": "gpt"}}
+def test_switch_madagascar_to_acp_replaces_with_fresh_variant() -> None:
+    base = {"agent_kind": "madagascar", "llm": {"model": "gpt"}}
 
     result = apply_agent_settings_diff(
         base, {"agent_kind": "acp", "acp_server": "claude-code"}
@@ -29,19 +29,19 @@ def test_switch_openhands_to_acp_replaces_with_fresh_variant() -> None:
 
     assert isinstance(result, ACPAgentSettings)
     assert result.acp_server == "claude-code"
-    # ACP's agent_context is nullable; the openhands llm.model is not carried.
+    # ACP's agent_context is nullable; the madagascar llm.model is not carried.
     assert result.agent_context is None
 
 
-def test_switch_acp_to_openhands_replaces_with_fresh_variant() -> None:
+def test_switch_acp_to_madagascar_replaces_with_fresh_variant() -> None:
     base = {"agent_kind": "acp", "acp_server": "claude-code"}
 
     result = apply_agent_settings_diff(
-        base, {"agent_kind": "openhands", "llm": {"model": "gpt"}}
+        base, {"agent_kind": "madagascar", "llm": {"model": "gpt"}}
     )
 
-    assert isinstance(result, OpenHandsAgentSettings)
-    assert result.agent_kind == "openhands"
+    assert isinstance(result, MadagascarAgentSettings)
+    assert result.agent_kind == "madagascar"
     assert result.llm.model == "gpt"
 
 
@@ -49,10 +49,10 @@ def test_inline_fields_land_on_fresh_base_during_switch() -> None:
     base = {"agent_kind": "acp", "acp_server": "claude-code"}
 
     result = apply_agent_settings_diff(
-        base, {"agent_kind": "openhands", "llm": {"model": "model-c"}}
+        base, {"agent_kind": "madagascar", "llm": {"model": "model-c"}}
     )
 
-    assert isinstance(result, OpenHandsAgentSettings)
+    assert isinstance(result, MadagascarAgentSettings)
     assert result.llm.model == "model-c"
 
 
@@ -61,13 +61,13 @@ def test_inline_fields_land_on_fresh_base_during_switch() -> None:
 
 def test_same_kind_deep_merges_within_variant() -> None:
     base = {
-        "agent_kind": "openhands",
+        "agent_kind": "madagascar",
         "llm": {"model": "gpt", "temperature": 0.5},
     }
 
     result = apply_agent_settings_diff(base, {"llm": {"temperature": 0.9}})
 
-    assert isinstance(result, OpenHandsAgentSettings)
+    assert isinstance(result, MadagascarAgentSettings)
     # untouched nested key is preserved; only temperature changes
     assert result.llm.model == "gpt"
     assert result.llm.temperature == 0.9
@@ -105,16 +105,16 @@ def test_empty_diff_returns_validated_base() -> None:
 
 
 def test_base_may_be_a_settings_instance() -> None:
-    base = OpenHandsAgentSettings.model_validate({"llm": {"model": "gpt"}})
+    base = MadagascarAgentSettings.model_validate({"llm": {"model": "gpt"}})
 
     result = apply_agent_settings_diff(base, {"llm": {"model": "claude"}})
 
-    assert isinstance(result, OpenHandsAgentSettings)
+    assert isinstance(result, MadagascarAgentSettings)
     assert result.llm.model == "claude"
 
 
 def test_secret_in_base_survives_same_kind_merge() -> None:
-    base = OpenHandsAgentSettings.model_validate(
+    base = MadagascarAgentSettings.model_validate(
         {"llm": {"model": "gpt", "api_key": "sk-SECRET"}}
     )
 
@@ -140,12 +140,12 @@ def test_validate_canonicalizes_llm_tag_at_current_schema_version() -> None:
         }
     )
 
-    assert type(result) is OpenHandsAgentSettings
-    assert result.agent_kind == "openhands"
+    assert type(result) is MadagascarAgentSettings
+    assert result.agent_kind == "madagascar"
     assert result.llm.model == "legacy"
 
 
-def test_apply_diff_on_llm_tagged_base_returns_openhands() -> None:
+def test_apply_diff_on_llm_tagged_base_returns_madagascar() -> None:
     base = {
         "agent_kind": "llm",
         "schema_version": AGENT_SETTINGS_SCHEMA_VERSION,
@@ -154,8 +154,8 @@ def test_apply_diff_on_llm_tagged_base_returns_openhands() -> None:
 
     result = apply_agent_settings_diff(base, {"llm": {"model": "new"}})
 
-    assert type(result) is OpenHandsAgentSettings
-    assert result.agent_kind == "openhands"
+    assert type(result) is MadagascarAgentSettings
+    assert result.agent_kind == "madagascar"
     assert result.llm.model == "new"
 
 
@@ -165,13 +165,13 @@ def test_validate_never_returns_llm_subclass() -> None:
             {"agent_kind": "llm", "schema_version": version, "llm": {"model": "m"}}
         )
         assert not isinstance(result, LLMAgentSettings)
-        assert result.agent_kind == "openhands"
+        assert result.agent_kind == "madagascar"
 
 
 # ── the deprecated class stays importable for back-compat ──────────────
 
 
 def test_llm_agent_settings_remains_importable() -> None:
-    from openhands.sdk.settings.model import LLMAgentSettings as _LLM
+    from madagascar.sdk.settings.model import LLMAgentSettings as _LLM
 
-    assert issubclass(_LLM, OpenHandsAgentSettings)
+    assert issubclass(_LLM, MadagascarAgentSettings)

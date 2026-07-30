@@ -8,10 +8,10 @@ import uuid
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation import Conversation
-from openhands.sdk.event.llm_convertible import MessageEvent
-from openhands.sdk.llm import LLM, Message, TextContent
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation import Conversation
+from madagascar.sdk.event.llm_convertible import MessageEvent
+from madagascar.sdk.llm import LLM, Message, TextContent
 from tests.platform_utils import maybe_mark_forked
 
 

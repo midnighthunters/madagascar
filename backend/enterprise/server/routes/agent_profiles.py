@@ -48,12 +48,12 @@ from storage.org import Org
 from storage.org_member import OrgMember
 from storage.org_service import OrgService
 
-from openhands.app_server.settings.agent_profiles import (
+from madagascar.app_server.settings.agent_profiles import (
     MAX_AGENT_PROFILES,
     AgentProfiles,
 )
-from openhands.app_server.utils.logger import openhands_logger as logger
-from openhands.sdk.profiles import (
+from madagascar.app_server.utils.logger import madagascar_logger as logger
+from madagascar.sdk.profiles import (
     AgentProfile,
     AgentProfileDiagnostics,
     ProfileLimitExceeded,
@@ -62,7 +62,7 @@ from openhands.sdk.profiles import (
     save_profile_preserving_identity,
     validate_agent_profile,
 )
-from openhands.sdk.profiles.agent_profile_store import PROFILE_NAME_PATTERN
+from madagascar.sdk.profiles.agent_profile_store import PROFILE_NAME_PATTERN
 
 router = APIRouter(prefix='/api/agent-profiles', tags=['Agent Profiles'])
 
@@ -80,7 +80,7 @@ class AgentProfileInfo(BaseModel):
 
     id: str | None = None
     name: str
-    agent_kind: str = 'openhands'
+    agent_kind: str = 'madagascar'
     revision: int | None = None
     llm_profile_ref: str | None = None
     mcp_server_refs: list[str] | None = None

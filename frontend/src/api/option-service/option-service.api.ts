@@ -1,4 +1,4 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 import { ModelsResponse, WebClientConfig } from "./option.types";
 
 /**
@@ -12,7 +12,7 @@ class OptionService {
    * verified providers, and provider assignment for bare model names.
    */
   static async getModels(): Promise<ModelsResponse> {
-    const { data } = await openHands.get<ModelsResponse>("/api/options/models");
+    const { data } = await madagascar.get<ModelsResponse>("/api/options/models");
     return data;
   }
 
@@ -21,7 +21,7 @@ class OptionService {
    * @returns List of security analyzers available
    */
   static async getSecurityAnalyzers(): Promise<string[]> {
-    const { data } = await openHands.get<string[]>(
+    const { data } = await madagascar.get<string[]>(
       "/api/options/security-analyzers",
     );
     return data;
@@ -32,7 +32,7 @@ class OptionService {
    * @returns Web client configuration response
    */
   static async getConfig(): Promise<WebClientConfig> {
-    const { data } = await openHands.get<WebClientConfig>(
+    const { data } = await madagascar.get<WebClientConfig>(
       "/api/v1/web-client/config",
     );
     return data;

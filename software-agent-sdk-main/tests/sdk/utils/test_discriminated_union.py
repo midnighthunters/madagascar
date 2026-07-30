@@ -11,9 +11,9 @@ from pydantic import (
     model_validator,
 )
 
-from openhands.sdk.utils.models import (
+from madagascar.sdk.utils.models import (
     DiscriminatedUnionMixin,
-    OpenHandsModel,
+    MadagascarModel,
 )
 
 
@@ -85,7 +85,7 @@ class Mythical(DiscriminatedUnionMixin, ABC):
         """Get a discription of the mythical beast"""
 
 
-class MythicalPack(OpenHandsModel):
+class MythicalPack(MadagascarModel):
     mythical: Mythical
 
 

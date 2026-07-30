@@ -1,4 +1,4 @@
-import { openHands } from "./open-hands-axios";
+import { madagascar } from "./madagascar-axios";
 
 export interface ApiKey {
   id: string;
@@ -49,7 +49,7 @@ class ApiKeysClient {
    * (``org_id: null`` -- visible regardless of the active org context).
    */
   static async getApiKeys(): Promise<ApiKey[]> {
-    const { data } = await openHands.get<unknown>("/api/keys");
+    const { data } = await madagascar.get<unknown>("/api/keys");
     // Ensure we always return an array, even if the API returns something else
     return Array.isArray(data) ? (data as ApiKey[]) : [];
   }
@@ -72,7 +72,7 @@ class ApiKeysClient {
     if ("org_id" in input) {
       body.org_id = input.org_id;
     }
-    const { data } = await openHands.post<CreateApiKeyResponse>(
+    const { data } = await madagascar.post<CreateApiKeyResponse>(
       "/api/keys",
       body,
     );
@@ -84,7 +84,7 @@ class ApiKeysClient {
    * @param id - The ID of the API key to delete
    */
   static async deleteApiKey(id: string): Promise<void> {
-    await openHands.delete(`/api/keys/${id}`);
+    await madagascar.delete(`/api/keys/${id}`);
   }
 }
 

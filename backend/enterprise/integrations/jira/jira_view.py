@@ -32,20 +32,20 @@ from storage.jira_integration_store import JiraIntegrationStore
 from storage.jira_user import JiraUser
 from storage.jira_workspace import JiraWorkspace
 
-from openhands.agent_server.models import SendMessageRequest
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.agent_server.models import SendMessageRequest
+from madagascar.app_server.app_conversation.app_conversation_models import (
     AppConversationStartRequest,
     AppConversationStartTaskStatus,
     ConversationTrigger,
 )
-from openhands.app_server.config import get_app_conversation_service
-from openhands.app_server.integrations.provider import ProviderHandler, ProviderType
-from openhands.app_server.services.injector import InjectorState
-from openhands.app_server.user.specifiy_user_context import USER_CONTEXT_ATTR
-from openhands.app_server.user_auth.user_auth import UserAuth
-from openhands.app_server.utils.http_session import httpx_verify_option
-from openhands.app_server.utils.logger import openhands_logger as logger
-from openhands.sdk import TextContent
+from madagascar.app_server.config import get_app_conversation_service
+from madagascar.app_server.integrations.provider import ProviderHandler, ProviderType
+from madagascar.app_server.services.injector import InjectorState
+from madagascar.app_server.user.specifiy_user_context import USER_CONTEXT_ATTR
+from madagascar.app_server.user_auth.user_auth import UserAuth
+from madagascar.app_server.utils.http_session import httpx_verify_option
+from madagascar.app_server.utils.logger import madagascar_logger as logger
+from madagascar.sdk import TextContent
 
 JIRA_CLOUD_API_URL = 'https://api.atlassian.com/ex/jira'
 
@@ -442,7 +442,7 @@ class JiraFactory:
         provider_handler = await JiraFactory._create_provider_handler(user_auth)
         if not provider_handler:
             raise RepositoryNotFoundError(
-                'No Git provider connected. Please connect a Git provider in OpenHands settings.'
+                'No Git provider connected. Please connect a Git provider in Madagascar settings.'
             )
 
         potential_repos = JiraFactory._extract_potential_repos(
@@ -479,7 +479,7 @@ class JiraFactory:
             payload: Parsed webhook payload
             workspace: The Jira workspace
             user: The Jira user
-            user_auth: OpenHands user authentication
+            user_auth: Madagascar user authentication
             decrypted_api_key: Decrypted service account API key
 
         Returns:

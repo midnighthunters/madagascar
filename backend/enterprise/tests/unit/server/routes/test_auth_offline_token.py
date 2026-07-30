@@ -1,7 +1,7 @@
 """Tests for the keycloak offline-token callback flow.
 
 Regression coverage for the bug fixed in
-https://github.com/OpenHands/OpenHands/pull/14387:
+https://github.com/Madagascar/Madagascar/pull/14387:
 
 The keycloak *offline* callback previously wrote the offline refresh token
 into the ``keycloak_auth`` cookie. The regular ``/logout`` endpoint reads
@@ -28,7 +28,7 @@ from fastapi import Request, status
 from fastapi.responses import JSONResponse, RedirectResponse
 from server.routes.auth import keycloak_offline_callback, logout
 
-from openhands.app_server.user_auth.user_auth import AuthType
+from madagascar.app_server.user_auth.user_auth import AuthType
 
 
 @pytest.fixture

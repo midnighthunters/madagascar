@@ -1,11 +1,11 @@
 import React from "react";
-import { OpenHandsAction } from "#/types/core/actions";
+import { MadagascarAction } from "#/types/core/actions";
 import { isFinishAction } from "#/types/core/guards";
 import { ChatMessage } from "../chat-message";
 import { getEventContent } from "../event-content-helpers/get-event-content";
 
 interface FinishEventMessageProps {
-  event: OpenHandsAction;
+  event: MadagascarAction;
 }
 
 export function FinishEventMessage({ event }: FinishEventMessageProps) {

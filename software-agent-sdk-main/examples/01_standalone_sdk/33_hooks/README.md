@@ -1,6 +1,6 @@
 # Hooks Examples
 
-This folder demonstrates the OpenHands hooks system.
+This folder demonstrates the Madagascar hooks system.
 
 ## Example
 

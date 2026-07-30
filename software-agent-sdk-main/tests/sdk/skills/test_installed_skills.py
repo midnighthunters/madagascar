@@ -1,6 +1,6 @@
 """Tests for installed skills management.
 
-These tests verify the public API in ``openhands.sdk.skills.installed``
+These tests verify the public API in ``madagascar.sdk.skills.installed``
 delegates correctly to ``InstallationManager``.  Internal metadata and
 sync logic is already covered by ``tests/sdk/extensions/installation/``.
 """
@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.skills import (
+from madagascar.sdk.skills import (
     Skill,
     disable_skill,
     enable_skill,
@@ -59,7 +59,7 @@ def sample_skill_dir(tmp_path: Path) -> Path:
 
 def test_get_installed_skills_dir_returns_default_path() -> None:
     path = get_installed_skills_dir()
-    assert ".openhands" in str(path)
+    assert ".madagascar" in str(path)
     assert "skills" in str(path)
     assert "installed" in str(path)
 

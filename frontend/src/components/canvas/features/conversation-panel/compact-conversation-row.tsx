@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { NavigationLink } from "#/components/shared/navigation-link";
 import { ExecutionStatus } from "#/types/agent-server/core/base/common";
 import { SandboxStatus } from "#/api/conversation-service/agent-server-conversation-service.types";
-import { RepositorySelection } from "#/api/open-hands.types";
+import { RepositorySelection } from "#/api/madagascar.types";
 import { cn } from "#/utils/utils";
 import { ConversationStatusDot } from "./conversation-status-dot";
 import { ConversationCardFooter } from "./conversation-card/conversation-card-footer";
@@ -24,7 +24,7 @@ interface CompactConversationRowProps {
   showRepositoryMetadata?: boolean;
   llmModel?: string | null;
   showLlmProfiles?: boolean;
-  agentKind?: "openhands" | "acp" | null;
+  agentKind?: "madagascar" | "acp" | null;
   acpServer?: string | null;
 }
 
@@ -50,7 +50,7 @@ export function CompactConversationRow({
   agentKind = null,
   acpServer = null,
 }: CompactConversationRowProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const disableAnimation = import.meta.env.MODE === "test";
 
   const preview = (

@@ -15,7 +15,7 @@ export function ConversationMobilePanelPage({
 }: {
   onNavigateBack: () => void;
 }) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { setIsRightPanelShown, setHasRightPanelToggled, setSelectedTab } =
     useConversationStore();
 

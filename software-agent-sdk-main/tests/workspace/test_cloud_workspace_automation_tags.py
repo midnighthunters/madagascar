@@ -1,4 +1,4 @@
-"""Tests for OpenHandsCloudWorkspace automation tags functionality."""
+"""Tests for MadagascarCloudWorkspace automation tags functionality."""
 
 import json
 import os
@@ -13,10 +13,10 @@ class TestDefaultConversationTags:
     @pytest.fixture
     def workspace(self):
         """Create a workspace instance with mocked sandbox creation."""
-        from openhands.workspace import OpenHandsCloudWorkspace
+        from madagascar.workspace import MadagascarCloudWorkspace
 
-        with patch.object(OpenHandsCloudWorkspace, "_start_sandbox"):
-            workspace = OpenHandsCloudWorkspace(
+        with patch.object(MadagascarCloudWorkspace, "_start_sandbox"):
+            workspace = MadagascarCloudWorkspace(
                 cloud_api_url="https://cloud.example.com",
                 cloud_api_key="test-api-key",
             )
@@ -127,8 +127,8 @@ class TestConversationTagMerging:
         """User tags should override workspace default tags."""
         from unittest.mock import MagicMock
 
-        from openhands.sdk.conversation.conversation import Conversation
-        from openhands.sdk.workspace import RemoteWorkspace
+        from madagascar.sdk.conversation.conversation import Conversation
+        from madagascar.sdk.workspace import RemoteWorkspace
 
         # Create a mock workspace with default_conversation_tags
         mock_workspace = MagicMock(spec=RemoteWorkspace)
@@ -139,7 +139,7 @@ class TestConversationTagMerging:
 
         # Mock RemoteConversation at the impl module level (where it's imported from)
         with patch(
-            "openhands.sdk.conversation.impl.remote_conversation.RemoteConversation"
+            "madagascar.sdk.conversation.impl.remote_conversation.RemoteConversation"
         ) as mock_convo_class:
             mock_convo_class.return_value = MagicMock()
 
@@ -167,8 +167,8 @@ class TestConversationTagMerging:
         """Should use workspace default tags when user provides none."""
         from unittest.mock import MagicMock
 
-        from openhands.sdk.conversation.conversation import Conversation
-        from openhands.sdk.workspace import RemoteWorkspace
+        from madagascar.sdk.conversation.conversation import Conversation
+        from madagascar.sdk.workspace import RemoteWorkspace
 
         mock_workspace = MagicMock(spec=RemoteWorkspace)
         mock_workspace.default_conversation_tags = {
@@ -177,7 +177,7 @@ class TestConversationTagMerging:
         }
 
         with patch(
-            "openhands.sdk.conversation.impl.remote_conversation.RemoteConversation"
+            "madagascar.sdk.conversation.impl.remote_conversation.RemoteConversation"
         ) as mock_convo_class:
             mock_convo_class.return_value = MagicMock()
 
@@ -197,15 +197,15 @@ class TestConversationTagMerging:
         """Should not merge when workspace returns None for default tags."""
         from unittest.mock import MagicMock
 
-        from openhands.sdk.conversation.conversation import Conversation
-        from openhands.sdk.workspace import RemoteWorkspace
+        from madagascar.sdk.conversation.conversation import Conversation
+        from madagascar.sdk.workspace import RemoteWorkspace
 
         # Create mock with default_conversation_tags returning None
         mock_workspace = MagicMock(spec=RemoteWorkspace)
         mock_workspace.default_conversation_tags = None
 
         with patch(
-            "openhands.sdk.conversation.impl.remote_conversation.RemoteConversation"
+            "madagascar.sdk.conversation.impl.remote_conversation.RemoteConversation"
         ) as mock_convo_class:
             mock_convo_class.return_value = MagicMock()
 
@@ -226,14 +226,14 @@ class TestConversationTagMerging:
         """Should not merge when workspace returns empty default tags."""
         from unittest.mock import MagicMock
 
-        from openhands.sdk.conversation.conversation import Conversation
-        from openhands.sdk.workspace import RemoteWorkspace
+        from madagascar.sdk.conversation.conversation import Conversation
+        from madagascar.sdk.workspace import RemoteWorkspace
 
         mock_workspace = MagicMock(spec=RemoteWorkspace)
         mock_workspace.default_conversation_tags = {}
 
         with patch(
-            "openhands.sdk.conversation.impl.remote_conversation.RemoteConversation"
+            "madagascar.sdk.conversation.impl.remote_conversation.RemoteConversation"
         ) as mock_convo_class:
             mock_convo_class.return_value = MagicMock()
 
@@ -254,59 +254,59 @@ class TestPluginSourceUrl:
 
     def test_github_shorthand_basic(self):
         """Should convert github:owner/repo to full URL."""
-        from openhands.sdk.plugin import PluginSource
+        from madagascar.sdk.plugin import PluginSource
 
-        plugin = PluginSource(source="github:OpenHands/skills")
-        assert plugin.source_url == "https://github.com/OpenHands/skills"
+        plugin = PluginSource(source="github:Madagascar/skills")
+        assert plugin.source_url == "https://github.com/Madagascar/skills"
 
     def test_github_shorthand_with_ref(self):
         """Should add tree/ref for github: sources with ref."""
-        from openhands.sdk.plugin import PluginSource
+        from madagascar.sdk.plugin import PluginSource
 
-        plugin = PluginSource(source="github:OpenHands/skills", ref="v1.0.0")
-        assert plugin.source_url == "https://github.com/OpenHands/skills/tree/v1.0.0"
+        plugin = PluginSource(source="github:Madagascar/skills", ref="v1.0.0")
+        assert plugin.source_url == "https://github.com/Madagascar/skills/tree/v1.0.0"
 
     def test_github_shorthand_with_repo_path(self):
         """Should add tree/main/path for github: sources with repo_path."""
-        from openhands.sdk.plugin import PluginSource
+        from madagascar.sdk.plugin import PluginSource
 
         plugin = PluginSource(
-            source="github:OpenHands/monorepo", repo_path="plugins/security"
+            source="github:Madagascar/monorepo", repo_path="plugins/security"
         )
         assert (
             plugin.source_url
-            == "https://github.com/OpenHands/monorepo/tree/main/plugins/security"
+            == "https://github.com/Madagascar/monorepo/tree/main/plugins/security"
         )
 
     def test_github_shorthand_with_ref_and_path(self):
         """Should include both ref and path in URL."""
-        from openhands.sdk.plugin import PluginSource
+        from madagascar.sdk.plugin import PluginSource
 
         plugin = PluginSource(
-            source="github:OpenHands/monorepo",
+            source="github:Madagascar/monorepo",
             ref="feature-branch",
             repo_path="plugins/security",
         )
         assert (
             plugin.source_url
-            == "https://github.com/OpenHands/monorepo/tree/feature-branch/plugins/security"
+            == "https://github.com/Madagascar/monorepo/tree/feature-branch/plugins/security"
         )
 
     def test_urls_returned_as_is(self):
         """Should return URLs as-is without modification."""
-        from openhands.sdk.plugin import PluginSource
+        from madagascar.sdk.plugin import PluginSource
 
         # Full GitHub URL
-        plugin = PluginSource(source="https://github.com/OpenHands/skills")
-        assert plugin.source_url == "https://github.com/OpenHands/skills"
+        plugin = PluginSource(source="https://github.com/Madagascar/skills")
+        assert plugin.source_url == "https://github.com/Madagascar/skills"
 
         # GitHub blob URL
         plugin = PluginSource(
-            source="https://github.com/OpenHands/skills/blob/main/SKILL.md"
+            source="https://github.com/Madagascar/skills/blob/main/SKILL.md"
         )
         assert (
             plugin.source_url
-            == "https://github.com/OpenHands/skills/blob/main/SKILL.md"
+            == "https://github.com/Madagascar/skills/blob/main/SKILL.md"
         )
 
         # GitLab URL (returned as-is, no ref appending)
@@ -327,7 +327,7 @@ class TestPluginSourceUrl:
 
     def test_local_path_returns_none(self):
         """Should return None for local paths (not portable)."""
-        from openhands.sdk.plugin import PluginSource
+        from madagascar.sdk.plugin import PluginSource
 
         for path in ["/absolute/path", "./relative", "../parent", "~/home"]:
             plugin = PluginSource(source=path)
@@ -341,20 +341,20 @@ class TestPluginsTagInConversation:
         """Should serialize plugins to URLs in the tags."""
         from unittest.mock import MagicMock
 
-        from openhands.sdk.conversation.conversation import Conversation
-        from openhands.sdk.plugin import PluginSource
-        from openhands.sdk.workspace import RemoteWorkspace
+        from madagascar.sdk.conversation.conversation import Conversation
+        from madagascar.sdk.plugin import PluginSource
+        from madagascar.sdk.workspace import RemoteWorkspace
 
         mock_workspace = MagicMock(spec=RemoteWorkspace)
         mock_workspace.default_conversation_tags = {}
 
         plugins = [
-            PluginSource(source="github:OpenHands/security-skill", ref="v1.0.0"),
-            PluginSource(source="github:OpenHands/review-skill"),
+            PluginSource(source="github:Madagascar/security-skill", ref="v1.0.0"),
+            PluginSource(source="github:Madagascar/review-skill"),
         ]
 
         with patch(
-            "openhands.sdk.conversation.impl.remote_conversation.RemoteConversation"
+            "madagascar.sdk.conversation.impl.remote_conversation.RemoteConversation"
         ) as mock_convo_class:
             mock_convo_class.return_value = MagicMock()
 
@@ -371,17 +371,17 @@ class TestPluginsTagInConversation:
             plugin_urls = effective_tags["plugins"].split(",")
             assert len(plugin_urls) == 2
             assert (
-                "https://github.com/OpenHands/security-skill/tree/v1.0.0" in plugin_urls
+                "https://github.com/Madagascar/security-skill/tree/v1.0.0" in plugin_urls
             )
-            assert "https://github.com/OpenHands/review-skill" in plugin_urls
+            assert "https://github.com/Madagascar/review-skill" in plugin_urls
 
     def test_credentials_redacted_in_plugins_tag(self):
         """Inline creds must not reach the persisted plugins tag; ${VAR} survives."""
         from unittest.mock import MagicMock
 
-        from openhands.sdk.conversation.conversation import Conversation
-        from openhands.sdk.plugin import PluginSource
-        from openhands.sdk.workspace import RemoteWorkspace
+        from madagascar.sdk.conversation.conversation import Conversation
+        from madagascar.sdk.plugin import PluginSource
+        from madagascar.sdk.workspace import RemoteWorkspace
 
         mock_workspace = MagicMock(spec=RemoteWorkspace)
         mock_workspace.default_conversation_tags = {}
@@ -391,7 +391,7 @@ class TestPluginsTagInConversation:
             PluginSource(source="https://x-token-auth:${MY_TOKEN}@host/org/ext.git"),
         ]
         with patch(
-            "openhands.sdk.conversation.impl.remote_conversation.RemoteConversation"
+            "madagascar.sdk.conversation.impl.remote_conversation.RemoteConversation"
         ) as mock_convo_class:
             mock_convo_class.return_value = MagicMock()
             Conversation(agent=MagicMock(), workspace=mock_workspace, plugins=plugins)
@@ -405,20 +405,20 @@ class TestPluginsTagInConversation:
         """Should not include local path plugins in tags."""
         from unittest.mock import MagicMock
 
-        from openhands.sdk.conversation.conversation import Conversation
-        from openhands.sdk.plugin import PluginSource
-        from openhands.sdk.workspace import RemoteWorkspace
+        from madagascar.sdk.conversation.conversation import Conversation
+        from madagascar.sdk.plugin import PluginSource
+        from madagascar.sdk.workspace import RemoteWorkspace
 
         mock_workspace = MagicMock(spec=RemoteWorkspace)
         mock_workspace.default_conversation_tags = {}
 
         plugins = [
-            PluginSource(source="github:OpenHands/skill"),
+            PluginSource(source="github:Madagascar/skill"),
             PluginSource(source="/local/path/to/plugin"),  # Should be skipped
         ]
 
         with patch(
-            "openhands.sdk.conversation.impl.remote_conversation.RemoteConversation"
+            "madagascar.sdk.conversation.impl.remote_conversation.RemoteConversation"
         ) as mock_convo_class:
             mock_convo_class.return_value = MagicMock()
 
@@ -432,15 +432,15 @@ class TestPluginsTagInConversation:
             effective_tags = call_kwargs["tags"]
 
             # Should only have one plugin (the GitHub one)
-            assert effective_tags["plugins"] == "https://github.com/OpenHands/skill"
+            assert effective_tags["plugins"] == "https://github.com/Madagascar/skill"
 
     def test_plugins_tag_merges_with_other_tags(self):
         """Plugins tag should merge with workspace and user tags."""
         from unittest.mock import MagicMock
 
-        from openhands.sdk.conversation.conversation import Conversation
-        from openhands.sdk.plugin import PluginSource
-        from openhands.sdk.workspace import RemoteWorkspace
+        from madagascar.sdk.conversation.conversation import Conversation
+        from madagascar.sdk.plugin import PluginSource
+        from madagascar.sdk.workspace import RemoteWorkspace
 
         mock_workspace = MagicMock(spec=RemoteWorkspace)
         mock_workspace.default_conversation_tags = {
@@ -448,10 +448,10 @@ class TestPluginsTagInConversation:
             "automationid": "auto-123",
         }
 
-        plugins = [PluginSource(source="github:OpenHands/skill")]
+        plugins = [PluginSource(source="github:Madagascar/skill")]
 
         with patch(
-            "openhands.sdk.conversation.impl.remote_conversation.RemoteConversation"
+            "madagascar.sdk.conversation.impl.remote_conversation.RemoteConversation"
         ) as mock_convo_class:
             mock_convo_class.return_value = MagicMock()
 
@@ -468,5 +468,5 @@ class TestPluginsTagInConversation:
             # All tags should be present
             assert effective_tags["automationtrigger"] == "webhook"
             assert effective_tags["automationid"] == "auto-123"
-            assert effective_tags["plugins"] == "https://github.com/OpenHands/skill"
+            assert effective_tags["plugins"] == "https://github.com/Madagascar/skill"
             assert effective_tags["custom"] == "value"

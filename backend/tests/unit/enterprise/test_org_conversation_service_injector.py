@@ -33,12 +33,12 @@ async def test_org_conversation_service_injector_sets_sandbox_service():
         finally:
             dummy_sandbox_service.closed = True
 
-    sentinel = types.ModuleType('openhands.app_server.config')
+    sentinel = types.ModuleType('madagascar.app_server.config')
     sentinel.get_db_session = fake_db_session
     sentinel.get_sandbox_service = fake_sandbox_service
 
-    original = sys.modules.get('openhands.app_server.config')
-    sys.modules['openhands.app_server.config'] = sentinel
+    original = sys.modules.get('madagascar.app_server.config')
+    sys.modules['madagascar.app_server.config'] = sentinel
     try:
         injector = OrgConversationServiceInjector()
         state = State()
@@ -51,6 +51,6 @@ async def test_org_conversation_service_injector_sets_sandbox_service():
         assert dummy_sandbox_service.closed is True
     finally:
         if original is None:
-            sys.modules.pop('openhands.app_server.config', None)
+            sys.modules.pop('madagascar.app_server.config', None)
         else:
-            sys.modules['openhands.app_server.config'] = original
+            sys.modules['madagascar.app_server.config'] = original

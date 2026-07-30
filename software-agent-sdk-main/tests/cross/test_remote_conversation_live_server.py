@@ -22,10 +22,10 @@ import uvicorn
 from litellm.types.utils import Choices, Message as LiteLLMMessage, ModelResponse
 from pydantic import SecretStr
 
-from openhands.agent_server.__main__ import preload_modules
-from openhands.sdk import LLM, Agent, AgentContext, Conversation
-from openhands.sdk.conversation import RemoteConversation
-from openhands.sdk.event import (
+from madagascar.agent_server.__main__ import preload_modules
+from madagascar.sdk import LLM, Agent, AgentContext, Conversation
+from madagascar.sdk.conversation import RemoteConversation
+from madagascar.sdk.event import (
     ActionEvent,
     AgentErrorEvent,
     CondensationSummaryEvent,
@@ -38,18 +38,18 @@ from openhands.sdk.event import (
     PauseEvent,
     SystemPromptEvent,
 )
-from openhands.sdk.hooks import HookConfig, HookDefinition, HookMatcher
-from openhands.sdk.skills import Skill
-from openhands.sdk.subagent import AgentDefinition
-from openhands.sdk.subagent.registry import (
+from madagascar.sdk.hooks import HookConfig, HookDefinition, HookMatcher
+from madagascar.sdk.skills import Skill
+from madagascar.sdk.subagent import AgentDefinition
+from madagascar.sdk.subagent.registry import (
     _reset_registry_for_tests,
     get_factory_info,
     get_registered_agent_definitions,
     register_agent,
     register_agent_if_absent,
 )
-from openhands.sdk.workspace import RemoteWorkspace
-from openhands.workspace.docker.workspace import find_available_tcp_port
+from madagascar.sdk.workspace import RemoteWorkspace
+from madagascar.workspace.docker.workspace import find_available_tcp_port
 
 
 @contextmanager
@@ -60,7 +60,7 @@ def live_server_env(
 ) -> Generator[dict]:
     """Launch a real FastAPI server backed by temp workspace and conversations.
 
-    We set OPENHANDS_AGENT_SERVER_CONFIG_PATH before creating the app so that
+    We set MADAGASCAR_AGENT_SERVER_CONFIG_PATH before creating the app so that
     routers pick up the correct default config and in-memory services.
     """
 
@@ -105,15 +105,15 @@ def live_server_env(
     cfg_file.write_text(json.dumps(cfg))
 
     # Ensure default config uses our file and disable any env key override
-    monkeypatch.setenv("OPENHANDS_AGENT_SERVER_CONFIG_PATH", str(cfg_file))
+    monkeypatch.setenv("MADAGASCAR_AGENT_SERVER_CONFIG_PATH", str(cfg_file))
     monkeypatch.delenv("SESSION_API_KEY", raising=False)
 
     if import_modules is not None:
         preload_modules(import_modules)
 
     # Build app after env is set
-    from openhands.agent_server.api import create_app
-    from openhands.agent_server.config import Config
+    from madagascar.agent_server.api import create_app
+    from madagascar.agent_server.config import Config
 
     cfg_obj = Config.model_validate_json(cfg_file.read_text())
 
@@ -188,8 +188,8 @@ def patched_llm(monkeypatch: pytest.MonkeyPatch) -> None:
         add_security_risk_prediction=False,
         **kwargs,
     ):  # type: ignore[no-untyped-def]
-        from openhands.sdk.llm.llm_response import LLMResponse
-        from openhands.sdk.llm.message import Message
+        from madagascar.sdk.llm.llm_response import LLMResponse
+        from madagascar.sdk.llm.message import Message
 
         # Create a minimal ModelResponse with a single assistant message
         litellm_msg = LiteLLMMessage.model_validate(
@@ -205,7 +205,7 @@ def patched_llm(monkeypatch: pytest.MonkeyPatch) -> None:
             choices=[Choices(index=0, finish_reason="stop", message=litellm_msg)],
         )
 
-        # Convert to OpenHands Message
+        # Convert to Madagascar Message
         message = Message.from_llm_chat_message(litellm_msg)
 
         self.metrics.add_token_usage(
@@ -237,7 +237,7 @@ def test_preloaded_custom_tool_resolves_in_live_server(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ):
     """A startup-preloaded tool is available during live conversation creation."""
-    from openhands.sdk.tool import Tool, registry as tool_registry
+    from madagascar.sdk.tool import Tool, registry as tool_registry
 
     package_name = "preload_live_server_tools_2771"
     module_qualname = f"{package_name}.tools"
@@ -252,7 +252,7 @@ def test_preloaded_custom_tool_resolves_in_live_server(
             from collections.abc import Sequence
             from typing import ClassVar
 
-            from openhands.sdk.tool import (
+            from madagascar.sdk.tool import (
                 Action,
                 Observation,
                 ToolDefinition,
@@ -542,7 +542,7 @@ def test_remote_conversation_over_real_server(server_env, patched_llm):
         # Note: SystemPromptEvent may not be delivered via WebSocket due to a race
         # condition where the event is published before the WebSocket subscription
         # completes. The event IS persisted on the server, but RemoteEventsList
-        # may miss it. See: https://github.com/OpenHands/software-agent-sdk/issues/1785
+        # may miss it. See: https://github.com/Madagascar/software-agent-sdk/issues/1785
         if found_agent_event and found_state_update:
             break
         time.sleep(0.1)
@@ -587,11 +587,11 @@ def test_remote_conversation_over_real_server(server_env, patched_llm):
 def test_openai_chat_completions_gateway_over_real_server(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, patched_llm
 ):
-    from openhands.agent_server import (
+    from madagascar.agent_server import (
         config as config_module,
         conversation_service as service_module,
     )
-    from openhands.sdk.llm.llm_profile_store import LLMProfileStore
+    from madagascar.sdk.llm.llm_profile_store import LLMProfileStore
 
     monkeypatch.setattr(config_module, "_default_config", None)
     monkeypatch.setattr(service_module, "_conversation_service", None)
@@ -606,7 +606,7 @@ def test_openai_chat_completions_gateway_over_real_server(
     )
 
     with patch(
-        "openhands.agent_server.openai.service.get_llm_profile_store",
+        "madagascar.agent_server.openai.service.get_llm_profile_store",
         lambda: LLMProfileStore(base_dir=profiles_dir),
     ):
         with live_server_env(tmp_path, monkeypatch) as env:
@@ -615,17 +615,17 @@ def test_openai_chat_completions_gateway_over_real_server(
                 assert models_response.status_code == 200
                 assert models_response.json()["data"] == [
                     {
-                        "id": "openhands_smoke",
+                        "id": "madagascar_smoke",
                         "object": "model",
                         "created": 0,
-                        "owned_by": "openhands",
+                        "owned_by": "madagascar",
                     }
                 ]
 
                 response = client.post(
                     f"{env['host']}/v1/chat/completions",
                     json={
-                        "model": "openhands_smoke",
+                        "model": "madagascar_smoke",
                         "messages": [
                             {"role": "system", "content": "Answer briefly."},
                             {"role": "user", "content": "Say hello."},
@@ -636,7 +636,7 @@ def test_openai_chat_completions_gateway_over_real_server(
                 assert response.status_code == 200
                 body = response.json()
                 assert body["object"] == "chat.completion"
-                assert body["model"] == "openhands_smoke"
+                assert body["model"] == "madagascar_smoke"
                 assert body["choices"][0]["message"] == {
                     "role": "assistant",
                     "content": "Hello from patched LLM",
@@ -646,7 +646,7 @@ def test_openai_chat_completions_gateway_over_real_server(
                     "completion_tokens": 5,
                     "total_tokens": 12,
                 }
-                conversation_id = response.headers["X-OpenHands-ServerConversation-ID"]
+                conversation_id = response.headers["X-Madagascar-ServerConversation-ID"]
                 UUID(conversation_id)
                 persisted_response = client.get(
                     f"{env['host']}/api/conversations/{conversation_id}", timeout=2.0
@@ -658,9 +658,9 @@ def test_openai_chat_completions_gateway_over_real_server(
 
                 reused_response = client.post(
                     f"{env['host']}/v1/chat/completions",
-                    headers={"X-OpenHands-ServerConversation-ID": conversation_id},
+                    headers={"X-Madagascar-ServerConversation-ID": conversation_id},
                     json={
-                        "model": "openhands_smoke",
+                        "model": "madagascar_smoke",
                         "messages": [
                             {"role": "user", "content": "Say hello again."},
                         ],
@@ -669,7 +669,7 @@ def test_openai_chat_completions_gateway_over_real_server(
                 )
                 assert reused_response.status_code == 200
                 assert (
-                    reused_response.headers["X-OpenHands-ServerConversation-ID"]
+                    reused_response.headers["X-Madagascar-ServerConversation-ID"]
                     == conversation_id
                 )
                 assert reused_response.json()["choices"][0]["message"] == {
@@ -685,7 +685,7 @@ def test_openai_chat_completions_gateway_over_real_server(
                     timeout=10,
                 )
                 stream = openai_client.chat.completions.create(
-                    model="openhands_smoke",
+                    model="madagascar_smoke",
                     messages=[
                         {"role": "developer", "content": "Answer tersely."},
                         {"role": "user", "content": "Say hello as a stream."},
@@ -707,7 +707,7 @@ def test_openai_chat_completions_gateway_over_real_server(
                 assert usage_chunks[-1].total_tokens == 12
 
                 stream = openai_client.chat.completions.create(
-                    model="openhands_smoke",
+                    model="madagascar_smoke",
                     messages=[
                         {
                             "role": "user",
@@ -734,15 +734,15 @@ def test_openai_gateway_replays_frozen_llm_fixtures(
 
     from openai import OpenAI
 
-    from openhands.agent_server import (
+    from madagascar.agent_server import (
         config as config_module,
         conversation_service as service_module,
     )
-    from openhands.agent_server.models import StartConversationRequest
-    from openhands.sdk import Message, TextContent
-    from openhands.sdk.llm.llm_profile_store import LLMProfileStore
-    from openhands.sdk.testing import TestLLM
-    from openhands.sdk.workspace import LocalWorkspace
+    from madagascar.agent_server.models import StartConversationRequest
+    from madagascar.sdk import Message, TextContent
+    from madagascar.sdk.llm.llm_profile_store import LLMProfileStore
+    from madagascar.sdk.testing import TestLLM
+    from madagascar.sdk.workspace import LocalWorkspace
 
     monkeypatch.setattr(config_module, "_default_config", None)
     monkeypatch.setattr(service_module, "_conversation_service", None)
@@ -779,7 +779,7 @@ def test_openai_gateway_replays_frozen_llm_fixtures(
         return info.id
 
     with patch(
-        "openhands.agent_server.openai.service.get_llm_profile_store",
+        "madagascar.agent_server.openai.service.get_llm_profile_store",
         lambda: LLMProfileStore(base_dir=profiles_dir),
     ):
         with live_server_env(tmp_path, monkeypatch) as env:
@@ -804,7 +804,7 @@ def test_openai_gateway_replays_frozen_llm_fixtures(
                     api_key="unused",
                     base_url=f"{env['host']}/v1",
                     default_headers={
-                        "X-OpenHands-ServerConversation-ID": str(conversation_id)
+                        "X-Madagascar-ServerConversation-ID": str(conversation_id)
                     },
                     timeout=10,
                 )
@@ -939,9 +939,9 @@ def test_conversation_stats_with_live_server(
         add_security_risk_prediction=False,
         **kwargs,
     ):  # type: ignore[no-untyped-def]
-        from openhands.sdk.llm.llm_response import LLMResponse
-        from openhands.sdk.llm.message import Message
-        from openhands.sdk.llm.utils.metrics import TokenUsage
+        from madagascar.sdk.llm.llm_response import LLMResponse
+        from madagascar.sdk.llm.message import Message
+        from madagascar.sdk.llm.utils.metrics import TokenUsage
 
         # Create a minimal ModelResponse with a single assistant message
         litellm_msg = LiteLLMMessage.model_validate(
@@ -954,12 +954,12 @@ def test_conversation_stats_with_live_server(
             choices=[Choices(index=0, finish_reason="stop", message=litellm_msg)],
         )
 
-        # Convert to OpenHands Message
+        # Convert to Madagascar Message
         message = Message.from_llm_chat_message(litellm_msg)
 
         # Simulate cost accumulation in the LLM's metrics
         # The LLM should have metrics that track cost
-        from openhands.sdk.llm.utils.metrics import MetricsSnapshot
+        from madagascar.sdk.llm.utils.metrics import MetricsSnapshot
 
         if self.metrics:
             self.metrics.add_cost(0.0025)
@@ -1084,7 +1084,7 @@ def test_events_not_lost_during_client_disconnection(
     that may have been missed via WebSocket. This ensures the client always
     has a complete view of all events.
 
-    See PR #1791 review for details: https://github.com/OpenHands/software-agent-sdk/pull/1791#pullrequestreview-3694259068
+    See PR #1791 review for details: https://github.com/Madagascar/software-agent-sdk/pull/1791#pullrequestreview-3694259068
     """
 
     def fake_completion_with_finish_tool(
@@ -1094,9 +1094,9 @@ def test_events_not_lost_during_client_disconnection(
         add_security_risk_prediction=False,
         **kwargs,
     ):  # type: ignore[no-untyped-def]
-        from openhands.sdk.llm.llm_response import LLMResponse
-        from openhands.sdk.llm.message import Message
-        from openhands.sdk.llm.utils.metrics import MetricsSnapshot
+        from madagascar.sdk.llm.llm_response import LLMResponse
+        from madagascar.sdk.llm.message import Message
+        from madagascar.sdk.llm.utils.metrics import MetricsSnapshot
 
         # Return a finish tool call to end the conversation
         litellm_msg = LiteLLMMessage.model_validate(
@@ -1260,9 +1260,9 @@ def test_post_run_reconcile_needed_under_ws_callback_lag(
         add_security_risk_prediction=False,
         **kwargs,
     ):  # type: ignore[no-untyped-def]
-        from openhands.sdk.llm.llm_response import LLMResponse
-        from openhands.sdk.llm.message import Message
-        from openhands.sdk.llm.utils.metrics import MetricsSnapshot
+        from madagascar.sdk.llm.llm_response import LLMResponse
+        from madagascar.sdk.llm.message import Message
+        from madagascar.sdk.llm.utils.metrics import MetricsSnapshot
 
         litellm_msg = LiteLLMMessage.model_validate(
             {
@@ -1410,9 +1410,9 @@ def test_security_risk_field_with_live_server(
         add_security_risk_prediction=False,
         **kwargs,
     ):  # type: ignore[no-untyped-def]
-        from openhands.sdk.llm.llm_response import LLMResponse
-        from openhands.sdk.llm.message import Message
-        from openhands.sdk.llm.utils.metrics import MetricsSnapshot
+        from madagascar.sdk.llm.llm_response import LLMResponse
+        from madagascar.sdk.llm.message import Message
+        from madagascar.sdk.llm.utils.metrics import MetricsSnapshot
 
         call_count["count"] += 1
 
@@ -1594,9 +1594,9 @@ def test_hook_config_sent_to_server(
         add_security_risk_prediction=False,
         **kwargs,
     ):  # type: ignore[no-untyped-def]
-        from openhands.sdk.llm.llm_response import LLMResponse
-        from openhands.sdk.llm.message import Message
-        from openhands.sdk.llm.utils.metrics import MetricsSnapshot
+        from madagascar.sdk.llm.llm_response import LLMResponse
+        from madagascar.sdk.llm.message import Message
+        from madagascar.sdk.llm.utils.metrics import MetricsSnapshot
 
         call_count["count"] += 1
 
@@ -1812,9 +1812,9 @@ def test_agent_final_response_endpoint(server_env, monkeypatch: pytest.MonkeyPat
         add_security_risk_prediction=False,
         **kwargs,
     ):  # type: ignore[no-untyped-def]
-        from openhands.sdk.llm.llm_response import LLMResponse
-        from openhands.sdk.llm.message import Message
-        from openhands.sdk.llm.utils.metrics import MetricsSnapshot
+        from madagascar.sdk.llm.llm_response import LLMResponse
+        from madagascar.sdk.llm.message import Message
+        from madagascar.sdk.llm.utils.metrics import MetricsSnapshot
 
         call_count["count"] += 1
 
@@ -1949,9 +1949,9 @@ def test_remote_state_exposes_invoked_skills(
         add_security_risk_prediction=False,
         **kwargs,
     ):  # type: ignore[no-untyped-def]
-        from openhands.sdk.llm.llm_response import LLMResponse
-        from openhands.sdk.llm.message import Message
-        from openhands.sdk.llm.utils.metrics import MetricsSnapshot
+        from madagascar.sdk.llm.llm_response import LLMResponse
+        from madagascar.sdk.llm.message import Message
+        from madagascar.sdk.llm.utils.metrics import MetricsSnapshot
 
         call_count["count"] += 1
         if call_count["count"] == 1:
@@ -2196,9 +2196,9 @@ def test_interrupt_endpoint_cancels_running_conversation(
         # Block in a way that arun() can cancel the awaiting coroutine.
         time.sleep(slow_delay)
         # Should never reach here if interrupt arrives in time.
-        from openhands.sdk.llm.llm_response import LLMResponse
-        from openhands.sdk.llm.message import Message
-        from openhands.sdk.llm.utils.metrics import MetricsSnapshot
+        from madagascar.sdk.llm.llm_response import LLMResponse
+        from madagascar.sdk.llm.message import Message
+        from madagascar.sdk.llm.utils.metrics import MetricsSnapshot
 
         litellm_msg = LiteLLMMessage.model_validate(
             {"role": "assistant", "content": "Hello"}
@@ -2288,7 +2288,7 @@ def test_interrupt_endpoint_cancels_running_conversation(
         events_resp = client.get(
             f"/api/conversations/{conv_id}/events/search",
             params={
-                "kind": ("openhands.sdk.event.user_action.InterruptEvent"),
+                "kind": ("madagascar.sdk.event.user_action.InterruptEvent"),
             },
         )
         assert events_resp.status_code == 200

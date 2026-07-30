@@ -1,7 +1,7 @@
-"""Resolve which OpenHands organization workspace a resolver conversation should be created in.
+"""Resolve which Madagascar organization workspace a resolver conversation should be created in.
 
 This module provides a reusable utility for routing resolver conversations
-(GitHub, GitLab, Bitbucket, Slack, etc.) to the correct OpenHands organization
+(GitHub, GitLab, Bitbucket, Slack, etc.) to the correct Madagascar organization
 workspace based on claimed Git organizations.
 """
 
@@ -10,7 +10,7 @@ from uuid import UUID
 from storage.org_git_claim_store import OrgGitClaimStore
 from storage.org_member_store import OrgMemberStore
 
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 
 async def resolve_org_for_repo(
@@ -18,15 +18,15 @@ async def resolve_org_for_repo(
     full_repo_name: str,
     keycloak_user_id: str | None = None,
 ) -> UUID | None:
-    """Determine the OpenHands org_id for a resolver conversation.
+    """Determine the Madagascar org_id for a resolver conversation.
 
-    If the repo's git organization is claimed by an OpenHands org, returns the
+    If the repo's git organization is claimed by an Madagascar org, returns the
     claiming org's ID. When keycloak_user_id is provided, also verifies the user
     is a member of that org.
 
     Args:
         provider: Git provider name ("github", "gitlab", "bitbucket")
-        full_repo_name: Full repository name (e.g., "OpenHands/foo")
+        full_repo_name: Full repository name (e.g., "Madagascar/foo")
         keycloak_user_id: The user's Keycloak UUID string (optional). If provided,
             membership is verified before returning the org_id.
 

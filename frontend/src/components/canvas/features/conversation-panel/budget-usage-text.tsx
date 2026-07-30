@@ -11,7 +11,7 @@ export function BudgetUsageText({
   currentCost,
   maxBudget,
 }: BudgetUsageTextProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const usagePercentage = (currentCost / maxBudget) * 100;
 
   return (

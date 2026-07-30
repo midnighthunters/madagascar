@@ -33,9 +33,9 @@ def _org(name: str = DEFAULT_ORG_NAME) -> Org:
 
 
 def test_default_org_config_defaults_org_name(monkeypatch):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', '1')
-    monkeypatch.delenv('OPENHANDS_DEFAULT_ORG_NAME', raising=False)
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', '1')
+    monkeypatch.delenv('MADAGASCAR_DEFAULT_ORG_NAME', raising=False)
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
 
     config = get_default_org_config()
 
@@ -46,8 +46,8 @@ def test_default_org_config_defaults_org_name(monkeypatch):
 
 
 def test_default_org_config_allows_org_name_override(monkeypatch):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', '1')
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_NAME', 'Acme')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', '1')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_NAME', 'Acme')
 
     config = get_default_org_config()
 
@@ -64,7 +64,7 @@ def test_default_org_config_reads_hide_personal_workspaces(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_disabled_default_org_does_nothing(monkeypatch):
-    monkeypatch.delenv('OPENHANDS_DEFAULT_ORG_ENABLED', raising=False)
+    monkeypatch.delenv('MADAGASCAR_DEFAULT_ORG_ENABLED', raising=False)
     user = _user('member@example.com')
 
     with patch(
@@ -82,9 +82,9 @@ async def test_disabled_default_org_does_nothing(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_first_user_creates_default_org_and_becomes_owner(monkeypatch):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
-    monkeypatch.delenv('OPENHANDS_DEFAULT_ORG_NAME', raising=False)
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
+    monkeypatch.delenv('MADAGASCAR_DEFAULT_ORG_NAME', raising=False)
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
     user = _user('first@example.com')
     org = _org()
     owner_membership = SimpleNamespace(role_id=1)
@@ -147,8 +147,8 @@ async def test_first_user_creates_default_org_and_becomes_owner(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_first_user_creates_org_even_with_auto_add_disabled(monkeypatch):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS', 'false')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS', 'false')
     user = _user('first@example.com')
     org = _org()
     owner_membership = SimpleNamespace(role_id=1)
@@ -199,8 +199,8 @@ async def test_first_user_creates_org_even_with_auto_add_disabled(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_sole_existing_team_org_is_adopted(monkeypatch):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
     member = _user('member@example.com')
     org = _org('Acme')
 
@@ -263,8 +263,8 @@ async def test_sole_existing_team_org_is_adopted(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_multiple_unflagged_team_orgs_skip_bootstrap(monkeypatch):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
     user = _user('member@example.com')
 
     with (
@@ -299,8 +299,8 @@ async def test_multiple_unflagged_team_orgs_skip_bootstrap(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_concurrent_creation_race_adopts_winner(monkeypatch):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
     user = _user('second@example.com')
     org = _org()
     existing_membership = SimpleNamespace(role_id=3)
@@ -347,8 +347,8 @@ async def test_concurrent_creation_race_adopts_winner(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_existing_user_auto_added_is_moved_into_default_org(monkeypatch):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
     member = _user('member@example.com')
     org = _org()
 
@@ -404,8 +404,8 @@ async def test_existing_user_auto_added_is_moved_into_default_org(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_auto_add_disabled_leaves_later_users_alone(monkeypatch):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS', 'false')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS', 'false')
     user = _user('member@example.com')
     org = _org()
 
@@ -446,8 +446,8 @@ async def test_auto_add_disabled_leaves_later_users_alone(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_existing_member_login_keeps_current_workspace(monkeypatch):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
     member = _user('member@example.com')
     org = _org()
     existing_membership = SimpleNamespace(role_id=3)
@@ -488,8 +488,8 @@ async def test_existing_member_login_keeps_current_workspace(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_hide_personal_workspaces_moves_member_parked_on_personal(monkeypatch):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
     monkeypatch.setenv('HIDE_PERSONAL_WORKSPACES', 'true')
     # _user() parks the user on their personal org (current_org_id == id)
     member = _user('member@example.com')
@@ -529,8 +529,8 @@ async def test_hide_personal_workspaces_moves_member_parked_on_personal(monkeypa
 async def test_hide_personal_workspaces_does_not_move_user_in_another_team_org(
     monkeypatch,
 ):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS', 'true')
     monkeypatch.setenv('HIDE_PERSONAL_WORKSPACES', 'true')
     member = _user('member@example.com')
     # The user works in some other (team) org — not their personal workspace.
@@ -566,8 +566,8 @@ async def test_hide_personal_workspaces_does_not_move_user_in_another_team_org(
 
 @pytest.mark.asyncio
 async def test_hide_personal_workspaces_leaves_non_member_on_personal(monkeypatch):
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
-    monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS', 'false')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
+    monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS', 'false')
     monkeypatch.setenv('HIDE_PERSONAL_WORKSPACES', 'true')
     member = _user('member@example.com')
     org = _org()

@@ -13,7 +13,7 @@
     ],
     "python.analysis.packageIndexDepths": [
         {
-            "name": "openhands",
+            "name": "madagascar",
             "depth": 10,
             "includeAllSymbols": true
         }

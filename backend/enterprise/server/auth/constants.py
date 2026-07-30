@@ -1,6 +1,6 @@
 import os
 
-from openhands.app_server.integrations.gitlab.constants import GITLAB_HOST
+from madagascar.app_server.integrations.gitlab.constants import GITLAB_HOST
 
 GITHUB_APP_CLIENT_ID = os.getenv('GITHUB_APP_CLIENT_ID', '').strip()
 GITHUB_APP_CLIENT_SECRET = os.getenv('GITHUB_APP_CLIENT_SECRET', '').strip()
@@ -70,8 +70,8 @@ BITBUCKET_DATA_CENTER_CLIENT_SECRET = os.getenv(
 ).strip()
 BITBUCKET_DATA_CENTER_HOST = os.getenv('BITBUCKET_DATA_CENTER_HOST', '').strip()
 # Optional HTTP access token for a dedicated bot service account. When set,
-# OpenHands posts all Bitbucket Data Center comments/reactions as this bot
-# (mirroring the GitHub App's openhands[bot] identity) instead of as the
+# Madagascar posts all Bitbucket Data Center comments/reactions as this bot
+# (mirroring the GitHub App's madagascar[bot] identity) instead of as the
 # per-repo webhook installer or the @-mentioning user. Only the posting
 # identity changes -- the resolver job still runs with the invoking user's
 # own token.

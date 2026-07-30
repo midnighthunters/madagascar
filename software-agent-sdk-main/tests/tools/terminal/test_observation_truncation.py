@@ -1,9 +1,9 @@
 """Tests for TerminalObservation truncation functionality."""
 
-from openhands.sdk.llm import TextContent
-from openhands.tools.terminal.constants import MAX_CMD_OUTPUT_SIZE
-from openhands.tools.terminal.definition import TerminalObservation
-from openhands.tools.terminal.metadata import CmdOutputMetadata
+from madagascar.sdk.llm import TextContent
+from madagascar.tools.terminal.constants import MAX_CMD_OUTPUT_SIZE
+from madagascar.tools.terminal.definition import TerminalObservation
+from madagascar.tools.terminal.metadata import CmdOutputMetadata
 
 
 def test_terminal_observation_truncation_under_limit():

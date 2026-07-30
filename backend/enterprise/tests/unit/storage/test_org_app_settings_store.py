@@ -15,7 +15,7 @@ from storage.org import Org
 from storage.org_app_settings_store import OrgAppSettingsStore
 from storage.user import User
 
-from openhands.app_server.settings.settings_models import MarketplaceRegistration
+from madagascar.app_server.settings.settings_models import MarketplaceRegistration
 
 
 @pytest.fixture

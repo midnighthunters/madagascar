@@ -16,7 +16,7 @@ triggers:
 curl -X POST \
   -H "Authorization: token $GITHUB_TOKEN" \
   -H "Accept: application/vnd.github+json" \
-  "https://api.github.com/repos/OpenHands/software-agent-sdk/actions/workflows/run-eval.yml/dispatches" \
+  "https://api.github.com/repos/Madagascar/software-agent-sdk/actions/workflows/run-eval.yml/dispatches" \
   -d '{
     "ref": "main",
     "inputs": {
@@ -40,7 +40,7 @@ curl -X POST \
 
 ## Monitoring
 
-**Datadog script** (requires `OpenHands/evaluation` repo; DD_API_KEY, DD_APP_KEY, and DD_SITE environment variables are set):
+**Datadog script** (requires `Madagascar/evaluation` repo; DD_API_KEY, DD_APP_KEY, and DD_SITE environment variables are set):
 ```bash
 DD_API_KEY=$DD_API_KEY DD_APP_KEY=$DD_APP_KEY DD_SITE=$DD_SITE \
   python scripts/analyze_evals.py --job-prefix <EVAL_RUN_ID> --time-range 60

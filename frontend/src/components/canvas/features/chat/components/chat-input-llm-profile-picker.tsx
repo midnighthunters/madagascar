@@ -30,7 +30,7 @@ interface ChatInputLlmProfileMenuContentProps {
 }
 
 /**
- * The in-conversation OpenHands LLM-profile switcher list. Selecting a profile
+ * The in-conversation Madagascar LLM-profile switcher list. Selecting a profile
  * live-swaps the running conversation's LLM via `/switch_profile` (the ACP
  * analog is {@link ChatInputModelMenuContent}). Shared by the inline pill and
  * the chat-input overflow submenu.
@@ -41,7 +41,7 @@ export function ChatInputLlmProfileMenuContent({
   settingsLinkClassName,
   settingsIconClassName,
 }: ChatInputLlmProfileMenuContentProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { profiles, currentProfileName, selectProfile } =
     useChatInputLlmProfileState();
 
@@ -131,7 +131,7 @@ export function ChatInputLlmProfileMenuContent({
 }
 
 export function ChatInputLlmProfilePicker() {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { profiles, currentProfileName, isLoading, isSwitching } =
     useChatInputLlmProfileState();
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);

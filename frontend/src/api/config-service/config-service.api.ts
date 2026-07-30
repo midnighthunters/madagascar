@@ -1,4 +1,4 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 import type {
   LLMModelPage,
   ProviderPage,
@@ -23,7 +23,7 @@ class ConfigService {
     params: SearchModelsParams = {},
   ): Promise<LLMModelPage> {
     const qs = toSearchParams(params);
-    const { data } = await openHands.get<LLMModelPage>(
+    const { data } = await madagascar.get<LLMModelPage>(
       `/api/v1/config/models/search?${qs}`,
     );
     return data;
@@ -33,7 +33,7 @@ class ConfigService {
     params: SearchProvidersParams = {},
   ): Promise<ProviderPage> {
     const qs = toSearchParams(params);
-    const { data } = await openHands.get<ProviderPage>(
+    const { data } = await madagascar.get<ProviderPage>(
       `/api/v1/config/providers/search?${qs}`,
     );
     return data;

@@ -30,12 +30,12 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.pool import StaticPool
 
-from openhands.app_server.app_conversation.sql_app_conversation_info_service import (
+from madagascar.app_server.app_conversation.sql_app_conversation_info_service import (
     SQLAppConversationInfoService,
     StoredConversationCostEvent,
     StoredConversationMetadata,
 )
-from openhands.app_server.user.specifiy_user_context import SpecifyUserContext
+from madagascar.app_server.user.specifiy_user_context import SpecifyUserContext
 
 
 @pytest.fixture

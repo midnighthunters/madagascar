@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { openHands } from "#/api/open-hands-axios";
+import { madagascar } from "#/api/madagascar-axios";
 import { useConfig } from "./use-config";
 
 export const LLM_API_KEY_QUERY_KEY = "llm-api-key";
@@ -22,7 +22,7 @@ export function useLlmApiKey() {
     enabled: config?.app_mode === "saas",
     queryFn: async () => {
       const { data } =
-        await openHands.get<LlmApiKeyResponse>("/api/keys/llm/byor");
+        await madagascar.get<LlmApiKeyResponse>("/api/keys/llm/byor");
       return data;
     },
     staleTime: 1000 * 60 * 5, // 5 minutes

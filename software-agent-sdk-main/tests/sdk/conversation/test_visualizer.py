@@ -11,11 +11,11 @@ from unittest.mock import MagicMock
 from pydantic import Field
 from rich.text import Text
 
-from openhands.sdk.conversation.conversation_stats import ConversationStats
-from openhands.sdk.conversation.visualizer import (
+from madagascar.sdk.conversation.conversation_stats import ConversationStats
+from madagascar.sdk.conversation.visualizer import (
     DefaultConversationVisualizer,
 )
-from openhands.sdk.event import (
+from madagascar.sdk.event import (
     ActionEvent,
     AgentErrorEvent,
     CondensationRequest,
@@ -26,20 +26,20 @@ from openhands.sdk.event import (
     SystemPromptEvent,
     UserRejectObservation,
 )
-from openhands.sdk.event.base import Event
-from openhands.sdk.event.types import SourceType
-from openhands.sdk.llm import (
+from madagascar.sdk.event.base import Event
+from madagascar.sdk.event.types import SourceType
+from madagascar.sdk.llm import (
     Message,
     MessageToolCall,
     ReasoningItemModel,
     TextContent,
 )
-from openhands.sdk.llm.utils.metrics import Metrics
-from openhands.sdk.tool import Action, Observation, ToolDefinition, ToolExecutor
+from madagascar.sdk.llm.utils.metrics import Metrics
+from madagascar.sdk.tool import Action, Observation, ToolDefinition, ToolExecutor
 
 
 if TYPE_CHECKING:
-    from openhands.sdk.conversation.impl.local_conversation import LocalConversation
+    from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
 
 
 class _UnknownEventForVisualizerTest(Event):
@@ -494,8 +494,8 @@ def test_metrics_formatting():
     """Test metrics subtitle formatting."""
     from unittest.mock import MagicMock
 
-    from openhands.sdk.conversation.conversation_stats import ConversationStats
-    from openhands.sdk.llm.utils.metrics import Metrics
+    from madagascar.sdk.conversation.conversation_stats import ConversationStats
+    from madagascar.sdk.llm.utils.metrics import Metrics
 
     # Create conversation stats with metrics
     conversation_stats = ConversationStats()
@@ -568,8 +568,8 @@ def test_metrics_abbreviation_formatting():
     """Test number abbreviation with various edge cases."""
     from unittest.mock import MagicMock
 
-    from openhands.sdk.conversation.conversation_stats import ConversationStats
-    from openhands.sdk.llm.utils.metrics import Metrics
+    from madagascar.sdk.conversation.conversation_stats import ConversationStats
+    from madagascar.sdk.llm.utils.metrics import Metrics
 
     test_cases = [
         # (input_tokens, expected_abbr)
@@ -621,7 +621,7 @@ def test_event_base_fallback_visualize():
 
 def test_conversation_error_event_visualize():
     """Test that ConversationErrorEvent provides a specific visualization."""
-    from openhands.sdk.event.conversation_error import ConversationErrorEvent
+    from madagascar.sdk.event.conversation_error import ConversationErrorEvent
 
     event = ConversationErrorEvent(
         source="environment",

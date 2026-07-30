@@ -2,7 +2,7 @@
 
 Single source of truth for the credential that posts comments/reactions back to
 Bitbucket DC: always the configured bot account, never the invoking user. A
-user-authored reply containing "@openhands" would re-fire the webhook, so we
+user-authored reply containing "@madagascar" would re-fire the webhook, so we
 post only as the bot (mirroring the Jira DC service-account pattern). Callers
 gate the event on ``BITBUCKET_DATA_CENTER_BOT_TOKEN`` before posting.
 """

@@ -3,7 +3,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from openhands.app_server.integrations.service_types import Comment
+from madagascar.app_server.integrations.service_types import Comment
 
 
 class SourceType(str, Enum):
@@ -12,7 +12,7 @@ class SourceType(str, Enum):
     BITBUCKET = 'bitbucket'
     BITBUCKET_DATA_CENTER = 'bitbucket_data_center'
     AZURE_DEVOPS = 'azure_devops'
-    OPENHANDS = 'openhands'
+    MADAGASCAR = 'madagascar'
     SLACK = 'slack'
     JIRA = 'jira'
     JIRA_DC = 'jira_dc'

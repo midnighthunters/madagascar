@@ -29,10 +29,10 @@ composes with whatever agent, tools, or critic you already have.
 import os
 import tempfile
 
-from openhands.sdk import LLM, Agent, Conversation, Tool
-from openhands.sdk.conversation.goal import run_goal
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk import LLM, Agent, Conversation, Tool
+from madagascar.sdk.conversation.goal import run_goal
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 
 
 # The agent LLM does the work; the judge LLM independently grades completion.

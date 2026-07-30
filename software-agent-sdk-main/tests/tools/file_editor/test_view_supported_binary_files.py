@@ -1,8 +1,8 @@
 import tempfile
 from pathlib import Path
 
-from openhands.tools.file_editor import file_editor
-from openhands.tools.file_editor.definition import FileEditorObservation
+from madagascar.tools.file_editor import file_editor
+from madagascar.tools.file_editor.definition import FileEditorObservation
 
 from .conftest import assert_successful_result
 

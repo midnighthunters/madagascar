@@ -28,26 +28,26 @@ from litellm.types.utils import (
 )
 from pydantic import SecretStr
 
-from openhands.sdk import Agent
-from openhands.sdk.context import AgentContext, KeywordTrigger, Skill
-from openhands.sdk.context.condenser.llm_summarizing_condenser import (
+from madagascar.sdk import Agent
+from madagascar.sdk.context import AgentContext, KeywordTrigger, Skill
+from madagascar.sdk.context.condenser.llm_summarizing_condenser import (
     LLMSummarizingCondenser,
 )
-from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-from openhands.sdk.event import ActionEvent, MessageEvent
-from openhands.sdk.event.conversation_state import ConversationStateUpdateEvent
-from openhands.sdk.event.types import ROOT_PARENT_ID
-from openhands.sdk.llm import LLM
-from openhands.sdk.llm.utils.openhands_provider import (
+from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+from madagascar.sdk.event import ActionEvent, MessageEvent
+from madagascar.sdk.event.conversation_state import ConversationStateUpdateEvent
+from madagascar.sdk.event.types import ROOT_PARENT_ID
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.llm.utils.madagascar_provider import (
     LITELLM_PROXY_PREFIX,
-    OPENHANDS_LLM_PROXY_BASE_URL,
-    OPENHANDS_PROVIDER_PREFIX,
+    MADAGASCAR_LLM_PROXY_BASE_URL,
+    MADAGASCAR_PROVIDER_PREFIX,
 )
-from openhands.sdk.security.llm_analyzer import LLMSecurityAnalyzer
-from openhands.sdk.security.risk import SecurityRisk
-from openhands.sdk.tool import Tool, register_tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.security.llm_analyzer import LLMSecurityAnalyzer
+from madagascar.sdk.security.risk import SecurityRisk
+from madagascar.sdk.tool import Tool, register_tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 from tests.conftest import create_mock_litellm_response
 
 
@@ -202,23 +202,23 @@ def _tool_call_response(
     )
 
 
-def _rewrite_openhands_llms_to_legacy_proxy(value: Any) -> None:
+def _rewrite_madagascar_llms_to_legacy_proxy(value: Any) -> None:
     if isinstance(value, dict):
         model = value.get("model")
-        if isinstance(model, str) and model.startswith(OPENHANDS_PROVIDER_PREFIX):
-            model_name = model.removeprefix(OPENHANDS_PROVIDER_PREFIX)
+        if isinstance(model, str) and model.startswith(MADAGASCAR_PROVIDER_PREFIX):
+            model_name = model.removeprefix(MADAGASCAR_PROVIDER_PREFIX)
             value["model"] = f"{LITELLM_PROXY_PREFIX}{model_name}"
-            value["base_url"] = OPENHANDS_LLM_PROXY_BASE_URL
+            value["base_url"] = MADAGASCAR_LLM_PROXY_BASE_URL
         for child in value.values():
-            _rewrite_openhands_llms_to_legacy_proxy(child)
+            _rewrite_madagascar_llms_to_legacy_proxy(child)
         return
 
     if isinstance(value, list):
         for child in value:
-            _rewrite_openhands_llms_to_legacy_proxy(child)
+            _rewrite_madagascar_llms_to_legacy_proxy(child)
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_conversation_restore_lifecycle_happy_path(mock_completion):
     """Baseline: restore should load prior events and allow further execution."""
 
@@ -280,7 +280,7 @@ def test_conversation_restore_lifecycle_happy_path(mock_completion):
             restored.close()
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_conversation_restore_preserves_security_risk_and_summary(mock_completion):
     """Restore should preserve action metadata derived from tool call arguments."""
 
@@ -384,7 +384,7 @@ def test_conversation_restore_preserves_security_risk_and_summary(mock_completio
             restored.close()
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_conversation_restore_fails_when_removing_tools(mock_completion):
     """Restore must fail when runtime tools remove a persisted tool."""
 
@@ -428,7 +428,7 @@ def test_conversation_restore_fails_when_removing_tools(mock_completion):
         assert "FileEditorTool" in str(exc.value)
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_conversation_restore_succeeds_when_adding_tools(mock_completion):
     """Restore must succeed when runtime tools add a new tool.
 
@@ -470,7 +470,7 @@ def test_conversation_restore_succeeds_when_adding_tools(mock_completion):
         assert conversation is not None
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_conversation_restore_fails_when_agent_class_changes(mock_completion):
     """Restore must fail when persisted and runtime agent types differ."""
 
@@ -513,7 +513,7 @@ def test_conversation_restore_fails_when_agent_class_changes(mock_completion):
         assert "self is of type" in str(exc.value)
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_conversation_restore_fails_when_default_tools_removed(mock_completion):
     """Restore must fail if include_default_tools removes a built-in tool."""
 
@@ -559,7 +559,7 @@ def test_conversation_restore_fails_when_default_tools_removed(mock_completion):
         assert "think" in str(exc.value)
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_conversation_restore_succeeds_when_default_tools_added(mock_completion):
     """Restore must succeed if include_default_tools adds a built-in tool.
 
@@ -603,7 +603,7 @@ def test_conversation_restore_succeeds_when_default_tools_added(mock_completion)
         assert conversation is not None
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_conversation_restore_succeeds_when_llm_condenser_and_skills_change(
     mock_completion,
 ):
@@ -662,8 +662,8 @@ def test_conversation_restore_succeeds_when_llm_condenser_and_skills_change(
             restored.close()
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
-def test_openhands_provider_restore_writes_public_model_shape(mock_completion):
+@patch("madagascar.sdk.llm.llm.litellm_completion")
+def test_madagascar_provider_restore_writes_public_model_shape(mock_completion):
     captured_completion_kwargs: list[dict[str, Any]] = []
 
     def capture_completion(*_args: Any, **kwargs: Any):
@@ -685,7 +685,7 @@ def test_openhands_provider_restore_writes_public_model_shape(mock_completion):
 
         tools = [Tool(name="TerminalTool"), Tool(name="FileEditorTool")]
         agent = _agent(
-            llm_model="openhands/claude-opus-4-8",
+            llm_model="madagascar/claude-opus-4-8",
             tools=tools,
             condenser_max_size=80,
             skill_name="skill-v1",
@@ -696,19 +696,19 @@ def test_openhands_provider_restore_writes_public_model_shape(mock_completion):
 
         base_state = lifecycle.read_base_state()
         llm_payload = base_state["agent"]["llm"]
-        assert llm_payload["model"] == "openhands/claude-opus-4-8"
+        assert llm_payload["model"] == "madagascar/claude-opus-4-8"
         assert "base_url" not in llm_payload
 
         assert captured_completion_kwargs[-1]["model"] == (
             "litellm_proxy/claude-opus-4-8"
         )
         assert (
-            captured_completion_kwargs[-1]["api_base"] == OPENHANDS_LLM_PROXY_BASE_URL
+            captured_completion_kwargs[-1]["api_base"] == MADAGASCAR_LLM_PROXY_BASE_URL
         )
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
-def test_conversation_restore_rewrites_legacy_openhands_proxy_snapshot(
+@patch("madagascar.sdk.llm.llm.litellm_completion")
+def test_conversation_restore_rewrites_legacy_madagascar_proxy_snapshot(
     mock_completion,
 ):
     captured_completion_kwargs: list[dict[str, Any]] = []
@@ -732,7 +732,7 @@ def test_conversation_restore_rewrites_legacy_openhands_proxy_snapshot(
 
         tools = [Tool(name="TerminalTool"), Tool(name="FileEditorTool")]
         persisted_agent = _agent(
-            llm_model="openhands/claude-opus-4-8",
+            llm_model="madagascar/claude-opus-4-8",
             tools=tools,
             condenser_max_size=80,
             skill_name="skill-v1",
@@ -741,11 +741,11 @@ def test_conversation_restore_rewrites_legacy_openhands_proxy_snapshot(
         initial = lifecycle.run_initial_session(persisted_agent)
 
         legacy_base_state = lifecycle.read_base_state()
-        _rewrite_openhands_llms_to_legacy_proxy(legacy_base_state["agent"])
+        _rewrite_madagascar_llms_to_legacy_proxy(legacy_base_state["agent"])
         lifecycle.write_base_state(legacy_base_state)
 
         runtime_agent = _agent(
-            llm_model="openhands/claude-opus-4-8",
+            llm_model="madagascar/claude-opus-4-8",
             tools=tools,
             condenser_max_size=80,
             skill_name="skill-v1",
@@ -756,11 +756,11 @@ def test_conversation_restore_rewrites_legacy_openhands_proxy_snapshot(
         try:
             assert restored.id == initial["conversation_id"]
             assert len(restored.state.events) == initial["event_count"]
-            assert restored.agent.llm.model == "openhands/claude-opus-4-8"
+            assert restored.agent.llm.model == "madagascar/claude-opus-4-8"
 
             restored_base_state = lifecycle.read_base_state()
             restored_llm_payload = restored_base_state["agent"]["llm"]
-            assert restored_llm_payload["model"] == "openhands/claude-opus-4-8"
+            assert restored_llm_payload["model"] == "madagascar/claude-opus-4-8"
             assert "base_url" not in restored_llm_payload
 
             lifecycle.send_and_run(restored, "Third message")
@@ -769,13 +769,13 @@ def test_conversation_restore_rewrites_legacy_openhands_proxy_snapshot(
             )
             assert (
                 captured_completion_kwargs[-1]["api_base"]
-                == OPENHANDS_LLM_PROXY_BASE_URL
+                == MADAGASCAR_LLM_PROXY_BASE_URL
             )
         finally:
             restored.close()
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_restore_reasoning_effort_none_strips_temperature(mock_completion):
     """Reasoning models should accept reasoning_effort and ignore temperature/top_p."""
 
@@ -835,7 +835,7 @@ def test_restore_reasoning_effort_none_strips_temperature(mock_completion):
             restored.close()
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_restore_pre_event_tree_conversation_with_artifact_tail_keeps_history(
     mock_completion,
 ):
@@ -924,7 +924,7 @@ def test_restore_pre_event_tree_conversation_with_artifact_tail_keeps_history(
             restored.close()
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_restore_event_tree_conversation_keeps_history(mock_completion):
     """Control for the pre-event-tree case: a normal 1.33.0+ restore is unaffected.
 

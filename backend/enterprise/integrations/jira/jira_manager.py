@@ -30,7 +30,7 @@ from integrations.models import Message
 from integrations.utils import (
     HOST,
     HOST_URL,
-    OPENHANDS_RESOLVER_TEMPLATES_DIR,
+    MADAGASCAR_RESOLVER_TEMPLATES_DIR,
     format_jira_comment_body,
     get_oh_labels,
     get_session_expired_message,
@@ -43,14 +43,14 @@ from storage.jira_integration_store import JiraIntegrationStore
 from storage.jira_user import JiraUser
 from storage.jira_workspace import JiraWorkspace
 
-from openhands.app_server.types import (
+from madagascar.app_server.types import (
     LLMAuthenticationError,
     MissingSettingsError,
     SessionExpiredError,
 )
-from openhands.app_server.user_auth.user_auth import UserAuth
-from openhands.app_server.utils.http_session import httpx_verify_option
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.user_auth.user_auth import UserAuth
+from madagascar.app_server.utils.http_session import httpx_verify_option
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 JIRA_CLOUD_API_URL = 'https://api.atlassian.com/ex/jira'
 
@@ -69,7 +69,7 @@ class JiraManager(Manager[JiraViewInterface]):
         self.token_manager = token_manager
         self.integration_store = JiraIntegrationStore.get_instance()
         self.jinja_env = Environment(
-            loader=FileSystemLoader(OPENHANDS_RESOLVER_TEMPLATES_DIR + 'jira')
+            loader=FileSystemLoader(MADAGASCAR_RESOLVER_TEMPLATES_DIR + 'jira')
         )
         self.payload_parser = JiraPayloadParser(
             oh_label=OH_LABEL,
@@ -216,7 +216,7 @@ class JiraManager(Manager[JiraViewInterface]):
     async def _authenticate_user(
         self, payload: JiraWebhookPayload, workspace: JiraWorkspace
     ) -> tuple[JiraUser | None, UserAuth | None]:
-        """Authenticate the Jira user and get OpenHands auth."""
+        """Authenticate the Jira user and get Madagascar auth."""
         jira_user = await self.integration_store.get_active_user(
             payload.account_id, workspace.id
         )
@@ -243,7 +243,7 @@ class JiraManager(Manager[JiraViewInterface]):
 
         if not saas_user_auth:
             logger.warning(
-                '[Jira] Failed to get OpenHands auth',
+                '[Jira] Failed to get Madagascar auth',
                 extra={
                     'keycloak_user_id': jira_user.keycloak_user_id,
                     'user_email': payload.user_email,
@@ -252,7 +252,7 @@ class JiraManager(Manager[JiraViewInterface]):
             await self._send_error_from_payload(
                 payload,
                 workspace,
-                f'User {payload.user_email} is not authenticated with OpenHands.',
+                f'User {payload.user_email} is not authenticated with Madagascar.',
             )
             return None, None
 
@@ -289,14 +289,14 @@ class JiraManager(Manager[JiraViewInterface]):
                 '[Jira] Missing settings error',
                 extra={'issue_key': view.payload.issue_key, 'error': str(e)},
             )
-            msg_info = f'Please re-login into [OpenHands Cloud]({HOST_URL}) before starting a job.'
+            msg_info = f'Please re-login into [Madagascar Cloud]({HOST_URL}) before starting a job.'
 
         except LLMAuthenticationError as e:
             logger.warning(
                 '[Jira] LLM authentication error',
                 extra={'issue_key': view.payload.issue_key, 'error': str(e)},
             )
-            msg_info = f'Please set a valid LLM API key in [OpenHands Cloud]({HOST_URL}) before starting a job.'
+            msg_info = f'Please set a valid LLM API key in [Madagascar Cloud]({HOST_URL}) before starting a job.'
 
         except SessionExpiredError as e:
             logger.warning(

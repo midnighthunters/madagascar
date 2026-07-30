@@ -3,9 +3,9 @@ from __future__ import annotations
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk import Agent
-from openhands.sdk.llm import LLM
-from openhands.sdk.tool import Tool
+from madagascar.sdk import Agent
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.tool import Tool
 
 
 def _make_llm() -> LLM:

@@ -1,5 +1,5 @@
 ---
-# OpenHands PR Review Workflow
+# Madagascar PR Review Workflow
 #
 # To set this up:
 #  1. Copy this file to .github/workflows/pr-review.yml in your repository
@@ -8,11 +8,11 @@
 #  4. Commit this file to your repository
 #  5. Trigger the review by either:
 #     - Adding the "review-this" label to any PR, OR
-#     - Requesting openhands-agent as a reviewer
+#     - Requesting madagascar-agent as a reviewer
 #
 # For more information, see:
-# https://github.com/OpenHands/software-agent-sdk/tree/main/examples/03_github_workflows/02_pr_review
-name: PR Review by OpenHands
+# https://github.com/Madagascar/software-agent-sdk/tree/main/examples/03_github_workflows/02_pr_review
+name: PR Review by Madagascar
 
 on:
     # Trigger when a label is added or a reviewer is requested
@@ -26,14 +26,14 @@ permissions:
 
 jobs:
     pr-review:
-        # Run when review-this label is added OR openhands-agent is requested as reviewer
+        # Run when review-this label is added OR madagascar-agent is requested as reviewer
         if: |
             github.event.label.name == 'review-this' ||
-            github.event.requested_reviewer.login == 'openhands-agent'
+            github.event.requested_reviewer.login == 'madagascar-agent'
         runs-on: ubuntu-latest
         steps:
             - name: Run PR Review
-              uses: OpenHands/extensions/plugins/pr-review@main
+              uses: Madagascar/extensions/plugins/pr-review@main
               with:
                   llm-model: gpt-5.5
                   llm-base-url: ''

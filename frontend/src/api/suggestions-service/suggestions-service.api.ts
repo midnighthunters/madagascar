@@ -1,5 +1,5 @@
 import { SuggestedTask } from "#/utils/types";
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 
 interface SuggestedTaskPage {
   items: SuggestedTask[];
@@ -17,7 +17,7 @@ export class SuggestionsService {
     pageId?: string,
     limit: number = 30,
   ): Promise<SuggestedTask[]> {
-    const { data } = await openHands.get<SuggestedTaskPage>(
+    const { data } = await madagascar.get<SuggestedTaskPage>(
       "/api/v1/git/suggested-tasks/search",
       {
         params: {

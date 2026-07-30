@@ -35,7 +35,7 @@ export function ChatInputProfileMenuContent({
   settingsLinkClassName,
   settingsIconClassName,
 }: ChatInputProfileMenuContentProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const {
     profiles,
     currentProfileId,
@@ -132,7 +132,7 @@ export function ChatInputProfileMenuContent({
 }
 
 export function ChatInputProfilePicker() {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { profiles, currentProfileName, isLoading, isSwitching } =
     useChatInputProfileState();
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);

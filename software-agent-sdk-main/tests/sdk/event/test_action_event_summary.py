@@ -2,9 +2,9 @@
 
 import pytest
 
-from openhands.sdk.event import ActionEvent
-from openhands.sdk.llm import MessageToolCall, TextContent
-from openhands.sdk.security.risk import SecurityRisk
+from madagascar.sdk.event import ActionEvent
+from madagascar.sdk.llm import MessageToolCall, TextContent
+from madagascar.sdk.security.risk import SecurityRisk
 
 
 @pytest.fixture

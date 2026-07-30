@@ -20,7 +20,7 @@ interface OutputPaneProps {
  * the full output. The copy button always yields the untruncated output.
  */
 export function OutputPane({ output, exitCode, copy = true }: OutputPaneProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const showExitBadge = exitCode != null && exitCode !== 0 && exitCode !== -1;
 
   return (

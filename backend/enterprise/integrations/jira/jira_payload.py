@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from enum import Enum
 from urllib.parse import urlparse
 
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 
 class JiraEventType(Enum):
@@ -94,11 +94,11 @@ class JiraPayloadParser:
     """
 
     def __init__(self, oh_label: str, inline_oh_label: str):
-        """Initialize parser with OpenHands label configuration.
+        """Initialize parser with Madagascar label configuration.
 
         Args:
-            oh_label: Label that triggers OpenHands (e.g., 'openhands')
-            inline_oh_label: Mention that triggers OpenHands (e.g., '@openhands')
+            oh_label: Label that triggers Madagascar (e.g., 'madagascar')
+            inline_oh_label: Mention that triggers Madagascar (e.g., '@madagascar')
         """
         self.oh_label = oh_label
         self.inline_oh_label = inline_oh_label
@@ -179,7 +179,7 @@ class JiraPayloadParser:
         )
 
     def _has_mention(self, text: str) -> bool:
-        """Check if text contains an exact mention of OpenHands."""
+        """Check if text contains an exact mention of Madagascar."""
         from integrations.utils import has_exact_mention
 
         return has_exact_mention(text, self.inline_oh_label)

@@ -8,7 +8,7 @@ from integrations.azure_devops.azure_devops_view import (
     AzureDevOpsWorkItemComment,
     _select_project_repo,
     actor_email,
-    mark_openhands_comment,
+    mark_madagascar_comment,
 )
 from integrations.models import Message, SourceType
 from jinja2 import Environment, FileSystemLoader
@@ -21,13 +21,13 @@ def jinja_env() -> Environment:
         loader=FileSystemLoader(
             str(
                 repo_root
-                / 'openhands/app_server/integrations/templates/resolver/azure_devops'
+                / 'madagascar/app_server/integrations/templates/resolver/azure_devops'
             )
         )
     )
 
 
-def _make_pr_message(body: str = '@openhands please fix this') -> Message:
+def _make_pr_message(body: str = '@madagascar please fix this') -> Message:
     return Message(
         source=SourceType.AZURE_DEVOPS,
         message={
@@ -68,7 +68,7 @@ def _make_pr_message(body: str = '@openhands please fix this') -> Message:
     )
 
 
-def _make_work_item_message(body: str = '@openhands please fix work item') -> Message:
+def _make_work_item_message(body: str = '@madagascar please fix work item') -> Message:
     return Message(
         source=SourceType.AZURE_DEVOPS,
         message={
@@ -110,7 +110,7 @@ def test_is_pr_comment_requires_exact_mention():
     assert AzureDevOpsFactory.is_pr_comment(_make_pr_message('hello')) is False
     assert (
         AzureDevOpsFactory.is_pr_comment(
-            _make_pr_message(mark_openhands_comment('@openhands generated summary'))
+            _make_pr_message(mark_madagascar_comment('@madagascar generated summary'))
         )
         is False
     )
@@ -125,7 +125,7 @@ def test_is_work_item_comment_requires_exact_mention():
     assert (
         AzureDevOpsFactory.is_work_item_comment(
             _make_work_item_message(
-                mark_openhands_comment('@openhands generated summary')
+                mark_madagascar_comment('@madagascar generated summary')
             )
         )
         is False
@@ -176,7 +176,7 @@ async def test_factory_work_item_view_derives_real_repo(monkeypatch):
     assert view.repository_id == 'repo-1'
     assert view.project_id == 'proj-9'
     assert view.issue_number == 42
-    assert view.comment_body == '@openhands please fix work item'
+    assert view.comment_body == '@madagascar please fix work item'
     assert view.user_info.user_id == 'ado-revised-user-id'
     assert view.user_info.username == 'Alice Revised'
 
@@ -279,7 +279,7 @@ async def test_pr_comment_instructions_include_actionable_comment(jinja_env):
         jinja_env
     )
 
-    assert '@openhands please fix this' in user_instructions
+    assert '@madagascar please fix this' in user_instructions
     assert 'PR title' in conversation_instructions
     assert 'PR body' in conversation_instructions
     assert 'older comment' in conversation_instructions
@@ -328,7 +328,7 @@ async def test_work_item_load_resolver_context_uses_work_item_not_pr(monkeypatch
 
 @pytest.mark.asyncio
 async def test_pr_comment_load_resolver_context_uses_pr_not_work_item(monkeypatch):
-    # A brand-new PR whose only comment is the @openhands mention returns an empty
+    # A brand-new PR whose only comment is the @madagascar mention returns an empty
     # list from get_pr_comments. The loader must NOT fall back to work-item
     # discussion in that case; it must stay on the PR code path.
     fake_service = MagicMock()

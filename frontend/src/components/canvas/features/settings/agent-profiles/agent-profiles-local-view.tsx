@@ -51,7 +51,7 @@ function toAgentSettingsOverride(
     };
   }
   return {
-    agent_kind: "openhands",
+    agent_kind: "madagascar",
     enable_sub_agents: profile.enable_sub_agents,
     tool_concurrency_limit: profile.tool_concurrency_limit,
   };
@@ -60,11 +60,11 @@ function toAgentSettingsOverride(
 /**
  * AgentProfilesLocalView mirrors {@link LlmSettingsLocalView}: a list of the
  * user's Agent profiles, with a create/edit view that reuses the existing Agent
- * settings form (embedded) plus a profile name and — for OpenHands profiles —
+ * settings form (embedded) plus a profile name and — for Madagascar profiles —
  * an LLM-profile picker. Available on local backends only.
  */
 export function AgentProfilesLocalView() {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { setHideSectionHeader } = useSettingsSectionHeader();
   const saveProfile = useSaveAgentProfile();
   const renameProfile = useRenameAgentProfile();
@@ -117,7 +117,7 @@ export function AgentProfilesLocalView() {
   const handleAddProfile = useCallback(() => {
     setProfileName("");
     setEditingProfile(null);
-    setOverride({ agent_kind: "openhands" });
+    setOverride({ agent_kind: "madagascar" });
     setLlmProfileRef(defaultLlmProfileRef);
     setSaveControl(null);
     setViewMode("create");
@@ -137,7 +137,7 @@ export function AgentProfilesLocalView() {
         const profile = detail.profile;
         setEditingProfile(profile);
         setOverride(toAgentSettingsOverride(profile));
-        if (profile.agent_kind === "openhands") {
+        if (profile.agent_kind === "madagascar") {
           // A profile can reference an LLM profile that's since been deleted
           // (or renamed): the dropdown would render nothing selected while
           // `llmProfileRef` still holds the stale name and saves it straight
@@ -181,7 +181,7 @@ export function AgentProfilesLocalView() {
     let input: AgentProfileSaveInput;
     try {
       const fields = saveControl.buildAgentProfileFields();
-      if (fields.agent_kind === "openhands") {
+      if (fields.agent_kind === "madagascar") {
         if (!llmProfileRef) {
           displayErrorToast(t(I18nKey.SETTINGS$AGENT_PROFILE_LLM_REQUIRED));
           return;
@@ -271,7 +271,7 @@ export function AgentProfilesLocalView() {
     viewMode === "edit" && editingProfile
       ? t(I18nKey.SETTINGS$PROFILE_LOADED, { name: editingProfile.name })
       : t(I18nKey.SETTINGS$PROFILE_SAVE_HINT);
-  const isOpenHands = saveControl?.agentType !== "acp";
+  const isMadagascar = saveControl?.agentType !== "acp";
 
   return (
     <div className="flex flex-col gap-6">
@@ -308,8 +308,8 @@ export function AgentProfilesLocalView() {
         onSaveControlChange={setSaveControl}
       />
 
-      {/* OpenHands profiles reference an LLM profile (required). */}
-      {isOpenHands &&
+      {/* Madagascar profiles reference an LLM profile (required). */}
+      {isMadagascar &&
         (llmProfiles.length > 0 ? (
           <SettingsDropdownInput
             testId="agent-profile-llm-selector"

@@ -30,7 +30,7 @@ export function GenericEventMessage({
   titleTrailing,
   titleIcon,
 }: GenericEventMessageProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const [showDetails, setShowDetails] = React.useState(initiallyExpanded);
 
   const chevron = details ? (

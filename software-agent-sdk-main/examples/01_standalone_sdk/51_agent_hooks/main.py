@@ -1,4 +1,4 @@
-"""OpenHands Agent SDK — Agent-based Hooks Example
+"""Madagascar Agent SDK — Agent-based Hooks Example
 
 Demonstrates the `type="agent"` hook, which evaluates lifecycle events with an
 LLM-driven sub-agent instead of a shell script. The hook agent receives the
@@ -24,11 +24,11 @@ from pathlib import Path
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Conversation
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.event.hook_execution import HookExecutionEvent
-from openhands.sdk.hooks import HookConfig, HookDefinition, HookMatcher, HookType
-from openhands.tools.preset.default import get_default_agent
+from madagascar.sdk import LLM, Conversation
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.event.hook_execution import HookExecutionEvent
+from madagascar.sdk.hooks import HookConfig, HookDefinition, HookMatcher, HookType
+from madagascar.tools.preset.default import get_default_agent
 
 
 # Keep the demo conversations short: a small per-run iteration cap means a hook

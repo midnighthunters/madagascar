@@ -9,7 +9,7 @@ interface PluginsSectionProps {
 }
 
 export function PluginsSection({ plugins }: PluginsSectionProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <SectionCard

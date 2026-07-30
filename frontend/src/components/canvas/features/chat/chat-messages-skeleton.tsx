@@ -24,7 +24,7 @@ function SkeletonBlock({ width, height }: { width: string; height: string }) {
 }
 
 export function ChatMessagesSkeleton() {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <div

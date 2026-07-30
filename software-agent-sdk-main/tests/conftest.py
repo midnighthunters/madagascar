@@ -7,12 +7,12 @@ from unittest.mock import MagicMock
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk import Agent
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.io import InMemoryFileStore
-from openhands.sdk.llm import LLM
-from openhands.sdk.tool import ToolExecutor
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.sdk import Agent
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.io import InMemoryFileStore
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.tool import ToolExecutor
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -176,4 +176,4 @@ def create_mock_litellm_response(
 def suppress_logging(monkeypatch):
     """Suppress logging during tests to reduce noise."""
     mock_logger = MagicMock()
-    monkeypatch.setattr("openhands.sdk.llm.llm.logger", mock_logger)
+    monkeypatch.setattr("madagascar.sdk.llm.llm.logger", mock_logger)

@@ -1,4 +1,4 @@
-"""OpenHands Agent SDK — Image Input Example.
+"""Madagascar Agent SDK — Image Input Example.
 
 This script mirrors the basic setup from ``examples/01_hello_world.py`` but adds
 vision support by sending an image to the agent alongside text instructions.
@@ -15,7 +15,7 @@ import os
 from PIL import Image
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
@@ -26,10 +26,10 @@ from openhands.sdk import (
     TextContent,
     get_logger,
 )
-from openhands.sdk.tool.spec import Tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.task_tracker import TaskTrackerTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.tool.spec import Tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.task_tracker import TaskTrackerTool
+from madagascar.tools.terminal import TerminalTool
 
 
 logger = get_logger(__name__)

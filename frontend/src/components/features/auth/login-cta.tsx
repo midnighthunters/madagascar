@@ -13,7 +13,7 @@ type LoginCTAProps = {
   source?: "login_page" | "device_verify";
 };
 
-const ENTERPRISE_URL = "https://openhands.dev/enterprise";
+const ENTERPRISE_URL = "https://madagascar.dev/enterprise";
 const INFORMATION_REQUEST_PATH = "/information-request";
 
 export function LoginCTA({

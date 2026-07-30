@@ -16,18 +16,18 @@ from fastmcp.server.auth.providers.in_memory import InMemoryOAuthProvider
 from mcp.server.auth.settings import ClientRegistrationOptions
 from pydantic import SecretStr
 
-import openhands.sdk.mcp.utils as mcp_utils
-from openhands.agent_server.config import Config
-from openhands.agent_server.mcp_oauth_store import (
+import madagascar.sdk.mcp.utils as mcp_utils
+from madagascar.agent_server.config import Config
+from madagascar.agent_server.mcp_oauth_store import (
     MCPSettingsOAuthTokenStore,
     create_settings_backed_mcp_tool_provider,
 )
-from openhands.agent_server.persistence import (
+from madagascar.agent_server.persistence import (
     PersistedSettings,
     get_settings_store,
     reset_stores,
 )
-from openhands.sdk.mcp.config import coerce_mcp_config, dump_mcp_config
+from madagascar.sdk.mcp.config import coerce_mcp_config, dump_mcp_config
 
 
 def _find_free_port() -> int:

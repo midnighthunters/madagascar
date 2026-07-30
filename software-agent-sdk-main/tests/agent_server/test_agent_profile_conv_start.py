@@ -1,7 +1,7 @@
 """Tests for agent_profile_id at conversation start + LaunchedAgentProfile provenance.
 
 Covers:
-- start-from-profile (OpenHands + ACP paths)
+- start-from-profile (Madagascar + ACP paths)
 - mutual-exclusivity validation (SDK layer)
 - unknown-id 404 / dangling-ref 422 (router layer)
 - LaunchedAgentProfile provenance round-trip through StoredConversation
@@ -19,31 +19,31 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pydantic import ValidationError
 
-from openhands.agent_server.config import Config
-from openhands.agent_server.conversation_router import conversation_router
-from openhands.agent_server.conversation_service import ConversationService
-from openhands.agent_server.dependencies import get_conversation_service
-from openhands.agent_server.event_service import EventService
-from openhands.agent_server.models import (
+from madagascar.agent_server.config import Config
+from madagascar.agent_server.conversation_router import conversation_router
+from madagascar.agent_server.conversation_service import ConversationService
+from madagascar.agent_server.dependencies import get_conversation_service
+from madagascar.agent_server.event_service import EventService
+from madagascar.agent_server.models import (
     ConversationInfo,
     LaunchedAgentProfile,
     StartConversationRequest,
     StoredConversation,
 )
-from openhands.sdk import LLM, Agent
-from openhands.sdk.conversation.state import (
+from madagascar.sdk import LLM, Agent
+from madagascar.sdk.conversation.state import (
     ConversationExecutionStatus,
     ConversationState,
 )
-from openhands.sdk.profiles.agent_profile import (
+from madagascar.sdk.profiles.agent_profile import (
     ACPAgentProfile,
-    OpenHandsAgentProfile,
+    MadagascarAgentProfile,
 )
-from openhands.sdk.profiles.resolver import (
+from madagascar.sdk.profiles.resolver import (
     DanglingMcpServerRef,
     ProfileNotFound,
 )
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 # ---------------------------------------------------------------------------
@@ -67,8 +67,8 @@ def mock_conversation_service():
     return AsyncMock(spec=ConversationService)
 
 
-def _make_openhands_profile(profile_id: UUID | None = None) -> OpenHandsAgentProfile:
-    return OpenHandsAgentProfile(
+def _make_madagascar_profile(profile_id: UUID | None = None) -> MadagascarAgentProfile:
+    return MadagascarAgentProfile(
         id=profile_id or uuid4(),
         name="my-profile",
         revision=3,
@@ -124,7 +124,7 @@ class TestStartConversationRequestValidation:
             StartConversationRequest(
                 agent_profile_id=uuid4(),
                 agent_settings={
-                    "agent_kind": "openhands",
+                    "agent_kind": "madagascar",
                     "llm": {"model": "gpt-4o", "usage_id": "llm"},
                 },
                 workspace=LocalWorkspace(working_dir="/tmp"),
@@ -151,18 +151,18 @@ class TestStartConversationRequestValidation:
 # ---------------------------------------------------------------------------
 
 # The helper does local imports inside the function body; patch at the source modules.
-_STORE_PATH = "openhands.agent_server.persistence.store.get_agent_profile_store"
-_LLM_STORE_PATH = "openhands.agent_server.persistence.store.get_llm_profile_store"
-_RESOLVE_PATH = "openhands.sdk.profiles.resolver.resolve_agent_profile"
-# Skill discovery is patched so OpenHands-profile resolves don't hit the network
+_STORE_PATH = "madagascar.agent_server.persistence.store.get_agent_profile_store"
+_LLM_STORE_PATH = "madagascar.agent_server.persistence.store.get_llm_profile_store"
+_RESOLVE_PATH = "madagascar.sdk.profiles.resolver.resolve_agent_profile"
+# Skill discovery is patched so Madagascar-profile resolves don't hit the network
 # (load_all_skills loads public skills from GitHub). conversation_service imports
 # discover_profile_skills directly, so patch it in that namespace.
-_DISCOVER_PATH = "openhands.agent_server.conversation_service.discover_profile_skills"
+_DISCOVER_PATH = "madagascar.agent_server.conversation_service.discover_profile_skills"
 
 
 class TestResolveAgentFromProfile:
     def test_unknown_id_raises_profile_not_found(self):
-        from openhands.agent_server.conversation_service import (
+        from madagascar.agent_server.conversation_service import (
             _resolve_agent_from_profile,
         )
 
@@ -171,14 +171,14 @@ class TestResolveAgentFromProfile:
             with pytest.raises(ProfileNotFound, match="not found"):
                 _resolve_agent_from_profile(uuid4(), cipher=None, mcp_config={})
 
-    def test_openhands_profile_resolves_to_agent_and_stamps_launched(self):
-        from openhands.agent_server.conversation_service import (
+    def test_madagascar_profile_resolves_to_agent_and_stamps_launched(self):
+        from madagascar.agent_server.conversation_service import (
             _resolve_agent_from_profile,
         )
 
-        # OpenHands profiles always discover the catalog (deny-list needs the
+        # Madagascar profiles always discover the catalog (deny-list needs the
         # full set), threaded through to the resolver as available_skills.
-        profile = _make_openhands_profile()
+        profile = _make_madagascar_profile()
         agent = _make_agent()
 
         with (
@@ -190,7 +190,7 @@ class TestResolveAgentFromProfile:
             # injected iff the host has chromium (covered by the dedicated
             # injection tests below); this test is about resolution plumbing.
             patch(
-                "openhands.agent_server.conversation_service.is_tool_usable",
+                "madagascar.agent_server.conversation_service.is_tool_usable",
                 return_value=False,
             ),
         ):
@@ -209,24 +209,24 @@ class TestResolveAgentFromProfile:
         assert result_agent is agent
         assert launched.agent_profile_id == profile.id
         assert launched.revision == profile.revision
-        # OpenHands discovery always runs; its result is threaded through.
+        # Madagascar discovery always runs; its result is threaded through.
         MockDiscover.assert_called_once()
         assert MockResolve.call_args.kwargs["available_skills"] == []
 
-    def test_openhands_profile_forces_llm_stream_true(self):
-        """A profile-launched OpenHands conversation must guarantee on_token
+    def test_madagascar_profile_forces_llm_stream_true(self):
+        """A profile-launched Madagascar conversation must guarantee on_token
         wiring (#4014): unlike an inline agent_settings launch, a client can't
         set llm.stream ahead of time on a profile's referenced LLM. This
         agent-server layer forces it after resolution — not the SDK resolver,
         which runs for every caller including headless/scripted ones."""
-        from openhands.agent_server.conversation_service import (
+        from madagascar.agent_server.conversation_service import (
             _resolve_agent_from_profile,
         )
-        from openhands.sdk.settings.model import OpenHandsAgentSettings
+        from madagascar.sdk.settings.model import MadagascarAgentSettings
 
-        profile = _make_openhands_profile()
+        profile = _make_madagascar_profile()
         # A real (unmocked) settings object so isinstance(...) narrows for real.
-        resolved_settings = OpenHandsAgentSettings(
+        resolved_settings = MadagascarAgentSettings(
             llm=LLM(model="gpt-4o", usage_id="agent", stream=False)
         )
         assert resolved_settings.llm.stream is False
@@ -236,7 +236,7 @@ class TestResolveAgentFromProfile:
             patch(_LLM_STORE_PATH),
             patch(_RESOLVE_PATH, return_value=resolved_settings),
             patch(
-                "openhands.agent_server.conversation_service.is_tool_usable",
+                "madagascar.agent_server.conversation_service.is_tool_usable",
                 return_value=False,
             ),
         ):
@@ -255,11 +255,11 @@ class TestResolveAgentFromProfile:
         assert resolved_settings.llm.stream is False
 
     def test_acp_profile_does_not_force_llm_stream(self):
-        """The stream-forcing guarantee is OpenHands-only: ACP agents emit
+        """The stream-forcing guarantee is Madagascar-only: ACP agents emit
         their own message chunks through the ACP bridge without exposing an
         LLM the same way (event_service.py's streaming_enabled already treats
         every ACPAgent as streaming-capable regardless of llm.stream)."""
-        from openhands.agent_server.conversation_service import (
+        from madagascar.agent_server.conversation_service import (
             _resolve_agent_from_profile,
         )
 
@@ -280,19 +280,19 @@ class TestResolveAgentFromProfile:
 
             _resolve_agent_from_profile(profile.id, cipher=None, mcp_config={})
 
-        # No model_copy/mutation attempted on an ACP (non-OpenHandsAgentSettings)
+        # No model_copy/mutation attempted on an ACP (non-MadagascarAgentSettings)
         # resolved settings object.
         mock_config.model_copy.assert_not_called()
 
-    def test_openhands_default_tools_get_browser_when_usable(self):
-        """A default-toolset (tools=None) OpenHands profile launch injects the
+    def test_madagascar_default_tools_get_browser_when_usable(self):
+        """A default-toolset (tools=None) Madagascar profile launch injects the
         browser tool set when this server's runtime can run it — the
         serving-layer counterpart of the SDK's deterministic default (#3978)."""
-        from openhands.agent_server.conversation_service import (
+        from madagascar.agent_server.conversation_service import (
             _resolve_agent_from_profile,
         )
 
-        profile = _make_openhands_profile()
+        profile = _make_madagascar_profile()
         assert profile.tools is None
         agent = _make_agent()
 
@@ -301,7 +301,7 @@ class TestResolveAgentFromProfile:
             patch(_LLM_STORE_PATH),
             patch(_RESOLVE_PATH) as MockResolve,
             patch(
-                "openhands.agent_server.conversation_service.is_tool_usable",
+                "madagascar.agent_server.conversation_service.is_tool_usable",
                 return_value=True,
             ) as MockUsable,
         ):
@@ -319,12 +319,12 @@ class TestResolveAgentFromProfile:
         MockUsable.assert_called_once_with("browser_tool_set")
         assert [tool.name for tool in result_agent.tools] == ["browser_tool_set"]
 
-    def test_openhands_default_tools_skip_browser_when_unusable(self):
-        from openhands.agent_server.conversation_service import (
+    def test_madagascar_default_tools_skip_browser_when_unusable(self):
+        from madagascar.agent_server.conversation_service import (
             _resolve_agent_from_profile,
         )
 
-        profile = _make_openhands_profile()
+        profile = _make_madagascar_profile()
         agent = _make_agent()
 
         with (
@@ -332,7 +332,7 @@ class TestResolveAgentFromProfile:
             patch(_LLM_STORE_PATH),
             patch(_RESOLVE_PATH) as MockResolve,
             patch(
-                "openhands.agent_server.conversation_service.is_tool_usable",
+                "madagascar.agent_server.conversation_service.is_tool_usable",
                 return_value=False,
             ),
         ):
@@ -349,14 +349,14 @@ class TestResolveAgentFromProfile:
 
         assert result_agent is agent
 
-    def test_openhands_explicit_tools_never_amended(self):
+    def test_madagascar_explicit_tools_never_amended(self):
         """An explicit profile tools list ([] included) is authoritative: the
         serving layer must not inject browser on top of it."""
-        from openhands.agent_server.conversation_service import (
+        from madagascar.agent_server.conversation_service import (
             _resolve_agent_from_profile,
         )
 
-        profile = _make_openhands_profile().model_copy(update={"tools": []})
+        profile = _make_madagascar_profile().model_copy(update={"tools": []})
         agent = _make_agent()
 
         with (
@@ -364,7 +364,7 @@ class TestResolveAgentFromProfile:
             patch(_LLM_STORE_PATH),
             patch(_RESOLVE_PATH) as MockResolve,
             patch(
-                "openhands.agent_server.conversation_service.is_tool_usable",
+                "madagascar.agent_server.conversation_service.is_tool_usable",
                 return_value=True,
             ) as MockUsable,
         ):
@@ -383,8 +383,8 @@ class TestResolveAgentFromProfile:
         assert result_agent is agent
 
     def test_acp_profile_never_gets_browser_injection(self):
-        """ACP agents own their tooling — the injection is OpenHands-only."""
-        from openhands.agent_server.conversation_service import (
+        """ACP agents own their tooling — the injection is Madagascar-only."""
+        from madagascar.agent_server.conversation_service import (
             _resolve_agent_from_profile,
         )
 
@@ -396,7 +396,7 @@ class TestResolveAgentFromProfile:
             patch(_LLM_STORE_PATH),
             patch(_RESOLVE_PATH) as MockResolve,
             patch(
-                "openhands.agent_server.conversation_service.is_tool_usable",
+                "madagascar.agent_server.conversation_service.is_tool_usable",
                 return_value=True,
             ) as MockUsable,
         ):
@@ -414,15 +414,15 @@ class TestResolveAgentFromProfile:
         MockUsable.assert_not_called()
         assert result_agent is agent
 
-    def test_openhands_default_profile_triggers_discovery(self):
-        """An OpenHands profile always discovers the skill catalog (the deny-list
+    def test_madagascar_default_profile_triggers_discovery(self):
+        """An Madagascar profile always discovers the skill catalog (the deny-list
         needs the full set, minus disabled names). The default deny-list is []
         (all discovered); there is no discovery-skip path anymore (#4017)."""
-        from openhands.agent_server.conversation_service import (
+        from madagascar.agent_server.conversation_service import (
             _resolve_agent_from_profile,
         )
 
-        profile = _make_openhands_profile()
+        profile = _make_madagascar_profile()
         assert profile.disabled_skills == []  # the default: disable nothing
         agent = _make_agent()
 
@@ -444,11 +444,11 @@ class TestResolveAgentFromProfile:
         MockDiscover.assert_called_once()
 
     def test_dangling_mcp_server_ref_propagates(self):
-        from openhands.agent_server.conversation_service import (
+        from madagascar.agent_server.conversation_service import (
             _resolve_agent_from_profile,
         )
 
-        profile = _make_openhands_profile()
+        profile = _make_madagascar_profile()
         with (
             patch(_STORE_PATH) as MockStore,
             patch(_LLM_STORE_PATH),
@@ -465,10 +465,10 @@ class TestResolveAgentFromProfile:
         assert "missing-server" in exc_info.value.missing
 
     def test_acp_profile_resolves_to_acp_agent(self):
-        from openhands.agent_server.conversation_service import (
+        from madagascar.agent_server.conversation_service import (
             _resolve_agent_from_profile,
         )
-        from openhands.sdk.agent.acp_agent import ACPAgent
+        from madagascar.sdk.agent.acp_agent import ACPAgent
 
         # ACP profiles carry no user/public skills, so discovery never runs and
         # the resolver receives available_skills=None.
@@ -529,7 +529,7 @@ class TestConversationServiceStartFromProfile:
         )
 
         with patch(
-            "openhands.agent_server.conversation_service._resolve_agent_from_profile",
+            "madagascar.agent_server.conversation_service._resolve_agent_from_profile",
             return_value=(agent, launched_agent_profile),
         ):
             service = ConversationService(conversations_dir=tmp_path)
@@ -575,7 +575,7 @@ class TestConversationServiceStartFromProfile:
         )
 
         with patch(
-            "openhands.agent_server.conversation_service._resolve_agent_from_profile",
+            "madagascar.agent_server.conversation_service._resolve_agent_from_profile",
             side_effect=ProfileNotFound("profile not found"),
         ):
             service = ConversationService(conversations_dir=tmp_path)
@@ -592,7 +592,7 @@ class TestConversationServiceStartFromProfile:
         )
 
         with patch(
-            "openhands.agent_server.conversation_service._resolve_agent_from_profile",
+            "madagascar.agent_server.conversation_service._resolve_agent_from_profile",
             side_effect=DanglingMcpServerRef(["mcp-server-x"]),
         ):
             service = ConversationService(conversations_dir=tmp_path)

@@ -29,25 +29,25 @@ from storage.org import Org
 from storage.org_member import OrgMember
 from storage.org_service import OrgService
 
-from openhands.app_server.settings.llm_profiles import (
+from madagascar.app_server.settings.llm_profiles import (
     LLMProfiles,
     ProfileAlreadyExistsError,
     ProfileLimitExceededError,
     ProfileNotFoundError,
     StrictLLM,
 )
-from openhands.app_server.settings.settings_models import (
+from madagascar.app_server.settings.settings_models import (
     _load_persisted_agent_settings,
 )
-from openhands.app_server.utils.llm import MASKED_API_KEY, is_openhands_model
-from openhands.app_server.utils.logger import openhands_logger as logger
-from openhands.sdk.llm import LLM
-from openhands.sdk.profiles import (
+from madagascar.app_server.utils.llm import MASKED_API_KEY, is_madagascar_model
+from madagascar.app_server.utils.logger import madagascar_logger as logger
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.profiles import (
     ProfileReferenced,
     delete_llm_profile,
     rename_llm_profile,
 )
-from openhands.sdk.profiles.agent_profile_store import PROFILE_NAME_PATTERN
+from madagascar.sdk.profiles.agent_profile_store import PROFILE_NAME_PATTERN
 
 from ..auth.authorization import Permission, require_permission
 
@@ -249,7 +249,7 @@ async def save_profile(
         else:
             # Snapshot current org LLM settings. Route through the persisted
             # loader so legacy/canonical ``agent_kind`` discriminator values
-            # ('llm' vs 'openhands') both validate.
+            # ('llm' vs 'madagascar') both validate.
             llm = _load_persisted_agent_settings(org.agent_settings).llm
         if request.preserve_existing_api_key and existing is not None:
             # Caller has no new key: keep the profile's stored key (even "no
@@ -364,7 +364,7 @@ async def activate_profile(
                 normalized_base_url == normalized_managed_base_url
                 or (
                     normalized_base_url is None
-                    and is_openhands_model(llm_dump.get('model'))
+                    and is_madagascar_model(llm_dump.get('model'))
                 )
             )
             member.llm_api_key = profile_api_key

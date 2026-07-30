@@ -6,11 +6,11 @@ This integration test verifies that:
 3. Condensation is triggered when event count limit is exceeded
 """
 
-from openhands.sdk import get_logger
-from openhands.sdk.context.condenser import LLMSummarizingCondenser
-from openhands.sdk.event.condenser import Condensation
-from openhands.sdk.tool import Tool, register_tool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk import get_logger
+from madagascar.sdk.context.condenser import LLMSummarizingCondenser
+from madagascar.sdk.event.condenser import Condensation
+from madagascar.sdk.tool import Tool, register_tool
+from madagascar.tools.terminal import TerminalTool
 from tests.integration.base import BaseIntegrationTest, TestResult
 
 

@@ -4,13 +4,13 @@
 ``static_system_message`` produces and asserts the snapshot reproduces them.
 """
 
-import openhands.sdk.agent.base as agent_base
-from openhands.sdk import Agent
-from openhands.sdk.context.agent_context import AgentContext
-from openhands.sdk.context.prompts.section import Platform, PromptContext
-from openhands.sdk.llm import LLM
-from openhands.sdk.skills import Skill
-from openhands.sdk.tool import Tool
+import madagascar.sdk.agent.base as agent_base
+from madagascar.sdk import Agent
+from madagascar.sdk.context.agent_context import AgentContext
+from madagascar.sdk.context.prompts.section import Platform, PromptContext
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.skills import Skill
+from madagascar.sdk.tool import Tool
 
 
 def _make_llm(model: str = "test-model") -> LLM:

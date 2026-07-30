@@ -14,20 +14,20 @@ from litellm.types.utils import (
 )
 from pydantic import SecretStr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation import Conversation
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.event import ActionEvent, AgentErrorEvent, ObservationEvent
-from openhands.sdk.llm import LLM, Message, TextContent
-from openhands.sdk.security.confirmation_policy import ConfirmRisky
-from openhands.sdk.security.llm_analyzer import LLMSecurityAnalyzer
-from openhands.sdk.security.risk import SecurityRisk
-from openhands.sdk.tool import Action, Observation, Tool, ToolExecutor, register_tool
-from openhands.sdk.tool.tool import ToolDefinition
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation import Conversation
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.event import ActionEvent, AgentErrorEvent, ObservationEvent
+from madagascar.sdk.llm import LLM, Message, TextContent
+from madagascar.sdk.security.confirmation_policy import ConfirmRisky
+from madagascar.sdk.security.llm_analyzer import LLMSecurityAnalyzer
+from madagascar.sdk.security.risk import SecurityRisk
+from madagascar.sdk.tool import Action, Observation, Tool, ToolExecutor, register_tool
+from madagascar.sdk.tool.tool import ToolDefinition
 
 
 if TYPE_CHECKING:
-    from openhands.sdk.conversation.state import ConversationState
+    from madagascar.sdk.conversation.state import ConversationState
 
 
 class ValidationTestAction(Action):
@@ -127,7 +127,7 @@ def test_validation_error_shows_keys_not_values():
     conversation.set_security_analyzer(LLMSecurityAnalyzer())
 
     with patch(
-        "openhands.sdk.llm.llm.litellm_completion", side_effect=mock_llm_response
+        "madagascar.sdk.llm.llm.litellm_completion", side_effect=mock_llm_response
     ):
         conversation.send_message(
             Message(role="user", content=[TextContent(text="Do something")])
@@ -192,7 +192,7 @@ def test_unparseable_json_error_message():
     conversation = Conversation(agent=agent, callbacks=[collected_events.append])
 
     with patch(
-        "openhands.sdk.llm.llm.litellm_completion", side_effect=mock_llm_response
+        "madagascar.sdk.llm.llm.litellm_completion", side_effect=mock_llm_response
     ):
         conversation.send_message(
             Message(role="user", content=[TextContent(text="Do something")])
@@ -210,7 +210,7 @@ def test_unparseable_json_error_message():
     assert len(action_events) == 1
     sanitized_args = json.loads(action_events[0].tool_call.arguments)
     assert sanitized_args == {
-        "_openhands_malformed_tool_call": True,
+        "_madagascar_malformed_tool_call": True,
         "error": error_msg,
     }
 
@@ -267,7 +267,7 @@ def test_tool_call_without_security_risk_succeeds():
     conversation.set_security_analyzer(LLMSecurityAnalyzer())
 
     with patch(
-        "openhands.sdk.llm.llm.litellm_completion",
+        "madagascar.sdk.llm.llm.litellm_completion",
         side_effect=_mock_llm_response_factory(tool_args),
     ):
         conversation.send_message(
@@ -308,7 +308,7 @@ def test_omitted_security_risk_still_requires_confirmation():
     conversation.set_confirmation_policy(ConfirmRisky())
 
     with patch(
-        "openhands.sdk.llm.llm.litellm_completion",
+        "madagascar.sdk.llm.llm.litellm_completion",
         side_effect=_mock_llm_response_factory(tool_args),
     ):
         conversation.send_message(

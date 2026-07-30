@@ -5,7 +5,7 @@ from unittest.mock import patch
 import pytest
 from pydantic import BaseModel
 
-from openhands.sdk.extensions.installation import (
+from madagascar.sdk.extensions.installation import (
     InstallationInterface,
     InstallationManager,
     InstallationMetadata,
@@ -116,7 +116,7 @@ def test_update_reclones_with_credentialed_source(
     extension fail to re-clone on update (regression guard for issue #3752)."""
     cred = "https://oauth2:SUPER_SECRET@github.com/org/repo.git"
     with patch(
-        "openhands.sdk.extensions.installation.manager.fetch_with_resolution",
+        "madagascar.sdk.extensions.installation.manager.fetch_with_resolution",
         return_value=(mock_extension_dir, "abc123"),
     ) as mock_fetch:
         manager.install(source=cred, force=True)  # records cred in .installed.json

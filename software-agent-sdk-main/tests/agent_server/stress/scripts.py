@@ -18,20 +18,20 @@ import httpx
 import psutil
 from pydantic import PrivateAttr, SecretStr
 
-from openhands.agent_server.conversation_service import ConversationService
-from openhands.agent_server.models import ConversationInfo, StartConversationRequest
-from openhands.sdk import LLM, Agent, Tool
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.llm import Message, TextContent
-from openhands.sdk.llm.llm_response import LLMResponse
-from openhands.sdk.llm.streaming import TokenCallbackType
-from openhands.sdk.testing import TestLLM
-from openhands.sdk.tool.tool import ToolDefinition
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.agent_server.conversation_service import ConversationService
+from madagascar.agent_server.models import ConversationInfo, StartConversationRequest
+from madagascar.sdk import LLM, Agent, Tool
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.llm import Message, TextContent
+from madagascar.sdk.llm.llm_response import LLMResponse
+from madagascar.sdk.llm.streaming import TokenCallbackType
+from madagascar.sdk.testing import TestLLM
+from madagascar.sdk.tool.tool import ToolDefinition
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 if TYPE_CHECKING:
-    from openhands.sdk.llm.llm import LLMCallContext
+    from madagascar.sdk.llm.llm import LLMCallContext
 
 
 class SlowTestLLM(TestLLM):

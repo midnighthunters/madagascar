@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { openHands } from "#/api/open-hands-axios";
+import { madagascar } from "#/api/madagascar-axios";
 
 export interface JiraDcInstanceStatus {
   /** Whether an admin has set up the install's Jira Data Center connection. */
@@ -18,7 +18,7 @@ export function useJiraDcInstanceStatus(enabled = true) {
     queryKey: ["jira-dc-instance-status"],
     enabled,
     queryFn: async () => {
-      const response = await openHands.get(
+      const response = await madagascar.get(
         "/integration/jira-dc/workspaces/status",
       );
       return response.data;

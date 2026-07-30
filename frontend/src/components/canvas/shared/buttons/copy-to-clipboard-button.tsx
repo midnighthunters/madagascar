@@ -16,7 +16,7 @@ export function CopyToClipboardButton({
   onClick,
   mode,
 }: CopyToClipboardButtonProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   return (
     <button
       hidden={isHidden}

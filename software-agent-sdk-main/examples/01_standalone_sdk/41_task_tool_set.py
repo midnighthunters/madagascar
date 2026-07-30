@@ -13,11 +13,11 @@ animal-expert sub-agent. The flow is:
 
 import os
 
-from openhands.sdk import LLM, Agent, AgentContext, Conversation, Tool
-from openhands.sdk.context import Skill
-from openhands.sdk.subagent import register_agent
-from openhands.tools.delegate import DelegationVisualizer
-from openhands.tools.task import TaskToolSet
+from madagascar.sdk import LLM, Agent, AgentContext, Conversation, Tool
+from madagascar.sdk.context import Skill
+from madagascar.sdk.subagent import register_agent
+from madagascar.tools.delegate import DelegationVisualizer
+from madagascar.tools.task import TaskToolSet
 
 
 llm = LLM(

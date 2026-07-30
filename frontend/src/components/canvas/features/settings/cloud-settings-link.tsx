@@ -16,7 +16,7 @@ import {
  * hosted settings page.
  */
 export function CloudSettingsLink() {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { active } = useActiveBackendContext();
   const { backend } = active;
 

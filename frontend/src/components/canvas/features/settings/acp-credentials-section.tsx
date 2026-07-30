@@ -23,7 +23,7 @@ export function AcpCredentialsSection({
   form: AcpCredentialForm;
   providerKey: string;
 }) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { fields, values, setValue, secretExists, conflicts } = form;
   const { status: authStatus, isChecking } = useAcpAuthStatus(providerKey);
   const providerName = getAcpProviderDisplayName(providerKey) ?? providerKey;

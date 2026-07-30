@@ -3,8 +3,8 @@
 import pytest
 from pydantic import SecretStr, ValidationError
 
-from openhands.sdk.agent.agent import Agent
-from openhands.sdk.llm import LLM
+from madagascar.sdk.agent.agent import Agent
+from madagascar.sdk.llm import LLM
 
 
 class TestAgentImmutability:

@@ -8,12 +8,12 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pydantic import SecretStr
 
-from openhands.agent_server.config import Config
-from openhands.agent_server.conversation_router import conversation_router
-from openhands.agent_server.conversation_service import ConversationService
-from openhands.agent_server.dependencies import get_conversation_service
-from openhands.agent_server.event_service import EventService
-from openhands.agent_server.models import (
+from madagascar.agent_server.config import Config
+from madagascar.agent_server.conversation_router import conversation_router
+from madagascar.agent_server.conversation_service import ConversationService
+from madagascar.agent_server.dependencies import get_conversation_service
+from madagascar.agent_server.event_service import EventService
+from madagascar.agent_server.models import (
     ACPConversationInfo,
     ConversationInfo,
     ConversationPage,
@@ -21,20 +21,20 @@ from openhands.agent_server.models import (
     SendMessageRequest,
     StartConversationRequest,
 )
-from openhands.agent_server.utils import utc_now
-from openhands.sdk import LLM, Agent, TextContent, Tool
-from openhands.sdk.agent.acp_agent import ACPAgent
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.llm import llm_profile_store
-from openhands.sdk.llm.llm_profile_store import LLMProfileStore
-from openhands.sdk.marketplace.registry import (
+from madagascar.agent_server.utils import utc_now
+from madagascar.sdk import LLM, Agent, TextContent, Tool
+from madagascar.sdk.agent.acp_agent import ACPAgent
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.llm import llm_profile_store
+from madagascar.sdk.llm.llm_profile_store import LLMProfileStore
+from madagascar.sdk.marketplace.registry import (
     PluginNotFoundError,
     PluginResolutionError,
 )
-from openhands.sdk.plugin import PluginFetchError
-from openhands.sdk.security.llm_analyzer import LLMSecurityAnalyzer
-from openhands.sdk.settings import AGENT_SETTINGS_SCHEMA_VERSION
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.sdk.plugin import PluginFetchError
+from madagascar.sdk.security.llm_analyzer import LLMSecurityAnalyzer
+from madagascar.sdk.settings import AGENT_SETTINGS_SCHEMA_VERSION
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 @pytest.fixture
@@ -571,7 +571,7 @@ def test_start_conversation_existing(
         client.app.dependency_overrides.clear()
 
 
-def test_start_conversation_accepts_openhands_agent_settings(
+def test_start_conversation_accepts_madagascar_agent_settings(
     client, mock_conversation_service
 ):
     now = utc_now()
@@ -1741,10 +1741,10 @@ def test_start_conversation_with_tool_module_qualnames(
             },
             "workspace": {"working_dir": "/tmp/test"},
             "tool_module_qualnames": {
-                "glob": "openhands.tools.glob.definition",
-                "grep": "openhands.tools.grep.definition",
+                "glob": "madagascar.tools.glob.definition",
+                "grep": "madagascar.tools.grep.definition",
                 "planning_file_editor": (
-                    "openhands.tools.planning_file_editor.definition"
+                    "madagascar.tools.planning_file_editor.definition"
                 ),
             },
         }
@@ -1761,9 +1761,9 @@ def test_start_conversation_with_tool_module_qualnames(
         request_arg = call_args[0][0]
         assert hasattr(request_arg, "tool_module_qualnames")
         assert request_arg.tool_module_qualnames == {
-            "glob": "openhands.tools.glob.definition",
-            "grep": "openhands.tools.grep.definition",
-            "planning_file_editor": ("openhands.tools.planning_file_editor.definition"),
+            "glob": "madagascar.tools.glob.definition",
+            "grep": "madagascar.tools.grep.definition",
+            "planning_file_editor": ("madagascar.tools.planning_file_editor.definition"),
         }
     finally:
         client.app.dependency_overrides.clear()
@@ -2378,7 +2378,7 @@ def test_switch_conversation_llm_decrypts_encrypted_api_key(
     """
     from base64 import urlsafe_b64encode
 
-    from openhands.sdk.utils.cipher import Cipher
+    from madagascar.sdk.utils.cipher import Cipher
 
     secret_key = urlsafe_b64encode(b"a" * 32).decode("ascii")
     cipher = Cipher(secret_key)
@@ -2665,7 +2665,7 @@ def test_start_conversation_client_tool_registration_error_returns_422(
     client, mock_conversation_service
 ):
     """Client tool registration input errors yield 422, not 500."""
-    from openhands.sdk.tool.client_tool import ClientToolRegistrationError
+    from madagascar.sdk.tool.client_tool import ClientToolRegistrationError
 
     mock_conversation_service.start_conversation.side_effect = (
         ClientToolRegistrationError(

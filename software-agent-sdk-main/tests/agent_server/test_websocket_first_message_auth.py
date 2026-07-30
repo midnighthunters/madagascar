@@ -8,7 +8,7 @@ from uuid import uuid4
 import pytest
 from fastapi import WebSocketDisconnect
 
-from openhands.agent_server.sockets import _accept_authenticated_websocket
+from madagascar.agent_server.sockets import _accept_authenticated_websocket
 
 
 def _make_mock_websocket(*, headers=None):
@@ -29,7 +29,7 @@ def _make_mock_websocket(*, headers=None):
 @pytest.mark.asyncio
 async def test_no_auth_configured_accepts_immediately():
     ws = _make_mock_websocket()
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = []
         result = await _accept_authenticated_websocket(ws, session_api_key=None)
 
@@ -44,7 +44,7 @@ async def test_no_auth_configured_accepts_immediately():
 @pytest.mark.asyncio
 async def test_legacy_query_param_valid_key():
     ws = _make_mock_websocket()
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         result = await _accept_authenticated_websocket(
             ws, session_api_key="sk-oh-valid"
@@ -58,7 +58,7 @@ async def test_legacy_query_param_valid_key():
 @pytest.mark.asyncio
 async def test_legacy_query_param_invalid_key():
     ws = _make_mock_websocket()
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         result = await _accept_authenticated_websocket(
             ws, session_api_key="sk-oh-wrong"
@@ -76,7 +76,7 @@ async def test_legacy_query_param_takes_precedence_over_first_message():
     ws.receive_text.return_value = json.dumps(
         {"type": "auth", "session_api_key": "sk-oh-different"}
     )
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         result = await _accept_authenticated_websocket(
             ws, session_api_key="sk-oh-valid"
@@ -94,7 +94,7 @@ async def test_legacy_query_param_takes_precedence_over_first_message():
 @pytest.mark.asyncio
 async def test_legacy_header_valid_key():
     ws = _make_mock_websocket(headers={"x-session-api-key": "sk-oh-valid"})
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         result = await _accept_authenticated_websocket(ws, session_api_key=None)
 
@@ -105,7 +105,7 @@ async def test_legacy_header_valid_key():
 @pytest.mark.asyncio
 async def test_legacy_header_invalid_key():
     ws = _make_mock_websocket(headers={"x-session-api-key": "sk-oh-wrong"})
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         result = await _accept_authenticated_websocket(ws, session_api_key=None)
 
@@ -122,7 +122,7 @@ async def test_first_message_auth_valid_key():
     ws.receive_text.return_value = json.dumps(
         {"type": "auth", "session_api_key": "sk-oh-valid"}
     )
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         result = await _accept_authenticated_websocket(ws, session_api_key=None)
 
@@ -137,7 +137,7 @@ async def test_first_message_auth_invalid_key():
     ws.receive_text.return_value = json.dumps(
         {"type": "auth", "session_api_key": "sk-oh-wrong"}
     )
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         result = await _accept_authenticated_websocket(ws, session_api_key=None)
 
@@ -152,7 +152,7 @@ async def test_first_message_auth_wrong_type_field():
     ws.receive_text.return_value = json.dumps(
         {"type": "message", "session_api_key": "sk-oh-valid"}
     )
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         result = await _accept_authenticated_websocket(ws, session_api_key=None)
 
@@ -163,7 +163,7 @@ async def test_first_message_auth_wrong_type_field():
 async def test_first_message_auth_missing_key_field():
     ws = _make_mock_websocket()
     ws.receive_text.return_value = json.dumps({"type": "auth"})
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         result = await _accept_authenticated_websocket(ws, session_api_key=None)
 
@@ -174,7 +174,7 @@ async def test_first_message_auth_missing_key_field():
 async def test_first_message_auth_malformed_json():
     ws = _make_mock_websocket()
     ws.receive_text.return_value = "not json at all"
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         result = await _accept_authenticated_websocket(ws, session_api_key=None)
 
@@ -186,7 +186,7 @@ async def test_first_message_auth_malformed_json():
 async def test_first_message_auth_client_disconnects():
     ws = _make_mock_websocket()
     ws.receive_text.side_effect = WebSocketDisconnect()
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         result = await _accept_authenticated_websocket(ws, session_api_key=None)
 
@@ -203,9 +203,9 @@ async def test_first_message_auth_timeout():
     ws.receive_text.side_effect = slow_receive
 
     with (
-        patch("openhands.agent_server.sockets.get_default_config") as mock_config,
+        patch("madagascar.agent_server.sockets.get_default_config") as mock_config,
         patch(
-            "openhands.agent_server.sockets._FIRST_MESSAGE_AUTH_TIMEOUT_SECONDS", 0.05
+            "madagascar.agent_server.sockets._FIRST_MESSAGE_AUTH_TIMEOUT_SECONDS", 0.05
         ),
     ):
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
@@ -221,8 +221,8 @@ async def test_first_message_auth_timeout():
 @pytest.mark.asyncio
 async def test_events_socket_first_message_auth_e2e():
     """First-message auth works end-to-end through the events_socket endpoint."""
-    from openhands.agent_server.event_service import EventService
-    from openhands.agent_server.sockets import events_socket
+    from madagascar.agent_server.event_service import EventService
+    from madagascar.agent_server.sockets import events_socket
 
     ws = _make_mock_websocket()
     # Auth via receive_text, then receive_json raises disconnect.
@@ -237,9 +237,9 @@ async def test_events_socket_first_message_auth_e2e():
 
     with (
         patch(
-            "openhands.agent_server.sockets.conversation_service"
+            "madagascar.agent_server.sockets.conversation_service"
         ) as mock_conv_service,
-        patch("openhands.agent_server.sockets.get_default_config") as mock_config,
+        patch("madagascar.agent_server.sockets.get_default_config") as mock_config,
     ):
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         mock_conv_service.get_event_service = AsyncMock(return_value=mock_event_service)
@@ -261,8 +261,8 @@ async def test_events_socket_ignores_redundant_auth_control_frame():
     it as a ``Message`` (which fails on the missing ``role`` field and
     emits a noisy ``ServerErrorEvent``).
     """
-    from openhands.agent_server.event_service import EventService
-    from openhands.agent_server.sockets import events_socket
+    from madagascar.agent_server.event_service import EventService
+    from madagascar.agent_server.sockets import events_socket
 
     ws = _make_mock_websocket()
     # First frame on the post-auth loop is the redundant auth control
@@ -281,9 +281,9 @@ async def test_events_socket_ignores_redundant_auth_control_frame():
 
     with (
         patch(
-            "openhands.agent_server.sockets.conversation_service"
+            "madagascar.agent_server.sockets.conversation_service"
         ) as mock_conv_service,
-        patch("openhands.agent_server.sockets.get_default_config") as mock_config,
+        patch("madagascar.agent_server.sockets.get_default_config") as mock_config,
     ):
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
         mock_conv_service.get_event_service = AsyncMock(return_value=mock_event_service)
@@ -302,14 +302,14 @@ async def test_events_socket_ignores_redundant_auth_control_frame():
 @pytest.mark.asyncio
 async def test_events_socket_first_message_auth_rejected():
     """events_socket returns early when first-message auth fails."""
-    from openhands.agent_server.sockets import events_socket
+    from madagascar.agent_server.sockets import events_socket
 
     ws = _make_mock_websocket()
     ws.receive_text.return_value = json.dumps(
         {"type": "auth", "session_api_key": "sk-oh-wrong"}
     )
 
-    with patch("openhands.agent_server.sockets.get_default_config") as mock_config:
+    with patch("madagascar.agent_server.sockets.get_default_config") as mock_config:
         mock_config.return_value.session_api_keys = ["sk-oh-valid"]
 
         await events_socket(uuid4(), ws, session_api_key=None)

@@ -36,7 +36,7 @@ const llmDefaults = (DEFAULT_AGENT_SETTINGS as Record<string, unknown>).llm as
 const DEFAULT_MODEL =
   typeof llmDefaults?.model === "string"
     ? llmDefaults.model
-    : "openhands/claude-opus-4-5-20251101";
+    : "madagascar/claude-opus-4-5-20251101";
 
 export const createMockWebClientConfig = (
   overrides: Partial<WebClientConfig> = {},
@@ -80,7 +80,7 @@ const MOCK_AGENT_SETTINGS_SCHEMA: NonNullable<
 > = {
   model_name: "AgentSettings",
   sections: [
-    // Mirrors the SDK schema; the OpenHands UI displays this field on its
+    // Mirrors the SDK schema; the Madagascar UI displays this field on its
     // dedicated Agent settings page by key.
     {
       key: "general",
@@ -358,7 +358,7 @@ const MOCK_CONVERSATION_SETTINGS_SCHEMA: NonNullable<
           key: "security_analyzer",
           label: "Security analyzer",
           description:
-            "Choose how OpenHands should analyze actions before asking for confirmation.",
+            "Choose how Madagascar should analyze actions before asking for confirmation.",
 
           section: "verification",
           section_label: "Verification",
@@ -422,11 +422,11 @@ const MOCK_MODELS = [
   "openai/gpt-3.5-turbo",
   "openai/gpt-4o",
   "openai/gpt-4o-mini",
-  "openhands/claude-sonnet-4-20250514",
-  "openhands/claude-sonnet-4-5-20250929",
-  "openhands/claude-haiku-4-5-20251001",
-  "openhands/claude-opus-4-5-20251101",
-  "openhands/minimax-m2.7",
+  "madagascar/claude-sonnet-4-20250514",
+  "madagascar/claude-sonnet-4-5-20250929",
+  "madagascar/claude-haiku-4-5-20251001",
+  "madagascar/claude-opus-4-5-20251101",
+  "madagascar/minimax-m2.7",
   "gemini/gemini-2.5-pro",
   "gemini/gemini-2.5-flash",
   "gemini/gemini-2.5-flash-lite",
@@ -443,9 +443,9 @@ const MOCK_MODELS = [
 const MOCK_VERIFIED_MODELS = new Set([
   "anthropic/claude-opus-4-5-20251101",
   "anthropic/claude-sonnet-4-5-20250929",
-  "openhands/claude-opus-4-5-20251101",
-  "openhands/claude-sonnet-4-5-20250929",
-  "openhands/minimax-m2.7",
+  "madagascar/claude-opus-4-5-20251101",
+  "madagascar/claude-sonnet-4-5-20250929",
+  "madagascar/minimax-m2.7",
   "gemini/gemini-2.5-pro",
   "gemini/gemini-2.5-flash",
   "gemini/gemini-2.0-flash",
@@ -458,7 +458,7 @@ const MOCK_VERIFIED_MODELS = new Set([
 ]);
 
 const MOCK_VERIFIED_PROVIDERS = [
-  "openhands",
+  "madagascar",
   "anthropic",
   "openai",
   "mistral",
@@ -480,7 +480,7 @@ export const SETTINGS_HANDLERS = [
         "claude-sonnet-4-5-20250929",
       ],
       verified_providers: MOCK_VERIFIED_PROVIDERS,
-      default_model: "openhands/claude-opus-4-5-20251101",
+      default_model: "madagascar/claude-opus-4-5-20251101",
     }),
   ),
 
@@ -575,7 +575,7 @@ export const SETTINGS_HANDLERS = [
       faulty_models: [],
       error_message: null,
       updated_at: new Date().toISOString(),
-      github_app_slug: mockSaas ? "openhands" : null,
+      github_app_slug: mockSaas ? "madagascar" : null,
       gitlab_enabled: false,
       provider_default_hosts: {
         github: "github.com",

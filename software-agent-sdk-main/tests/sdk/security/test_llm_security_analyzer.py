@@ -2,11 +2,11 @@
 
 import pytest
 
-from openhands.sdk.event import ActionEvent
-from openhands.sdk.llm import MessageToolCall, TextContent
-from openhands.sdk.security.llm_analyzer import LLMSecurityAnalyzer
-from openhands.sdk.security.risk import SecurityRisk
-from openhands.sdk.tool import Action
+from madagascar.sdk.event import ActionEvent
+from madagascar.sdk.llm import MessageToolCall, TextContent
+from madagascar.sdk.security.llm_analyzer import LLMSecurityAnalyzer
+from madagascar.sdk.security.risk import SecurityRisk
+from madagascar.sdk.tool import Action
 
 
 class LlmSecurityAnalyzerMockAction(Action):

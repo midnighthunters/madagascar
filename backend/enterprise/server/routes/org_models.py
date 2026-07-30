@@ -17,17 +17,17 @@ from storage.org import Org
 from storage.org_member import OrgMember
 from storage.role import Role
 
-from openhands.app_server.settings.settings_models import (
+from madagascar.app_server.settings.settings_models import (
     MarketplaceRegistration,
     _load_persisted_agent_settings,
     _load_persisted_conversation_settings,
     validate_and_convert_marketplaces,
 )
-from openhands.app_server.utils.llm import MASKED_API_KEY, resolve_llm_base_url
-from openhands.sdk.settings import (
+from madagascar.app_server.utils.llm import MASKED_API_KEY, resolve_llm_base_url
+from madagascar.sdk.settings import (
     AgentSettingsConfig,
     ConversationSettings,
-    OpenHandsAgentSettings,
+    MadagascarAgentSettings,
 )
 
 logger = logging.getLogger(__name__)
@@ -211,7 +211,7 @@ class OrgResponse(BaseModel):
     sandbox_base_container_image: str | None = None
     sandbox_runtime_container_image: str | None = None
     org_version: int = 0
-    agent_settings: AgentSettingsConfig = Field(default_factory=OpenHandsAgentSettings)
+    agent_settings: AgentSettingsConfig = Field(default_factory=MadagascarAgentSettings)
     conversation_settings: ConversationSettings = Field(
         default_factory=ConversationSettings
     )
@@ -411,7 +411,7 @@ class OrgUpdate(BaseModel):
         """Get shared updates that need to be propagated to org members.
 
         An empty ``llm_api_key`` means the org-wide custom key is being cleared
-        (e.g. owner switching to a managed/OpenHands provider). It must not
+        (e.g. owner switching to a managed/Madagascar provider). It must not
         land in member rows — ``OrgMember.llm_api_key``'s setter has no
         ``if raw else None`` guard because the column is ``nullable=False``,
         so an empty string would become an encrypted empty blob rather than a
@@ -428,7 +428,7 @@ class OrgUpdate(BaseModel):
 class OrgDefaultsSettingsResponse(BaseModel):
     """Response model for organization default settings."""
 
-    agent_settings: AgentSettingsConfig = Field(default_factory=OpenHandsAgentSettings)
+    agent_settings: AgentSettingsConfig = Field(default_factory=MadagascarAgentSettings)
     conversation_settings: ConversationSettings = Field(
         default_factory=ConversationSettings
     )
@@ -451,7 +451,7 @@ class OrgDefaultsSettingsResponse(BaseModel):
     def from_org(cls, org: Org) -> 'OrgDefaultsSettingsResponse':
         """Create response from Org entity.
 
-        The SDK now keeps ``openhands/`` as the public/stored provider prefix
+        The SDK now keeps ``madagascar/`` as the public/stored provider prefix
         and translates to ``litellm_proxy/`` only at the transport boundary, so
         organization responses should not reverse-map model names. Secret
         values are still stripped before returning the response.
@@ -473,7 +473,7 @@ class OrgDefaultsSettingsResponse(BaseModel):
         llm = agent_settings.llm
         if (
             llm.model
-            and llm.model.startswith('openhands/')
+            and llm.model.startswith('madagascar/')
             and llm.base_url
             and llm.base_url.rstrip('/') == LITE_LLM_API_URL.rstrip('/')
         ):
@@ -698,7 +698,7 @@ class GitOrgClaimResponse(BaseModel):
 
 
 class GitOrgAlreadyClaimedError(Exception):
-    """Raised when a Git organization is already claimed by another OpenHands org."""
+    """Raised when a Git organization is already claimed by another Madagascar org."""
 
     def __init__(self, provider: str, git_organization: str):
         self.provider = provider
@@ -847,7 +847,7 @@ class OrgConversationResponse(BaseModel):
     id: str  # conversation_id
     title: str | None = None
     llm_model: str | None = None
-    agent_kind: str = 'openhands'
+    agent_kind: str = 'madagascar'
     user_id: str  # UUID of user who created the conversation
     user_email: str | None = None  # Email of user who created the conversation
     created_at: datetime | None = None

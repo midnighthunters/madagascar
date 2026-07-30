@@ -6,13 +6,13 @@ extended thinking models like Claude Sonnet 4.5, where thinking blocks must stay
 with their associated tool calls.
 """
 
-from openhands.sdk.context.view import View
-from openhands.sdk.event.condenser import Condensation
-from openhands.sdk.event.llm_convertible import (
+from madagascar.sdk.context.view import View
+from madagascar.sdk.event.condenser import Condensation
+from madagascar.sdk.event.llm_convertible import (
     ActionEvent,
     ObservationEvent,
 )
-from openhands.sdk.llm import (
+from madagascar.sdk.llm import (
     RedactedThinkingBlock,
     ThinkingBlock,
 )

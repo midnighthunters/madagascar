@@ -3,13 +3,13 @@ from __future__ import annotations
 from pathlib import Path
 from unittest.mock import patch
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.context.agent_context import AgentContext
-from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-from openhands.sdk.event import SystemPromptEvent
-from openhands.sdk.llm import Message, TextContent
-from openhands.sdk.skills import Skill, load_project_skills
-from openhands.sdk.testing import TestLLM
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.context.agent_context import AgentContext
+from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+from madagascar.sdk.event import SystemPromptEvent
+from madagascar.sdk.llm import Message, TextContent
+from madagascar.sdk.skills import Skill, load_project_skills
+from madagascar.sdk.testing import TestLLM
 
 
 def _agent(agent_context: AgentContext) -> Agent:
@@ -227,7 +227,7 @@ def test_load_project_skills_failure_does_not_block_conversation(tmp_path: Path)
     )
 
     with patch(
-        "openhands.sdk.conversation.impl.local_conversation.load_available_skills",
+        "madagascar.sdk.conversation.impl.local_conversation.load_available_skills",
         side_effect=PermissionError("workspace unreadable"),
     ):
         conversation.send_message("hi")  # must not raise

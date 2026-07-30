@@ -6,8 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useConversationHistory } from "#/hooks/query/use-conversation-history";
 import EventService from "#/api/event-service/event-service.api";
 import { useUserConversation } from "#/hooks/query/use-user-conversation";
-import type { Conversation } from "#/api/open-hands.types";
-import type { OpenHandsEvent } from "#/types/v1/core";
+import type { Conversation } from "#/api/madagascar.types";
+import type { MadagascarEvent } from "#/types/v1/core";
 
 function makeConversation(version: "V0" | "V1"): Conversation {
   return {
@@ -26,17 +26,17 @@ function makeConversation(version: "V0" | "V1"): Conversation {
   };
 }
 
-function makeEvent(): OpenHandsEvent {
+function makeEvent(): MadagascarEvent {
   return {
     id: "evt-1",
-  } as OpenHandsEvent;
+  } as MadagascarEvent;
 }
 
 // --------------------
 // Mocks
 // --------------------
-vi.mock("#/api/open-hands-axios", () => ({
-  openHands: {
+vi.mock("#/api/madagascar-axios", () => ({
+  madagascar: {
     get: vi.fn(),
   },
 }));

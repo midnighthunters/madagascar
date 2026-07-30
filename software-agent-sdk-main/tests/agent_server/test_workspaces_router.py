@@ -1,6 +1,6 @@
 """Tests for workspaces_router endpoints.
 
-Workspaces persisted on the agent-server (workspace/.openhands/workspaces.json)
+Workspaces persisted on the agent-server (workspace/.madagascar/workspaces.json)
 replace the previous browser-local Zustand store, so every client connected to
 the same server sees the same list. These tests cover the HTTP surface the
 GUI consumes plus the file-locked persistence underneath it.
@@ -14,9 +14,9 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from openhands.agent_server.api import create_app
-from openhands.agent_server.config import Config
-from openhands.agent_server.persistence import reset_stores
+from madagascar.agent_server.api import create_app
+from madagascar.agent_server.config import Config
+from madagascar.agent_server.persistence import reset_stores
 
 
 @pytest.fixture

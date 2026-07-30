@@ -1,6 +1,6 @@
 """Add agent_profiles to org and active_agent_profile_id to org_member.
 
-Agent Profiles (OpenHands/OpenHands#15044) are the named, reference-bearing
+Agent Profiles (Madagascar/Madagascar#15044) are the named, reference-bearing
 launch specs one level up from LLM profiles. They are stored at the
 organization level exactly like ``org.llm_profiles``:
 

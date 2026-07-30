@@ -13,11 +13,11 @@ import pytest
 import pytest_asyncio
 from fastapi import FastAPI
 
-from openhands.agent_server import bash_router as bash_router_module
-from openhands.agent_server.bash_service import BashEventService
-from openhands.agent_server.config import Config
-from openhands.agent_server.models import BashCommand
-from openhands.agent_server.server_details_router import (
+from madagascar.agent_server import bash_router as bash_router_module
+from madagascar.agent_server.bash_service import BashEventService
+from madagascar.agent_server.config import Config
+from madagascar.agent_server.models import BashCommand
+from madagascar.agent_server.server_details_router import (
     mark_initialization_complete,
     server_details_router,
 )

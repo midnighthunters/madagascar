@@ -5,8 +5,8 @@ from typing import Any
 import pytest
 from pydantic import SecretStr, ValidationError
 
-from openhands.agent_server.models import UpdateSecretsRequest
-from openhands.sdk.secret import LookupSecret, StaticSecret
+from madagascar.agent_server.models import UpdateSecretsRequest
+from madagascar.sdk.secret import LookupSecret, StaticSecret
 
 
 def test_update_secrets_request_string_conversion():

@@ -16,17 +16,17 @@ triggers:
 
 # Feature Release Rollout
 
-This skill guides the complete feature release workflow across the OpenHands ecosystem repositories.
+This skill guides the complete feature release workflow across the Madagascar ecosystem repositories.
 
 ## Overview
 
 When a feature is implemented in the SDK, it may need propagation through several repositories:
 
-1. **SDK** (`OpenHands/software-agent-sdk`) — Core feature implementation
-2. **CLI** (`OpenHands/OpenHands-CLI`) — Terminal interface support
-3. **GUI** (`OpenHands/OpenHands` frontend directory) — Web interface support
-4. **Docs** (`OpenHands/docs`) — Documentation updates (sdk/ folder)
-5. **Blog** (`OpenHands/growth-utils` blog-post/) — Marketing and announcements
+1. **SDK** (`Madagascar/software-agent-sdk`) — Core feature implementation
+2. **CLI** (`Madagascar/Madagascar-CLI`) — Terminal interface support
+3. **GUI** (`Madagascar/Madagascar` frontend directory) — Web interface support
+4. **Docs** (`Madagascar/docs`) — Documentation updates (sdk/ folder)
+5. **Blog** (`Madagascar/growth-utils` blog-post/) — Marketing and announcements
 6. **Video** — Tutorial content (using ElevenLabs + Remotion)
 
 ## Workflow
@@ -42,7 +42,7 @@ First, identify what feature(s) to analyze. The user may specify:
 **For release tags:**
 ```bash
 # Clone SDK if not present
-git clone https://github.com/OpenHands/software-agent-sdk.git
+git clone https://github.com/Madagascar/software-agent-sdk.git
 
 # View release notes
 cd software-agent-sdk
@@ -59,19 +59,19 @@ Clone all relevant repositories to analyze current support:
 
 ```bash
 # Clone repositories (use GITHUB_TOKEN for authenticated access)
-git clone https://github.com/OpenHands/software-agent-sdk.git
-git clone https://github.com/OpenHands/OpenHands-CLI.git
-git clone https://github.com/OpenHands/OpenHands.git        # Frontend in frontend/
-git clone https://github.com/OpenHands/docs.git
-git clone https://github.com/OpenHands/growth-utils.git
+git clone https://github.com/Madagascar/software-agent-sdk.git
+git clone https://github.com/Madagascar/Madagascar-CLI.git
+git clone https://github.com/Madagascar/Madagascar.git        # Frontend in frontend/
+git clone https://github.com/Madagascar/docs.git
+git clone https://github.com/Madagascar/growth-utils.git
 ```
 
 For each feature, check support status:
 
 | Repository | Check Location | What to Look For |
 |------------|---------------|------------------|
-| CLI | `openhands_cli/` | Feature flags, commands, TUI widgets |
-| GUI | `OpenHands/frontend/src/` | React components, API integrations |
+| CLI | `madagascar_cli/` | Feature flags, commands, TUI widgets |
+| GUI | `Madagascar/frontend/src/` | React components, API integrations |
 | Docs | `docs/sdk/` | Guide pages, API reference, examples |
 | Blog | `growth-utils/blog-post/posts/` | Announcement posts |
 
@@ -148,7 +148,7 @@ Only after user confirmation:
 **Create GitHub Issues:**
 ```bash
 # Create issue on relevant repo
-gh issue create --repo OpenHands/OpenHands-CLI \
+gh issue create --repo Madagascar/Madagascar-CLI \
   --title "Support [feature] in CLI" \
   --body "## Context\n[Feature description]\n\n## Implementation\n[Details]\n\n## Related\n- SDK: [link]\n- Docs: [link]"
 ```
@@ -161,15 +161,15 @@ gh issue create --repo OpenHands/OpenHands-CLI \
 
 ## Repository-Specific Guidelines
 
-### CLI (OpenHands/OpenHands-CLI)
+### CLI (Madagascar/Madagascar-CLI)
 
 - Check `AGENTS.md` for development guidelines
 - Use `uv` for dependency management
 - Run `make lint` and `make test` before commits
-- TUI components in `openhands_cli/tui/`
+- TUI components in `madagascar_cli/tui/`
 - Snapshot tests for UI changes
 
-### GUI (OpenHands/OpenHands frontend)
+### GUI (Madagascar/Madagascar frontend)
 
 - Frontend in `frontend/` directory
 - React/TypeScript codebase
@@ -177,15 +177,15 @@ gh issue create --repo OpenHands/OpenHands-CLI \
 - Follow TanStack Query patterns for data fetching
 - i18n translations in `frontend/src/i18n/`
 
-### Docs (OpenHands/docs)
+### Docs (Madagascar/docs)
 
 - SDK docs in `sdk/` folder
 - Uses Mintlify (`.mdx` files)
 - Code blocks can auto-sync from SDK examples
 - Run `mint broken-links` to validate
-- Follow `openhands/DOC_STYLE_GUIDE.md`
+- Follow `madagascar/DOC_STYLE_GUIDE.md`
 
-### Blog (OpenHands/growth-utils)
+### Blog (Madagascar/growth-utils)
 
 - Posts in `blog-post/posts/YYYYMMDD-title.md`
 - Assets in `blog-post/assets/YYYYMMDD-title/`
@@ -208,7 +208,7 @@ gh issue create --repo OpenHands/OpenHands-CLI \
 
 **Feature: Browser Session Recording (SDK v1.8.0)**
 
-1. **SDK**: ✅ Implemented in `openhands.tools.browser`
+1. **SDK**: ✅ Implemented in `madagascar.tools.browser`
 2. **CLI**: ❌ No replay/export commands
 3. **GUI**: ❌ No recording viewer component
 4. **Docs**: ✅ Guide at `sdk/guides/browser-session-recording.mdx`
@@ -221,13 +221,13 @@ gh issue create --repo OpenHands/OpenHands-CLI \
 
 ```bash
 # Check SDK feature presence
-grep -r "feature_name" software-agent-sdk/openhands/ --include="*.py"
+grep -r "feature_name" software-agent-sdk/madagascar/ --include="*.py"
 
 # Check CLI support
-grep -r "feature_name" OpenHands-CLI/openhands_cli/ --include="*.py"
+grep -r "feature_name" Madagascar-CLI/madagascar_cli/ --include="*.py"
 
 # Check GUI support
-grep -r "featureName" OpenHands/frontend/src/ --include="*.ts" --include="*.tsx"
+grep -r "featureName" Madagascar/frontend/src/ --include="*.ts" --include="*.tsx"
 
 # Check docs coverage
 grep -r "feature" docs/sdk/ --include="*.mdx"

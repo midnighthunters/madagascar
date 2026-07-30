@@ -1,4 +1,4 @@
-class OpenHandsWebChat {
+class MadagascarWebChat {
     constructor() {
         // For development - direct connection to agent server
         this.apiBaseUrl = 'http://localhost:8000';
@@ -639,5 +639,5 @@ class OpenHandsWebChat {
 
 // Initialize the application when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new OpenHandsWebChat();
+    new MadagascarWebChat();
 });

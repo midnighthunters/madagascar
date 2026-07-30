@@ -44,7 +44,7 @@ const STATUS_LABEL_KEY: Record<GoalStatus["status"], I18nKey> = {
  * without any re-mount trickery.
  */
 export function GoalStatusContent({ status }: { status: GoalStatus }) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { conversationId } = useOptionalConversationId();
   // Whether *some* goal loop is currently live for this conversation. Used to
   // hide a stale inline Resume button once the user has resumed (or started a

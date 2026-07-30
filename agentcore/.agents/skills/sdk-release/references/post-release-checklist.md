@@ -8,28 +8,28 @@ several automated and manual follow-up steps occur.
 The `version-bump-prs.yml` workflow runs automatically after `pypi-release`
 succeeds. It creates PRs in two repositories:
 
-### OpenHands-CLI (`OpenHands/openhands-cli`)
+### Madagascar-CLI (`Madagascar/madagascar-cli`)
 
 - Branch: `bump-sdk-<version>`
-- Updates `openhands-sdk` and `openhands-tools` via `uv add`
+- Updates `madagascar-sdk` and `madagascar-tools` via `uv add`
 - Verify the PR passes CLI tests before merging
 
 ```bash
-gh pr list --repo OpenHands/openhands-cli \
+gh pr list --repo Madagascar/madagascar-cli \
   --search "bump-sdk-<version>" --json number,title,url
 ```
 
-### OpenHands (`All-Hands-AI/OpenHands`)
+### Madagascar (`All-Hands-AI/Madagascar`)
 
 - Branch: `bump-sdk-<version>`
-- Updates `openhands-sdk`, `openhands-tools`, and `openhands-agent-server`
+- Updates `madagascar-sdk`, `madagascar-tools`, and `madagascar-agent-server`
   in `pyproject.toml`
 - Regenerates `poetry.lock`
 - Updates `AGENT_SERVER_IMAGE` in `sandbox_spec_service.py`
 - Verifies `enterprise/pyproject.toml` does not have explicit SDK pins
 
 ```bash
-gh pr list --repo All-Hands-AI/OpenHands \
+gh pr list --repo All-Hands-AI/Madagascar \
   --search "bump-sdk-<version>" --json number,title,url
 ```
 
@@ -42,7 +42,7 @@ Both PRs require human review:
    changes or new features that need adoption
 3. **Merge** once satisfied
 
-## Evaluation on OpenHands Index
+## Evaluation on Madagascar Index
 
 If not already done pre-release, trigger a full evaluation run
 against the published version:
@@ -51,7 +51,7 @@ against the published version:
 curl -X POST \
   -H "Authorization: token $GITHUB_TOKEN" \
   -H "Accept: application/vnd.github+json" \
-  "https://api.github.com/repos/OpenHands/software-agent-sdk/actions/workflows/run-eval.yml/dispatches" \
+  "https://api.github.com/repos/Madagascar/software-agent-sdk/actions/workflows/run-eval.yml/dispatches" \
   -d '{
     "ref": "main",
     "inputs": {
@@ -66,7 +66,7 @@ curl -X POST \
 ## Documentation Updates
 
 If the release includes user-facing features, verify documentation is
-updated in `OpenHands/docs` (SDK docs live under `sdk/`). See the
+updated in `Madagascar/docs` (SDK docs live under `sdk/`). See the
 `feature-release-rollout` skill for the full downstream propagation
 workflow.
 
@@ -78,7 +78,7 @@ Re-run the `pypi-release.yml` workflow manually. It uses `--check-url`
 to skip already-published packages, so partial reruns are safe.
 
 ```bash
-gh workflow run pypi-release.yml --repo OpenHands/software-agent-sdk
+gh workflow run pypi-release.yml --repo Madagascar/software-agent-sdk
 ```
 
 ### Version bump PR has conflicts
@@ -89,7 +89,7 @@ or re-trigger `version-bump-prs.yml` with the version input.
 
 ```bash
 gh workflow run version-bump-prs.yml \
-  --repo OpenHands/software-agent-sdk \
+  --repo Madagascar/software-agent-sdk \
   -f version=<version>
 ```
 

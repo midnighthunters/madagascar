@@ -9,9 +9,9 @@ try:
 except ImportError:
     RESEND_AVAILABLE = False
 
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
-DEFAULT_FROM_EMAIL = 'OpenHands <no-reply@openhands.dev>'
+DEFAULT_FROM_EMAIL = 'Madagascar <no-reply@madagascar.dev>'
 DEFAULT_WEB_HOST = 'https://app.all-hands.dev'
 
 
@@ -93,12 +93,12 @@ class EmailService:
         params = {
             'from': from_email,
             'to': [to_email],
-            'subject': f"You're invited to join {org_name} on OpenHands",
+            'subject': f"You're invited to join {org_name} on Madagascar",
             'html': f"""
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <p>Hi,</p>
 
-                <p><strong>{inviter_name}</strong> has invited you to join <strong>{org_name}</strong> on OpenHands as a <strong>{role_name}</strong>.</p>
+                <p><strong>{inviter_name}</strong> has invited you to join <strong>{org_name}</strong> on Madagascar as a <strong>{role_name}</strong>.</p>
 
                 <p>Click the button below to accept the invitation:</p>
 
@@ -128,7 +128,7 @@ class EmailService:
 
                 <p style="color: #999; font-size: 12px;">
                     Best,<br>
-                    The OpenHands Team
+                    The Madagascar Team
                 </p>
             </div>
             """,

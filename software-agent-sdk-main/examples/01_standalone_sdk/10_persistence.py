@@ -3,7 +3,7 @@ import uuid
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
@@ -11,10 +11,10 @@ from openhands.sdk import (
     LLMConvertibleEvent,
     get_logger,
 )
-from openhands.sdk.mcp import MCPServer
-from openhands.sdk.tool import Tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.mcp import MCPServer
+from madagascar.sdk.tool import Tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 
 
 logger = get_logger(__name__)
@@ -64,7 +64,7 @@ conversation = Conversation(
     conversation_id=conversation_id,
 )
 conversation.send_message(
-    "Read https://github.com/OpenHands/OpenHands. Then write 3 facts "
+    "Read https://github.com/Madagascar/Madagascar. Then write 3 facts "
     "about the project into FACTS.txt."
 )
 conversation.run()

@@ -11,12 +11,12 @@ function capitalize(s: string): string {
  *   "openai/gpt-4o"                        -> "GPT-4o"
  *   "openai/gpt-4o-mini"                   -> "GPT-4o mini"
  *   "gemini/gemini-2.5-pro"                -> "Gemini 2.5 Pro"
- *   "openhands/o3"                         -> "o3"
+ *   "madagascar/o3"                         -> "o3"
  *   "openai/o4-mini"                       -> "o4-mini"
  *   "litellm_proxy/anthropic/claude-3-5-sonnet-20241022" -> "Claude 3.5 Sonnet"
  *   "litellm_proxy/my-finetune"            -> "my-finetune"
  *
- * This handles native OpenHands ``LLM.model`` strings, where the reasoning
+ * This handles native Madagascar ``LLM.model`` strings, where the reasoning
  * effort is a separate field — it is never embedded in the model id. (ACP
  * conversations resolve their label from the provider registry instead, so
  * effort-suffixed ids like ``gpt-5.5/high`` never reach this function.)

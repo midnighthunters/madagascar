@@ -22,12 +22,12 @@ import re
 import tempfile
 from pathlib import Path
 
-from openhands.sdk import LLM, Agent, Conversation, Tool
-from openhands.sdk.critic import APIBasedCritic, IterativeRefinementConfig
-from openhands.sdk.critic.base import CriticBase
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.task_tracker import TaskTrackerTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk import LLM, Agent, Conversation, Tool
+from madagascar.sdk.critic import APIBasedCritic, IterativeRefinementConfig
+from madagascar.sdk.critic.base import CriticBase
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.task_tracker import TaskTrackerTool
+from madagascar.tools.terminal import TerminalTool
 
 
 # Configuration

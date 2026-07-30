@@ -6,13 +6,13 @@ HOST = os.getenv('WEB_HOST', 'app.all-hands.dev').strip()
 
 # Check if this is a feature environment
 # Feature environments have a host format like {some-text}.staging.all-hands.dev
-# or {some-text}.staging.openhands.dev (the domain the staging/feature stack is
+# or {some-text}.staging.madagascar.dev (the domain the staging/feature stack is
 # migrating to), or {some-text}.ohe-staging.platform-team.all-hands.dev (for the
 # platform-team sandbox). The bare staging host (staging.all-hands.dev /
-# staging.openhands.dev) does not count as a feature environment.
-STAGING_BASE_HOSTS = ('staging.all-hands.dev', 'staging.openhands.dev')
+# staging.madagascar.dev) does not count as a feature environment.
+STAGING_BASE_HOSTS = ('staging.all-hands.dev', 'staging.madagascar.dev')
 IS_STAGING_ENV = bool(
-    re.match(r'^.+\.staging\.(?:all-hands|openhands)\.dev$', HOST)
+    re.match(r'^.+\.staging\.(?:all-hands|madagascar)\.dev$', HOST)
     or re.match(r'^.+\.ohe-staging\.platform-team\.all-hands\.dev$', HOST)
     or HOST in STAGING_BASE_HOSTS
 )  # Includes the staging deployment + feature deployments
@@ -33,10 +33,10 @@ def _is_all_hands_managed_domain(host: str) -> bool:
     """Check if the host is an All-Hands managed domain."""
     return (
         host == 'app.all-hands.dev'
-        or host == 'app.openhands.ai'
+        or host == 'app.madagascar.ai'
         or host.endswith('.all-hands.dev')
-        or host.endswith('.openhands.ai')
-        or host.endswith('.openhands.dev')
+        or host.endswith('.madagascar.ai')
+        or host.endswith('.madagascar.dev')
     )
 
 
@@ -76,14 +76,14 @@ PERSONAL_WORKSPACE_VERSION_TO_MODEL = {
 }
 
 LITELLM_DEFAULT_MODEL = os.getenv('LITELLM_DEFAULT_MODEL')
-OPENHANDS_LLM_PROVIDER_ROUTE = os.getenv('OPENHANDS_LLM_PROVIDER_ROUTE')
-OPENHANDS_DEFAULT_LLM_MODEL = os.getenv('OPENHANDS_DEFAULT_LLM_MODEL') or os.getenv(
+MADAGASCAR_LLM_PROVIDER_ROUTE = os.getenv('MADAGASCAR_LLM_PROVIDER_ROUTE')
+MADAGASCAR_DEFAULT_LLM_MODEL = os.getenv('MADAGASCAR_DEFAULT_LLM_MODEL') or os.getenv(
     'LLM_MODEL'
 )
-OPENHANDS_DEFAULT_LLM_BASE_URL = os.getenv(
-    'OPENHANDS_DEFAULT_LLM_BASE_URL'
+MADAGASCAR_DEFAULT_LLM_BASE_URL = os.getenv(
+    'MADAGASCAR_DEFAULT_LLM_BASE_URL'
 ) or os.getenv('LLM_BASE_URL')
-OPENHANDS_DEFAULT_LLM_API_KEY = os.getenv('OPENHANDS_DEFAULT_LLM_API_KEY') or os.getenv(
+MADAGASCAR_DEFAULT_LLM_API_KEY = os.getenv('MADAGASCAR_DEFAULT_LLM_API_KEY') or os.getenv(
     'LLM_API_KEY'
 )
 
@@ -103,7 +103,7 @@ SUBSCRIPTION_PRICE_DATA = {
         'unit_amount': 2000,
         'currency': 'usd',
         'product_data': {
-            'name': 'OpenHands Monthly',
+            'name': 'Madagascar Monthly',
             'tax_code': 'txcd_10000000',
         },
         'tax_behavior': 'exclusive',
@@ -143,7 +143,7 @@ USER_PROVISIONING_ENABLED = os.getenv('USER_PROVISIONING_ENABLED', 'false').lowe
 
 # Controls whether any authenticated user is allowed to create an organization
 # via POST /api/organizations (env: OPEN_ORG_CREATION_ENABLED). When disabled
-# (the default), org creation remains restricted to @openhands.dev admin users.
+# (the default), org creation remains restricted to @madagascar.dev admin users.
 # Accepts both ``'true'`` and ``'1'`` because older Helm chart versions emit
 # the latter and would otherwise silently keep the feature disabled.
 OPEN_ORG_CREATION_ENABLED = os.getenv('OPEN_ORG_CREATION_ENABLED', 'false').lower() in (
@@ -178,29 +178,29 @@ def get_default_litellm_model():
 def should_use_direct_llm_defaults() -> bool:
     """Whether defaults should point directly at an OpenAI-compatible endpoint."""
     return (
-        OPENHANDS_LLM_PROVIDER_ROUTE == 'direct'
-        and bool(OPENHANDS_DEFAULT_LLM_MODEL)
-        and bool(OPENHANDS_DEFAULT_LLM_BASE_URL)
+        MADAGASCAR_LLM_PROVIDER_ROUTE == 'direct'
+        and bool(MADAGASCAR_DEFAULT_LLM_MODEL)
+        and bool(MADAGASCAR_DEFAULT_LLM_BASE_URL)
     )
 
 
 def get_default_llm_model() -> str:
     """Return the deployment default LLM model."""
-    if should_use_direct_llm_defaults() and OPENHANDS_DEFAULT_LLM_MODEL:
-        return OPENHANDS_DEFAULT_LLM_MODEL
+    if should_use_direct_llm_defaults() and MADAGASCAR_DEFAULT_LLM_MODEL:
+        return MADAGASCAR_DEFAULT_LLM_MODEL
     return get_default_litellm_model()
 
 
 def get_default_llm_base_url() -> str:
     """Return the deployment default LLM base URL."""
-    if should_use_direct_llm_defaults() and OPENHANDS_DEFAULT_LLM_BASE_URL:
-        return OPENHANDS_DEFAULT_LLM_BASE_URL
+    if should_use_direct_llm_defaults() and MADAGASCAR_DEFAULT_LLM_BASE_URL:
+        return MADAGASCAR_DEFAULT_LLM_BASE_URL
     return LITE_LLM_API_URL
 
 
 def get_default_llm_api_key() -> str | None:
     """Return the optional shared deployment default LLM API key."""
-    if not should_use_direct_llm_defaults() or not OPENHANDS_DEFAULT_LLM_API_KEY:
+    if not should_use_direct_llm_defaults() or not MADAGASCAR_DEFAULT_LLM_API_KEY:
         return None
-    key = OPENHANDS_DEFAULT_LLM_API_KEY.strip()
+    key = MADAGASCAR_DEFAULT_LLM_API_KEY.strip()
     return key or None

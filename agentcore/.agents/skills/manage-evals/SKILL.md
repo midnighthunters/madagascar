@@ -7,7 +7,7 @@ description: This skill should be used when the user asks to "trigger an eval", 
 
 ## Overview
 
-OpenHands evaluations produce results stored on a CDN at `https://results.eval.all-hands.dev/`. Each run is identified by a path: `{benchmark}/{model_slug}/{github_run_id}/`. This skill enables triggering evaluation runs, comparing results between runs, and posting performance reports as GitHub PR comments.
+Madagascar evaluations produce results stored on a CDN at `https://results.eval.all-hands.dev/`. Each run is identified by a path: `{benchmark}/{model_slug}/{github_run_id}/`. This skill enables triggering evaluation runs, comparing results between runs, and posting performance reports as GitHub PR comments.
 
 ## Quick Start
 
@@ -32,7 +32,7 @@ python .agents/skills/manage-evals/scripts/manage_evals.py compare \
 python .agents/skills/manage-evals/scripts/manage_evals.py compare \
     "<benchmark>/<model_slug>/<run_id>/" \
     --auto-baseline \
-    --post-comment --pr <PR_NUMBER> --repo OpenHands/software-agent-sdk
+    --post-comment --pr <PR_NUMBER> --repo Madagascar/software-agent-sdk
 ```
 
 ## Triggering Evaluations
@@ -104,7 +104,7 @@ Eval runs are triggered by adding labels like `run-eval-50` to a PR. The `all-ha
 **Option A — From bot comments on the PR:**
 
 ```bash
-gh api repos/OpenHands/software-agent-sdk/issues/<PR_NUMBER>/comments \
+gh api repos/Madagascar/software-agent-sdk/issues/<PR_NUMBER>/comments \
     --jq '.[] | select(.user.login == "all-hands-bot") | .body' \
     | grep -o 'Evaluation:.*' | head -1
 ```
@@ -114,7 +114,7 @@ The evaluation name follows the format `{github_run_id}-{model_slug_short}` (e.g
 **Option B — From the "Evaluation Triggered" bot comment:**
 
 ```bash
-gh api repos/OpenHands/software-agent-sdk/issues/<PR_NUMBER>/comments \
+gh api repos/Madagascar/software-agent-sdk/issues/<PR_NUMBER>/comments \
     --jq '.[] | select(.body | test("Evaluation Triggered")) | .body'
 ```
 
@@ -133,7 +133,7 @@ Each line is a run path. Match by benchmark and model to find the run.
 A run path has three components:
 - **benchmark**: `swebench`, `swebenchpro`, `gaia`, `swtbench`, `commit0`, `swebenchmultimodal`, `terminalbench`, `programbench`
 - **model_slug**: Derived from model name with `/:@.` replaced by `-` (e.g., `litellm_proxy-claude-sonnet-4-5-20250929`)
-- **run_id**: The GitHub Actions workflow run ID from the `OpenHands/evaluation` repo
+- **run_id**: The GitHub Actions workflow run ID from the `Madagascar/evaluation` repo
 
 ### Step 3: Verify Results Exist
 
@@ -171,7 +171,7 @@ Or with auto-baseline and PR comment posting:
 python .agents/skills/manage-evals/scripts/manage_evals.py compare \
     "swebench/litellm_proxy-claude-sonnet-4-5-20250929/23775164157/" \
     --auto-baseline \
-    --post-comment --pr 2334 --repo OpenHands/software-agent-sdk
+    --post-comment --pr 2334 --repo Madagascar/software-agent-sdk
 ```
 
 ## Available Data Per Run
@@ -190,7 +190,7 @@ Each run stores files at `https://results.eval.all-hands.dev/{run_path}/`:
 The eval monitor dashboard provides a visual view of runs:
 
 ```
-https://openhands-eval-monitor.vercel.app/?run={benchmark}/{model_slug}/{run_id}/
+https://madagascar-eval-monitor.vercel.app/?run={benchmark}/{model_slug}/{run_id}/
 ```
 
 ## Interpreting Results

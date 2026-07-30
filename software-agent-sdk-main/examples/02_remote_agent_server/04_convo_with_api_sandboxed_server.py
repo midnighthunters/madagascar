@@ -16,14 +16,14 @@ import time
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Conversation,
     RemoteConversation,
     get_logger,
 )
-from openhands.tools.preset.default import get_default_agent
-from openhands.workspace import APIRemoteWorkspace
+from madagascar.tools.preset.default import get_default_agent
+from madagascar.workspace import APIRemoteWorkspace
 
 
 logger = get_logger(__name__)
@@ -48,7 +48,7 @@ if not runtime_api_key:
 # SDK_SHA is the canonical commit SHA set by CI workflows (avoids the
 # built-in GITHUB_SHA which resolves to the merge-commit on PRs).
 server_image_sha = os.getenv("SDK_SHA") or os.getenv("GITHUB_SHA") or "main"
-server_image = f"ghcr.io/openhands/agent-server:{server_image_sha[:7]}-python-amd64"
+server_image = f"ghcr.io/madagascar/agent-server:{server_image_sha[:7]}-python-amd64"
 logger.info(f"Using server image: {server_image}")
 
 with APIRemoteWorkspace(

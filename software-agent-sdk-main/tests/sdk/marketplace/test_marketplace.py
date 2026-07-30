@@ -4,14 +4,14 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.marketplace import (
+from madagascar.sdk.marketplace import (
     Marketplace,
     MarketplaceMetadata,
     MarketplaceOwner,
     MarketplacePluginEntry,
     MarketplacePluginSource,
 )
-from openhands.sdk.plugin import PluginAuthor
+from madagascar.sdk.plugin import PluginAuthor
 
 
 class TestMarketplaceOwner:
@@ -574,7 +574,7 @@ class TestMarketplaceIntegration:
     def test_marketplace_plugin_entry_consistency(self):
         """Test that MarketplacePluginEntry fields align with PluginManifest."""
         # Both should support name, version, description, author
-        from openhands.sdk.plugin import PluginManifest
+        from madagascar.sdk.plugin import PluginManifest
 
         author = PluginAuthor(name="Test Author")
         entry = MarketplacePluginEntry(

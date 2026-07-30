@@ -1,6 +1,6 @@
 """Tests for the deferred-init / dormant-mode flow.
 
-Background: https://github.com/OpenHands/software-agent-sdk/issues/2523
+Background: https://github.com/Madagascar/software-agent-sdk/issues/2523
 """
 
 from __future__ import annotations
@@ -13,9 +13,9 @@ import pytest
 from fastapi.testclient import TestClient
 from pydantic import SecretStr
 
-from openhands.agent_server.api import api_lifespan, create_app
-from openhands.agent_server.config import Config
-from openhands.agent_server.init_router import (
+from madagascar.agent_server.api import api_lifespan, create_app
+from madagascar.agent_server.config import Config
+from madagascar.agent_server.init_router import (
     InitRequest,
     InitService,
     _build_initialized_config,
@@ -41,14 +41,14 @@ def _clean_env(monkeypatch):
 def _reset_conversation_singleton():
     """Some tests build their own ConversationService; reset the module-level
     cache so unrelated tests don't see leftover state."""
-    from openhands.agent_server import conversation_service as cs_mod
+    from madagascar.agent_server import conversation_service as cs_mod
 
     cs_mod._conversation_service = None
 
 
 def _reset_bash_singleton():
     """Reset the module-level BashEventService cache so each test starts fresh."""
-    from openhands.agent_server import bash_service as bash_mod
+    from madagascar.agent_server import bash_service as bash_mod
 
     bash_mod._bash_event_service = None
 
@@ -124,7 +124,7 @@ class TestInitServiceTransitions:
     async def test_init_transitions_dormant_to_ready(self, tmp_path):
         _reset_conversation_singleton()
         _reset_bash_singleton()
-        from openhands.agent_server.bash_service import BashEventService
+        from madagascar.agent_server.bash_service import BashEventService
 
         base = Config(
             deferred_init=True,
@@ -225,7 +225,7 @@ class TestInitServiceTransitions:
         bash_events_dir supplied in the InitRequest."""
         _reset_conversation_singleton()
         _reset_bash_singleton()
-        from openhands.agent_server.bash_service import BashEventService
+        from madagascar.agent_server.bash_service import BashEventService
 
         base = Config(
             deferred_init=True,

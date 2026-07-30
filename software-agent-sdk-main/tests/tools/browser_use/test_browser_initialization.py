@@ -4,8 +4,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from openhands.tools.browser_use.impl import BrowserToolExecutor
-from openhands.tools.utils.timeout import TimeoutError
+from madagascar.tools.browser_use.impl import BrowserToolExecutor
+from madagascar.tools.utils.timeout import TimeoutError
 
 
 class TestBrowserInitialization:
@@ -20,7 +20,7 @@ class TestBrowserInitialization:
                 return_value="/usr/bin/chromium",
             ),
             patch(
-                "openhands.tools.browser_use.impl.run_with_timeout",
+                "madagascar.tools.browser_use.impl.run_with_timeout",
                 side_effect=TimeoutError("Timeout occurred"),
             ),
         ):
@@ -42,10 +42,10 @@ class TestBrowserInitialization:
                 return_value="/usr/bin/chromium",
             ),
             patch(
-                "openhands.tools.browser_use.impl.CustomBrowserUseServer",
+                "madagascar.tools.browser_use.impl.CustomBrowserUseServer",
                 return_value=mock_server,
             ),
-            patch("openhands.tools.browser_use.impl.run_with_timeout") as mock_timeout,
+            patch("madagascar.tools.browser_use.impl.run_with_timeout") as mock_timeout,
         ):
             BrowserToolExecutor(init_timeout_seconds=60)
             mock_timeout.assert_called_once()
@@ -64,10 +64,10 @@ class TestBrowserInitialization:
                 return_value="/usr/bin/chromium",
             ),
             patch(
-                "openhands.tools.browser_use.impl.CustomBrowserUseServer",
+                "madagascar.tools.browser_use.impl.CustomBrowserUseServer",
                 return_value=mock_server,
             ),
-            patch("openhands.tools.browser_use.impl.run_with_timeout") as mock_timeout,
+            patch("madagascar.tools.browser_use.impl.run_with_timeout") as mock_timeout,
         ):
             BrowserToolExecutor()
             mock_timeout.assert_called_once()
@@ -86,11 +86,11 @@ class TestBrowserInitialization:
                 return_value="/usr/bin/chromium",
             ),
             patch(
-                "openhands.tools.browser_use.impl.CustomBrowserUseServer",
+                "madagascar.tools.browser_use.impl.CustomBrowserUseServer",
                 return_value=mock_server,
             ),
             patch(
-                "openhands.tools.browser_use.impl.os.getuid",
+                "madagascar.tools.browser_use.impl.os.getuid",
                 return_value=1000,
                 create=True,
             ),  # Non-root user
@@ -123,7 +123,7 @@ class TestBrowserInitialization:
                 return_value="/usr/bin/chromium",
             ),
             patch(
-                "openhands.tools.browser_use.impl.CustomBrowserUseServer",
+                "madagascar.tools.browser_use.impl.CustomBrowserUseServer",
                 return_value=mock_server,
             ) as mock_server_class,
         ):
@@ -143,11 +143,11 @@ class TestBrowserInitialization:
                 return_value="/usr/bin/chromium",
             ),
             patch(
-                "openhands.tools.browser_use.impl.CustomBrowserUseServer",
+                "madagascar.tools.browser_use.impl.CustomBrowserUseServer",
                 return_value=mock_server,
             ),
             patch(
-                "openhands.tools.browser_use.impl.AsyncExecutor",
+                "madagascar.tools.browser_use.impl.AsyncExecutor",
                 return_value=mock_async_executor,
             ),
         ):
@@ -173,7 +173,7 @@ class TestBrowserInitialization:
 
     def test_call_method_delegates_to_async_executor(self):
         """Test that __call__ method properly delegates to async executor."""
-        from openhands.tools.browser_use.definition import BrowserObservation
+        from madagascar.tools.browser_use.definition import BrowserObservation
 
         mock_server = MagicMock()
         mock_async_executor = MagicMock()
@@ -189,11 +189,11 @@ class TestBrowserInitialization:
                 return_value="/usr/bin/chromium",
             ),
             patch(
-                "openhands.tools.browser_use.impl.CustomBrowserUseServer",
+                "madagascar.tools.browser_use.impl.CustomBrowserUseServer",
                 return_value=mock_server,
             ),
             patch(
-                "openhands.tools.browser_use.impl.AsyncExecutor",
+                "madagascar.tools.browser_use.impl.AsyncExecutor",
                 return_value=mock_async_executor,
             ),
         ):
@@ -207,7 +207,7 @@ class TestBrowserInitialization:
 
     def test_call_method_timeout_configuration(self):
         """Test that __call__ method uses correct timeout."""
-        from openhands.tools.browser_use.definition import BrowserObservation
+        from madagascar.tools.browser_use.definition import BrowserObservation
 
         mock_server = MagicMock()
         mock_async_executor = MagicMock()
@@ -223,11 +223,11 @@ class TestBrowserInitialization:
                 return_value="/usr/bin/chromium",
             ),
             patch(
-                "openhands.tools.browser_use.impl.CustomBrowserUseServer",
+                "madagascar.tools.browser_use.impl.CustomBrowserUseServer",
                 return_value=mock_server,
             ),
             patch(
-                "openhands.tools.browser_use.impl.AsyncExecutor",
+                "madagascar.tools.browser_use.impl.AsyncExecutor",
                 return_value=mock_async_executor,
             ),
         ):

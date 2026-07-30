@@ -2,8 +2,8 @@
 
 import pytest
 
-from openhands.sdk.tool import DeclaredResources
-from openhands.tools.tom_consult.definition import (
+from madagascar.sdk.tool import DeclaredResources
+from madagascar.tools.tom_consult.definition import (
     ConsultTomAction,
     ConsultTomObservation,
     TomConsultTool,

@@ -1,11 +1,11 @@
-"""Regression tests for ``openhands.app_server.services.db_session``.
+"""Regression tests for ``madagascar.app_server.services.db_session``.
 
 These tests lock in a specific contract: calling ``depends_db_session()`` at
 module load time must NOT trigger ``get_global_config()``. If it does, an
 ``OH_LLM_MODEL_KIND`` value that dynamically imports a feature module whose
 body uses ``depends_db_session()`` as a default argument re-enters the
 in-flight ``get_global_config()`` and recurses until the stack blows --
-exactly the crashloop seen in OpenHands/deploy#4315.
+exactly the crashloop seen in Madagascar/deploy#4315.
 """
 
 import sys
@@ -13,7 +13,7 @@ import types
 
 from fastapi.params import Depends
 
-from openhands.app_server.services.db_session import (
+from madagascar.app_server.services.db_session import (
     _yield_db_session,
     depends_db_session,
 )
@@ -39,12 +39,12 @@ def test_depends_db_session_does_not_resolve_config_at_construction():
     ``get_global_config()`` while ``_global_config`` was still ``None``,
     re-entering the same initialiser and recursing until ``RecursionError``.
 
-    We install a sentinel ``openhands.app_server.config`` module whose
+    We install a sentinel ``madagascar.app_server.config`` module whose
     attribute access blows up; ``depends_db_session()`` must succeed without
     ever touching it. (``_yield_db_session`` will only touch it per request.)
     """
-    original = sys.modules.get('openhands.app_server.config')
-    sentinel = types.ModuleType('openhands.app_server.config')
+    original = sys.modules.get('madagascar.app_server.config')
+    sentinel = types.ModuleType('madagascar.app_server.config')
 
     def _explode():
         raise AssertionError(
@@ -53,7 +53,7 @@ def test_depends_db_session_does_not_resolve_config_at_construction():
         )
 
     sentinel.get_global_config = _explode  # type: ignore[attr-defined]
-    sys.modules['openhands.app_server.config'] = sentinel
+    sys.modules['madagascar.app_server.config'] = sentinel
     try:
         # Calling depends_db_session() repeatedly must not raise.
         for _ in range(3):
@@ -61,6 +61,6 @@ def test_depends_db_session_does_not_resolve_config_at_construction():
             assert isinstance(result, Depends)
     finally:
         if original is None:
-            sys.modules.pop('openhands.app_server.config', None)
+            sys.modules.pop('madagascar.app_server.config', None)
         else:
-            sys.modules['openhands.app_server.config'] = original
+            sys.modules['madagascar.app_server.config'] = original

@@ -53,7 +53,7 @@ const PHASE_ORDER_WITHOUT_BACKEND: readonly OnboardingPhase[] = [
  * rerenders, remounts and the lazy/Suspense flip so the event fires at most
  * once per onboarding session.
  */
-const ONBOARDING_STARTED_TRACKED_KEY = "openhands-onboarding-started";
+const ONBOARDING_STARTED_TRACKED_KEY = "madagascar-onboarding-started";
 
 interface SlideProps {
   /** Index of this slide in the step sequence. */
@@ -133,7 +133,7 @@ export function OnboardingModal({
   initialStep = 0,
   isPreview = false,
 }: OnboardingModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { data: settings } = useSettings();
   const analyticsEnabled = settings?.user_consents_to_analytics === true;
   const {
@@ -176,7 +176,7 @@ export function OnboardingModal({
       ],
   );
   const [selectedAgentId, setSelectedAgentId] =
-    React.useState<OnboardingAgentId>("openhands");
+    React.useState<OnboardingAgentId>("madagascar");
 
   // When the backend slide drops out of the flow (skipBackendStep flips
   // true), a user still parked on "backend" must be moved forward to the
@@ -200,7 +200,7 @@ export function OnboardingModal({
     noBackendSelected ||
     healthByBackendId[backend.id]?.isConnected !== undefined;
 
-  const isOpenHands = selectedAgentId === "openhands";
+  const isMadagascar = selectedAgentId === "madagascar";
   const hideSkip = currentStep === 0 && getLockedCloudHost() !== null;
   const goNext = React.useCallback(() => {
     setPhase((prev) => {
@@ -290,7 +290,7 @@ export function OnboardingModal({
   return (
     // No `onClose`: the flow must only be dismissed via explicit actions
     // (the skip button or launching), never by an errant backdrop click or
-    // Escape press — see https://github.com/OpenHands/agent-canvas/issues/1085.
+    // Escape press — see https://github.com/Madagascar/agent-canvas/issues/1085.
     <ModalBackdrop aria-label={t(I18nKey.ONBOARDING$TITLE)}>
       <div className="relative flex flex-col items-center gap-4">
         <section
@@ -343,7 +343,7 @@ export function OnboardingModal({
                 index={slideOrder.indexOf("setup")}
                 currentStep={currentStep}
               >
-                {isOpenHands ? (
+                {isMadagascar ? (
                   <SetupLlmStep onBack={goBack} onNext={goNext} />
                 ) : (
                   <SetupAcpSecretsStep

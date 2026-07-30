@@ -11,20 +11,20 @@ from litellm import ChatCompletionMessageToolCall
 from litellm.types.utils import Function
 from pydantic import SecretStr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.context.view import View
-from openhands.sdk.conversation import Conversation, LocalConversation
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.event import ActionEvent
-from openhands.sdk.event.base import Event
-from openhands.sdk.event.condenser import Condensation
-from openhands.sdk.event.conversation_error import ConversationErrorEvent
-from openhands.sdk.event.conversation_state import ConversationStateUpdateEvent
-from openhands.sdk.event.llm_convertible import MessageEvent
-from openhands.sdk.event.types import ROOT_PARENT_ID, SourceType
-from openhands.sdk.event.user_action import PauseEvent
-from openhands.sdk.llm import LLM, Message, MessageToolCall, TextContent
-from openhands.sdk.tool.schema import Action
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.context.view import View
+from madagascar.sdk.conversation import Conversation, LocalConversation
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.event import ActionEvent
+from madagascar.sdk.event.base import Event
+from madagascar.sdk.event.condenser import Condensation
+from madagascar.sdk.event.conversation_error import ConversationErrorEvent
+from madagascar.sdk.event.conversation_state import ConversationStateUpdateEvent
+from madagascar.sdk.event.llm_convertible import MessageEvent
+from madagascar.sdk.event.types import ROOT_PARENT_ID, SourceType
+from madagascar.sdk.event.user_action import PauseEvent
+from madagascar.sdk.llm import LLM, Message, MessageToolCall, TextContent
+from madagascar.sdk.tool.schema import Action
 
 
 def _agent() -> Agent:
@@ -606,7 +606,7 @@ def test_generate_title_reads_active_branch(monkeypatch):
             return "title"
 
         monkeypatch.setattr(
-            "openhands.sdk.conversation.impl.local_conversation."
+            "madagascar.sdk.conversation.impl.local_conversation."
             "generate_conversation_title",
             _fake_generate,
         )

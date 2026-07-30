@@ -39,7 +39,7 @@ export function AutomationListRow({
   onEdit,
 }: AutomationListRowProps) {
   const { navigate } = useNavigation();
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const canManage = useHasPermission("manage_automations");
 
   const scheduleLabel =

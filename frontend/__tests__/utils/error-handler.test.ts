@@ -88,19 +88,19 @@ describe("Error Handler", () => {
   });
 
   describe("isBudgetOrCreditError", () => {
-    it("identifies OpenHands budget and credit limit errors", () => {
+    it("identifies Madagascar budget and credit limit errors", () => {
       expect(
         isBudgetOrCreditError(
           "Budget has been exceeded! Current cost: 18.51, Max budget: 18.24",
         ),
       ).toBe(true);
-      expect(isBudgetOrCreditError("OpenHands Credits are exhausted")).toBe(
+      expect(isBudgetOrCreditError("Madagascar Credits are exhausted")).toBe(
         true,
       );
       expect(isBudgetOrCreditError("Credit limit reached")).toBe(true);
     });
 
-    it("does not rewrite provider-side credit messages as OpenHands billing errors", () => {
+    it("does not rewrite provider-side credit messages as Madagascar billing errors", () => {
       expect(
         isBudgetOrCreditError(
           "OpenrouterException - This model requires provider credits. Check your OpenRouter account.",

@@ -1,4 +1,4 @@
-"""Test that importing openhands.sdk completes within a reasonable time.
+"""Test that importing madagascar.sdk completes within a reasonable time.
 
 This is a performance regression guard: it spawns a fresh Python process
 so that the measurement is not affected by modules already imported by the
@@ -9,7 +9,7 @@ import subprocess
 import sys
 
 
-# Upper bound (seconds) for `import openhands.sdk` in a cold process.
+# Upper bound (seconds) for `import madagascar.sdk` in a cold process.
 # Kept generous so CI machines don't flake, while still catching
 # accidental heavy eager imports (e.g. loading Laminar at import time).
 IMPORT_TIME_LIMIT_SECONDS = 10.0
@@ -19,11 +19,11 @@ _ITERATIONS = 5
 
 
 def _measure_import_time_seconds() -> float:
-    """Return wall-clock seconds to `import openhands.sdk` in a subprocess."""
+    """Return wall-clock seconds to `import madagascar.sdk` in a subprocess."""
     code = (
         "import time; "
         "start = time.perf_counter(); "
-        "import openhands.sdk; "
+        "import madagascar.sdk; "
         "elapsed = time.perf_counter() - start; "
         "print(elapsed)"
     )
@@ -40,12 +40,12 @@ def _measure_import_time_seconds() -> float:
     return float(result.stdout.strip())
 
 
-def test_import_openhands_sdk_time():
-    """Import of openhands.sdk must complete under the time limit."""
+def test_import_madagascar_sdk_time():
+    """Import of madagascar.sdk must complete under the time limit."""
     times = [_measure_import_time_seconds() for _ in range(_ITERATIONS)]
     avg = sum(times) / len(times)
     print(
-        f"\n[import-perf] openhands.sdk import times (s): {[f'{t:.3f}' for t in times]}"
+        f"\n[import-perf] madagascar.sdk import times (s): {[f'{t:.3f}' for t in times]}"
     )
     print(f"[import-perf] average: {avg:.3f}s (limit: {IMPORT_TIME_LIMIT_SECONDS}s)")
     assert avg < IMPORT_TIME_LIMIT_SECONDS, (

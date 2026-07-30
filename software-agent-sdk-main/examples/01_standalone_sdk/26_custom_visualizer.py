@@ -15,12 +15,12 @@ import os
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Conversation
-from openhands.sdk.conversation.visualizer import ConversationVisualizerBase
-from openhands.sdk.event import (
+from madagascar.sdk import LLM, Conversation
+from madagascar.sdk.conversation.visualizer import ConversationVisualizerBase
+from madagascar.sdk.event import (
     Event,
 )
-from openhands.tools.preset.default import get_default_agent
+from madagascar.tools.preset.default import get_default_agent
 
 
 class MinimalVisualizer(ConversationVisualizerBase):

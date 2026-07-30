@@ -20,7 +20,7 @@ export function DeleteAgentProfileModal({
   profile,
   onClose,
 }: DeleteAgentProfileModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const deleteProfile = useDeleteAgentProfile();
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
 

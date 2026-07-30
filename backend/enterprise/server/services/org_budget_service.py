@@ -24,8 +24,8 @@ from storage.stored_conversation_metadata import StoredConversationMetadata
 from storage.stored_conversation_metadata_saas import StoredConversationMetadataSaas
 from storage.user import User
 
-from openhands.app_server.services.injector import Injector, InjectorState
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.services.injector import Injector, InjectorState
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 try:
     from slack_sdk.web.async_client import AsyncWebClient
@@ -769,7 +769,7 @@ class OrgBudgetService:
 
         client = AsyncWebClient(token=token)
         message = (
-            f':warning: OpenHands budget alert for *{org_name}*\n'
+            f':warning: Madagascar budget alert for *{org_name}*\n'
             f'Threshold: *{threshold}%*\n'
             f'Current spend: *${current_spend:,.2f}* '
             f'({percentage:.1f}% of ${settings.monthly_limit:,.2f})'
@@ -803,7 +803,7 @@ class OrgBudgetServiceInjector(Injector[OrgBudgetService]):
     async def inject(
         self, state: InjectorState, request: Request | None = None
     ) -> AsyncGenerator[OrgBudgetService, None]:
-        from openhands.app_server.config import get_db_session
+        from madagascar.app_server.config import get_db_session
 
         async with get_db_session(state, request) as db_session:
             yield OrgBudgetService(db_session=db_session)

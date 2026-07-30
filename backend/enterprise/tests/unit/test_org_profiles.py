@@ -11,12 +11,12 @@ from storage.org_member import OrgMember
 from storage.role import Role
 from storage.user import User
 
-from openhands.app_server.settings.llm_profiles import (
+from madagascar.app_server.settings.llm_profiles import (
     MAX_PROFILES_PER_USER,
     LLMProfiles,
     StrictLLM,
 )
-from openhands.app_server.utils.llm import MASKED_API_KEY
+from madagascar.app_server.utils.llm import MASKED_API_KEY
 
 # Mock the database module before importing the router — matches the
 # test_saas_settings_store.py pattern so module-level imports don't try to

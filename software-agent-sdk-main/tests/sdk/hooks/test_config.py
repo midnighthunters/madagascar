@@ -6,8 +6,8 @@ import tempfile
 import pytest
 from pydantic import ValidationError
 
-from openhands.sdk.hooks.config import HookConfig, HookDefinition, HookMatcher, HookType
-from openhands.sdk.hooks.types import HookEventType
+from madagascar.sdk.hooks.config import HookConfig, HookDefinition, HookMatcher, HookType
+from madagascar.sdk.hooks.types import HookEventType
 
 
 def test_command_hook_requires_command():
@@ -215,15 +215,15 @@ class TestHookConfig:
         assert config.is_empty()
 
     def test_load_discovers_config_in_working_dir(self):
-        """Test that load() discovers .openhands/hooks.json in working_dir."""
+        """Test that load() discovers .madagascar/hooks.json in working_dir."""
         hook = {"type": "command", "command": "test-hook.sh"}
         data = {"hooks": {"PreToolUse": [{"matcher": "*", "hooks": [hook]}]}}
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            # Create .openhands/hooks.json in the working directory
+            # Create .madagascar/hooks.json in the working directory
             import os
 
-            hooks_dir = os.path.join(tmpdir, ".openhands")
+            hooks_dir = os.path.join(tmpdir, ".madagascar")
             os.makedirs(hooks_dir)
             hooks_file = os.path.join(hooks_dir, "hooks.json")
             with open(hooks_file, "w") as f:
@@ -435,7 +435,7 @@ class TestAsyncHooks:
 def test_issue_2749():
     """Prompt-based stop hooks should not cause a validation error.
 
-    https://github.com/OpenHands/software-agent-sdk/issues/2749
+    https://github.com/Madagascar/software-agent-sdk/issues/2749
     """
     data = {
         "hooks": {
@@ -470,7 +470,7 @@ def test_issue_2749():
 def test_issue_2749_validation(hook_type: HookType, match: str):
     """Validator should enforce required fields based on hook type.
 
-    https://github.com/OpenHands/software-agent-sdk/issues/2749
+    https://github.com/Madagascar/software-agent-sdk/issues/2749
     """
     with pytest.raises(ValidationError, match=match):
         HookDefinition(type=hook_type)  # type: ignore[call-arg]

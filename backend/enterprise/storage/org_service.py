@@ -29,9 +29,9 @@ from storage.org_store import OrgStore
 from storage.role_store import RoleStore
 from storage.user_store import UserStore
 
-from openhands.app_server.settings.settings_models import Settings
-from openhands.app_server.utils.logger import openhands_logger as logger
-from openhands.sdk.settings import ConversationSettings, default_agent_settings
+from madagascar.app_server.settings.settings_models import Settings
+from madagascar.app_server.utils.logger import madagascar_logger as logger
+from madagascar.sdk.settings import ConversationSettings, default_agent_settings
 
 
 class OrgService:

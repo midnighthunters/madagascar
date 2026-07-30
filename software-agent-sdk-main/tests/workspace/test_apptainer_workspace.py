@@ -8,15 +8,15 @@ import pytest
 @pytest.fixture
 def mock_apptainer_workspace(tmp_path):
     """Fixture to create a mocked ApptainerWorkspace with minimal setup."""
-    from openhands.workspace import ApptainerWorkspace
+    from madagascar.workspace import ApptainerWorkspace
 
     sif_path = tmp_path / "test.sif"
     sif_path.write_text("fake sif")
 
     with (
-        patch("openhands.workspace.apptainer.workspace.execute_command") as mock_exec,
+        patch("madagascar.workspace.apptainer.workspace.execute_command") as mock_exec,
         patch(
-            "openhands.workspace.apptainer.workspace.check_port_available",
+            "madagascar.workspace.apptainer.workspace.check_port_available",
             return_value=True,
         ),
     ):
@@ -44,7 +44,7 @@ def mock_apptainer_workspace(tmp_path):
 
 def test_apptainer_workspace_import():
     """Test that ApptainerWorkspace can be imported from the package."""
-    from openhands.workspace import ApptainerWorkspace
+    from madagascar.workspace import ApptainerWorkspace
 
     assert ApptainerWorkspace is not None
     assert hasattr(ApptainerWorkspace, "__init__")
@@ -52,15 +52,15 @@ def test_apptainer_workspace_import():
 
 def test_apptainer_workspace_inheritance():
     """Test that ApptainerWorkspace inherits from RemoteWorkspace."""
-    from openhands.sdk.workspace import RemoteWorkspace
-    from openhands.workspace import ApptainerWorkspace
+    from madagascar.sdk.workspace import RemoteWorkspace
+    from madagascar.workspace import ApptainerWorkspace
 
     assert issubclass(ApptainerWorkspace, RemoteWorkspace)
 
 
 def test_apptainer_workspace_has_gpu_field():
     """Test that ApptainerWorkspace exposes the GPU passthrough option."""
-    from openhands.workspace import ApptainerWorkspace
+    from madagascar.workspace import ApptainerWorkspace
 
     assert "enable_gpu" in ApptainerWorkspace.model_fields
 
@@ -74,7 +74,7 @@ def test_apptainer_workspace_gpu_passthrough_flag(
 
     fake_process = Mock(stdout=None)
     with patch(
-        "openhands.workspace.apptainer.workspace.subprocess.Popen",
+        "madagascar.workspace.apptainer.workspace.subprocess.Popen",
         return_value=fake_process,
     ) as mock_popen:
         workspace._start_container()
@@ -91,14 +91,14 @@ def test_apptainer_workspace_gpu_passthrough_flag(
 
 def test_apptainer_workspace_extra_bind_mounts(mock_apptainer_workspace, monkeypatch):
     """Test that explicit and environment-provided bind mounts reach Apptainer."""
-    monkeypatch.setenv("OPENHANDS_APPTAINER_EXTRA_BINDS", "/env/src:/env/dst:ro")
+    monkeypatch.setenv("MADAGASCAR_APPTAINER_EXTRA_BINDS", "/env/src:/env/dst:ro")
     workspace, _ = mock_apptainer_workspace(
         extra_bind_mounts=["/host/tokenizer:/host/tokenizer:ro"]
     )
 
     fake_process = Mock(stdout=None)
     with patch(
-        "openhands.workspace.apptainer.workspace.subprocess.Popen",
+        "madagascar.workspace.apptainer.workspace.subprocess.Popen",
         return_value=fake_process,
     ) as mock_popen:
         workspace._start_container()

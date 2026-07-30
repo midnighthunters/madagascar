@@ -1,6 +1,6 @@
 {
   "backing_model": "litellm_proxy/anthropic/claude-haiku-4-5-20251001",
-  "gateway_model": "openhands_haiku_eval_proxy",
+  "gateway_model": "madagascar_haiku_eval_proxy",
   "messages": [
     {
       "content": "Answer directly and do not use tools.",
@@ -31,7 +31,7 @@
     ],
     "created": 1780752884,
     "id": "chatcmpl-cbc4bc5e7d2d4ef6b3c3ed3e9bf9fdb9",
-    "model": "openhands_haiku_eval_proxy",
+    "model": "madagascar_haiku_eval_proxy",
     "object": "chat.completion",
     "service_tier": null,
     "system_fingerprint": null,

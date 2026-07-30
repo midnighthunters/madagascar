@@ -121,7 +121,7 @@ The script:
 ### Prerequisites
 
 - Docker installed and running
-- OpenHands SDK installed
+- Madagascar SDK installed
 - `LLM_API_KEY` environment variable set
 
 ### Steps
@@ -187,8 +187,8 @@ Entry 3:
 Create a new Python file in `custom_tools/`:
 
 ```python
-from openhands.sdk import Action, Observation, ToolDefinition
-from openhands.sdk.tool import ToolExecutor, register_tool
+from madagascar.sdk import Action, Observation, ToolDefinition
+from madagascar.sdk.tool import ToolExecutor, register_tool
 
 class MyAction(Action):
     # Define your input fields
@@ -230,7 +230,7 @@ No changes needed! The Dockerfile already copies all of `custom_tools/` and sets
 In your SDK script:
 
 ```python
-from openhands.workspace import DockerDevWorkspace
+from madagascar.workspace import DockerDevWorkspace
 
 # Use DockerDevWorkspace with your custom base image and binary target
 with DockerDevWorkspace(
@@ -249,13 +249,13 @@ with DockerDevWorkspace(
 ## Related Documentation
 
 - [Standalone Custom Tools Example](../../01_standalone_sdk/02_custom_tools.py)
-- [Tool Definition API](../../../openhands-sdk/openhands/sdk/tool/)
-- [Agent Server API](../../../openhands-agent-server/)
-- [Dynamic Tool Registration](https://github.com/OpenHands/software-agent-sdk/pull/1129)
+- [Tool Definition API](../../../madagascar-sdk/madagascar/sdk/tool/)
+- [Agent Server API](../../../madagascar-agent-server/)
+- [Dynamic Tool Registration](https://github.com/Madagascar/software-agent-sdk/pull/1129)
 
 ## Questions?
 
 If you have questions or run into issues:
 1. Check the [SDK documentation](https://docs.all-hands.dev/sdk/)
-2. Review existing tools in `openhands-tools/`
-3. Open an issue on [GitHub](https://github.com/OpenHands/software-agent-sdk/issues)
+2. Review existing tools in `madagascar-tools/`
+3. Open an issue on [GitHub](https://github.com/Madagascar/software-agent-sdk/issues)

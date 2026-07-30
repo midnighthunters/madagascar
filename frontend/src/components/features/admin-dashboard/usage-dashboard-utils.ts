@@ -105,7 +105,7 @@ export const formatAgentLabel = (conversation: {
     if (llmModelLower.includes("gemini")) return "Gemini";
     return llmModel;
   }
-  if (agentKind === "openhands") return "OpenHands";
+  if (agentKind === "madagascar") return "Madagascar";
   return agentKind || "-";
 };
 

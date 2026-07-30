@@ -24,7 +24,7 @@ export function PluginPickerModal({
   onChange,
   onClose,
 }: PluginPickerModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <ModalBackdrop onClose={onClose}>

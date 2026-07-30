@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 
-from openhands.tools.glob.definition import GlobAction
-from openhands.tools.glob.impl import GlobExecutor
-from openhands.tools.utils import _check_ripgrep_available
+from madagascar.tools.glob.definition import GlobAction
+from madagascar.tools.glob.impl import GlobExecutor
+from madagascar.tools.utils import _check_ripgrep_available
 
 
 @pytest.mark.skipif(

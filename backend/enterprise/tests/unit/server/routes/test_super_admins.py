@@ -16,7 +16,7 @@ from httpx import ASGITransport, AsyncClient
 from server.routes.super_admins import super_admin_router
 from storage.user_store import SuperAdminRevokeResult
 
-from openhands.app_server.user_auth import get_user_id
+from madagascar.app_server.user_auth import get_user_id
 
 CALLER_USER_ID = str(uuid.uuid4())
 

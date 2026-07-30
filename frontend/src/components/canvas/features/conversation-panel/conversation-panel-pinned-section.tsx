@@ -26,7 +26,7 @@ export function ConversationPanelPinnedSection({
   showDivider = false,
   renderConversationCard,
 }: ConversationPanelPinnedSectionProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const { visibleConversations, isPreviewTruncated, isShowingAll } =
     getGroupConversationPreview(pinnedConversations, {

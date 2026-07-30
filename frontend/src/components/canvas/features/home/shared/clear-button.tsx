@@ -14,7 +14,7 @@ export function ClearButton({
   onClear,
   testId = "dropdown-clear",
 }: ClearButtonProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <button

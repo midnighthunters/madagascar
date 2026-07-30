@@ -19,7 +19,7 @@ os.environ.setdefault("LOG_TO_FILE", "true")
 os.environ.setdefault("LOG_DIR", str(log_dir))
 os.environ.setdefault("LOG_LEVEL", "INFO")
 
-from openhands.sdk import (  # noqa: E402
+from madagascar.sdk import (  # noqa: E402
     LLM,
     Agent,
     Conversation,
@@ -27,8 +27,8 @@ from openhands.sdk import (  # noqa: E402
     LLMConvertibleEvent,
     Tool,
 )
-from openhands.sdk.logger import get_logger, setup_logging  # noqa: E402
-from openhands.tools.terminal import TerminalTool  # noqa: E402
+from madagascar.sdk.logger import get_logger, setup_logging  # noqa: E402
+from madagascar.tools.terminal import TerminalTool  # noqa: E402
 
 
 setup_logging(log_to_file=True, log_dir=str(log_dir))

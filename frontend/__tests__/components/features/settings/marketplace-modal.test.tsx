@@ -154,11 +154,11 @@ describe("MarketplaceModal", () => {
     );
     await user.type(
       screen.getByPlaceholderText("github:owner/repo"),
-      "github:OpenHands/extensions",
+      "github:Madagascar/extensions",
     );
     await user.type(
       screen.getByPlaceholderText("e.g., marketplaces/internal"),
-      "https://github.com/OpenHands/extensions",
+      "https://github.com/Madagascar/extensions",
     );
     await user.click(screen.getByTestId("marketplace-save-button"));
 

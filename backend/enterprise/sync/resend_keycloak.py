@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Sync OpenHands users to a Resend.com audience.
+"""Sync Madagascar users to a Resend.com audience.
 
-This script reads users from the OpenHands application database and adds them to
+This script reads users from the Madagascar application database and adds them to
 a Resend.com audience. It handles rate limiting and retries with exponential
 backoff for adding contacts. When a user is newly added to the mailing list, a
 welcome email is sent.
@@ -12,8 +12,8 @@ Required environment variables:
 
 Optional environment variables:
 - RESEND_FROM_EMAIL: Email address to use as the sender
-  (default: "OpenHands Team <no-reply@welcome.openhands.dev>")
-- RESEND_REPLY_TO_EMAIL: Email address for replies (default: "contact@openhands.dev")
+  (default: "Madagascar Team <no-reply@welcome.madagascar.dev>")
+- RESEND_REPLY_TO_EMAIL: Email address for replies (default: "contact@madagascar.dev")
 - BATCH_SIZE: Number of users to process in each batch (default: 2000)
 - MAX_RETRIES: Maximum number of retries for API calls (default: 3)
 - INITIAL_BACKOFF_SECONDS: Initial backoff time for retries (default: 1)
@@ -41,7 +41,7 @@ from tenacity import (
     wait_exponential,
 )
 
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 # Get configuration from environment variables
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY')
@@ -91,7 +91,7 @@ EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
 
 def _get_session_maker():
     """Get the application database session maker."""
-    from openhands.app_server.config import get_global_config
+    from madagascar.app_server.config import get_global_config
 
     config = get_global_config()
     return config.db_session.get_session_maker()
@@ -113,7 +113,7 @@ def _split_display_name(display_name: str | None) -> tuple[str | None, str | Non
 
 
 def get_local_users(offset: int = 0, limit: int = BATCH_SIZE) -> list[ResendUser]:
-    """Get users with email addresses from the OpenHands database."""
+    """Get users with email addresses from the Madagascar database."""
     session_maker = _get_session_maker()
     with session_maker() as session:
         rows = session.execute(
@@ -139,7 +139,7 @@ def get_local_users(offset: int = 0, limit: int = BATCH_SIZE) -> list[ResendUser
 
 
 def get_total_local_users() -> int:
-    """Get the total number of OpenHands users with email addresses."""
+    """Get the total number of Madagascar users with email addresses."""
     session_maker = _get_session_maker()
     with session_maker() as session:
         return (
@@ -275,31 +275,31 @@ def send_welcome_email(
         # Prepare email parameters
         params = {
             'from': os.environ.get(
-                'RESEND_FROM_EMAIL', 'OpenHands Team <no-reply@welcome.openhands.dev>'
+                'RESEND_FROM_EMAIL', 'Madagascar Team <no-reply@welcome.madagascar.dev>'
             ),
             'reply_to': os.environ.get(
-                'RESEND_REPLY_TO_EMAIL', 'contact@openhands.dev'
+                'RESEND_REPLY_TO_EMAIL', 'contact@madagascar.dev'
             ),
             'to': [email],
-            'subject': 'Welcome to OpenHands Cloud',
+            'subject': 'Welcome to Madagascar Cloud',
             'html': f"""
             <div>
                 <p>{greeting}</p>
-                <p>Thanks for joining OpenHands Cloud — we're excited to help you start building with the world's leading open source AI coding agent!</p>
+                <p>Thanks for joining Madagascar Cloud — we're excited to help you start building with the world's leading open source AI coding agent!</p>
                 <p><strong>Here are three quick ways to get started:</strong></p>
                 <ol>
-                    <li><a href="https://docs.openhands.dev/openhands/usage/cloud/openhands-cloud#next-steps"><strong>Connect your Git repo</strong></a> – Link your <a href="https://docs.openhands.dev/openhands/usage/cloud/github-installation">GitHub</a> or <a href="https://docs.openhands.dev/openhands/usage/cloud/gitlab-installation">GitLab</a> repository in seconds so OpenHands can begin understanding your codebase and suggest tasks.</li>
-                    <li><a href="https://docs.openhands.dev/openhands/usage/cloud/github-installation#working-on-github-issues-and-pull-requests-using-openhands"><strong>Use OpenHands on an issue or pull request</strong></a> – Label an issue with 'openhands' or mention @openhands on any PR comment to generate explanations, tests, refactors, or doc fixes tailored to the exact lines you're reviewing.</li>
-                    <li><a href="https://dub.sh/openhands"><strong>Join the community</strong></a> – Join our Slack Community to share tips, feedback, and help shape the next features on our roadmap.</li>
+                    <li><a href="https://docs.madagascar.dev/madagascar/usage/cloud/madagascar-cloud#next-steps"><strong>Connect your Git repo</strong></a> – Link your <a href="https://docs.madagascar.dev/madagascar/usage/cloud/github-installation">GitHub</a> or <a href="https://docs.madagascar.dev/madagascar/usage/cloud/gitlab-installation">GitLab</a> repository in seconds so Madagascar can begin understanding your codebase and suggest tasks.</li>
+                    <li><a href="https://docs.madagascar.dev/madagascar/usage/cloud/github-installation#working-on-github-issues-and-pull-requests-using-madagascar"><strong>Use Madagascar on an issue or pull request</strong></a> – Label an issue with 'madagascar' or mention @madagascar on any PR comment to generate explanations, tests, refactors, or doc fixes tailored to the exact lines you're reviewing.</li>
+                    <li><a href="https://dub.sh/madagascar"><strong>Join the community</strong></a> – Join our Slack Community to share tips, feedback, and help shape the next features on our roadmap.</li>
                 </ol>
                 <p>Have questions? Want to share feedback? Just reply to this email—we're here to help.</p>
                 <p>Happy coding!</p>
-                <p>The OpenHands team</p>
+                <p>The Madagascar team</p>
                 <p>--</p>
-                <p>OpenHands</p>
+                <p>Madagascar</p>
                 <p>24 Oak Street</p>
                 <p>Cambridge MA 02139</p>
-                <p>https://openhands.dev</p>
+                <p>https://madagascar.dev</p>
             </div>
             """,
         }
@@ -373,9 +373,9 @@ def _backfill_existing_resend_contacts(
 
 
 def sync_users_to_resend():
-    """Sync OpenHands users to Resend.
+    """Sync Madagascar users to Resend.
 
-    This function syncs users from the OpenHands database to a Resend audience.
+    This function syncs users from the Madagascar database to a Resend audience.
     It tracks which users have been synced in the database to ensure that:
     1. Users are only added once (even across multiple sync runs)
     2. Users who are manually deleted from Resend are not re-added
@@ -400,7 +400,7 @@ def sync_users_to_resend():
         sys.exit(1)
 
     logger.info(
-        f'Starting sync of OpenHands users to Resend audience {RESEND_AUDIENCE_ID}'
+        f'Starting sync of Madagascar users to Resend audience {RESEND_AUDIENCE_ID}'
     )
 
     try:
@@ -413,7 +413,7 @@ def sync_users_to_resend():
         )
 
         total_users = get_total_local_users()
-        logger.info(f'Found {total_users} users with emails in OpenHands database')
+        logger.info(f'Found {total_users} users with emails in Madagascar database')
 
         stats = {
             'total_users': total_users,

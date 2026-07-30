@@ -4,12 +4,12 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.skills import (
+from madagascar.sdk.skills import (
     Skill,
     SkillValidationError,
     load_skills_from_dir,
 )
-from openhands.sdk.skills.utils import (
+from madagascar.sdk.skills.utils import (
     find_skill_md,
     validate_skill_name,
 )
@@ -122,7 +122,7 @@ def test_load_skills_from_dir_with_skill_md(tmp_path: Path) -> None:
 def test_skill_md_always_agent_skill(tmp_path: Path) -> None:
     """SKILL.md directories should always be agent_skills, even without triggers.
 
-    AgentSkills are a separate category from OpenHands skills. They follow the
+    AgentSkills are a separate category from Madagascar skills. They follow the
     AgentSkills standard and should be handled differently from regular .md files.
     """
     skills_dir = tmp_path / "skills"

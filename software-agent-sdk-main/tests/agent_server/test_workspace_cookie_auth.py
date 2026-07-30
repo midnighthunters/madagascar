@@ -12,15 +12,15 @@ from uuid import UUID, uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from openhands.agent_server.api import create_app
-from openhands.agent_server.config import Config
-from openhands.agent_server.conversation_service import ConversationService
-from openhands.agent_server.dependencies import (
+from madagascar.agent_server.api import create_app
+from madagascar.agent_server.config import Config
+from madagascar.agent_server.conversation_service import ConversationService
+from madagascar.agent_server.dependencies import (
     WORKSPACE_SESSION_COOKIE_NAME,
     get_conversation_service,
 )
-from openhands.agent_server.event_service import EventService
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.agent_server.event_service import EventService
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 SESSION_KEY = "test-key-abc"

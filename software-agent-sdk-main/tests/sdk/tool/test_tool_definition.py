@@ -1,4 +1,4 @@
-"""Tests for the Tool class in openhands.sdk.runtime.tool."""
+"""Tests for the Tool class in madagascar.sdk.runtime.tool."""
 
 from collections.abc import Sequence
 from typing import Any
@@ -6,8 +6,8 @@ from typing import Any
 import pytest
 from pydantic import Field
 
-from openhands.sdk.llm.message import ImageContent, TextContent
-from openhands.sdk.tool import (
+from madagascar.sdk.llm.message import ImageContent, TextContent
+from madagascar.sdk.tool import (
     Action,
     Observation,
     ToolAnnotations,
@@ -631,7 +631,7 @@ class TestTool:
 
     def test_security_risk_is_optional_field_in_schema(self):
         """Test that _create_action_type_with_risk makes security_risk an optional field defaulting to UNKNOWN."""  # noqa: E501
-        from openhands.sdk.tool.tool import create_action_type_with_risk
+        from madagascar.sdk.tool.tool import create_action_type_with_risk
 
         # Test with a simple action type
         action_type_with_risk = create_action_type_with_risk(ToolMockAction)
@@ -684,7 +684,7 @@ class TestTool:
 
         When the LLM exhausts its output token budget, truncation should cut
         content parameters rather than the required security_risk field.
-        See https://github.com/OpenHands/software-agent-sdk/issues/1911
+        See https://github.com/Madagascar/software-agent-sdk/issues/1911
         """
         tool = MockTestTool(
             description="A test tool",

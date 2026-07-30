@@ -13,11 +13,11 @@ from unittest.mock import patch
 import botocore.exceptions
 from google.api_core.exceptions import NotFound
 
-from openhands.app_server.file_store.files import FileStore
-from openhands.app_server.file_store.google_cloud import GoogleCloudFileStore
-from openhands.app_server.file_store.local import LocalFileStore
-from openhands.app_server.file_store.memory import InMemoryFileStore
-from openhands.app_server.file_store.s3 import S3FileStore
+from madagascar.app_server.file_store.files import FileStore
+from madagascar.app_server.file_store.google_cloud import GoogleCloudFileStore
+from madagascar.app_server.file_store.local import LocalFileStore
+from madagascar.app_server.file_store.memory import InMemoryFileStore
+from madagascar.app_server.file_store.s3 import S3FileStore
 
 # =============================================================================
 # Mock classes for cloud storage tests
@@ -255,7 +255,7 @@ class _StorageTest(ABC):
 class TestLocalFileStore(TestCase, _StorageTest):
     def setUp(self):
         # Create a unique temporary directory for each test instance
-        self.temp_dir = tempfile.mkdtemp(prefix='openhands_test_')
+        self.temp_dir = tempfile.mkdtemp(prefix='madagascar_test_')
         self.store = LocalFileStore(root=self.temp_dir)
 
     def tearDown(self):
@@ -325,7 +325,7 @@ class TestInMemoryFileStore(TestCase, _StorageTest):
 
 
 @patch(
-    'openhands.app_server.file_store.google_cloud.storage.Client',
+    'madagascar.app_server.file_store.google_cloud.storage.Client',
     _MockGoogleCloudClient,
 )
 class TestGoogleCloudFileStore(TestCase, _StorageTest):

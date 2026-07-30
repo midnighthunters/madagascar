@@ -2,7 +2,7 @@
 
 This example demonstrates how to create a marketplace that includes both:
 1. Local skills hosted in your project directory
-2. Remote skills from GitHub (OpenHands/extensions repository)
+2. Remote skills from GitHub (Madagascar/extensions repository)
 
 The marketplace.json schema supports source paths in these formats:
 - Local paths: ./path, ../path, /absolute/path, ~/path, file:///path
@@ -24,7 +24,7 @@ Directory Structure:
     └── README.md                # Documentation
 
 Usage:
-    # Install all skills from marketplace to ~/.openhands/skills/installed/
+    # Install all skills from marketplace to ~/.madagascar/skills/installed/
     python main.py --install
 
     # Force reinstall (overwrite existing)
@@ -37,8 +37,8 @@ Usage:
 import sys
 from pathlib import Path
 
-from openhands.sdk.marketplace import Marketplace
-from openhands.sdk.skills import (
+from madagascar.sdk.marketplace import Marketplace
+from madagascar.sdk.skills import (
     install_skills_from_marketplace,
     list_installed_skills,
 )

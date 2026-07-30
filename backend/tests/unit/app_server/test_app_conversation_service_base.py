@@ -12,14 +12,14 @@ from uuid import uuid4
 
 import pytest
 
-from openhands.app_server.app_conversation.app_conversation_models import AgentType
-from openhands.app_server.app_conversation.app_conversation_service_base import (
+from madagascar.app_server.app_conversation.app_conversation_models import AgentType
+from madagascar.app_server.app_conversation.app_conversation_service_base import (
     AppConversationServiceBase,
 )
-from openhands.app_server.integrations.service_types import ProviderType
-from openhands.app_server.sandbox.sandbox_models import SandboxInfo, SandboxStatus
-from openhands.app_server.user.user_context import UserContext
-from openhands.sdk.skills import Skill
+from madagascar.app_server.integrations.service_types import ProviderType
+from madagascar.app_server.sandbox.sandbox_models import SandboxInfo, SandboxStatus
+from madagascar.app_server.user.user_context import UserContext
+from madagascar.sdk.skills import Skill
 
 
 class MockUserInfo:
@@ -299,7 +299,7 @@ async def test_clone_or_init_git_repo_custom_timeout(service):
 
 
 @patch(
-    'openhands.app_server.app_conversation.app_conversation_service_base.LLMSummarizingCondenser'
+    'madagascar.app_server.app_conversation.app_conversation_service_base.LLMSummarizingCondenser'
 )
 def test_create_condenser_default_agent_with_none_max_size(mock_condenser_class):
     """Test _create_condenser for DEFAULT agent with condenser_max_size = None uses default."""
@@ -336,7 +336,7 @@ def test_create_condenser_default_agent_with_none_max_size(mock_condenser_class)
 
 
 @patch(
-    'openhands.app_server.app_conversation.app_conversation_service_base.LLMSummarizingCondenser'
+    'madagascar.app_server.app_conversation.app_conversation_service_base.LLMSummarizingCondenser'
 )
 def test_create_condenser_default_agent_with_custom_max_size(mock_condenser_class):
     """Test _create_condenser for DEFAULT agent with custom condenser_max_size."""
@@ -372,7 +372,7 @@ def test_create_condenser_default_agent_with_custom_max_size(mock_condenser_clas
 
 
 @patch(
-    'openhands.app_server.app_conversation.app_conversation_service_base.LLMSummarizingCondenser'
+    'madagascar.app_server.app_conversation.app_conversation_service_base.LLMSummarizingCondenser'
 )
 def test_create_condenser_plan_agent_with_none_max_size(mock_condenser_class):
     """Test _create_condenser for PLAN agent with condenser_max_size = None uses default."""
@@ -409,7 +409,7 @@ def test_create_condenser_plan_agent_with_none_max_size(mock_condenser_class):
 
 
 @patch(
-    'openhands.app_server.app_conversation.app_conversation_service_base.LLMSummarizingCondenser'
+    'madagascar.app_server.app_conversation.app_conversation_service_base.LLMSummarizingCondenser'
 )
 def test_create_condenser_plan_agent_with_custom_max_size(mock_condenser_class):
     """Test _create_condenser for PLAN agent with custom condenser_max_size."""
@@ -476,7 +476,7 @@ def test_create_security_analyzer_returns_llm_analyzer():
     result = service._create_security_analyzer_from_string(security_analyzer_str)
 
     # Assert
-    from openhands.sdk.security import LLMSecurityAnalyzer
+    from madagascar.sdk.security import LLMSecurityAnalyzer
 
     assert isinstance(result, LLMSecurityAnalyzer)
 
@@ -491,7 +491,7 @@ def test_create_security_analyzer_logs_warning_for_unknown_value():
 
     # Act
     with patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base._logger'
+        'madagascar.app_server.app_conversation.app_conversation_service_base._logger'
     ) as mock_logger:
         result = service._create_security_analyzer_from_string(unknown_value)
 
@@ -513,7 +513,7 @@ def test_select_confirmation_policy_when_disabled_returns_never_confirm():
     policy = service._select_confirmation_policy(confirmation_mode, security_analyzer)
 
     # Assert
-    from openhands.sdk.security import NeverConfirm
+    from madagascar.sdk.security import NeverConfirm
 
     assert isinstance(policy, NeverConfirm)
 
@@ -531,7 +531,7 @@ def test_select_confirmation_policy_llm_returns_confirm_risky():
     policy = service._select_confirmation_policy(confirmation_mode, security_analyzer)
 
     # Assert
-    from openhands.sdk.security import ConfirmRisky
+    from madagascar.sdk.security import ConfirmRisky
 
     assert isinstance(policy, ConfirmRisky)
 
@@ -551,7 +551,7 @@ def test_select_confirmation_policy_non_llm_returns_always_confirm(
     policy = service._select_confirmation_policy(confirmation_mode, security_analyzer)
 
     # Assert
-    from openhands.sdk.security import AlwaysConfirm
+    from madagascar.sdk.security import AlwaysConfirm
 
     assert isinstance(policy, AlwaysConfirm)
 
@@ -658,7 +658,7 @@ async def test_set_security_analyzer_successfully_calls_agent_server():
             return_value=analyzer,
         ) as mock_create,
         patch(
-            'openhands.app_server.app_conversation.app_conversation_service_base._logger'
+            'madagascar.app_server.app_conversation.app_conversation_service_base._logger'
         ) as mock_logger,
     ):
         # Act
@@ -709,7 +709,7 @@ async def test_set_security_analyzer_logs_warning_on_failure():
             return_value=analyzer,
         ) as mock_create,
         patch(
-            'openhands.app_server.app_conversation.app_conversation_service_base._logger'
+            'madagascar.app_server.app_conversation.app_conversation_service_base._logger'
         ) as mock_logger,
     ):
         # Act
@@ -940,7 +940,7 @@ async def test_clone_or_init_git_repo_configures_dynamic_azure_devops_helper(
     helper_command = next(
         command
         for command in commands
-        if 'openhands-azure-devops-credential-helper' in command
+        if 'madagascar-azure-devops-credential-helper' in command
     )
     assert (
         '/api/v1/sandboxes/sandbox-123/settings/secrets/azure_devops_token'
@@ -978,7 +978,7 @@ async def test_azure_devops_git_credential_helper_logs_without_web_url(
     )
 
     with patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base._logger.debug'
+        'madagascar.app_server.app_conversation.app_conversation_service_base._logger.debug'
     ) as mock_debug:
         await service._configure_azure_devops_git_credential_helper(
             mock_workspace,
@@ -1222,13 +1222,13 @@ class TestLoadAndMergeAllSkills:
 
     @pytest.mark.asyncio
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.load_skills_from_agent_server'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.load_skills_from_agent_server'
     )
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.build_org_configs'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.build_org_configs'
     )
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.build_sandbox_config'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.build_sandbox_config'
     )
     async def test_loads_skills_successfully(
         self,
@@ -1247,7 +1247,7 @@ class TestLoadAndMergeAllSkills:
             mock_workspace = AsyncMock()
             mock_workspace.working_dir = '/workspace'
 
-            from openhands.app_server.sandbox.sandbox_models import ExposedUrl
+            from madagascar.app_server.sandbox.sandbox_models import ExposedUrl
 
             sandbox = Mock(spec=SandboxInfo)
             exposed_url = ExposedUrl(
@@ -1284,7 +1284,7 @@ class TestLoadAndMergeAllSkills:
 
     @pytest.mark.asyncio
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.load_skills_from_agent_server'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.load_skills_from_agent_server'
     )
     async def test_returns_empty_list_when_no_agent_server_url(self, mock_load_skills):
         """Test returns empty list when agent-server URL is not available."""
@@ -1296,7 +1296,7 @@ class TestLoadAndMergeAllSkills:
             )
 
             AsyncMock()
-            from openhands.app_server.sandbox.sandbox_models import ExposedUrl
+            from madagascar.app_server.sandbox.sandbox_models import ExposedUrl
 
             sandbox = Mock(spec=SandboxInfo)
             exposed_url = ExposedUrl(
@@ -1315,13 +1315,13 @@ class TestLoadAndMergeAllSkills:
 
     @pytest.mark.asyncio
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.load_skills_from_agent_server'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.load_skills_from_agent_server'
     )
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.build_org_configs'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.build_org_configs'
     )
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.build_sandbox_config'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.build_sandbox_config'
     )
     async def test_uses_project_dir_when_no_repository(
         self,
@@ -1338,7 +1338,7 @@ class TestLoadAndMergeAllSkills:
             )
 
             AsyncMock()
-            from openhands.app_server.sandbox.sandbox_models import ExposedUrl
+            from madagascar.app_server.sandbox.sandbox_models import ExposedUrl
 
             sandbox = Mock(spec=SandboxInfo)
             exposed_url = ExposedUrl(
@@ -1362,13 +1362,13 @@ class TestLoadAndMergeAllSkills:
 
     @pytest.mark.asyncio
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.load_skills_from_agent_server'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.load_skills_from_agent_server'
     )
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.build_org_configs'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.build_org_configs'
     )
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.build_sandbox_config'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.build_sandbox_config'
     )
     async def test_handles_exception_gracefully(
         self,
@@ -1385,7 +1385,7 @@ class TestLoadAndMergeAllSkills:
             )
 
             AsyncMock()
-            from openhands.app_server.sandbox.sandbox_models import ExposedUrl
+            from madagascar.app_server.sandbox.sandbox_models import ExposedUrl
 
             sandbox = Mock(spec=SandboxInfo)
             exposed_url = ExposedUrl(
@@ -1406,13 +1406,13 @@ class TestLoadAndMergeAllSkills:
 
     @pytest.mark.asyncio
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.load_skills_from_agent_server'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.load_skills_from_agent_server'
     )
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.build_org_configs'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.build_org_configs'
     )
     @patch(
-        'openhands.app_server.app_conversation.app_conversation_service_base.build_sandbox_config'
+        'madagascar.app_server.app_conversation.app_conversation_service_base.build_sandbox_config'
     )
     async def test_sends_authenticated_marketplace_sources_to_agent_server(
         self,
@@ -1422,7 +1422,7 @@ class TestLoadAndMergeAllSkills:
     ):
         """Auto-load marketplace sources reach the agent-server as token URLs."""
         # Arrange
-        from openhands.app_server.settings.settings_models import (
+        from madagascar.app_server.settings.settings_models import (
             MarketplaceRegistration,
         )
 
@@ -1471,7 +1471,7 @@ class TestLoadSkillsAndUpdateAgent:
     async def test_forwards_registered_marketplaces(self):
         """Registered marketplaces reach load_and_merge_all_skills at startup."""
         # Arrange
-        from openhands.app_server.settings.settings_models import (
+        from madagascar.app_server.settings.settings_models import (
             MarketplaceRegistration,
         )
 

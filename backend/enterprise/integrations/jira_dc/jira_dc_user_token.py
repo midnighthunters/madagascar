@@ -15,8 +15,8 @@ from server.auth.constants import (
 from server.auth.token_manager import TokenManager
 from storage.jira_dc_integration_store import JiraDcIntegrationStore
 
-from openhands.app_server.utils.http_session import httpx_verify_option
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.http_session import httpx_verify_option
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 # Refresh access tokens this many seconds before wire expiry.
 _ACCESS_REFRESH_BUFFER_SECONDS: Final = 300
@@ -56,7 +56,7 @@ async def get_user_jira_dc_token(
     if row is None:
         raise JiraDcUserTokenError(
             'No stored Jira DC OAuth token for this user/workspace. '
-            'Please re-link via OpenHands Settings → Integrations.'
+            'Please re-link via Madagascar Settings → Integrations.'
         )
 
     enc_access, enc_refresh, access_exp, refresh_exp = row
@@ -71,12 +71,12 @@ async def get_user_jira_dc_token(
     if not enc_refresh:
         raise JiraDcUserTokenError(
             'Jira DC access token expired and no refresh token is stored. '
-            'Please re-link via OpenHands Settings → Integrations.'
+            'Please re-link via Madagascar Settings → Integrations.'
         )
     if refresh_exp and refresh_exp <= now:
         raise JiraDcUserTokenError(
             'Jira DC refresh token has expired. '
-            'Please re-link via OpenHands Settings → Integrations.'
+            'Please re-link via Madagascar Settings → Integrations.'
         )
 
     refresh_token = token_manager.decrypt_text(enc_refresh)
@@ -104,7 +104,7 @@ async def get_user_jira_dc_token(
         raise JiraDcUserTokenError(
             f'Could not reach the Jira Data Center token endpoint '
             f'({JIRA_DC_TOKEN_URL}): {type(e).__name__}. Check that the Jira Base '
-            f'URL uses https and that OpenHands can reach the Jira server.'
+            f'URL uses https and that Madagascar can reach the Jira server.'
         ) from e
 
     if response.status_code != 200:
@@ -115,7 +115,7 @@ async def get_user_jira_dc_token(
         )
         raise JiraDcUserTokenError(
             'Jira DC token refresh failed. '
-            'Please re-link via OpenHands Settings → Integrations.'
+            'Please re-link via Madagascar Settings → Integrations.'
         )
     data = response.json()
 
@@ -123,7 +123,7 @@ async def get_user_jira_dc_token(
     if not new_access:
         raise JiraDcUserTokenError(
             'Jira DC token refresh returned no access_token. '
-            'Please re-link via OpenHands Settings → Integrations.'
+            'Please re-link via Madagascar Settings → Integrations.'
         )
     # Some IdPs rotate the refresh token on each use; fall back to the existing one.
     new_refresh = data.get('refresh_token') or refresh_token
@@ -146,6 +146,6 @@ async def get_user_jira_dc_token(
     if updated_count == 0:
         raise JiraDcUserTokenError(
             'Stored Jira DC OAuth link was not found while refreshing tokens. '
-            'Please re-link via OpenHands Settings → Integrations.'
+            'Please re-link via Madagascar Settings → Integrations.'
         )
     return JiraDcUserToken(SecretStr(new_access), new_access_exp)

@@ -1,14 +1,14 @@
-"""Example: OpenHandsCloudWorkspace for OpenHands Cloud API.
+"""Example: MadagascarCloudWorkspace for Madagascar Cloud API.
 
-This example demonstrates using OpenHandsCloudWorkspace to provision a sandbox
-via OpenHands Cloud (app.all-hands.dev) and run an agent conversation.
+This example demonstrates using MadagascarCloudWorkspace to provision a sandbox
+via Madagascar Cloud (app.all-hands.dev) and run an agent conversation.
 
 Usage:
   uv run examples/02_remote_agent_server/06_convo_with_cloud_workspace.py
 
 Requirements:
   - LLM_API_KEY: API key for direct LLM provider access (e.g., Anthropic API key)
-  - OPENHANDS_CLOUD_API_KEY: API key for OpenHands Cloud access
+  - MADAGASCAR_CLOUD_API_KEY: API key for Madagascar Cloud access
 
 Note:
   The LLM configuration is sent to the cloud sandbox, so you need an API key
@@ -21,14 +21,14 @@ import time
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Conversation,
     RemoteConversation,
     get_logger,
 )
-from openhands.tools.preset.default import get_default_agent
-from openhands.workspace import OpenHandsCloudWorkspace
+from madagascar.tools.preset.default import get_default_agent
+from madagascar.workspace import MadagascarCloudWorkspace
 
 
 logger = get_logger(__name__)
@@ -47,15 +47,15 @@ llm = LLM(
     api_key=SecretStr(api_key),
 )
 
-cloud_api_key = os.getenv("OPENHANDS_CLOUD_API_KEY")
+cloud_api_key = os.getenv("MADAGASCAR_CLOUD_API_KEY")
 if not cloud_api_key:
-    logger.error("OPENHANDS_CLOUD_API_KEY required")
+    logger.error("MADAGASCAR_CLOUD_API_KEY required")
     exit(1)
 
-cloud_api_url = os.getenv("OPENHANDS_CLOUD_API_URL", "https://app.all-hands.dev")
-logger.info(f"Using OpenHands Cloud API: {cloud_api_url}")
+cloud_api_url = os.getenv("MADAGASCAR_CLOUD_API_URL", "https://app.all-hands.dev")
+logger.info(f"Using Madagascar Cloud API: {cloud_api_url}")
 
-with OpenHandsCloudWorkspace(
+with MadagascarCloudWorkspace(
     cloud_api_url=cloud_api_url,
     cloud_api_key=cloud_api_key,
 ) as workspace:
@@ -68,7 +68,7 @@ with OpenHandsCloudWorkspace(
         last_event_time["ts"] = time.time()
 
     result = workspace.execute_command(
-        "echo 'Hello from OpenHands Cloud sandbox!' && pwd"
+        "echo 'Hello from Madagascar Cloud sandbox!' && pwd"
     )
     logger.info(f"Command completed: {result.exit_code}, {result.stdout}")
 

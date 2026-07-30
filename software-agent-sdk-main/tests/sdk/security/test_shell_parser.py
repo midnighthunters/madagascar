@@ -1,7 +1,7 @@
 """Round-trip tests for the shared tree-sitter-bash parse entry point.
 
 These tests pin the contract that downstream consumers
-(``openhands-tools.terminal.utils.command`` and the planned
+(``madagascar-tools.terminal.utils.command`` and the planned
 security analyzers) rely on: ``parse`` returns a ``ParseResult``
 whose ``tree`` can be walked with the standard tree-sitter API and
 whose ``has_error`` flag faithfully reflects ``tree.root_node.has_error``.
@@ -11,7 +11,7 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
-from openhands.sdk.security.shell_parser import ParseResult, parse
+from madagascar.sdk.security.shell_parser import ParseResult, parse
 
 
 class TestParseSuccessShape:

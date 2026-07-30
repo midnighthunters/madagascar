@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from openhands.sdk.utils.path import (
+from madagascar.sdk.utils.path import (
     is_absolute_path_source,
     is_host_absolute_path,
     is_local_path_source,
@@ -38,7 +38,7 @@ def test_is_local_path_source_detects_backslash_path_syntax():
 def test_is_local_path_source_detects_dot_paths():
     assert is_local_path_source(".")
     assert is_local_path_source("..")
-    assert is_local_path_source(".openhands")
+    assert is_local_path_source(".madagascar")
 
 
 def test_is_absolute_path_source_detects_posix_and_windows_paths():

@@ -8,8 +8,8 @@ showing them as "object | object | object...".
 import pytest
 from fastapi.testclient import TestClient
 
-from openhands.agent_server.api import create_app
-from openhands.agent_server.models import (
+from madagascar.agent_server.api import create_app
+from madagascar.agent_server.models import (
     ACPConversationInfo,
     ACPConversationPage,
     ConversationInfo,
@@ -173,7 +173,7 @@ def test_action_variants_have_proper_schemas(client):
 
 
 def test_conversation_contracts_use_unified_acp_capable_endpoint(client):
-    """The main conversation endpoint accepts both OpenHands and ACP agents."""
+    """The main conversation endpoint accepts both Madagascar and ACP agents."""
     response = client.get("/openapi.json")
     assert response.status_code == 200
 

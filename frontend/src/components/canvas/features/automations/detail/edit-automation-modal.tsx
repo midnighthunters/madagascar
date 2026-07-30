@@ -119,7 +119,7 @@ export function EditAutomationModal({
   isOpen,
   onClose,
 }: EditAutomationModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const updateMutation = useUpdateAutomation();
   const { data: profilesData, isLoading: isLoadingProfiles } = useLlmProfiles();
   const profiles = profilesData?.profiles ?? [];

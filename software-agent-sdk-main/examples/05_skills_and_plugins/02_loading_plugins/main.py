@@ -28,8 +28,8 @@ from pathlib import Path
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Agent, Conversation
-from openhands.sdk.plugin import (
+from madagascar.sdk import LLM, Agent, Conversation
+from madagascar.sdk.plugin import (
     PluginFetchError,
     PluginSource,
     disable_plugin,
@@ -39,9 +39,9 @@ from openhands.sdk.plugin import (
     load_installed_plugins,
     uninstall_plugin,
 )
-from openhands.sdk.tool import Tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.tool import Tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 
 
 script_dir = Path(__file__).parent

@@ -1,7 +1,7 @@
 // sandbox-service.api.ts
 // This file contains API methods for /api/v1/sandboxes endpoints.
 
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 import type { V1SandboxInfo, V1SandboxSpecPage } from "./sandbox-service.types";
 
 export class SandboxService {
@@ -10,7 +10,7 @@ export class SandboxService {
    * Calls the /api/v1/sandboxes/{id}/pause endpoint
    */
   static async pauseSandbox(sandboxId: string): Promise<{ success: boolean }> {
-    const { data } = await openHands.post<{ success: boolean }>(
+    const { data } = await madagascar.post<{ success: boolean }>(
       `/api/v1/sandboxes/${sandboxId}/pause`,
       {},
     );
@@ -22,7 +22,7 @@ export class SandboxService {
    * Calls the /api/v1/sandboxes/{id}/resume endpoint
    */
   static async resumeSandbox(sandboxId: string): Promise<{ success: boolean }> {
-    const { data } = await openHands.post<{ success: boolean }>(
+    const { data } = await madagascar.post<{ success: boolean }>(
       `/api/v1/sandboxes/${sandboxId}/resume`,
       {},
     );
@@ -34,7 +34,7 @@ export class SandboxService {
    * Calls the /api/v1/sandbox-specs/search endpoint
    */
   static async searchSandboxSpecs(): Promise<V1SandboxSpecPage> {
-    const { data } = await openHands.get<V1SandboxSpecPage>(
+    const { data } = await madagascar.get<V1SandboxSpecPage>(
       `/api/v1/sandbox-specs/search`,
     );
     return data;
@@ -55,7 +55,7 @@ export class SandboxService {
     }
     const params = new URLSearchParams();
     ids.forEach((id) => params.append("id", id));
-    const { data } = await openHands.get<(V1SandboxInfo | null)[]>(
+    const { data } = await madagascar.get<(V1SandboxInfo | null)[]>(
       `/api/v1/sandboxes?${params.toString()}`,
     );
     return data;

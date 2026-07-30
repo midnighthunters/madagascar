@@ -4,17 +4,17 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from openhands.app_server.config_api.config_models import (
+from madagascar.app_server.config_api.config_models import (
     LLMModelPage,
     ProviderPage,
 )
-from openhands.app_server.config_api.default_llm_model_service import (
+from madagascar.app_server.config_api.default_llm_model_service import (
     DefaultLLMModelService,
     DefaultLLMModelServiceInjector,
     _to_llm_models,
 )
-from openhands.app_server.config_api.llm_model_service import LLMModelService
-from openhands.app_server.utils.llm import ModelsResponse
+from madagascar.app_server.config_api.llm_model_service import LLMModelService
+from madagascar.app_server.utils.llm import ModelsResponse
 
 
 class TestDefaultLLMModelServiceSearchModels:
@@ -29,12 +29,12 @@ class TestDefaultLLMModelServiceSearchModels:
         assert len(result.items) > 0
 
     @pytest.mark.asyncio
-    async def test_includes_openhands_models(self):
+    async def test_includes_madagascar_models(self):
         service = DefaultLLMModelService()
         result = await service.search_llm_models(limit=10000)
 
         providers = {m.provider for m in result.items}
-        assert 'openhands' in providers
+        assert 'madagascar' in providers
 
     @pytest.mark.asyncio
     async def test_includes_clarifai_models(self):
@@ -180,12 +180,12 @@ class TestToLLMModelsHiddenCanonical:
 
     def test_canonical_set_only_on_mapped_hidden_models(self):
         response = ModelsResponse(
-            models=['openhands/real-model'],
+            models=['madagascar/real-model'],
             verified_models=['real-model'],
-            verified_providers=['openhands'],
-            default_model='openhands/real-model',
-            hidden_models=['openhands/legacy-alias', 'openhands/untagged-alias'],
-            hidden_model_canonicals={'openhands/legacy-alias': 'openhands/real-model'},
+            verified_providers=['madagascar'],
+            default_model='madagascar/real-model',
+            hidden_models=['madagascar/legacy-alias', 'madagascar/untagged-alias'],
+            hidden_model_canonicals={'madagascar/legacy-alias': 'madagascar/real-model'},
         )
 
         by_name = {m.name: m for m in _to_llm_models(response)}
@@ -200,10 +200,10 @@ class TestToLLMModelsHiddenCanonical:
 
     def test_defaults_empty_no_hidden_items(self):
         response = ModelsResponse(
-            models=['openhands/real-model'],
+            models=['madagascar/real-model'],
             verified_models=['real-model'],
-            verified_providers=['openhands'],
-            default_model='openhands/real-model',
+            verified_providers=['madagascar'],
+            default_model='madagascar/real-model',
         )
 
         models = _to_llm_models(response)

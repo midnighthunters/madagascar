@@ -7,7 +7,7 @@ import pytest
 from integrations.azure_devops.azure_devops_service import SaaSAzureDevOpsService
 from pydantic import SecretStr
 
-from openhands.app_server.integrations.service_types import ProviderType, RequestMethod
+from madagascar.app_server.integrations.service_types import ProviderType, RequestMethod
 
 
 @pytest.mark.asyncio
@@ -183,7 +183,7 @@ async def test_create_pr_comment_service_hook_posts_expected_payload():
     assert kwargs['params']['consumerInputs']['url'] == (
         'https://app.example.com/integration/azure-devops/events'
     )
-    assert kwargs['params']['consumerInputs']['basicAuthUsername'] == 'openhands'
+    assert kwargs['params']['consumerInputs']['basicAuthUsername'] == 'madagascar'
     assert kwargs['params']['consumerInputs']['basicAuthPassword'] == 'secret'
 
 
@@ -264,5 +264,5 @@ async def test_create_work_item_comment_service_hook_posts_expected_payload():
     assert kwargs['params']['eventType'] == 'workitem.commented'
     assert kwargs['params']['resourceVersion'] == '1.0'
     assert kwargs['params']['publisherInputs'] == {}
-    assert kwargs['params']['consumerInputs']['basicAuthUsername'] == 'openhands'
+    assert kwargs['params']['consumerInputs']['basicAuthUsername'] == 'madagascar'
     assert kwargs['params']['consumerInputs']['basicAuthPassword'] == 'secret'

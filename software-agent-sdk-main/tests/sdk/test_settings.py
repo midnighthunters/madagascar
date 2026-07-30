@@ -5,38 +5,38 @@ from typing import Any
 import pytest
 from pydantic import SecretStr, ValidationError
 
-from openhands.agent_server.models import StartConversationRequest
-from openhands.sdk import (
+from madagascar.agent_server.models import StartConversationRequest
+from madagascar.sdk import (
     LLM,
     ACPAgentSettings,
     Agent,
     AgentContext,
     AgentSettingsBase,
     ConversationSettings,
-    OpenHandsAgentSettings,
+    MadagascarAgentSettings,
     SettingProminence,
     Tool,
     default_agent_settings,
     export_agent_settings_schema,
     validate_agent_settings,
 )
-from openhands.sdk.agent.acp_agent import ACPAgent
-from openhands.sdk.context.condenser import LLMSummarizingCondenser, NoOpCondenser
-from openhands.sdk.critic.base import IterativeRefinementConfig
-from openhands.sdk.critic.impl.api import APIBasedCritic
-from openhands.sdk.mcp.config import MCPServer, coerce_mcp_config, dump_mcp_config
-from openhands.sdk.secret import StaticSecret
-from openhands.sdk.security.confirmation_policy import AlwaysConfirm, ConfirmRisky
-from openhands.sdk.security.llm_analyzer import LLMSecurityAnalyzer
-from openhands.sdk.settings import (
+from madagascar.sdk.agent.acp_agent import ACPAgent
+from madagascar.sdk.context.condenser import LLMSummarizingCondenser, NoOpCondenser
+from madagascar.sdk.critic.base import IterativeRefinementConfig
+from madagascar.sdk.critic.impl.api import APIBasedCritic
+from madagascar.sdk.mcp.config import MCPServer, coerce_mcp_config, dump_mcp_config
+from madagascar.sdk.secret import StaticSecret
+from madagascar.sdk.security.confirmation_policy import AlwaysConfirm, ConfirmRisky
+from madagascar.sdk.security.llm_analyzer import LLMSecurityAnalyzer
+from madagascar.sdk.settings import (
     AGENT_SETTINGS_SCHEMA_VERSION,
     CondenserSettings,
     LLMSummarizingCondenserSettings,
     NoOpCondenserSettings,
     VerificationSettings,
 )
-from openhands.sdk.settings.model import ACPServerKind
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.sdk.settings.model import ACPServerKind
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 # Fields on LLM that have ``exclude=True`` and should not appear in the schema.
@@ -49,9 +49,9 @@ _LLM_EXCLUDED_FIELDS = {name for name, fi in LLM.model_fields.items() if fi.excl
 
 
 def test_llm_agent_settings_export_schema_groups_sections() -> None:
-    schema = OpenHandsAgentSettings.export_schema()
+    schema = MadagascarAgentSettings.export_schema()
 
-    assert schema.model_name == "OpenHandsAgentSettings"
+    assert schema.model_name == "MadagascarAgentSettings"
     section_keys = [section.key for section in schema.sections]
     assert section_keys == [
         "general",
@@ -175,7 +175,7 @@ def test_acp_agent_settings_export_schema_has_acp_section() -> None:
     assert acp_fields["acp_model"].prominence is SettingProminence.CRITICAL
     assert acp_fields["acp_command"].prominence is SettingProminence.MINOR
 
-    # mcp_config is exposed as a single object field (matching the OpenHands
+    # mcp_config is exposed as a single object field (matching the Madagascar
     # variant) rather than being expanded into nested per-server fields. The
     # servers are forwarded to the ACP subprocess at session creation.
     general_fields = {f.key: f for f in sections["general"].fields}
@@ -212,8 +212,8 @@ def test_conversation_settings_export_schema_groups_sections() -> None:
 
 
 def test_conversation_settings_validates_observability_metadata() -> None:
-    settings = ConversationSettings(observability_metadata={"repo": "OpenHands/sdk"})
-    assert settings.observability_metadata == {"repo": "OpenHands/sdk"}
+    settings = ConversationSettings(observability_metadata={"repo": "Madagascar/sdk"})
+    assert settings.observability_metadata == {"repo": "Madagascar/sdk"}
 
     with pytest.raises(ValidationError):
         ConversationSettings(observability_metadata={"": "missing-key"})
@@ -244,7 +244,7 @@ def test_conversation_settings_create_request() -> None:
         security_analyzer="llm",
     )
     workspace = LocalWorkspace(working_dir="/tmp")
-    agent = OpenHandsAgentSettings(llm=LLM(model="test-model")).create_agent()
+    agent = MadagascarAgentSettings(llm=LLM(model="test-model")).create_agent()
 
     request = settings.create_request(
         StartConversationRequest,
@@ -333,7 +333,7 @@ def test_export_agent_settings_schema_emits_variant_tagged_sections() -> None:
     by_keyvariant = {(s.key, s.variant): s for s in schema.sections}
 
     # Shared general section contains LLM-only top-level fields with
-    # field-level variant="openhands" tags (so they hide on the ACP page).
+    # field-level variant="madagascar" tags (so they hide on the ACP page).
     general = by_keyvariant.get(("general", None))
     assert general is not None
     general_keys = {f.key for f in general.fields}
@@ -349,14 +349,14 @@ def test_export_agent_settings_schema_emits_variant_tagged_sections() -> None:
     # injects the discriminator on save.
     assert "agent_kind" not in general_keys
     for f in general.fields:
-        assert f.variant == "openhands", (
-            f"expected field {f.key} variant=openhands, got {f.variant}"
+        assert f.variant == "madagascar", (
+            f"expected field {f.key} variant=madagascar, got {f.variant}"
         )
 
     # LLM-variant sections.
-    assert ("llm", "openhands") in by_keyvariant
-    assert ("condenser", "openhands") in by_keyvariant
-    assert ("verification", "openhands") in by_keyvariant
+    assert ("llm", "madagascar") in by_keyvariant
+    assert ("condenser", "madagascar") in by_keyvariant
+    assert ("verification", "madagascar") in by_keyvariant
 
     # ACP-variant sections.
     acp_section = by_keyvariant.get(("acp", "acp"))
@@ -385,33 +385,33 @@ def test_export_agent_settings_schema_emits_variant_tagged_sections() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_default_agent_settings_returns_openhands_variant() -> None:
+def test_default_agent_settings_returns_madagascar_variant() -> None:
     s = default_agent_settings()
-    assert isinstance(s, OpenHandsAgentSettings)
-    assert s.agent_kind == "openhands"
+    assert isinstance(s, MadagascarAgentSettings)
+    assert s.agent_kind == "madagascar"
 
 
-def test_validate_agent_settings_defaults_to_openhands_when_discriminator_missing() -> (
+def test_validate_agent_settings_defaults_to_madagascar_when_discriminator_missing() -> (
     None
 ):
     """Existing persisted payloads predate ``agent_kind`` — they must round-trip."""
     v = validate_agent_settings({"llm": {"model": "test-model"}})
-    assert isinstance(v, OpenHandsAgentSettings)
+    assert isinstance(v, MadagascarAgentSettings)
     assert v.llm.model == "test-model"
 
 
 def test_validate_agent_settings_dispatches_on_agent_kind() -> None:
-    openhands = validate_agent_settings(
-        {"agent_kind": "openhands", "llm": {"model": "m"}}
+    madagascar = validate_agent_settings(
+        {"agent_kind": "madagascar", "llm": {"model": "m"}}
     )
-    assert isinstance(openhands, OpenHandsAgentSettings)
-    assert openhands.agent_kind == "openhands"
+    assert isinstance(madagascar, MadagascarAgentSettings)
+    assert madagascar.agent_kind == "madagascar"
 
     legacy_llm = validate_agent_settings(
         {"agent_kind": "llm", "llm": {"model": "legacy-model"}}
     )
-    assert isinstance(legacy_llm, OpenHandsAgentSettings)
-    assert legacy_llm.agent_kind == "openhands"
+    assert isinstance(legacy_llm, MadagascarAgentSettings)
+    assert legacy_llm.agent_kind == "madagascar"
     assert legacy_llm.llm.model == "legacy-model"
 
     acp = validate_agent_settings(
@@ -428,9 +428,9 @@ def test_validate_agent_settings_dispatches_on_agent_kind() -> None:
 def test_validate_agent_settings_migrates_v0_llm_payload() -> None:
     settings = validate_agent_settings({"llm": {"model": "test-model"}})
 
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.schema_version == AGENT_SETTINGS_SCHEMA_VERSION
-    assert settings.agent_kind == "openhands"
+    assert settings.agent_kind == "madagascar"
     assert settings.llm.model == "test-model"
 
 
@@ -452,7 +452,7 @@ def test_validate_agent_settings_dispatches_current_acp_payload() -> None:
 
 def test_validate_agent_settings_canonicalizes_legacy_llm_kind() -> None:
     """v1 payloads with the deprecated ``agent_kind: 'llm'`` are migrated to
-    the canonical ``'openhands'`` discriminator on read."""
+    the canonical ``'madagascar'`` discriminator on read."""
     settings = validate_agent_settings(
         {
             "schema_version": 1,
@@ -461,9 +461,9 @@ def test_validate_agent_settings_canonicalizes_legacy_llm_kind() -> None:
         }
     )
 
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.schema_version == AGENT_SETTINGS_SCHEMA_VERSION
-    assert settings.agent_kind == "openhands"
+    assert settings.agent_kind == "madagascar"
     assert settings.llm.model == "legacy-model"
 
 
@@ -471,7 +471,7 @@ def test_validate_agent_settings_drops_legacy_verification_fields() -> None:
     settings = validate_agent_settings(
         {
             "schema_version": 2,
-            "agent_kind": "openhands",
+            "agent_kind": "madagascar",
             "verification": {
                 "critic_enabled": True,
                 "confirmation_mode": True,
@@ -480,7 +480,7 @@ def test_validate_agent_settings_drops_legacy_verification_fields() -> None:
         }
     )
 
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.schema_version == AGENT_SETTINGS_SCHEMA_VERSION
     verification = settings.verification.model_dump(mode="json")
     assert verification["critic_enabled"] is True
@@ -488,11 +488,11 @@ def test_validate_agent_settings_drops_legacy_verification_fields() -> None:
     assert "security_analyzer" not in verification
 
 
-def test_validate_agent_settings_migrates_legacy_openhands_proxy_llm() -> None:
+def test_validate_agent_settings_migrates_legacy_madagascar_proxy_llm() -> None:
     settings = validate_agent_settings(
         {
             "schema_version": 3,
-            "agent_kind": "openhands",
+            "agent_kind": "madagascar",
             "llm": {
                 "model": "litellm_proxy/claude-opus-4-8",
                 "base_url": "https://llm-proxy.app.all-hands.dev/",
@@ -500,9 +500,9 @@ def test_validate_agent_settings_migrates_legacy_openhands_proxy_llm() -> None:
         }
     )
 
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.schema_version == AGENT_SETTINGS_SCHEMA_VERSION
-    assert settings.llm.model == "openhands/claude-opus-4-8"
+    assert settings.llm.model == "madagascar/claude-opus-4-8"
     assert settings.llm.base_url is None
 
 
@@ -510,7 +510,7 @@ def test_validate_agent_settings_migrates_legacy_mcp_auth_shapes() -> None:
     settings = validate_agent_settings(
         {
             "schema_version": 4,
-            "agent_kind": "openhands",
+            "agent_kind": "madagascar",
             "mcp_config": {
                 "mcpServers": {
                     "oauth-top-level": {
@@ -594,7 +594,7 @@ def test_validate_agent_settings_migrates_legacy_mcp_auth_shapes() -> None:
         }
     )
 
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.schema_version == AGENT_SETTINGS_SCHEMA_VERSION
     servers = dump_mcp_config(settings.mcp_config)
 
@@ -655,7 +655,7 @@ def test_validate_agent_settings_migrates_mcp_type_to_transport() -> None:
     settings = validate_agent_settings(
         {
             "schema_version": 4,
-            "agent_kind": "openhands",
+            "agent_kind": "madagascar",
             "mcp_config": {
                 "http": {
                     "url": "https://mcp.example.com/mcp",
@@ -669,7 +669,7 @@ def test_validate_agent_settings_migrates_mcp_type_to_transport() -> None:
         }
     )
 
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.schema_version == AGENT_SETTINGS_SCHEMA_VERSION
     assert dump_mcp_config(settings.mcp_config) == {
         "http": {
@@ -683,9 +683,9 @@ def test_validate_agent_settings_migrates_mcp_type_to_transport() -> None:
     }
 
 
-def test_openhands_mcp_config_reject_unknown_server_fields() -> None:
+def test_madagascar_mcp_config_reject_unknown_server_fields() -> None:
     with pytest.raises(ValidationError):
-        OpenHandsAgentSettings.model_validate(
+        MadagascarAgentSettings.model_validate(
             {
                 "mcp_config": {
                     "server": {
@@ -701,7 +701,7 @@ def test_validate_agent_settings_mcp_linear_migration_does_not_duplicate() -> No
     settings = validate_agent_settings(
         {
             "schema_version": 4,
-            "agent_kind": "openhands",
+            "agent_kind": "madagascar",
             "mcp_config": {
                 "mcpServers": {
                     "sse": {
@@ -718,7 +718,7 @@ def test_validate_agent_settings_mcp_linear_migration_does_not_duplicate() -> No
         }
     )
 
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert dump_mcp_config(settings.mcp_config) == {
         "shttp": {
             "url": "https://mcp.linear.app/mcp",
@@ -757,7 +757,7 @@ def test_conversation_settings_from_persisted_rejects_newer_schema_version() -> 
 def test_llm_create_agent_uses_settings_llm_and_tools() -> None:
     llm = LLM(model="test-model")
     tools = [Tool(name="TerminalTool")]
-    settings = OpenHandsAgentSettings(llm=llm, tools=tools)
+    settings = MadagascarAgentSettings(llm=llm, tools=tools)
     agent = settings.create_agent()
     assert isinstance(agent, Agent)
     assert agent.llm is llm
@@ -765,7 +765,7 @@ def test_llm_create_agent_uses_settings_llm_and_tools() -> None:
 
 
 def test_llm_create_agent_defaults_tool_concurrency_limit_to_one() -> None:
-    agent = OpenHandsAgentSettings(llm=LLM(model="test-model")).create_agent()
+    agent = MadagascarAgentSettings(llm=LLM(model="test-model")).create_agent()
     assert agent.tool_concurrency_limit == 1
 
 
@@ -773,14 +773,14 @@ def test_create_agent_defaults_tools_when_none() -> None:
     """tools=None (the default) materializes the canonical exec set at
     create_agent — the single defaulting point (#3967 / #3978). Deterministic:
     browser is a serving-layer injection, never part of the default."""
-    settings = OpenHandsAgentSettings(llm=LLM(model="test-model"))
+    settings = MadagascarAgentSettings(llm=LLM(model="test-model"))
     assert settings.tools is None
     agent = settings.create_agent()
     assert [t.name for t in agent.tools] == ["terminal", "file_editor", "task_tracker"]
 
 
 def test_create_agent_default_tools_honor_enable_sub_agents() -> None:
-    settings = OpenHandsAgentSettings(
+    settings = MadagascarAgentSettings(
         llm=LLM(model="test-model"), enable_sub_agents=True
     )
     agent = settings.create_agent()
@@ -795,7 +795,7 @@ def test_create_agent_default_tools_honor_enable_sub_agents() -> None:
 def test_create_agent_empty_tools_stays_bare() -> None:
     """tools=[] is an explicit choice: no default injection (persisted-payload
     compatibility — [] predates the None default and keeps its old meaning)."""
-    settings = OpenHandsAgentSettings(llm=LLM(model="test-model"), tools=[])
+    settings = MadagascarAgentSettings(llm=LLM(model="test-model"), tools=[])
     agent = settings.create_agent()
     assert agent.tools == []
 
@@ -803,7 +803,7 @@ def test_create_agent_empty_tools_stays_bare() -> None:
 def test_tool_concurrency_limit_defaults_to_one_when_omitted_from_payload() -> None:
     # Backward compatibility: payloads persisted before the field existed must
     # still load and fall back to the sequential default.
-    settings = OpenHandsAgentSettings.model_validate({"agent_kind": "openhands"})
+    settings = MadagascarAgentSettings.model_validate({"agent_kind": "madagascar"})
     assert settings.tool_concurrency_limit == 1
 
 
@@ -823,14 +823,14 @@ def test_tool_concurrency_limit_defaults_to_one_when_omitted_from_payload() -> N
 def test_tool_concurrency_limit_valid_values_round_trip(
     raw: Any, expected: int
 ) -> None:
-    settings = OpenHandsAgentSettings(
+    settings = MadagascarAgentSettings(
         llm=LLM(model="test-model"), tool_concurrency_limit=raw
     )
     assert settings.tool_concurrency_limit == expected
     assert type(settings.tool_concurrency_limit) is int
 
     # The value must survive a JSON serialization round-trip...
-    reloaded = OpenHandsAgentSettings.model_validate(settings.model_dump(mode="json"))
+    reloaded = MadagascarAgentSettings.model_validate(settings.model_dump(mode="json"))
     assert reloaded.tool_concurrency_limit == expected
 
     # ...and propagate to the constructed Agent.
@@ -853,14 +853,14 @@ def test_tool_concurrency_limit_valid_values_round_trip(
 )
 def test_tool_concurrency_limit_invalid_values_rejected(raw: Any) -> None:
     with pytest.raises(ValidationError) as exc_info:
-        OpenHandsAgentSettings(llm=LLM(model="test-model"), tool_concurrency_limit=raw)
+        MadagascarAgentSettings(llm=LLM(model="test-model"), tool_concurrency_limit=raw)
     assert any(
         err["loc"] == ("tool_concurrency_limit",) for err in exc_info.value.errors()
     )
 
 
 def test_llm_agent_settings_validates_mcp_config_as_typed_model() -> None:
-    settings = OpenHandsAgentSettings.model_validate(
+    settings = MadagascarAgentSettings.model_validate(
         {"mcp_config": {"fetch": {"command": "uvx", "args": ["mcp-server-fetch"]}}}
     )
 
@@ -874,7 +874,7 @@ def test_llm_create_agent_serializes_typed_mcp_config_compactly() -> None:
     mcp_config = coerce_mcp_config(
         {"fetch": {"command": "uvx", "args": ["mcp-server-fetch"]}}
     )
-    settings = OpenHandsAgentSettings(mcp_config=mcp_config)
+    settings = MadagascarAgentSettings(mcp_config=mcp_config)
 
     agent = settings.create_agent()
 
@@ -886,7 +886,7 @@ def test_llm_create_agent_serializes_typed_mcp_config_compactly() -> None:
 def test_llm_create_agent_builds_condenser_when_enabled() -> None:
     llm = LLM(model="test-model", usage_id="agent")
     agent_metrics = llm.metrics
-    settings = OpenHandsAgentSettings(
+    settings = MadagascarAgentSettings(
         llm=llm,
         condenser=LLMSummarizingCondenserSettings(
             enabled=True,
@@ -924,8 +924,8 @@ def test_llm_summarizing_condenser_settings_match_condenser_fields() -> None:
     assert settings_fields == condenser_fields
 
 
-def test_openhands_agent_settings_defaults_legacy_condenser_payload() -> None:
-    settings = OpenHandsAgentSettings.model_validate(
+def test_madagascar_agent_settings_defaults_legacy_condenser_payload() -> None:
+    settings = MadagascarAgentSettings.model_validate(
         {
             "condenser": {
                 "enabled": True,
@@ -941,8 +941,8 @@ def test_openhands_agent_settings_defaults_legacy_condenser_payload() -> None:
     assert settings.condenser.max_tokens == 5000
 
 
-def test_openhands_agent_settings_dispatches_no_op_condenser_payload() -> None:
-    settings = OpenHandsAgentSettings.model_validate(
+def test_madagascar_agent_settings_dispatches_no_op_condenser_payload() -> None:
+    settings = MadagascarAgentSettings.model_validate(
         {
             "condenser": {
                 "enabled": True,
@@ -959,8 +959,8 @@ def test_openhands_agent_settings_dispatches_no_op_condenser_payload() -> None:
     }
 
 
-def test_openhands_agent_settings_upgrades_base_condenser_settings_instance() -> None:
-    settings = OpenHandsAgentSettings.model_validate(
+def test_madagascar_agent_settings_upgrades_base_condenser_settings_instance() -> None:
+    settings = MadagascarAgentSettings.model_validate(
         {"condenser": CondenserSettings(enabled=True, max_size=100)}
     )
 
@@ -974,7 +974,7 @@ def test_condenser_settings_base_requires_concrete_build_method() -> None:
 
 
 def test_llm_create_agent_no_condenser_when_disabled() -> None:
-    settings = OpenHandsAgentSettings(
+    settings = MadagascarAgentSettings(
         condenser=LLMSummarizingCondenserSettings(enabled=False),
     )
     agent = settings.create_agent()
@@ -982,7 +982,7 @@ def test_llm_create_agent_no_condenser_when_disabled() -> None:
 
 
 def test_llm_create_agent_builds_no_op_condenser_variant() -> None:
-    settings = OpenHandsAgentSettings(condenser=NoOpCondenserSettings())
+    settings = MadagascarAgentSettings(condenser=NoOpCondenserSettings())
 
     agent = settings.create_agent()
 
@@ -990,7 +990,7 @@ def test_llm_create_agent_builds_no_op_condenser_variant() -> None:
 
 
 def test_llm_create_agent_builds_critic_when_enabled() -> None:
-    settings = OpenHandsAgentSettings(
+    settings = MadagascarAgentSettings(
         llm=LLM(model="m", api_key=SecretStr("k")),
         verification=VerificationSettings(
             critic_enabled=True,
@@ -1004,7 +1004,7 @@ def test_llm_create_agent_builds_critic_when_enabled() -> None:
 
 
 def test_llm_create_agent_no_critic_without_api_key() -> None:
-    settings = OpenHandsAgentSettings(
+    settings = MadagascarAgentSettings(
         llm=LLM(model="m", api_key=None),
         verification=VerificationSettings(critic_enabled=True),
     )
@@ -1016,7 +1016,7 @@ def test_llm_create_agent_critic_uses_explicit_api_key() -> None:
     """When ``verification.critic_api_key`` is set, the critic authenticates
     with it instead of the LLM key. The LLM's own key is preserved untouched
     so the main agent loop still talks to its provider."""
-    settings = OpenHandsAgentSettings(
+    settings = MadagascarAgentSettings(
         llm=LLM(model="m", api_key=SecretStr("llm-key")),
         verification=VerificationSettings(
             critic_enabled=True,
@@ -1035,7 +1035,7 @@ def test_llm_create_agent_critic_uses_explicit_api_key() -> None:
 def test_llm_create_agent_critic_falls_back_to_llm_api_key() -> None:
     """Without ``verification.critic_api_key``, the legacy behavior holds:
     the critic reuses the LLM key (auto-config path for the All-Hands proxy)."""
-    settings = OpenHandsAgentSettings(
+    settings = MadagascarAgentSettings(
         llm=LLM(model="m", api_key=SecretStr("llm-key")),
         verification=VerificationSettings(critic_enabled=True),
     )
@@ -1048,7 +1048,7 @@ def test_llm_create_agent_critic_falls_back_to_llm_api_key() -> None:
 def test_llm_create_agent_critic_with_only_critic_api_key() -> None:
     """If the LLM has no key but ``critic_api_key`` is supplied, the critic
     is still built — its credential is independent of the LLM's."""
-    settings = OpenHandsAgentSettings(
+    settings = MadagascarAgentSettings(
         llm=LLM(model="m", api_key=None),
         verification=VerificationSettings(
             critic_enabled=True,
@@ -1084,7 +1084,7 @@ def test_verification_settings_critic_api_key_roundtrip() -> None:
 
 
 def test_llm_create_agent_critic_with_iterative_refinement() -> None:
-    settings = OpenHandsAgentSettings(
+    settings = MadagascarAgentSettings(
         llm=LLM(model="m", api_key=SecretStr("k")),
         verification=VerificationSettings(
             critic_enabled=True,
@@ -1102,9 +1102,9 @@ def test_llm_create_agent_critic_with_iterative_refinement() -> None:
 
 
 def test_llm_roundtrip_preserves_llm_model() -> None:
-    settings = OpenHandsAgentSettings(llm=LLM(model="test-model"))
+    settings = MadagascarAgentSettings(llm=LLM(model="test-model"))
     data = settings.model_dump()
-    restored = OpenHandsAgentSettings.model_validate(data)
+    restored = MadagascarAgentSettings.model_validate(data)
     assert restored.llm.model == "test-model"
 
 
@@ -1441,8 +1441,8 @@ def test_acp_create_agent_passes_caller_context_through() -> None:
 def test_llm_agent_settings_public_alias_removed() -> None:
     """The deprecated ``LLMAgentSettings`` public import aliases were removed in
     v1.24.0; the class itself is retained (internal-only) for the union."""
-    import openhands.sdk as _sdk_mod
-    import openhands.sdk.settings as _settings_mod
+    import madagascar.sdk as _sdk_mod
+    import madagascar.sdk.settings as _settings_mod
 
     with pytest.raises(AttributeError):
         getattr(_settings_mod, "LLMAgentSettings")
@@ -1452,11 +1452,11 @@ def test_llm_agent_settings_public_alias_removed() -> None:
     # The class is still reachable at its canonical internal location and keeps
     # agent_kind="llm" so the discriminated union deserializes legacy payloads
     # and the API-breakage checker sees no field-value change.
-    from openhands.sdk.settings.model import LLMAgentSettings
+    from madagascar.sdk.settings.model import LLMAgentSettings
 
-    assert issubclass(LLMAgentSettings, OpenHandsAgentSettings)
+    assert issubclass(LLMAgentSettings, MadagascarAgentSettings)
     settings = LLMAgentSettings(llm=LLM(model="test-model"))
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.agent_kind == "llm"
     assert settings.llm.model == "test-model"
 
@@ -1473,7 +1473,7 @@ def test_conversation_settings_create_request_for_llm_variant() -> None:
         security_analyzer="llm",
     )
     workspace = LocalWorkspace(working_dir="/tmp")
-    agent = OpenHandsAgentSettings(llm=LLM(model="test-model")).create_agent()
+    agent = MadagascarAgentSettings(llm=LLM(model="test-model")).create_agent()
 
     request = settings.create_request(
         StartConversationRequest,
@@ -1513,9 +1513,9 @@ def test_conversation_settings_create_request_with_acp_agent_variant() -> None:
 def test_conversation_settings_agent_settings_field_accepts_both_variants() -> None:
     """The agent_settings runtime field should accept either variant."""
     llm_conv = ConversationSettings(
-        agent_settings=OpenHandsAgentSettings(llm=LLM(model="m")),
+        agent_settings=MadagascarAgentSettings(llm=LLM(model="m")),
     )
-    assert isinstance(llm_conv.agent_settings, OpenHandsAgentSettings)
+    assert isinstance(llm_conv.agent_settings, MadagascarAgentSettings)
 
     acp_conv = ConversationSettings(
         agent_settings=ACPAgentSettings(acp_command=["x"]),
@@ -1528,7 +1528,7 @@ def test_conversation_settings_agent_settings_field_accepts_both_variants() -> N
 # ---------------------------------------------------------------------------
 
 
-def test_openhands_agent_settings_mcp_config_redacts_env_and_headers() -> None:
+def test_madagascar_agent_settings_mcp_config_redacts_env_and_headers() -> None:
     mcp_config = coerce_mcp_config(
         {
             "leaky": {
@@ -1539,7 +1539,7 @@ def test_openhands_agent_settings_mcp_config_redacts_env_and_headers() -> None:
             }
         }
     )
-    settings = OpenHandsAgentSettings(mcp_config=mcp_config)
+    settings = MadagascarAgentSettings(mcp_config=mcp_config)
 
     blob = settings.model_dump_json()
     assert "sk-mcp-secret" not in blob
@@ -1559,7 +1559,7 @@ def test_mcp_config_encrypts_env_and_headers_with_cipher() -> None:
     Round-tripping through ``model_validate`` with the same cipher must
     recover the original plaintext values.
     """
-    from openhands.sdk.utils.cipher import Cipher
+    from madagascar.sdk.utils.cipher import Cipher
 
     mcp_config = coerce_mcp_config(
         {
@@ -1574,7 +1574,7 @@ def test_mcp_config_encrypts_env_and_headers_with_cipher() -> None:
             },
         }
     )
-    settings = OpenHandsAgentSettings(mcp_config=mcp_config)
+    settings = MadagascarAgentSettings(mcp_config=mcp_config)
     cipher = Cipher(secret_key="test-encryption-key")
 
     dumped = settings.model_dump(mode="json", context={"cipher": cipher})
@@ -1609,7 +1609,7 @@ def test_mcp_config_encrypts_env_and_headers_with_cipher() -> None:
     assert servers["fetch"]["url"] == "https://example.com/mcp"
 
     # Round-trip: decrypt with the same cipher recovers the originals.
-    restored = OpenHandsAgentSettings.model_validate(dumped, context={"cipher": cipher})
+    restored = MadagascarAgentSettings.model_validate(dumped, context={"cipher": cipher})
     restored_dump = dump_mcp_config(restored.mcp_config)
     restored_github_env = restored_dump["github"]["env"]
     restored_fetch_headers = restored_dump["fetch"]["headers"]
@@ -1620,7 +1620,7 @@ def test_mcp_config_encrypts_env_and_headers_with_cipher() -> None:
 
 
 def test_mcp_config_encrypts_bearer_auth_with_cipher() -> None:
-    from openhands.sdk.utils.cipher import Cipher
+    from madagascar.sdk.utils.cipher import Cipher
 
     mcp_config = coerce_mcp_config(
         {
@@ -1634,7 +1634,7 @@ def test_mcp_config_encrypts_bearer_auth_with_cipher() -> None:
             },
         }
     )
-    settings = OpenHandsAgentSettings(mcp_config=mcp_config)
+    settings = MadagascarAgentSettings(mcp_config=mcp_config)
     cipher = Cipher(secret_key="test-encryption-key")
 
     dumped = settings.model_dump(mode="json", context={"cipher": cipher})
@@ -1652,7 +1652,7 @@ def test_mcp_config_encrypts_bearer_auth_with_cipher() -> None:
     }
     assert redacted["mcp_config"]["superhuman"]["auth"] == {"strategy": "oauth2"}
 
-    restored = OpenHandsAgentSettings.model_validate(dumped, context={"cipher": cipher})
+    restored = MadagascarAgentSettings.model_validate(dumped, context={"cipher": cipher})
     restored_servers = dump_mcp_config(restored.mcp_config)
     assert restored_servers["linear"]["auth"] == {
         "strategy": "bearer",
@@ -1663,7 +1663,7 @@ def test_mcp_config_encrypts_bearer_auth_with_cipher() -> None:
     }
 
 
-def test_openhands_agent_settings_create_agent_preserves_mcp_auth_model() -> None:
+def test_madagascar_agent_settings_create_agent_preserves_mcp_auth_model() -> None:
     mcp_config = coerce_mcp_config(
         {
             "linear": {
@@ -1683,7 +1683,7 @@ def test_openhands_agent_settings_create_agent_preserves_mcp_auth_model() -> Non
         }
     )
 
-    agent = OpenHandsAgentSettings(mcp_config=mcp_config).create_agent()
+    agent = MadagascarAgentSettings(mcp_config=mcp_config).create_agent()
 
     servers = dump_mcp_config(agent.mcp_config)
     assert servers["linear"]["auth"] == {
@@ -1699,13 +1699,13 @@ def test_openhands_agent_settings_create_agent_preserves_mcp_auth_model() -> Non
     }
 
 
-def test_openhands_agent_settings_mcp_config_decrypt_legacy_plaintext_on_disk() -> None:
+def test_madagascar_agent_settings_mcp_config_decrypt_legacy_plaintext_on_disk() -> None:
     """Loading a settings file that pre-dates per-value encryption (env /
     headers stored as plaintext) must NOT drop those values: each value that
     isn't a valid Fernet token is passed through unchanged so the next save
     can re-encrypt it.
     """
-    from openhands.sdk.utils.cipher import Cipher
+    from madagascar.sdk.utils.cipher import Cipher
 
     cipher = Cipher(secret_key="test-encryption-key")
     legacy_payload = {
@@ -1719,7 +1719,7 @@ def test_openhands_agent_settings_mcp_config_decrypt_legacy_plaintext_on_disk() 
         }
     }
 
-    restored = OpenHandsAgentSettings.model_validate(
+    restored = MadagascarAgentSettings.model_validate(
         legacy_payload, context={"cipher": cipher}
     )
     restored_env = dump_mcp_config(restored.mcp_config)["github"]["env"]
@@ -1727,7 +1727,7 @@ def test_openhands_agent_settings_mcp_config_decrypt_legacy_plaintext_on_disk() 
     assert restored_env["GITHUB_TOKEN"] == "ghp-legacy-plaintext"
 
 
-def test_openhands_agent_settings_mcp_config_expose_encrypted_requires_cipher() -> None:
+def test_madagascar_agent_settings_mcp_config_expose_encrypted_requires_cipher() -> None:
     """``expose_secrets="encrypted"`` without a cipher must raise — mirroring
     the contract used for individual ``SecretStr`` fields via
     :func:`serialize_secret`. Pydantic wraps the inner
@@ -1737,9 +1737,9 @@ def test_openhands_agent_settings_mcp_config_expose_encrypted_requires_cipher() 
     """
     from pydantic_core import PydanticSerializationError
 
-    from openhands.sdk.utils.pydantic_secrets import MissingCipherError
+    from madagascar.sdk.utils.pydantic_secrets import MissingCipherError
 
-    settings = OpenHandsAgentSettings(
+    settings = MadagascarAgentSettings(
         mcp_config=coerce_mcp_config(
             {
                 "github": {
@@ -1755,14 +1755,14 @@ def test_openhands_agent_settings_mcp_config_expose_encrypted_requires_cipher() 
     assert MissingCipherError.__name__ in str(exc_info.value)
 
 
-def test_openhands_agent_settings_mcp_config_expose_plaintext_passes_through() -> None:
+def test_madagascar_agent_settings_mcp_config_expose_plaintext_passes_through() -> None:
     """``expose_secrets="plaintext"`` must return raw env / headers values
     even when a cipher is also in the context (e.g. an admin GET with
     explicit plaintext exposure).
     """
-    from openhands.sdk.utils.cipher import Cipher
+    from madagascar.sdk.utils.cipher import Cipher
 
-    settings = OpenHandsAgentSettings(
+    settings = MadagascarAgentSettings(
         mcp_config=coerce_mcp_config(
             {
                 "github": {
@@ -1782,7 +1782,7 @@ def test_openhands_agent_settings_mcp_config_expose_plaintext_passes_through() -
     assert dumped["mcp_config"]["github"]["env"]["GITHUB_TOKEN"] == "ghp-secret"
 
 
-def test_openhands_agent_settings_create_agent_keeps_real_mcp_secrets() -> None:
+def test_madagascar_agent_settings_create_agent_keeps_real_mcp_secrets() -> None:
     # create_agent must hand the runtime real env/headers (the field serializer
     # redacts mcp_config for transit only).
     mcp_config = coerce_mcp_config(
@@ -1794,7 +1794,7 @@ def test_openhands_agent_settings_create_agent_keeps_real_mcp_secrets() -> None:
             }
         }
     )
-    agent = OpenHandsAgentSettings(mcp_config=mcp_config).create_agent()
+    agent = MadagascarAgentSettings(mcp_config=mcp_config).create_agent()
 
     env = dump_mcp_config(agent.mcp_config)["leaky"]["env"]
     assert isinstance(env, dict)
@@ -1859,32 +1859,32 @@ def test_acp_agent_settings_create_agent_keeps_real_mcp_secrets() -> None:
 
 
 def test_agent_settings_base_is_parent_of_both_variants() -> None:
-    assert issubclass(OpenHandsAgentSettings, AgentSettingsBase)
+    assert issubclass(MadagascarAgentSettings, AgentSettingsBase)
     assert issubclass(ACPAgentSettings, AgentSettingsBase)
 
 
 def test_agent_settings_base_schema_version_inherited() -> None:
-    openhands = OpenHandsAgentSettings()
+    madagascar = MadagascarAgentSettings()
     acp = ACPAgentSettings(acp_command=["x"])
-    assert openhands.schema_version == AGENT_SETTINGS_SCHEMA_VERSION
+    assert madagascar.schema_version == AGENT_SETTINGS_SCHEMA_VERSION
     assert acp.schema_version == AGENT_SETTINGS_SCHEMA_VERSION
 
 
 def test_agent_settings_base_export_schema_works_on_both_variants() -> None:
-    openhands_schema = OpenHandsAgentSettings.export_schema()
+    madagascar_schema = MadagascarAgentSettings.export_schema()
     acp_schema = ACPAgentSettings.export_schema()
-    assert openhands_schema.model_name == "OpenHandsAgentSettings"
+    assert madagascar_schema.model_name == "MadagascarAgentSettings"
     assert acp_schema.model_name == "ACPAgentSettings"
 
 
 def test_agent_settings_base_create_agent_is_callable_via_interface() -> None:
     """Both variants expose create_agent() through the shared base type."""
-    settings: AgentSettingsBase = OpenHandsAgentSettings(llm=LLM(model="test-model"))
+    settings: AgentSettingsBase = MadagascarAgentSettings(llm=LLM(model="test-model"))
     agent = settings.create_agent()
     assert isinstance(agent, Agent)
 
     acp_settings: AgentSettingsBase = ACPAgentSettings(acp_command=["x"])
-    from openhands.sdk.agent.acp_agent import ACPAgent
+    from madagascar.sdk.agent.acp_agent import ACPAgent
 
     acp_agent = acp_settings.create_agent()
     assert isinstance(acp_agent, ACPAgent)
@@ -1938,7 +1938,7 @@ def test_acp_settings_base_url_env_var_from_registry() -> None:
 def test_acp_resolve_command_uses_registry_defaults(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    from openhands.sdk.settings.acp_providers import ACP_PROVIDERS
+    from madagascar.sdk.settings.acp_providers import ACP_PROVIDERS
 
     # No pinned binary on PATH → registry npx default is returned verbatim.
     monkeypatch.setattr(shutil, "which", lambda _: None)
@@ -1954,17 +1954,17 @@ def test_acp_resolve_command_uses_registry_defaults(
 
 
 def test_regular_agent_supports_all_capabilities() -> None:
-    agent = OpenHandsAgentSettings(llm=LLM(model="test-model")).create_agent()
-    assert agent.supports_openhands_tools is True
+    agent = MadagascarAgentSettings(llm=LLM(model="test-model")).create_agent()
+    assert agent.supports_madagascar_tools is True
     assert agent.supports_condenser is True
-    assert agent.agent_kind == "openhands"
+    assert agent.agent_kind == "madagascar"
 
 
-def test_acp_agent_reports_no_openhands_capabilities() -> None:
-    from openhands.sdk.agent.acp_agent import ACPAgent
+def test_acp_agent_reports_no_madagascar_capabilities() -> None:
+    from madagascar.sdk.agent.acp_agent import ACPAgent
 
     agent = ACPAgent(acp_command=["x"])
-    assert agent.supports_openhands_tools is False
+    assert agent.supports_madagascar_tools is False
     assert agent.supports_condenser is False
     assert agent.agent_kind == "acp"
 
@@ -1980,7 +1980,7 @@ def test_llm_subscription_fields_roundtrip() -> None:
         }
     )
 
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.llm.auth_type == "subscription"
     assert settings.llm.subscription_vendor == "openai"
     dumped = settings.model_dump(mode="json", exclude_none=True)
@@ -1990,7 +1990,7 @@ def test_llm_subscription_fields_roundtrip() -> None:
 
 
 def test_llm_create_agent_resolves_subscription_llm(monkeypatch) -> None:
-    from openhands.sdk.llm.auth import openai
+    from madagascar.sdk.llm.auth import openai
 
     original_llm = LLM(
         model="gpt-5.6",
@@ -2010,14 +2010,14 @@ def test_llm_create_agent_resolves_subscription_llm(monkeypatch) -> None:
         fake_create_subscription_llm_from_config,
     )
 
-    agent = OpenHandsAgentSettings(llm=original_llm).create_agent()
+    agent = MadagascarAgentSettings(llm=original_llm).create_agent()
 
     assert agent.llm is runtime_llm
     assert agent.llm.is_subscription is True
 
 
 def test_llm_from_persisted_rehydrates_subscription_runtime(monkeypatch) -> None:
-    from openhands.sdk.llm.auth import openai
+    from madagascar.sdk.llm.auth import openai
 
     runtime_llm = LLM(model="openai/gpt-5.6", auth_type="subscription")
     runtime_llm._is_subscription = True
@@ -2047,7 +2047,7 @@ def test_llm_from_persisted_rehydrates_subscription_runtime(monkeypatch) -> None
 
 
 def test_llm_load_from_env_rehydrates_subscription_runtime(monkeypatch) -> None:
-    from openhands.sdk.llm.auth import openai
+    from madagascar.sdk.llm.auth import openai
 
     runtime_llm = LLM(model="openai/gpt-5.6", auth_type="subscription")
     runtime_llm._is_subscription = True
@@ -2074,8 +2074,8 @@ def test_llm_load_from_env_rehydrates_subscription_runtime(monkeypatch) -> None:
 
 
 def test_create_subscription_llm_from_config_preserves_runtime_llm(monkeypatch) -> None:
-    import openhands.sdk.llm.auth.openai as openai_auth
-    from openhands.sdk.llm.auth.credentials import OAuthCredentials
+    import madagascar.sdk.llm.auth.openai as openai_auth
+    from madagascar.sdk.llm.auth.credentials import OAuthCredentials
 
     class UnexpectedAuth:
         def __init__(self, *args, **kwargs):
@@ -2101,9 +2101,9 @@ def test_create_subscription_llm_from_config_preserves_runtime_llm(monkeypatch) 
 def test_llm_from_persisted_rebuilds_serialized_subscription_runtime(
     monkeypatch,
 ) -> None:
-    import openhands.sdk.llm.auth.openai as openai_auth
-    from openhands.sdk.llm.auth.credentials import OAuthCredentials
-    from openhands.sdk.llm.auth.openai import OpenAISubscriptionAuth
+    import madagascar.sdk.llm.auth.openai as openai_auth
+    from madagascar.sdk.llm.auth.credentials import OAuthCredentials
+    from madagascar.sdk.llm.auth.openai import OpenAISubscriptionAuth
 
     credentials = OAuthCredentials(
         vendor="openai",
@@ -2142,8 +2142,8 @@ def test_llm_from_persisted_rebuilds_serialized_subscription_runtime(
 
 @pytest.mark.asyncio
 async def test_async_subscription_api_key_uses_async_refresh(monkeypatch) -> None:
-    import openhands.sdk.llm.auth.openai as openai_auth
-    from openhands.sdk.llm.auth.credentials import OAuthCredentials
+    import madagascar.sdk.llm.auth.openai as openai_auth
+    from madagascar.sdk.llm.auth.credentials import OAuthCredentials
 
     credentials = OAuthCredentials(
         vendor="openai",
@@ -2183,8 +2183,8 @@ async def test_async_subscription_api_key_uses_async_refresh(monkeypatch) -> Non
 def test_sync_subscription_api_key_uses_valid_runtime_credentials(
     monkeypatch,
 ) -> None:
-    import openhands.sdk.llm.auth.openai as openai_auth
-    from openhands.sdk.llm.auth.credentials import OAuthCredentials
+    import madagascar.sdk.llm.auth.openai as openai_auth
+    from madagascar.sdk.llm.auth.credentials import OAuthCredentials
 
     credentials = OAuthCredentials(
         vendor="openai",
@@ -2222,9 +2222,9 @@ def test_sync_subscription_api_key_uses_valid_runtime_credentials(
 def test_openai_subscription_create_llm_serializes_subscription_auth(
     monkeypatch,
 ) -> None:
-    import openhands.sdk.llm.auth.openai as openai_auth
-    from openhands.sdk.llm.auth.credentials import OAuthCredentials
-    from openhands.sdk.llm.auth.openai import OpenAISubscriptionAuth
+    import madagascar.sdk.llm.auth.openai as openai_auth
+    from madagascar.sdk.llm.auth.credentials import OAuthCredentials
+    from madagascar.sdk.llm.auth.openai import OpenAISubscriptionAuth
 
     monkeypatch.setattr(openai_auth, "_extract_chatgpt_account_id", lambda _: None)
 
@@ -2251,8 +2251,8 @@ def test_openai_subscription_create_llm_serializes_subscription_auth(
 def test_create_subscription_llm_from_config_preserves_non_auth_options(
     monkeypatch,
 ) -> None:
-    import openhands.sdk.llm.auth.openai as openai_auth
-    from openhands.sdk.llm.auth.credentials import OAuthCredentials
+    import madagascar.sdk.llm.auth.openai as openai_auth
+    from madagascar.sdk.llm.auth.credentials import OAuthCredentials
 
     captured: dict[str, object] = {}
 

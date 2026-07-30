@@ -8,7 +8,7 @@ Analyzer selection does not automatically change confirmation policy --
 you must configure both explicitly.
 """
 
-from openhands.sdk.security import (
+from madagascar.sdk.security import (
     ConfirmRisky,
     EnsembleSecurityAnalyzer,
     PatternSecurityAnalyzer,

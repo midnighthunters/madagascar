@@ -1,7 +1,7 @@
 """Tests for BrowserObservation wrapper behavior."""
 
-from openhands.sdk.llm.message import ImageContent, TextContent
-from openhands.tools.browser_use.definition import BrowserObservation
+from madagascar.sdk.llm.message import ImageContent, TextContent
+from madagascar.tools.browser_use.definition import BrowserObservation
 
 
 def test_browser_observation_basic_output():

@@ -23,15 +23,15 @@ import httpx
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from openhands.app_server.errors import SandboxDeleteRetryError, SandboxError
-from openhands.app_server.sandbox.remote_sandbox_service import (
+from madagascar.app_server.errors import SandboxDeleteRetryError, SandboxError
+from madagascar.app_server.sandbox.remote_sandbox_service import (
     ALLOW_CORS_ORIGINS_VARIABLE,
     STATUS_MAPPING,
     WEBHOOK_CALLBACK_VARIABLE,
     RemoteSandboxService,
     StoredRemoteSandbox,
 )
-from openhands.app_server.sandbox.sandbox_models import (
+from madagascar.app_server.sandbox.sandbox_models import (
     AGENT_SERVER,
     VSCODE,
     WORKER_1,
@@ -39,9 +39,9 @@ from openhands.app_server.sandbox.sandbox_models import (
     SandboxInfo,
     SandboxStatus,
 )
-from openhands.app_server.sandbox.sandbox_spec_models import SandboxSpecInfo
-from openhands.app_server.settings.settings_models import SandboxGroupingStrategy
-from openhands.app_server.user.user_context import UserContext
+from madagascar.app_server.sandbox.sandbox_spec_models import SandboxSpecInfo
+from madagascar.app_server.settings.settings_models import SandboxGroupingStrategy
+from madagascar.app_server.user.user_context import UserContext
 
 
 @pytest.fixture
@@ -50,7 +50,7 @@ def mock_sandbox_spec_service():
     mock_service = AsyncMock()
     mock_spec = SandboxSpecInfo(
         id='test-image:latest',
-        command=['/usr/local/bin/openhands-agent-server', '--port', '60000'],
+        command=['/usr/local/bin/madagascar-agent-server', '--port', '60000'],
         initial_env={'TEST_VAR': 'test_value'},
         working_dir='/workspace/project',
     )
@@ -735,7 +735,7 @@ class TestSandboxLifecycle:
         remote_sandbox_service.httpx_client.request = AsyncMock()
 
         with patch(
-            'openhands.app_server.sandbox.remote_sandbox_service.workspace_archive'
+            'madagascar.app_server.sandbox.remote_sandbox_service.workspace_archive'
         ) as mock_wa:
             mock_wa.archive_enabled.return_value = True
             mock_wa.archive_workspace = AsyncMock(return_value=True)
@@ -756,7 +756,7 @@ class TestSandboxLifecycle:
         """No-op (returns True) when archiving is disabled — no lookups at all."""
         remote_sandbox_service._get_stored_sandbox = AsyncMock()
         with patch(
-            'openhands.app_server.sandbox.remote_sandbox_service.workspace_archive'
+            'madagascar.app_server.sandbox.remote_sandbox_service.workspace_archive'
         ) as mock_wa:
             mock_wa.archive_enabled.return_value = False
             ok = await remote_sandbox_service.archive_conversation_workspace(
@@ -1199,7 +1199,7 @@ class TestGetSandboxBySessionApiKey:
         self, remote_sandbox_service
     ):
         """Test finding sandbox by session API key using stored hash."""
-        from openhands.app_server.sandbox.remote_sandbox_service import (
+        from madagascar.app_server.sandbox.remote_sandbox_service import (
             _hash_session_api_key,
         )
 
@@ -1246,7 +1246,7 @@ class TestGetSandboxBySessionApiKey:
         self, remote_sandbox_service
     ):
         """Test handling runtime error when getting sandbox."""
-        from openhands.app_server.sandbox.remote_sandbox_service import (
+        from madagascar.app_server.sandbox.remote_sandbox_service import (
             _hash_session_api_key,
         )
 
@@ -1279,7 +1279,7 @@ class TestUtilityFunctions:
 
     def test_build_service_url_subdomain_mode(self):
         """Test _build_service_url function with subdomain-based routing."""
-        from openhands.app_server.sandbox.remote_sandbox_service import (
+        from madagascar.app_server.sandbox.remote_sandbox_service import (
             _build_service_url,
         )
 
@@ -1301,7 +1301,7 @@ class TestUtilityFunctions:
 
     def test_build_service_url_path_mode(self):
         """Test _build_service_url function with path-based routing."""
-        from openhands.app_server.sandbox.remote_sandbox_service import (
+        from madagascar.app_server.sandbox.remote_sandbox_service import (
             _build_service_url,
         )
 
@@ -1325,7 +1325,7 @@ class TestUtilityFunctions:
 
     def test_hash_session_api_key(self):
         """Test _hash_session_api_key function."""
-        from openhands.app_server.sandbox.remote_sandbox_service import (
+        from madagascar.app_server.sandbox.remote_sandbox_service import (
             _hash_session_api_key,
         )
 
@@ -1534,35 +1534,35 @@ class TestPollAgentServersSessionScoping:
         mock_event_page = MagicMock()
         mock_event_page.model_validate.side_effect = list(event_pages)
         return [
-            patch('openhands.app_server.config.get_db_session', side_effect=tracker),
+            patch('madagascar.app_server.config.get_db_session', side_effect=tracker),
             patch(
-                'openhands.app_server.config.get_app_conversation_info_service',
+                'madagascar.app_server.config.get_app_conversation_info_service',
                 side_effect=_async_cm_factory(conv_service),
             ),
             patch(
-                'openhands.app_server.config.get_event_service',
+                'madagascar.app_server.config.get_event_service',
                 side_effect=_async_cm_factory(event_service),
             ),
             patch(
-                'openhands.app_server.config.get_event_callback_service',
+                'madagascar.app_server.config.get_event_callback_service',
                 side_effect=_async_cm_factory(callback_service),
             ),
             patch(
-                'openhands.app_server.config.get_httpx_client',
+                'madagascar.app_server.config.get_httpx_client',
                 side_effect=_async_cm_factory(httpx_client),
             ),
             patch(
-                'openhands.app_server.sandbox.remote_sandbox_service.ConversationInfo',
+                'madagascar.app_server.sandbox.remote_sandbox_service.ConversationInfo',
                 mock_conv_info,
             ),
             patch(
-                'openhands.app_server.sandbox.remote_sandbox_service.EventPage',
+                'madagascar.app_server.sandbox.remote_sandbox_service.EventPage',
                 mock_event_page,
             ),
-            patch('openhands.app_server.sandbox.remote_sandbox_service.InjectorState'),
-            patch('openhands.app_server.sandbox.remote_sandbox_service.ADMIN'),
+            patch('madagascar.app_server.sandbox.remote_sandbox_service.InjectorState'),
+            patch('madagascar.app_server.sandbox.remote_sandbox_service.ADMIN'),
             patch(
-                'openhands.app_server.sandbox.remote_sandbox_service.USER_CONTEXT_ATTR',
+                'madagascar.app_server.sandbox.remote_sandbox_service.USER_CONTEXT_ATTR',
                 'user_context',
             ),
         ]
@@ -1585,7 +1585,7 @@ class TestPollAgentServersSessionScoping:
     @pytest.mark.asyncio
     async def test_poll_agent_servers_releases_db_before_network_io(self):
         """poll_agent_servers must release the read session before network I/O."""
-        from openhands.app_server.sandbox.remote_sandbox_service import (
+        from madagascar.app_server.sandbox.remote_sandbox_service import (
             poll_agent_servers,
         )
 
@@ -1672,7 +1672,7 @@ class TestPollAgentServersSessionScoping:
     @pytest.mark.asyncio
     async def test_refresh_conversation_acquires_own_db_session(self):
         """refresh_conversation must open its own short-lived write sessions."""
-        from openhands.app_server.sandbox.remote_sandbox_service import (
+        from madagascar.app_server.sandbox.remote_sandbox_service import (
             refresh_conversation,
         )
 
@@ -1747,7 +1747,7 @@ class TestPollAgentServersSessionScoping:
         Uses an artificial network delay so a held session would visibly span
         the await; the open-session count is sampled inside that window.
         """
-        from openhands.app_server.sandbox.remote_sandbox_service import (
+        from madagascar.app_server.sandbox.remote_sandbox_service import (
             refresh_conversation,
         )
 
@@ -1994,11 +1994,11 @@ class TestArchiveConversationWorkspace:
 
         with (
             patch(
-                'openhands.app_server.sandbox.workspace_archive.archive_enabled',
+                'madagascar.app_server.sandbox.workspace_archive.archive_enabled',
                 return_value=True,
             ),
             patch(
-                'openhands.app_server.sandbox.workspace_archive.archive_workspace',
+                'madagascar.app_server.sandbox.workspace_archive.archive_workspace',
                 new=AsyncMock(return_value=False),
             ),
         ):
@@ -2022,11 +2022,11 @@ class TestArchiveConversationWorkspace:
 
         with (
             patch(
-                'openhands.app_server.sandbox.workspace_archive.archive_enabled',
+                'madagascar.app_server.sandbox.workspace_archive.archive_enabled',
                 return_value=True,
             ),
             patch(
-                'openhands.app_server.sandbox.workspace_archive.archive_workspace',
+                'madagascar.app_server.sandbox.workspace_archive.archive_workspace',
                 new=AsyncMock(return_value=True),
             ),
         ):
@@ -2049,7 +2049,7 @@ class TestArchiveConversationWorkspace:
             )
         )
         with patch(
-            'openhands.app_server.sandbox.workspace_archive.archive_enabled',
+            'madagascar.app_server.sandbox.workspace_archive.archive_enabled',
             return_value=True,
         ):
             ok = await remote_sandbox_service.archive_conversation_workspace(
@@ -2068,22 +2068,22 @@ class TestArchiveConversationWorkspace:
         )
         with (
             patch(
-                'openhands.app_server.sandbox.workspace_archive.archive_enabled',
+                'madagascar.app_server.sandbox.workspace_archive.archive_enabled',
                 return_value=True,
             ),
             patch(
-                'openhands.app_server.sandbox.workspace_archive.archive_workspace',
+                'madagascar.app_server.sandbox.workspace_archive.archive_workspace',
                 new=AsyncMock(return_value=True),
             ) as mock_archive,
         ):
             ok = await remote_sandbox_service.archive_conversation_workspace(
                 'test-sandbox-123',
                 conversation_id='conv-1',
-                workspace_path='/home/openhands/workspace/conv-1',
+                workspace_path='/home/madagascar/workspace/conv-1',
             )
         assert ok is True
         _, kwargs = mock_archive.call_args
-        assert kwargs['archive_path'] == '/home/openhands/workspace/conv-1'
+        assert kwargs['archive_path'] == '/home/madagascar/workspace/conv-1'
         remote_sandbox_service.sandbox_spec_service.get_sandbox_spec.assert_not_called()
 
     @pytest.mark.asyncio
@@ -2092,9 +2092,9 @@ class TestArchiveConversationWorkspace:
         grouping toggle since creation can never misroute the capture."""
         stored = create_stored_sandbox()
         path = await remote_sandbox_service._resolve_archive_path(
-            stored, 'conv-1', '/home/openhands/workspace/conv-1'
+            stored, 'conv-1', '/home/madagascar/workspace/conv-1'
         )
-        assert path == '/home/openhands/workspace/conv-1'
+        assert path == '/home/madagascar/workspace/conv-1'
         remote_sandbox_service.sandbox_spec_service.get_sandbox_spec.assert_not_called()
 
     @pytest.mark.asyncio
@@ -2135,7 +2135,7 @@ class TestArchiveWorkspaceHelper:
 
     @pytest.mark.asyncio
     async def test_archive_uploads_archive_and_manifest(self, monkeypatch):
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_FORMAT', 'git-delta')
@@ -2213,7 +2213,7 @@ class TestArchiveWorkspaceHelper:
 
     @pytest.mark.asyncio
     async def test_archive_missing_base_commit_header_defaults_empty(self, monkeypatch):
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_FORMAT', 'git-delta')
@@ -2252,7 +2252,7 @@ class TestArchiveWorkspaceHelper:
 
     @pytest.mark.asyncio
     async def test_archive_non_200_not_required_allows_delete(self, monkeypatch):
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.delenv('RUNTIME_FILE_ARCHIVE_REQUIRED', raising=False)
@@ -2270,7 +2270,7 @@ class TestArchiveWorkspaceHelper:
 
     @pytest.mark.asyncio
     async def test_archive_non_200_required_blocks_delete(self, monkeypatch):
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_REQUIRED', 'true')
@@ -2288,7 +2288,7 @@ class TestArchiveWorkspaceHelper:
 
     @pytest.mark.asyncio
     async def test_archive_no_url_skips(self, monkeypatch):
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.delenv('RUNTIME_FILE_ARCHIVE_REQUIRED', raising=False)
@@ -2307,7 +2307,7 @@ class TestArchiveWorkspaceHelper:
     async def test_archive_400_no_repo_required_allows_delete(self, monkeypatch):
         """No git repo to capture is a permanent 400 from the agent-server, not a
         failure: even when archiving is required, the delete may proceed (BUG 2)."""
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_REQUIRED', 'true')
@@ -2329,7 +2329,7 @@ class TestArchiveWorkspaceHelper:
         """A 404 (path missing) is the misrouted-path symptom, NOT a confirmed-empty
         workspace: under REQUIRED it must block the delete (keep for the idle reap)
         rather than silently tearing the sandbox down uncaptured."""
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_REQUIRED', 'true')
@@ -2348,7 +2348,7 @@ class TestArchiveWorkspaceHelper:
     async def test_archive_500_required_blocks_delete(self, monkeypatch):
         """A 5xx is a genuine transient failure: required archiving blocks the
         delete so it can be retried (BUG 2 — only 5xx/network block)."""
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_REQUIRED', 'true')
@@ -2368,7 +2368,7 @@ class TestArchiveWorkspaceHelper:
         """A 422 (malformed request from the producer) is NOT "nothing to archive"
         — under REQUIRED it is treated as retryable and must block the delete
         instead of being misread as permanent (infra#1444 M1)."""
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_REQUIRED', 'true')
@@ -2388,7 +2388,7 @@ class TestArchiveWorkspaceHelper:
         """A 401 (session key rejected) means the capture did NOT happen and is not
         a confirmed-empty workspace, so under REQUIRED it must block the delete
         (keep for the idle reap) rather than tear the sandbox down uncaptured."""
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_REQUIRED', 'true')
@@ -2412,7 +2412,7 @@ class TestArchiveWorkspaceHelper:
         PROCEEDS even under REQUIRED. Like an unset bucket, no retry makes a valid
         format appear, so blocking would wedge every delete forever with no
         app-server backstop; the producer never sees the bad format."""
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_FORMAT', 'zip')
@@ -2431,7 +2431,7 @@ class TestArchiveWorkspaceHelper:
 
     @pytest.mark.asyncio
     async def test_archive_unsupported_format_not_required_proceeds(self, monkeypatch):
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_FORMAT', 'zip')
@@ -2453,7 +2453,7 @@ class TestArchiveWorkspaceHelper:
         """RUNTIME_FILE_ARCHIVE_BUCKET unset is a config error no retry can fix;
         it must NOT wedge every delete under REQUIRED — proceed loudly instead
         (infra#1444 L8)."""
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.delenv('RUNTIME_FILE_ARCHIVE_BUCKET', raising=False)
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_REQUIRED', 'true')
@@ -2474,7 +2474,7 @@ class TestArchiveWorkspaceHelper:
         """archive_workspace targets the caller-resolved archive_path exactly (the
         path was pinned at creation; the grouping nesting is resolved upstream in
         RemoteSandboxService._resolve_archive_path)."""
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_FORMAT', 'git-delta')
@@ -2511,7 +2511,7 @@ class TestArchiveWorkspaceHelper:
         """FORMAT=both (the default) captures git-delta AND a full tar.gz, each
         with its own artifact + manifest; base_commit rides the git-delta header
         and is reused for the tar.gz manifest."""
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_FORMAT', 'both')
@@ -2564,7 +2564,7 @@ class TestArchiveWorkspaceHelper:
     async def test_archive_both_required_blocks_if_one_format_fails(self, monkeypatch):
         """In REQUIRED both-mode, a retryable failure on either format blocks the
         delete so a retry can capture the complete pair."""
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_FORMAT', 'both')
@@ -2602,7 +2602,7 @@ class TestArchiveWorkspaceHelper:
         silently dropped one conversation's archive)."""
         from datetime import datetime, timezone
 
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_BUCKET', 'archive-bkt')
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_FORMAT', 'git-delta')
@@ -2653,7 +2653,7 @@ class TestDeleteSandboxKeyHandling:
         from sqlalchemy.ext.asyncio import create_async_engine
         from sqlalchemy.pool import StaticPool
 
-        from openhands.app_server.utils.sql_utils import Base
+        from madagascar.app_server.utils.sql_utils import Base
 
         engine = create_async_engine(
             'sqlite+aiosqlite:///:memory:',
@@ -2757,33 +2757,33 @@ class TestDeleteSandboxKeyHandling:
 
 
 class TestArchiveEnvToggles:
-    """Per OpenHands/AGENTS.md, env enable-toggles must accept '1' as well as
+    """Per Madagascar/AGENTS.md, env enable-toggles must accept '1' as well as
     'true' (older Helm charts default these to '1'). A regression to == 'true'
     would silently disable the entire workspace-archive capture, so pin both."""
 
     @pytest.mark.parametrize('value', ['1', 'true', 'TRUE', 'True'])
     def test_archive_enabled_truthy(self, monkeypatch, value):
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_ENABLED', value)
         assert workspace_archive.archive_enabled() is True
 
     @pytest.mark.parametrize('value', ['0', 'false', '', 'no'])
     def test_archive_enabled_falsy(self, monkeypatch, value):
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_ENABLED', value)
         assert workspace_archive.archive_enabled() is False
 
     @pytest.mark.parametrize('value', ['1', 'true'])
     def test_archive_required_truthy(self, monkeypatch, value):
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         monkeypatch.setenv('RUNTIME_FILE_ARCHIVE_REQUIRED', value)
         assert workspace_archive.archive_required() is True
 
     def test_toggles_default_off(self, monkeypatch):
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         for var in (
             'RUNTIME_FILE_ARCHIVE_ENABLED',
@@ -2799,7 +2799,7 @@ class TestArchiveRequestParams:
     endpoint's default excludes; git-delta stays compact (keeps them)."""
 
     def test_tar_gz_disables_default_excludes(self):
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         params = workspace_archive._archive_request_params(
             '/workspace/project', 'tar.gz'
@@ -2811,7 +2811,7 @@ class TestArchiveRequestParams:
         }
 
     def test_git_delta_keeps_default_excludes(self):
-        from openhands.app_server.sandbox import workspace_archive
+        from madagascar.app_server.sandbox import workspace_archive
 
         params = workspace_archive._archive_request_params(
             '/workspace/project', 'git-delta'

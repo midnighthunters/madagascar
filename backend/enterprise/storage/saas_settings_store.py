@@ -21,7 +21,7 @@ from storage.agent_profile_resolution import (
     load_llm_profiles,
 )
 from storage.database import a_session_maker
-from storage.lite_llm_manager import LiteLlmManager, get_openhands_cloud_key_alias
+from storage.lite_llm_manager import LiteLlmManager, get_madagascar_cloud_key_alias
 from storage.org import Org
 from storage.org_member import OrgMember
 from storage.org_member_store import OrgMemberStore, serialize_mcp_config
@@ -30,19 +30,19 @@ from storage.user import User
 from storage.user_settings import UserSettings
 from storage.user_store import UserStore
 
-from openhands.app_server.settings.llm_profiles import LLMProfiles, resolve_profile_llm
-from openhands.app_server.settings.settings_models import Settings
-from openhands.app_server.settings.settings_store import SettingsStore
-from openhands.app_server.utils.jsonpatch_compat import (
+from madagascar.app_server.settings.llm_profiles import LLMProfiles, resolve_profile_llm
+from madagascar.app_server.settings.settings_models import Settings
+from madagascar.app_server.settings.settings_store import SettingsStore
+from madagascar.app_server.utils.jsonpatch_compat import (
     deep_merge,
     deep_merge_with_wholesale_keys,
 )
-from openhands.app_server.utils.llm import is_openhands_model
-from openhands.sdk.llm.utils.openhands_provider import (
-    canonicalize_openhands_llm_payload,
+from madagascar.app_server.utils.llm import is_madagascar_model
+from madagascar.sdk.llm.utils.madagascar_provider import (
+    canonicalize_madagascar_llm_payload,
 )
-from openhands.sdk.mcp.config import MCPServer, coerce_mcp_config
-from openhands.sdk.profiles import resolve_agent_profile
+from madagascar.sdk.mcp.config import MCPServer, coerce_mcp_config
+from madagascar.sdk.profiles import resolve_agent_profile
 
 
 @dataclass
@@ -198,10 +198,10 @@ class SaasSettingsStore(SettingsStore):
             )
 
             # Apply the cloud managed-key / base-url overlay to the resolved LLM
-            # (OpenHands kind only), so managed OpenHands keys and provider-default
+            # (Madagascar kind only), so managed Madagascar keys and provider-default
             # base URLs behave exactly as the non-profile path. Reuses the existing
             # resolve_profile_llm helper rather than re-deriving key resolution.
-            if resolved.agent_kind == 'openhands':
+            if resolved.agent_kind == 'madagascar':
                 resolved = resolved.model_copy(
                     update={
                         'llm': resolve_profile_llm(
@@ -218,13 +218,13 @@ class SaasSettingsStore(SettingsStore):
             resolved_dump = resolved.model_dump(
                 mode='json', context={'expose_secrets': True}
             )
-            # Canonicalize legacy managed OpenHands model names/base_urls on the
+            # Canonicalize legacy managed Madagascar model names/base_urls on the
             # resolved LLM, mirroring the composed path (merged_agent_settings
             # ['llm'], line ~348) so a profile launch and a non-profile launch
             # normalize an org's pre-canonical llm_profiles identically.
             resolved_llm = resolved_dump.get('llm')
             if isinstance(resolved_llm, dict):
-                resolved_dump['llm'] = canonicalize_openhands_llm_payload(resolved_llm)
+                resolved_dump['llm'] = canonicalize_madagascar_llm_payload(resolved_llm)
         except Exception as exc:
             # Never-brick contract: catch broadly, not just the known resolver
             # errors — SDK contract drift (e.g. a new required kwarg raising
@@ -332,12 +332,12 @@ class SaasSettingsStore(SettingsStore):
                 f'No effective LLM API key found for user {self.user_id} '
                 f'in org {org_id} (org key and member key are both unset)'
             )
-        # Canonicalize legacy managed OpenHands LLM payloads before Settings
+        # Canonicalize legacy managed Madagascar LLM payloads before Settings
         # validation so current settings and seeded profiles use the public
-        # openhands/ prefix.
+        # madagascar/ prefix.
         llm_dict = merged_agent_settings.get('llm')
         if isinstance(llm_dict, dict):
-            merged_agent_settings['llm'] = canonicalize_openhands_llm_payload(llm_dict)
+            merged_agent_settings['llm'] = canonicalize_madagascar_llm_payload(llm_dict)
 
         kwargs['agent_settings'] = merged_agent_settings
         org_conversation = OrgStore.get_conversation_settings_from_org(org)
@@ -385,7 +385,7 @@ class SaasSettingsStore(SettingsStore):
             raw_profiles = profiles_data.get('profiles')
             if isinstance(raw_profiles, dict):
                 profiles_data['profiles'] = {
-                    name: canonicalize_openhands_llm_payload(prof)
+                    name: canonicalize_madagascar_llm_payload(prof)
                     if isinstance(prof, dict)
                     else prof
                     for name, prof in raw_profiles.items()
@@ -562,12 +562,12 @@ class SaasSettingsStore(SettingsStore):
             normalized_managed_base_url = LITE_LLM_API_URL.rstrip('/')
             uses_managed_llm_key = (
                 normalized_llm_base_url == normalized_managed_base_url
-                or (normalized_llm_base_url is None and is_openhands_model(llm_model))
+                or (normalized_llm_base_url is None and is_madagascar_model(llm_model))
             )
 
             if uses_managed_llm_key:
                 await self._ensure_api_key(
-                    item, str(org_id), openhands_type=is_openhands_model(llm_model)
+                    item, str(org_id), madagascar_type=is_madagascar_model(llm_model)
                 )
 
             effective_agent_settings_diff = self._get_persisted_agent_settings(item)
@@ -759,9 +759,9 @@ class SaasSettingsStore(SettingsStore):
             return []
 
     async def _ensure_api_key(
-        self, item: Settings, org_id: str, openhands_type: bool = False
+        self, item: Settings, org_id: str, madagascar_type: bool = False
     ) -> None:
-        """Generate and set the OpenHands API key for the given settings.
+        """Generate and set the Madagascar API key for the given settings.
 
         First checks if an existing key exists for the user and verifies it
         is valid in LiteLLM. If valid, reuses it. Otherwise, generates a new key.
@@ -774,22 +774,22 @@ class SaasSettingsStore(SettingsStore):
             llm_api_key.get_secret_value(),  # type: ignore[union-attr]
             self.user_id,
             org_id,
-            openhands_type=openhands_type,
+            madagascar_type=madagascar_type,
         ):
             # Both branches mint one managed key per (user, org) under the same
             # deterministic alias, deleting any prior key first — so switching
-            # the default to/from an openhands/* model never orphans a key.
-            key_alias = get_openhands_cloud_key_alias(self.user_id, org_id)
+            # the default to/from an madagascar/* model never orphans a key.
+            key_alias = get_madagascar_cloud_key_alias(self.user_id, org_id)
             await LiteLlmManager.delete_key_by_alias(key_alias=key_alias)
             generated_key = await LiteLlmManager.generate_key(
                 self.user_id,
                 org_id,
                 key_alias,
-                {'type': 'openhands'} if openhands_type else None,
+                {'type': 'madagascar'} if madagascar_type else None,
             )
 
             item.agent_settings.llm.api_key = SecretStr(generated_key)
             logger.info(
-                'saas_settings_store:store:generated_openhands_key',
+                'saas_settings_store:store:generated_madagascar_key',
                 extra={'user_id': self.user_id},
             )

@@ -1,4 +1,4 @@
-"""Tests for schema immutability in openhands.sdk.tool.schema."""
+"""Tests for schema immutability in madagascar.sdk.tool.schema."""
 
 from collections.abc import Sequence
 from typing import Any
@@ -6,9 +6,9 @@ from typing import Any
 import pytest
 from pydantic import Field, ValidationError
 
-from openhands.sdk.llm import ImageContent, TextContent
-from openhands.sdk.mcp.definition import MCPToolAction
-from openhands.sdk.tool.schema import (
+from madagascar.sdk.llm import ImageContent, TextContent
+from madagascar.sdk.mcp.definition import MCPToolAction
+from madagascar.sdk.tool.schema import (
     Action,
     Observation,
     Schema,

@@ -38,10 +38,10 @@ _TARGET_DIRECTORIES = (
 # LLM-specific examples that require model overrides
 _LLM_SPECIFIC_EXAMPLES: dict[str, dict[str, str]] = {
     "examples/04_llm_specific_tools/01_gpt5_apply_patch_preset.py": {
-        "LLM_MODEL": "openhands/gpt-5.1",
+        "LLM_MODEL": "madagascar/gpt-5.1",
     },
     "examples/04_llm_specific_tools/02_gemini_file_tools.py": {
-        "LLM_MODEL": "openhands/gemini-3.1-pro-preview",
+        "LLM_MODEL": "madagascar/gemini-3.1-pro-preview",
     },
 }
 
@@ -132,7 +132,7 @@ def test_example_scripts(
     env.setdefault("PYTHONIOENCODING", "utf-8")
     # Give each example subprocess its own tmux socket directory so that parallel
     # workers cannot tear down a tmux server shared via the default socket path
-    # (openhands/tools/terminal uses a fixed socket name). tmux creates its own
+    # (madagascar/tools/terminal uses a fixed socket name). tmux creates its own
     # tmux-<uid> subdirectory inside TMUX_TMPDIR.
     env["TMUX_TMPDIR"] = str(tmp_path)
     # Apply model overrides for certain examples requiring provider-specific models

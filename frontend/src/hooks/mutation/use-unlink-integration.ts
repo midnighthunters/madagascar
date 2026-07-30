@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
-import { openHands } from "#/api/open-hands-axios";
+import { madagascar } from "#/api/madagascar-axios";
 import { I18nKey } from "#/i18n/declaration";
 import {
   displayErrorToast,
@@ -25,7 +25,7 @@ export function useUnlinkIntegration(
     // down may pass a one-time PAT so the Jira webhook is revoked too. Never
     // stored. Omitted for the non-owner self-disconnect path.
     mutationFn: (adminApiKey?: string) =>
-      openHands.post(
+      madagascar.post(
         `/integration/${platform}/workspaces/unlink`,
         adminApiKey ? { admin_api_key: adminApiKey } : {},
       ),

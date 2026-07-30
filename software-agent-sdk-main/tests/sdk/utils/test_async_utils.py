@@ -1,12 +1,12 @@
-"""Tests for async utilities in OpenHands SDK."""
+"""Tests for async utilities in Madagascar SDK."""
 
 import asyncio
 import threading
 import time
 
-from openhands.sdk.event import Event
-from openhands.sdk.event.types import SourceType
-from openhands.sdk.utils.async_utils import (
+from madagascar.sdk.event import Event
+from madagascar.sdk.event.types import SourceType
+from madagascar.sdk.utils.async_utils import (
     AsyncCallbackWrapper,
     AsyncConversationCallback,
 )

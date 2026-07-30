@@ -42,7 +42,7 @@ export function SystemMessageModal({
         >
           <SystemMessageHeader
             agentClass={systemMessage.agent_class}
-            openhandsVersion={systemMessage.openhands_version}
+            madagascarVersion={systemMessage.madagascar_version}
           />
 
           <div className="w-full">

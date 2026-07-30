@@ -1,8 +1,8 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { ServerClient } from "@openhands/typescript-client/clients";
-import OpenHandsLogoWhite from "#/assets/branding/openhands-logo-white.svg?react";
+import { ServerClient } from "@madagascar/typescript-client/clients";
+import MadagascarLogoWhite from "#/assets/branding/madagascar-logo-white.svg?react";
 import { ModalBackdrop } from "#/components/shared/modals/modal-backdrop";
 import {
   MODAL_MAX_WIDTH_VIEWPORT,
@@ -22,7 +22,7 @@ import {
 } from "#/services/cloud-funnel-analytics";
 import { getAgentServerClientOptions } from "#/api/agent-server-client-options";
 import { getLockedCloudHost } from "#/api/agent-server-config";
-import { isOpenHandsCloudHost } from "#/api/device-flow-client";
+import { isMadagascarCloudHost } from "#/api/device-flow-client";
 import {
   assertAgentServerVersionIsSupported,
   getDisplayAgentServerVersion,
@@ -55,16 +55,16 @@ interface BackendFormModalProps {
 
 /**
  * Seed the default backend kind from the host. Uses proper hostname-suffix
- * matching (via {@link isOpenHandsCloudHost}) rather than a substring test, so
+ * matching (via {@link isMadagascarCloudHost}) rather than a substring test, so
  * a look-alike host such as `all-hands-testing.dev` isn't misread as cloud.
  *
- * This is only a *default*: a self-hosted OpenHands Cloud/Enterprise instance
+ * This is only a *default*: a self-hosted Madagascar Cloud/Enterprise instance
  * on a truly custom domain is indistinguishable from a local agent-server by
  * host alone, so the manual add form lets the user override the kind
  * explicitly (see the Type selector in ManualConnectionColumn).
  */
 function inferKindFromHost(host: string): BackendKind {
-  return isOpenHandsCloudHost(host) ? "cloud" : "local";
+  return isMadagascarCloudHost(host) ? "cloud" : "local";
 }
 
 /**
@@ -140,7 +140,7 @@ function isValidHostUrl(host: string): boolean {
   }
 }
 
-const DEFAULT_OPENHANDS_CLOUD_HOST = "https://app.all-hands.dev";
+const DEFAULT_MADAGASCAR_CLOUD_HOST = "https://app.all-hands.dev";
 
 export type BackendConnectionMethod = "manual" | "cloud_login";
 
@@ -194,7 +194,7 @@ function BackendStatusBadge({
   backend: Backend;
   testIdRoot: string;
 }) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const healthByBackendId = useBackendsHealth([backend]);
   const health = healthByBackendId[backend.id];
   const isConnected = health?.isConnected ?? null;
@@ -321,7 +321,7 @@ function useBackendForm({
   requireApiKey = false,
   onSubmitOverride,
 }: UseBackendFormOptions) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const [name, setName] = React.useState(initialName);
   const [host, setHost] = React.useState(initialHost);
@@ -480,7 +480,7 @@ export function BackendForm({
   hideConfigurationFields = false,
   onSubmitOverride,
 }: BackendFormProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { addBackend, updateBackend } = useActiveBackendContext();
 
   // In edit mode preserve the existing backend's kind so that renaming or
@@ -608,7 +608,7 @@ export function BackendForm({
                 }
           }
           onBlur={() => setHostTouched(true)}
-          placeholder={DEFAULT_OPENHANDS_CLOUD_HOST}
+          placeholder={DEFAULT_MADAGASCAR_CLOUD_HOST}
           className="w-full"
           showRequiredTag
           error={hostError}
@@ -708,7 +708,7 @@ interface BackendConnectionOptionsProps {
 }
 
 /**
- * Manual agent-server connection plus OpenHands Cloud OAuth login.
+ * Manual agent-server connection plus Madagascar Cloud OAuth login.
  * Used by both the Add Backend modal and the onboarding backend step so
  * supported backend choices stay consistent across first-run and settings UI.
  */
@@ -722,7 +722,7 @@ export function BackendConnectionOptions({
   manualSubmitTestId,
   analyticsSource,
 }: BackendConnectionOptionsProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const lockedCloudHost = getLockedCloudHost();
 
   if (lockedCloudHost) {
@@ -791,7 +791,7 @@ interface ManualConnectionColumnProps {
 
 /**
  * Manual connection via Host + API Key. Designed for self-hosted agent servers
- * and self-hosted OpenHands Cloud with API key auth.
+ * and self-hosted Madagascar Cloud with API key auth.
  */
 function ManualConnectionColumn({
   onConnected,
@@ -802,7 +802,7 @@ function ManualConnectionColumn({
   submittingLabel,
   submitTestId,
 }: ManualConnectionColumnProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const {
     name,
@@ -949,8 +949,8 @@ interface CloudLoginColumnProps {
 }
 
 /**
- * One-click OAuth login with OpenHands Cloud. Includes an "Advanced"
- * disclosure for users who self-host OpenHands Cloud and need to override the
+ * One-click OAuth login with Madagascar Cloud. Includes an "Advanced"
+ * disclosure for users who self-host Madagascar Cloud and need to override the
  * host.
  */
 function CloudLoginColumn({
@@ -959,18 +959,18 @@ function CloudLoginColumn({
   lockedHost,
   analyticsSource,
 }: CloudLoginColumnProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const [advancedOpen, setAdvancedOpen] = React.useState(false);
   const [customHost, setCustomHost] = React.useState("");
 
   const effectiveHost =
-    lockedHost ?? (customHost.trim() || DEFAULT_OPENHANDS_CLOUD_HOST);
+    lockedHost ?? (customHost.trim() || DEFAULT_MADAGASCAR_CLOUD_HOST);
 
   const handleLoginSuccess = (apiKey: string) => {
     onConnected(
       {
-        name: "OpenHands Cloud",
+        name: "Madagascar Cloud",
         host: normalizeHost(effectiveHost),
         apiKey,
         kind: "cloud",
@@ -982,7 +982,7 @@ function CloudLoginColumn({
   return (
     <div className="flex flex-1 min-w-0 flex-col items-center gap-3 pb-8">
       <div className="flex flex-col items-center gap-1">
-        <OpenHandsLogoWhite width={56} height={56} aria-hidden />
+        <MadagascarLogoWhite width={56} height={56} aria-hidden />
 
         <h4
           className={modalTitleLgMediumClassName}
@@ -1035,7 +1035,7 @@ function CloudLoginColumn({
               label={t(I18nKey.BACKEND$HOST_LABEL)}
               value={customHost}
               onChange={setCustomHost}
-              placeholder={DEFAULT_OPENHANDS_CLOUD_HOST}
+              placeholder={DEFAULT_MADAGASCAR_CLOUD_HOST}
               className="w-full"
             />
             <p className="mt-1 text-xs text-[var(--oh-muted)]">
@@ -1066,7 +1066,7 @@ function AddBackendConnectionOptions({
     ) => {
       addBackend(payload);
       // Coarse, non-sensitive host classification — never emit the raw host.
-      const isOpenHandsCloud = isOpenHandsCloudHost(payload.host);
+      const isMadagascarCloud = isMadagascarCloudHost(payload.host);
       const trackedByCanvas = trackCanvasBackendAdded({
         backendKind: payload.kind,
         connectionMethod,
@@ -1078,8 +1078,8 @@ function AddBackendConnectionOptions({
         trackBackendAdded({
           backendKind: payload.kind,
           connectionMethod,
-          isOpenhandsCloud: isOpenHandsCloud,
-          isCustomHost: !isOpenHandsCloud,
+          isMadagascarCloud: isMadagascarCloud,
+          isCustomHost: !isMadagascarCloud,
           hasApiKey: Boolean(payload.apiKey),
           source,
         });
@@ -1112,7 +1112,7 @@ export function BackendFormModal({
   source = "add_backend_modal",
   hideCloseButton = false,
 }: BackendFormModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   if (mode === "add") {
     return (

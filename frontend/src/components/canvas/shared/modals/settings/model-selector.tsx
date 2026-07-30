@@ -100,7 +100,7 @@ export function ModelSelector({
     setLitellmId(null);
   };
 
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <div
@@ -167,10 +167,10 @@ export function ModelSelector({
         </Autocomplete>
       </fieldset>
 
-      {selectedProvider === "openhands" && (
+      {selectedProvider === "madagascar" && (
         <HelpLink
-          testId="openhands-account-help"
-          text={t(I18nKey.SETTINGS$NEED_OPENHANDS_ACCOUNT)}
+          testId="madagascar-account-help"
+          text={t(I18nKey.SETTINGS$NEED_MADAGASCAR_ACCOUNT)}
           linkText={t(I18nKey.SETTINGS$CLICK_HERE)}
           href={PRODUCT_URL.PRODUCTION}
           size="settings"

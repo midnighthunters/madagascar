@@ -10,7 +10,7 @@ from unittest.mock import AsyncMock, MagicMock, Mock, patch
 import httpx
 import pytest
 
-from openhands.app_server.app_conversation.skill_loader import (
+from madagascar.app_server.app_conversation.skill_loader import (
     _MAX_ORG_CANDIDATES,
     OrgConfig,
     SandboxConfig,
@@ -26,15 +26,15 @@ from openhands.app_server.app_conversation.skill_loader import (
     build_sandbox_config,
     load_skills_from_agent_server,
 )
-from openhands.app_server.integrations.provider import ProviderType
-from openhands.app_server.integrations.service_types import AuthenticationError
-from openhands.app_server.sandbox.sandbox_models import (
+from madagascar.app_server.integrations.provider import ProviderType
+from madagascar.app_server.integrations.service_types import AuthenticationError
+from madagascar.app_server.sandbox.sandbox_models import (
     ExposedUrl,
     SandboxInfo,
     SandboxStatus,
 )
-from openhands.app_server.user.user_context import UserContext
-from openhands.sdk.skills import KeywordTrigger, Skill, TaskTrigger
+from madagascar.app_server.user.user_context import UserContext
+from madagascar.sdk.skills import KeywordTrigger, Skill, TaskTrigger
 
 # ===== Test Fixtures =====
 
@@ -102,9 +102,9 @@ class TestGetProviderType:
     """Test _get_provider_type function."""
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._is_gitlab_repository')
+    @patch('madagascar.app_server.app_conversation.skill_loader._is_gitlab_repository')
     @patch(
-        'openhands.app_server.app_conversation.skill_loader._is_azure_devops_repository'
+        'madagascar.app_server.app_conversation.skill_loader._is_azure_devops_repository'
     )
     async def test_returns_gitlab_for_gitlab_repo(
         self, mock_is_azure, mock_is_gitlab, mock_user_context
@@ -122,9 +122,9 @@ class TestGetProviderType:
         mock_is_gitlab.assert_called_once_with('owner/repo', mock_user_context)
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._is_gitlab_repository')
+    @patch('madagascar.app_server.app_conversation.skill_loader._is_gitlab_repository')
     @patch(
-        'openhands.app_server.app_conversation.skill_loader._is_azure_devops_repository'
+        'madagascar.app_server.app_conversation.skill_loader._is_azure_devops_repository'
     )
     async def test_returns_azure_for_azure_repo(
         self, mock_is_azure, mock_is_gitlab, mock_user_context
@@ -142,9 +142,9 @@ class TestGetProviderType:
         mock_is_azure.assert_called_once_with('org/project/repo', mock_user_context)
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._is_gitlab_repository')
+    @patch('madagascar.app_server.app_conversation.skill_loader._is_gitlab_repository')
     @patch(
-        'openhands.app_server.app_conversation.skill_loader._is_azure_devops_repository'
+        'madagascar.app_server.app_conversation.skill_loader._is_azure_devops_repository'
     )
     async def test_returns_github_for_github_repo(
         self, mock_is_azure, mock_is_gitlab, mock_user_context
@@ -199,11 +199,11 @@ class TestBuildOrgConfigs:
         return handler
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._get_org_repository_url')
+    @patch('madagascar.app_server.app_conversation.skill_loader._get_org_repository_url')
     async def test_loads_account_and_orgs_when_no_repository(
         self, mock_get_url, mock_user_context
     ):
-        """Account and org repos (both .openhands and .agents) load with no repo."""
+        """Account and org repos (both .madagascar and .agents) load with no repo."""
         # Arrange
         handler = self._make_provider_handler(
             logins={ProviderType.GITHUB: 'hieptl'},
@@ -217,18 +217,18 @@ class TestBuildOrgConfigs:
 
         # Assert
         assert {c.repository for c in result} == {
-            'hieptl/.openhands',
+            'hieptl/.madagascar',
             'hieptl/.agents',
-            'acme/.openhands',
+            'acme/.madagascar',
             'acme/.agents',
         }
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._get_provider_type')
+    @patch('madagascar.app_server.app_conversation.skill_loader._get_provider_type')
     @patch(
-        'openhands.app_server.app_conversation.skill_loader._determine_org_repo_path'
+        'madagascar.app_server.app_conversation.skill_loader._determine_org_repo_path'
     )
-    @patch('openhands.app_server.app_conversation.skill_loader._get_org_repository_url')
+    @patch('madagascar.app_server.app_conversation.skill_loader._get_org_repository_url')
     async def test_includes_selected_repo_owner_both_repos(
         self,
         mock_get_url,
@@ -236,11 +236,11 @@ class TestBuildOrgConfigs:
         mock_get_provider,
         mock_user_context,
     ):
-        """A selected GitHub repo loads the owner's .openhands and .agents repos."""
+        """A selected GitHub repo loads the owner's .madagascar and .agents repos."""
         # Arrange
         handler = self._make_provider_handler(logins={})  # no global owners
         mock_user_context.get_provider_handler = AsyncMock(return_value=handler)
-        mock_determine_path.return_value = ('other/.openhands', 'other')
+        mock_determine_path.return_value = ('other/.madagascar', 'other')
         mock_get_provider.return_value = 'github'
         mock_get_url.side_effect = lambda path, ctx: f'https://git/{path}.git'
 
@@ -249,16 +249,16 @@ class TestBuildOrgConfigs:
 
         # Assert
         assert {c.org_repo_url for c in result} == {
-            'https://git/other/.openhands.git',
+            'https://git/other/.madagascar.git',
             'https://git/other/.agents.git',
         }
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._get_provider_type')
+    @patch('madagascar.app_server.app_conversation.skill_loader._get_provider_type')
     @patch(
-        'openhands.app_server.app_conversation.skill_loader._determine_org_repo_path'
+        'madagascar.app_server.app_conversation.skill_loader._determine_org_repo_path'
     )
-    @patch('openhands.app_server.app_conversation.skill_loader._get_org_repository_url')
+    @patch('madagascar.app_server.app_conversation.skill_loader._get_org_repository_url')
     async def test_dedupes_when_owner_equals_login(
         self,
         mock_get_url,
@@ -270,7 +270,7 @@ class TestBuildOrgConfigs:
         # Arrange
         handler = self._make_provider_handler(logins={ProviderType.GITHUB: 'hieptl'})
         mock_user_context.get_provider_handler = AsyncMock(return_value=handler)
-        mock_determine_path.return_value = ('hieptl/.openhands', 'hieptl')
+        mock_determine_path.return_value = ('hieptl/.madagascar', 'hieptl')
         mock_get_provider.return_value = 'github'
         mock_get_url.side_effect = lambda path, ctx: f'https://git/{path}.git'
 
@@ -279,12 +279,12 @@ class TestBuildOrgConfigs:
 
         # Assert
         resolved_paths = sorted(call.args[0] for call in mock_get_url.call_args_list)
-        assert resolved_paths == ['hieptl/.agents', 'hieptl/.openhands']
+        assert resolved_paths == ['hieptl/.agents', 'hieptl/.madagascar']
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._get_org_repository_url')
+    @patch('madagascar.app_server.app_conversation.skill_loader._get_org_repository_url')
     async def test_skips_agents_for_gitlab(self, mock_get_url, mock_user_context):
-        """GitLab owners resolve only openhands-config (no .openhands/.agents)."""
+        """GitLab owners resolve only madagascar-config (no .madagascar/.agents)."""
         # Arrange
         handler = self._make_provider_handler(logins={ProviderType.GITLAB: 'mygroup'})
         mock_user_context.get_provider_handler = AsyncMock(return_value=handler)
@@ -294,10 +294,10 @@ class TestBuildOrgConfigs:
         result = await build_org_configs(None, mock_user_context)
 
         # Assert
-        assert {c.repository for c in result} == {'mygroup/openhands-config'}
+        assert {c.repository for c in result} == {'mygroup/madagascar-config'}
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._get_org_repository_url')
+    @patch('madagascar.app_server.app_conversation.skill_loader._get_org_repository_url')
     async def test_filters_unresolvable_repos(self, mock_get_url, mock_user_context):
         """Repos whose authenticated URL does not resolve are excluded."""
         # Arrange
@@ -305,7 +305,7 @@ class TestBuildOrgConfigs:
         mock_user_context.get_provider_handler = AsyncMock(return_value=handler)
 
         def _resolve(path, ctx):
-            return f'https://git/{path}.git' if path == 'hieptl/.openhands' else None
+            return f'https://git/{path}.git' if path == 'hieptl/.madagascar' else None
 
         mock_get_url.side_effect = _resolve
 
@@ -313,14 +313,14 @@ class TestBuildOrgConfigs:
         result = await build_org_configs(None, mock_user_context)
 
         # Assert
-        assert {c.repository for c in result} == {'hieptl/.openhands'}
+        assert {c.repository for c in result} == {'hieptl/.madagascar'}
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._get_provider_type')
+    @patch('madagascar.app_server.app_conversation.skill_loader._get_provider_type')
     @patch(
-        'openhands.app_server.app_conversation.skill_loader._determine_org_repo_path'
+        'madagascar.app_server.app_conversation.skill_loader._determine_org_repo_path'
     )
-    @patch('openhands.app_server.app_conversation.skill_loader._get_org_repository_url')
+    @patch('madagascar.app_server.app_conversation.skill_loader._get_org_repository_url')
     async def test_selected_repo_is_first_for_legacy_org_config(
         self,
         mock_get_url,
@@ -340,7 +340,7 @@ class TestBuildOrgConfigs:
             orgs={ProviderType.GITHUB: ['acme']},
         )
         mock_user_context.get_provider_handler = AsyncMock(return_value=handler)
-        mock_determine_path.return_value = ('selectedorg/.openhands', 'selectedorg')
+        mock_determine_path.return_value = ('selectedorg/.madagascar', 'selectedorg')
         mock_get_provider.return_value = 'github'
         mock_get_url.side_effect = lambda path, ctx: f'https://git/{path}.git'
 
@@ -348,11 +348,11 @@ class TestBuildOrgConfigs:
         result = await build_org_configs('selectedorg/web', mock_user_context)
 
         # Assert
-        assert result[0].repository == 'selectedorg/.openhands'
+        assert result[0].repository == 'selectedorg/.madagascar'
         assert result[0].org_name == 'selectedorg'
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._get_org_repository_url')
+    @patch('madagascar.app_server.app_conversation.skill_loader._get_org_repository_url')
     async def test_does_not_enumerate_bitbucket_dc_projects(
         self, mock_get_url, mock_user_context
     ):
@@ -371,7 +371,7 @@ class TestBuildOrgConfigs:
         handler.get_bitbucket_dc_projects.assert_not_called()
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._get_org_repository_url')
+    @patch('madagascar.app_server.app_conversation.skill_loader._get_org_repository_url')
     async def test_caps_candidate_fan_out(self, mock_get_url, mock_user_context):
         """No more than _MAX_ORG_CANDIDATES repos are verified per conversation."""
         # Arrange: 1 login + 40 orgs => 82 GitHub-style candidate paths.
@@ -546,7 +546,7 @@ class TestLoadSkillsFromAgentServer:
         org_config = OrgConfig(
             repository='owner/repo',
             provider='github',
-            org_repo_url='https://github.com/owner/.openhands.git',
+            org_repo_url='https://github.com/owner/.madagascar.git',
             org_name='owner',
         )
 
@@ -746,9 +746,9 @@ class TestDetermineOrgRepoPath:
     """Test _determine_org_repo_path helper function."""
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._is_gitlab_repository')
+    @patch('madagascar.app_server.app_conversation.skill_loader._is_gitlab_repository')
     @patch(
-        'openhands.app_server.app_conversation.skill_loader._is_azure_devops_repository'
+        'madagascar.app_server.app_conversation.skill_loader._is_azure_devops_repository'
     )
     async def test_github_repository_path(self, mock_is_azure, mock_is_gitlab):
         """Test org path for GitHub repository."""
@@ -763,13 +763,13 @@ class TestDetermineOrgRepoPath:
         )
 
         # Assert
-        assert org_repo == 'owner/.openhands'
+        assert org_repo == 'owner/.madagascar'
         assert org_name == 'owner'
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._is_gitlab_repository')
+    @patch('madagascar.app_server.app_conversation.skill_loader._is_gitlab_repository')
     @patch(
-        'openhands.app_server.app_conversation.skill_loader._is_azure_devops_repository'
+        'madagascar.app_server.app_conversation.skill_loader._is_azure_devops_repository'
     )
     async def test_gitlab_repository_path(self, mock_is_azure, mock_is_gitlab):
         """Test org path for GitLab repository."""
@@ -784,13 +784,13 @@ class TestDetermineOrgRepoPath:
         )
 
         # Assert
-        assert org_repo == 'owner/openhands-config'
+        assert org_repo == 'owner/madagascar-config'
         assert org_name == 'owner'
 
     @pytest.mark.asyncio
-    @patch('openhands.app_server.app_conversation.skill_loader._is_gitlab_repository')
+    @patch('madagascar.app_server.app_conversation.skill_loader._is_gitlab_repository')
     @patch(
-        'openhands.app_server.app_conversation.skill_loader._is_azure_devops_repository'
+        'madagascar.app_server.app_conversation.skill_loader._is_azure_devops_repository'
     )
     async def test_azure_devops_repository_path(self, mock_is_azure, mock_is_gitlab):
         """Test org path for Azure DevOps repository."""
@@ -805,7 +805,7 @@ class TestDetermineOrgRepoPath:
         )
 
         # Assert
-        assert org_repo == 'org/openhands-config/openhands-config'
+        assert org_repo == 'org/madagascar-config/madagascar-config'
         assert org_name == 'org'
 
 
@@ -817,16 +817,16 @@ class TestGetOrgRepositoryUrl:
         """Test successfully retrieving authenticated URL."""
         # Arrange
         mock_user_context = AsyncMock()
-        expected_url = 'https://token@github.com/owner/.openhands.git'
+        expected_url = 'https://token@github.com/owner/.madagascar.git'
         mock_user_context.get_authenticated_git_url.return_value = expected_url
 
         # Act
-        result = await _get_org_repository_url('owner/.openhands', mock_user_context)
+        result = await _get_org_repository_url('owner/.madagascar', mock_user_context)
 
         # Assert
         assert result == expected_url
         mock_user_context.get_authenticated_git_url.assert_called_once_with(
-            'owner/.openhands', is_optional=True
+            'owner/.madagascar', is_optional=True
         )
 
     @pytest.mark.asyncio
@@ -839,7 +839,7 @@ class TestGetOrgRepositoryUrl:
         )
 
         # Act
-        result = await _get_org_repository_url('owner/.openhands', mock_user_context)
+        result = await _get_org_repository_url('owner/.madagascar', mock_user_context)
 
         # Assert
         assert result is None
@@ -854,7 +854,7 @@ class TestGetOrgRepositoryUrl:
         )
 
         # Act
-        result = await _get_org_repository_url('owner/.openhands', mock_user_context)
+        result = await _get_org_repository_url('owner/.madagascar', mock_user_context)
 
         # Assert
         assert result is None
@@ -870,7 +870,7 @@ class TestLoadSkillsWithMarketplaces:
     @patch('httpx.AsyncClient')
     async def test_passes_registered_marketplaces_in_payload(self, mock_client_class):
         """Test that registered_marketplaces is included in the API payload."""
-        from openhands.app_server.settings.settings_models import (
+        from madagascar.app_server.settings.settings_models import (
             MarketplaceRegistration,
         )
 
@@ -891,7 +891,7 @@ class TestLoadSkillsWithMarketplaces:
         marketplaces = [
             MarketplaceRegistration(
                 name='public',
-                source='github:OpenHands/skills',
+                source='github:Madagascar/skills',
                 auto_load=True,
             ),
             MarketplaceRegistration(
@@ -921,7 +921,7 @@ class TestLoadSkillsWithMarketplaces:
         # Verify first marketplace
         mp1 = payload['registered_marketplaces'][0]
         assert mp1['name'] == 'public'
-        assert mp1['source'] == 'github:OpenHands/skills'
+        assert mp1['source'] == 'github:Madagascar/skills'
         assert mp1['auto_load']
         # None values are stripped by model_dump()
         assert 'ref' not in mp1
@@ -1014,17 +1014,17 @@ class TestLoadSkillsWithMarketplaces:
 
 
 AUTHENTICATED_URL = (
-    'https://x-access-token:token123@github.com/OpenHands/extensions-private.git'
+    'https://x-access-token:token123@github.com/Madagascar/extensions-private.git'
 )
 
 
 def _make_registration(**overrides):
     """Build a MarketplaceRegistration with private-repo defaults."""
-    from openhands.app_server.settings.settings_models import MarketplaceRegistration
+    from madagascar.app_server.settings.settings_models import MarketplaceRegistration
 
     fields = {
         'name': 'extensions-private',
-        'source': 'github:OpenHands/extensions-private',
+        'source': 'github:Madagascar/extensions-private',
         'auto_load': True,
     }
     fields.update(overrides)
@@ -1038,9 +1038,9 @@ class TestAuthenticateMarketplaceSources:
     @pytest.mark.parametrize(
         'source',
         [
-            'github:OpenHands/extensions-private',
-            'OpenHands/extensions-private',
-            'https://github.com/OpenHands/extensions-private.git',
+            'github:Madagascar/extensions-private',
+            'Madagascar/extensions-private',
+            'https://github.com/Madagascar/extensions-private.git',
         ],
     )
     async def test_rewrites_auto_load_source_to_authenticated_url(self, source):
@@ -1059,7 +1059,7 @@ class TestAuthenticateMarketplaceSources:
         assert result is not None
         assert result[0].source == AUTHENTICATED_URL
         mock_user_context.get_authenticated_git_url.assert_awaited_once_with(
-            'OpenHands/extensions-private', is_optional=True
+            'Madagascar/extensions-private', is_optional=True
         )
 
     @pytest.mark.asyncio
@@ -1083,7 +1083,7 @@ class TestAuthenticateMarketplaceSources:
             'main',
             'marketplaces/team',
         )
-        assert registration.source == 'github:OpenHands/extensions-private'
+        assert registration.source == 'github:Madagascar/extensions-private'
 
     @pytest.mark.asyncio
     async def test_keeps_source_when_resolution_fails(self):
@@ -1102,7 +1102,7 @@ class TestAuthenticateMarketplaceSources:
 
         # Assert
         assert result is not None
-        assert result[0].source == 'github:OpenHands/extensions-private'
+        assert result[0].source == 'github:Madagascar/extensions-private'
 
     @pytest.mark.asyncio
     async def test_skips_non_auto_load_registrations(self):
@@ -1118,7 +1118,7 @@ class TestAuthenticateMarketplaceSources:
 
         # Assert
         assert result is not None
-        assert result[0].source == 'github:OpenHands/extensions-private'
+        assert result[0].source == 'github:Madagascar/extensions-private'
         mock_user_context.get_authenticated_git_url.assert_not_awaited()
 
     @pytest.mark.asyncio

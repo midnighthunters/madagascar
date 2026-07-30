@@ -1,6 +1,6 @@
 """Content-policy blocks recover softly instead of hard-erroring.
 
-See https://github.com/OpenHands/software-agent-sdk/issues/3798. An Anthropic
+See https://github.com/Madagascar/software-agent-sdk/issues/3798. An Anthropic
 output content-policy block surfaces as ``LLMContentPolicyViolationError``. The
 agent should emit a non-fatal user nudge and return so the run loop continues,
 rather than letting it escape ``step``/``astep`` and become a fatal
@@ -10,12 +10,12 @@ rather than letting it escape ``step``/``astep`` and become a fatal
 import pytest
 from pydantic import PrivateAttr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation import Conversation
-from openhands.sdk.event import MessageEvent
-from openhands.sdk.event.conversation_error import ConversationErrorEvent
-from openhands.sdk.llm import LLM
-from openhands.sdk.llm.exceptions import LLMContentPolicyViolationError
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation import Conversation
+from madagascar.sdk.event import MessageEvent
+from madagascar.sdk.event.conversation_error import ConversationErrorEvent
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.llm.exceptions import LLMContentPolicyViolationError
 
 
 class ContentPolicyRaisingLLM(LLM):

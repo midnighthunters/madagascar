@@ -1,4 +1,4 @@
-import { openHands } from "./open-hands-axios";
+import { madagascar } from "./madagascar-axios";
 import {
   MarketplaceRegistration,
   MarketplacePluginInfo,
@@ -22,7 +22,7 @@ class SkillsService {
    * Search available skills (global + user skills) with pagination
    */
   static async getSkills(): Promise<SkillInfo[]> {
-    const { data } = await openHands.get<SkillPage>("/api/v1/skills/search", {
+    const { data } = await madagascar.get<SkillPage>("/api/v1/skills/search", {
       params: { limit: 100 },
     });
     return data.items;
@@ -37,7 +37,7 @@ class SkillsService {
   static async getMarketplaceSkills(
     marketplaces: MarketplaceRegistration[],
   ): Promise<MarketplaceSkillsResponse> {
-    const { data } = await openHands.post<MarketplaceSkillsResponse>(
+    const { data } = await madagascar.post<MarketplaceSkillsResponse>(
       "/api/v1/skills/marketplace-skills",
       marketplaces,
     );

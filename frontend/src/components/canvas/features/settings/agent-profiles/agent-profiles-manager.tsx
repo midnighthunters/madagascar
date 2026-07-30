@@ -19,7 +19,7 @@ export function AgentProfilesManager({
   onAddProfile,
   onEditProfile,
 }: AgentProfilesManagerProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { data, isLoading, error } = useAgentProfiles();
   const activateProfile = useActivateAgentProfile();
   // Cloud members are view-only; only owners/admins (and all local users) may

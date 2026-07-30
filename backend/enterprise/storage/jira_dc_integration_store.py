@@ -11,7 +11,7 @@ from storage.jira_dc_conversation import JiraDcConversation
 from storage.jira_dc_user import JiraDcUser
 from storage.jira_dc_workspace import JiraDcWorkspace
 
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 
 def workspace_visible_to_org(

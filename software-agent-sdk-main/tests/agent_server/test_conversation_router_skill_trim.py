@@ -23,21 +23,21 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pydantic import SecretStr
 
-from openhands.agent_server.config import Config
-from openhands.agent_server.conversation_router import conversation_router
-from openhands.agent_server.conversation_service import ConversationService
-from openhands.agent_server.dependencies import get_conversation_service
-from openhands.agent_server.models import (
+from madagascar.agent_server.config import Config
+from madagascar.agent_server.conversation_router import conversation_router
+from madagascar.agent_server.conversation_service import ConversationService
+from madagascar.agent_server.dependencies import get_conversation_service
+from madagascar.agent_server.models import (
     ConversationInfo,
     ConversationPage,
     trim_conversation_response_skills,
 )
-from openhands.agent_server.utils import utc_now
-from openhands.sdk import LLM, Agent
-from openhands.sdk.context import AgentContext
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.skills import Skill
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.agent_server.utils import utc_now
+from madagascar.sdk import LLM, Agent
+from madagascar.sdk.context import AgentContext
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.skills import Skill
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 def _make_skill(name: str, content: str = "skill body bytes") -> Skill:
@@ -172,7 +172,7 @@ class TestRouteIntegration:
         ``conversation.agent.agent_context.skills`` (notably via
         ``RemoteConversation``) now see ``[]`` unless they pass
         ``?include_skills=true``. No known client (agent-canvas,
-        OpenHands app-server, SDK examples) reads this field from
+        Madagascar app-server, SDK examples) reads this field from
         HTTP responses, so the change is documentation + opt-in
         rather than a coordinated migration.
         """

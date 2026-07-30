@@ -1,6 +1,6 @@
 # UV workspace configuration
 [tool.uv.workspace]
-members = ["openhands-sdk", "openhands-tools", "openhands-workspace", "openhands-agent-server"]
+members = ["madagascar-sdk", "madagascar-tools", "madagascar-workspace", "madagascar-agent-server"]
 
 # Security: Apply workspace-wide dependency guardrails.
 [tool.uv]
@@ -20,10 +20,10 @@ constraint-dependencies = [
 
 # Workspace sources for intra-repo dependencies
 [tool.uv.sources]
-openhands-sdk = { workspace = true }
-openhands-tools = { workspace = true }
-openhands-workspace = { workspace = true }
-openhands-agent-server = { workspace = true }
+madagascar-sdk = { workspace = true }
+madagascar-tools = { workspace = true }
+madagascar-workspace = { workspace = true }
+madagascar-agent-server = { workspace = true }
 
 [dependency-groups]
 dev = [
@@ -83,7 +83,7 @@ extend-immutable-calls = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["openhands"]
+known-first-party = ["madagascar"]
 combine-as-imports = true
 force-single-line = false
 lines-after-imports = 2
@@ -106,19 +106,19 @@ markers = [
 # This is needed for VSCode to properly resolve imports across multiple packages in the monorepo
 [tool.pyright]
 include = [
-    "openhands-sdk",
-    "openhands-tools",
-    "openhands-workspace",
-    "openhands-agent-server",
+    "madagascar-sdk",
+    "madagascar-tools",
+    "madagascar-workspace",
+    "madagascar-agent-server",
     "examples",
     "tests",
     "scripts"
 ]
 extraPaths = [
-    "openhands-sdk",
-    "openhands-tools",
-    "openhands-workspace",
-    "openhands-agent-server"
+    "madagascar-sdk",
+    "madagascar-tools",
+    "madagascar-workspace",
+    "madagascar-agent-server"
 ]
 venvPath = "."
 venv = ".venv"

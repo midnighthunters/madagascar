@@ -25,7 +25,7 @@ interface PluginsModalProps {
  * loaded plugins, so this reads that client-side snapshot.
  */
 export function PluginsModal({ onClose }: PluginsModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const plugins = useConversationPlugins();
 
   return (

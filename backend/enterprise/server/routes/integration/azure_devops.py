@@ -24,11 +24,11 @@ from server.auth.authorization import Permission, require_permission
 from server.auth.constants import AZURE_DEVOPS_WEBHOOK_SECRET
 from storage.redis import get_redis_client_async
 
-from openhands.app_server.integrations.azure_devops.service.webhooks import (
+from madagascar.app_server.integrations.azure_devops.service.webhooks import (
     AZURE_DEVOPS_PR_COMMENT_EVENT,
     AZURE_DEVOPS_WORK_ITEM_COMMENT_EVENT,
 )
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 azure_devops_integration_router = APIRouter(prefix='/integration')
 
@@ -366,12 +366,12 @@ async def uninstall_azure_devops_webhook(
 async def azure_devops_events(
     request: Request,
     background_tasks: BackgroundTasks,
-    x_openhands_webhook_secret: str | None = Header(None),
+    x_madagascar_webhook_secret: str | None = Header(None),
     authorization: str | None = Header(None),
 ):
     try:
         await verify_azure_devops_signature(
-            header_webhook_secret=x_openhands_webhook_secret,
+            header_webhook_secret=x_madagascar_webhook_secret,
             authorization=authorization,
         )
 

@@ -17,7 +17,7 @@ with that field).
 import json
 import warnings
 
-from openhands.sdk.llm.message import Message, TextContent
+from madagascar.sdk.llm.message import Message, TextContent
 
 
 # =============================================================================

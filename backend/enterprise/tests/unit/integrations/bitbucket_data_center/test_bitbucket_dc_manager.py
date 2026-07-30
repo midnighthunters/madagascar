@@ -12,7 +12,7 @@ from integrations.models import Message, SourceType
 from integrations.types import UserData
 
 
-def _comment_message(*, body: str = 'Hey @openhands fix') -> Message:
+def _comment_message(*, body: str = 'Hey @madagascar fix') -> Message:
     return Message(
         source=SourceType.BITBUCKET_DATA_CENTER,
         message={
@@ -69,7 +69,7 @@ def _pr_comment_view(parent_id: int | None = 42) -> BitbucketDCPRComment:
         branch_name='feature/x',
         installer_keycloak_user_id='kc-installer',
         comment_id=99,
-        comment_body='Hey @openhands fix',
+        comment_body='Hey @madagascar fix',
         parent_comment_id=parent_id,
     )
 
@@ -95,7 +95,7 @@ def _inline_view() -> BitbucketDCInlinePRComment:
         branch_name='feature/x',
         installer_keycloak_user_id='kc-installer',
         comment_id=99,
-        comment_body='@openhands rename',
+        comment_body='@madagascar rename',
         parent_comment_id=None,
         file_location='src/x.py',
         line_number=12,
@@ -128,7 +128,7 @@ async def test_receive_message_runs_job_as_mentioner_when_linked_in_keycloak():
         ),
         patch(
             'integrations.bitbucket_data_center.bitbucket_dc_manager.BITBUCKET_DATA_CENTER_BOT_USERNAME',
-            'openhands-bot',
+            'madagascar-bot',
         ),
         patch.object(
             manager.webhook_store, 'get_webhook_user_id', return_value='kc-installer'
@@ -170,7 +170,7 @@ async def test_receive_message_asks_unenrolled_mentioner_to_sign_up():
         ),
         patch(
             'integrations.bitbucket_data_center.bitbucket_dc_manager.BITBUCKET_DATA_CENTER_BOT_USERNAME',
-            'openhands-bot',
+            'madagascar-bot',
         ),
         patch.object(
             manager.webhook_store, 'get_webhook_user_id', return_value='kc-installer'
@@ -211,7 +211,7 @@ async def test_receive_message_drops_event_when_keycloak_lookup_raises():
         ),
         patch(
             'integrations.bitbucket_data_center.bitbucket_dc_manager.BITBUCKET_DATA_CENTER_BOT_USERNAME',
-            'openhands-bot',
+            'madagascar-bot',
         ),
         patch.object(
             manager.webhook_store, 'get_webhook_user_id', return_value='kc-installer'
@@ -295,11 +295,11 @@ async def test_receive_message_skips_when_bot_username_unset():
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize('actor_slug', ['openhands', 'OpenHands'])
+@pytest.mark.parametrize('actor_slug', ['madagascar', 'Madagascar'])
 async def test_receive_message_skips_event_authored_by_bot(actor_slug):
     """Skip events the bot account authored (case-insensitive).
 
-    The agent's reply is posted via the bot PAT and can contain "@openhands";
+    The agent's reply is posted via the bot PAT and can contain "@madagascar";
     the self-author guard stops it from re-triggering a job.
     """
     token_manager = AsyncMock()
@@ -314,7 +314,7 @@ async def test_receive_message_skips_event_authored_by_bot(actor_slug):
         ),
         patch(
             'integrations.bitbucket_data_center.bitbucket_dc_manager.BITBUCKET_DATA_CENTER_BOT_USERNAME',
-            'openhands',
+            'madagascar',
         ),
         patch.object(
             manager.webhook_store, 'get_webhook_user_id', return_value='kc-installer'
@@ -372,7 +372,7 @@ async def test_receive_message_skips_when_commenter_lacks_write_access():
         ),
         patch(
             'integrations.bitbucket_data_center.bitbucket_dc_manager.BITBUCKET_DATA_CENTER_BOT_USERNAME',
-            'openhands-bot',
+            'madagascar-bot',
         ),
         patch.object(
             manager.webhook_store, 'get_webhook_user_id', return_value='kc-installer'
@@ -396,7 +396,7 @@ async def test_receive_message_skips_when_no_installer_recorded_for_repo():
         ),
         patch(
             'integrations.bitbucket_data_center.bitbucket_dc_manager.BITBUCKET_DATA_CENTER_BOT_USERNAME',
-            'openhands-bot',
+            'madagascar-bot',
         ),
         patch.object(manager.webhook_store, 'get_webhook_user_id', return_value=None),
         patch.object(manager, 'start_job', new=AsyncMock()) as mock_start,
@@ -520,7 +520,7 @@ def test_posting_service_raises_when_bot_token_unset():
     """Raise instead of falling back to a user token.
 
     Without a bot token there is no safe posting identity (a user-authored
-    reply with "@openhands" would re-fire the webhook), so building the posting
+    reply with "@madagascar" would re-fire the webhook), so building the posting
     service must raise rather than fall back.
     """
     manager = BitbucketDCManager(AsyncMock())

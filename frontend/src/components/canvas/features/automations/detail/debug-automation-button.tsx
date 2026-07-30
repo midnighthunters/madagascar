@@ -16,7 +16,7 @@ interface DebugAutomationButtonProps {
 }
 
 /**
- * Starts a new OpenHands conversation seeded with the failed run's error
+ * Starts a new Madagascar conversation seeded with the failed run's error
  * details so the agent begins debugging immediately. Kept as its own component
  * (rather than inlined into the logs modal) so `useCreateConversation` — which
  * requires a QueryClientProvider — only mounts for failed runs.
@@ -26,7 +26,7 @@ export function DebugAutomationButton({
   automation,
   stderr,
 }: DebugAutomationButtonProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { navigate } = useNavigation();
   const createConversation = useCreateConversation();
 
@@ -60,7 +60,7 @@ export function DebugAutomationButton({
       isDisabled={createConversation.isPending}
       aria-busy={createConversation.isPending}
     >
-      {t(I18nKey.AUTOMATIONS$DETAIL$DEBUG_WITH_OPENHANDS)}
+      {t(I18nKey.AUTOMATIONS$DETAIL$DEBUG_WITH_MADAGASCAR)}
     </BrandButton>
   );
 }

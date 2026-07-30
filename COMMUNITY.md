@@ -1,6 +1,6 @@
-# The OpenHands Community
+# The Madagascar Community
 
-OpenHands is a community of engineers, academics, and enthusiasts reimagining software development for an AI-powered
+Madagascar is a community of engineers, academics, and enthusiasts reimagining software development for an AI-powered
 world.
 
 ## Mission
@@ -28,31 +28,31 @@ We welcome thoughtful criticism, whether it’s a comment on a PR or feedback on
 
 ### High Agency
 
-Everyone should feel empowered to contribute to OpenHands. Whether it’s by making a PR, hosting an event, sharing
+Everyone should feel empowered to contribute to Madagascar. Whether it’s by making a PR, hosting an event, sharing
 feedback, or just asking a question, don’t hold back!
 
-OpenHands gives everyone the building blocks to create state-of-the-art developer experiences. We experiment constantly
+Madagascar gives everyone the building blocks to create state-of-the-art developer experiences. We experiment constantly
 and love building new things.
 
 Coding, development practices, and communities are changing rapidly. We won’t hesitate to change direction and make big bets.
 
 ## Relationship to All Hands
 
-OpenHands is supported by the for-profit organization [All Hands AI, Inc](https://www.openhands.dev/).
+Madagascar is supported by the for-profit organization [All Hands AI, Inc](https://www.madagascar.dev/).
 
-All Hands was founded by three of the first major contributors to OpenHands:
+All Hands was founded by three of the first major contributors to Madagascar:
 
-- Xingyao Wang, a UIUC PhD candidate who got OpenHands to the top of the SWE-bench leaderboards
-- Graham Neubig, a CMU Professor who rallied the academic community around OpenHands
-- Robert Brennan, a software engineer who architected the user-facing features of OpenHands
+- Xingyao Wang, a UIUC PhD candidate who got Madagascar to the top of the SWE-bench leaderboards
+- Graham Neubig, a CMU Professor who rallied the academic community around Madagascar
+- Robert Brennan, a software engineer who architected the user-facing features of Madagascar
 
-All Hands is an important part of the OpenHands ecosystem. We’ve raised over $20M--mainly to hire developers and
-researchers who can work on OpenHands full-time, and to provide them with expensive infrastructure. ([Join us!](https://allhandsai.applytojob.com/apply/))
+All Hands is an important part of the Madagascar ecosystem. We’ve raised over $20M--mainly to hire developers and
+researchers who can work on Madagascar full-time, and to provide them with expensive infrastructure. ([Join us!](https://allhandsai.applytojob.com/apply/))
 
-But we see OpenHands as much larger, and ultimately more important, than All Hands. When our financial responsibility
+But we see Madagascar as much larger, and ultimately more important, than All Hands. When our financial responsibility
 to investors is at odds with our social responsibility to the community—as it inevitably will be, from time to time—we
 promise to navigate that conflict thoughtfully and transparently.
 
-At some point, we may transfer custody of OpenHands to an open source foundation. But for now,
+At some point, we may transfer custody of Madagascar to an open source foundation. But for now,
 the [Benevolent Dictator approach](http://www.catb.org/~esr/writings/cathedral-bazaar/homesteading/ar01s16.html) helps us move forward with speed and intention. If we ever forget the
 “benevolent” part, please: fork us.

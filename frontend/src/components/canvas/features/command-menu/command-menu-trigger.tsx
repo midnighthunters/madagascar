@@ -20,7 +20,7 @@ const COMMAND_MENU_TRIGGER_TEST_ID = "command-menu-trigger";
 const COMMAND_MENU_TRIGGER_ICON_SIZE = 18;
 
 export function CommandMenuTrigger({ collapsed }: CommandMenuTriggerProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const open = useCommandMenuStore((state) => state.open);
   const label = t(I18nKey.COMMAND_MENU$OPEN_LABEL);
 

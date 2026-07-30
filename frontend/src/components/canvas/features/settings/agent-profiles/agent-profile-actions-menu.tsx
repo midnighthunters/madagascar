@@ -39,7 +39,7 @@ export function AgentProfileActionsMenu({
   onClose,
   anchorRef,
 }: AgentProfileActionsMenuProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const menuRef = useRef<HTMLDivElement>(null);
   const menuItemsRef = useRef<(HTMLButtonElement | null)[]>([]);
 

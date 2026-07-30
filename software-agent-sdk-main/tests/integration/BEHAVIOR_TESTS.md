@@ -61,9 +61,9 @@ Create a file in `tests/integration/tests/` with naming pattern `b##_*.py`:
 """Test description here."""
 
 import os
-from openhands.sdk.tool import Tool, register_tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.tool import Tool, register_tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 from tests.integration.base import BaseIntegrationTest, TestResult
 
 INSTRUCTION = "Your user prompt that might trigger undesirable behavior"

@@ -23,8 +23,8 @@ from server.constants import (
 from server.logger import logger
 from storage.user_settings import UserSettings
 
-from openhands.app_server.settings.settings_models import Settings
-from openhands.app_server.utils.http_session import httpx_verify_option
+from madagascar.app_server.settings.settings_models import Settings
+from madagascar.app_server.utils.http_session import httpx_verify_option
 
 # Timeout in seconds for key verification requests to LiteLLM
 KEY_VERIFICATION_TIMEOUT = 5.0
@@ -65,9 +65,9 @@ def _get_default_initial_budget() -> float | None:
 DEFAULT_INITIAL_BUDGET: float | None = _get_default_initial_budget()
 
 
-def get_openhands_cloud_key_alias(keycloak_user_id: str, org_id: str) -> str:
-    """Generate the key alias for OpenHands Cloud managed keys."""
-    return f'OpenHands Cloud - user {keycloak_user_id} - org {org_id}'
+def get_madagascar_cloud_key_alias(keycloak_user_id: str, org_id: str) -> str:
+    """Generate the key alias for Madagascar Cloud managed keys."""
+    return f'Madagascar Cloud - user {keycloak_user_id} - org {org_id}'
 
 
 def get_byor_key_alias(keycloak_user_id: str, org_id: str) -> str:
@@ -202,7 +202,7 @@ class LiteLlmManager:
 
                 if add_user_to_team:
                     if create_user:
-                        # create_user is True only when no OpenHands User row exists,
+                        # create_user is True only when no Madagascar User row exists,
                         # so a pre-existing LiteLLM record under this id is a stale
                         # orphan (e.g. from an account reset). Reset it so _create_user
                         # rebuilds a clean record rather than re-attaching it. Best-
@@ -262,7 +262,7 @@ class LiteLlmManager:
                     # We delete the key if it already exists. In environments where multiple
                     # installations are using the same keycloak and litellm instance, this
                     # will mean other installations will have their key invalidated.
-                    key_alias = get_openhands_cloud_key_alias(keycloak_user_id, org_id)
+                    key_alias = get_madagascar_cloud_key_alias(keycloak_user_id, org_id)
                     try:
                         await LiteLlmManager._delete_key_by_alias(client, key_alias)
                     except httpx.HTTPStatusError as ex:
@@ -463,7 +463,7 @@ class LiteLlmManager:
                             client,
                             keycloak_user_id,
                             org_id,
-                            get_openhands_cloud_key_alias(keycloak_user_id, org_id),
+                            get_madagascar_cloud_key_alias(keycloak_user_id, org_id),
                             None,
                         )
                         logger.info(
@@ -1512,13 +1512,13 @@ class LiteLlmManager:
         key_value: str,
         keycloak_user_id: str,
         org_id: str,
-        openhands_type: bool = False,
+        madagascar_type: bool = False,
     ) -> bool:
         """Check if an existing key exists for the user/org in LiteLLM.
 
         Verifies the provided key_value matches a key registered in LiteLLM for
-        the given user and organization. For openhands_type=True, looks for keys
-        with metadata type='openhands' and matching team_id. For openhands_type=False,
+        the given user and organization. For madagascar_type=True, looks for keys
+        with metadata type='madagascar' and matching team_id. For madagascar_type=False,
         looks for keys with matching alias and team_id.
 
         Returns True if the key is found and valid, False otherwise.
@@ -1531,11 +1531,11 @@ class LiteLlmManager:
             key_alias = key_info.get('key_alias')
             token = None
             if (
-                openhands_type
-                and metadata.get('type') == 'openhands'
+                madagascar_type
+                and metadata.get('type') == 'madagascar'
                 and team_id == org_id
             ):
-                # Found an existing OpenHands key for this org
+                # Found an existing Madagascar key for this org
                 key_name = key_info.get('key_name')
                 token = key_name[-4:] if key_name else None  # last 4 digits of key
                 if token and key_value.endswith(
@@ -1544,10 +1544,10 @@ class LiteLlmManager:
                     found = True
                     break
             if (
-                not openhands_type
+                not madagascar_type
                 and team_id == org_id
                 and (
-                    key_alias == get_openhands_cloud_key_alias(keycloak_user_id, org_id)
+                    key_alias == get_madagascar_cloud_key_alias(keycloak_user_id, org_id)
                     or key_alias == get_byor_key_alias(keycloak_user_id, org_id)
                 )
             ):

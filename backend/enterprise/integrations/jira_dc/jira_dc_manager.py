@@ -22,7 +22,7 @@ from integrations.models import JobContext, Message
 from integrations.utils import (
     HOST,
     HOST_URL,
-    OPENHANDS_RESOLVER_TEMPLATES_DIR,
+    MADAGASCAR_RESOLVER_TEMPLATES_DIR,
     get_account_not_linked_message,
     get_jira_dc_relink_message,
     get_oh_labels,
@@ -40,27 +40,27 @@ from storage.jira_dc_integration_store import JiraDcIntegrationStore
 from storage.jira_dc_user import JiraDcUser
 from storage.jira_dc_workspace import JiraDcWorkspace
 
-from openhands.app_server.integrations.provider import ProviderHandler
-from openhands.app_server.integrations.service_types import Comment, Repository
-from openhands.app_server.types import (
+from madagascar.app_server.integrations.provider import ProviderHandler
+from madagascar.app_server.integrations.service_types import Comment, Repository
+from madagascar.app_server.types import (
     LLMAuthenticationError,
     MissingSettingsError,
     SessionExpiredError,
 )
-from openhands.app_server.user_auth.user_auth import UserAuth
-from openhands.app_server.utils.http_session import httpx_verify_option
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.user_auth.user_auth import UserAuth
+from madagascar.app_server.utils.http_session import httpx_verify_option
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 # Trigger macro (label + @mention), configurable per deployment via
 # OH_RESOLVER_LABEL / host inference -- matches the other integrations.
 OH_LABEL, INLINE_OH_LABEL = get_oh_labels(HOST)
 
-# Unicode codepoint of the emoji reaction posted to acknowledge an @openhands
+# Unicode codepoint of the emoji reaction posted to acknowledge an @madagascar
 # mention via Jira's internal reactions API. 1f44d = 👍 (thumbs up). Note:
 # 1f440 (👀 eyes) is NOT in Jira DC's reaction palette, so thumbs-up is used.
 JIRA_DC_REACTION_EMOJI_ID = '1f44d'
 
-# Events the OpenHands webhook subscribes to, used when auto-enrolling the
+# Events the Madagascar webhook subscribes to, used when auto-enrolling the
 # webhook in Jira. The resolver only creates jobs for a narrower subset in
 # parse_webhook, but automations can subscribe to these broader issue/comment
 # lifecycle events.
@@ -119,15 +119,15 @@ def _extract_workspace_hosts(payload: Dict) -> set[str]:
     }
 
 
-def _comment_addresses_openhands(comment: str, bot_ids: set[str] | None) -> bool:
-    # Literal @openhands always triggers (works even when the bot identity can't
+def _comment_addresses_madagascar(comment: str, bot_ids: set[str] | None) -> bool:
+    # Literal @madagascar always triggers (works even when the bot identity can't
     # be resolved). Jira's mention picker serializes a real mention as wiki
     # markup [~name]/[~key]/[~accountid:key]; match any token whose inner id is
     # the bot, so we don't depend on which exact form the instance emits.
     if not comment:
         return False
-    # Boundary-aware + case-insensitive: matches @OpenHands but not an email like
-    # someone@openhands.dev (incl. the service account's own address).
+    # Boundary-aware + case-insensitive: matches @Madagascar but not an email like
+    # someone@madagascar.dev (incl. the service account's own address).
     if has_exact_mention(comment, INLINE_OH_LABEL):
         return True
     if bot_ids:
@@ -143,7 +143,7 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
         self.token_manager = token_manager
         self.integration_store = JiraDcIntegrationStore.get_instance()
         self.jinja_env = Environment(
-            loader=FileSystemLoader(OPENHANDS_RESOLVER_TEMPLATES_DIR + 'jira_dc')
+            loader=FileSystemLoader(MADAGASCAR_RESOLVER_TEMPLATES_DIR + 'jira_dc')
         )
         # Bot identifiers (username + Jira key) per workspace.id, resolved lazily
         # from /myself for matching picker mentions.
@@ -152,11 +152,11 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
     async def authenticate_user(
         self, user_email: str, jira_dc_user_id: str, workspace_id: int
     ) -> tuple[JiraDcUser | None, UserAuth | None]:
-        """Authenticate Jira DC user and get their OpenHands user auth."""
+        """Authenticate Jira DC user and get their Madagascar user auth."""
         # In email-match mode (OAuth disabled) the workspace link is stored with
         # an 'unavailable' Jira account id, so the webhook's real Jira user key
         # can never match a stored row. Resolve the user by matching their Jira
-        # email to their OpenHands email instead. In OAuth mode we resolve
+        # email to their Madagascar email instead. In OAuth mode we resolve
         # strictly by the verified Jira account id and never fall back to email,
         # preserving the verification guarantee.
         if not JIRA_DC_ENABLE_OAUTH or not jira_dc_user_id or jira_dc_user_id == 'none':
@@ -175,7 +175,7 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
                 keycloak_user_id, workspace_id
             )
             # Email mode is itself the admin's opt-in: a user whose Jira email
-            # matches an OpenHands account is auto-enrolled, no manual link step.
+            # matches an Madagascar account is auto-enrolled, no manual link step.
             # Never in OAuth mode, which requires a verified per-user token.
             if not jira_dc_user and not JIRA_DC_ENABLE_OAUTH:
                 jira_dc_user = (
@@ -320,7 +320,7 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
             comment = comment_data.get('body', '')
             comment_id = comment_data.get('id')
 
-            if not _comment_addresses_openhands(comment, bot_mentions):
+            if not _comment_addresses_madagascar(comment, bot_mentions):
                 return None
 
             issue_data = payload.get('issue', {})
@@ -397,7 +397,7 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
 
         if not job_context:
             # Log the body only for a non-matching comment that references the
-            # bot itself (name 'openhands' or a resolved bot id) -- the FDE-84
+            # bot itself (name 'madagascar' or a resolved bot id) -- the FDE-84
             # "mention didn't fire" case. Skips unrelated comments / mentions of
             # other users on this instance-wide webhook. Truncated since bodies
             # can hold sensitive content.
@@ -463,7 +463,7 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
             logger.warning(
                 f'[Jira DC] User authentication failed for {job_context.user_email}'
             )
-            # Distinguish "no OpenHands account" from "account exists but not linked
+            # Distinguish "no Madagascar account" from "account exists but not linked
             # to this workspace" so the reply is actionable (mirrors GitHub/BBDC).
             keycloak_user_id = await self.token_manager.get_user_id_from_user_email(
                 job_context.user_email
@@ -594,11 +594,11 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
 
         except MissingSettingsError as e:
             logger.warning(f'[Jira DC] Missing settings error: {str(e)}')
-            msg_info = f'Please re-login into [OpenHands Cloud]({HOST_URL}) before starting a job.'
+            msg_info = f'Please re-login into [Madagascar Cloud]({HOST_URL}) before starting a job.'
 
         except LLMAuthenticationError as e:
             logger.warning(f'[Jira DC] LLM authentication error: {str(e)}')
-            msg_info = f'Please set a valid LLM API key in [OpenHands Cloud]({HOST_URL}) before starting a job.'
+            msg_info = f'Please set a valid LLM API key in [Madagascar Cloud]({HOST_URL}) before starting a job.'
 
         except SessionExpiredError as e:
             logger.warning(f'[Jira DC] Session expired: {str(e)}')
@@ -631,9 +631,9 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
     async def _resolve_service_account_mentions(self, payload: Dict) -> set[str] | None:
         """Best-effort bot identifiers (username + Jira key) for a picker mention.
 
-        Returns the ids a [~...] token can carry; _comment_addresses_openhands
+        Returns the ids a [~...] token can carry; _comment_addresses_madagascar
         matches a token's inner id against these. Gated so only wiki-markup
-        mentions pay a lookup; literal @openhands and non-comment payloads
+        mentions pay a lookup; literal @madagascar and non-comment payloads
         short-circuit. Cached per workspace; failures are not cached, so a later
         comment re-attempts resolution (this event is dropped, not retried).
         """
@@ -741,7 +741,7 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
         chronological (oldest-first) order, excluding the triggering comment
         (which is surfaced separately as the actionable request). Comments
         authored by the integration's service account are flagged via
-        ``Comment.system`` so the prompt can label them as OpenHands' own prior
+        ``Comment.system`` so the prompt can label them as Madagascar' own prior
         replies rather than instructions. Best-effort: any failure returns an
         empty list so a transient comments-API issue never blocks the job.
         """
@@ -849,7 +849,7 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
     async def _add_acknowledgement_reaction(
         self, job_context: JobContext, workspace: JiraDcWorkspace
     ):
-        """Acknowledge the @openhands mention with a best-effort reaction.
+        """Acknowledge the @madagascar mention with a best-effort reaction.
 
         Reactions are non-essential, so failures are logged, never raised.
         """
@@ -878,9 +878,9 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
         admin_api_key: str,
         events_url: str,
         secret: str,
-        name: str = 'OpenHands',
+        name: str = 'Madagascar',
     ) -> int:
-        """Create or update the OpenHands webhook in Jira DC via the admin API.
+        """Create or update the Madagascar webhook in Jira DC via the admin API.
 
         Uses Jira Data Center's ``jira-webhook`` plugin REST API (the same one the
         admin UI calls). Idempotent: if a webhook already targets ``events_url`` it
@@ -889,7 +889,7 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
         Args:
             base_api_url: Jira base URL, e.g. ``https://jira.example.com``.
             admin_api_key: A Jira admin PAT. Used only for this call; never stored.
-            events_url: The OpenHands endpoint Jira should POST events to.
+            events_url: The Madagascar endpoint Jira should POST events to.
             secret: HMAC signing secret Jira will sign deliveries with. Must match
                 the workspace's stored ``webhook_secret`` or verification rejects.
             name: Display name for the webhook.
@@ -944,7 +944,7 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
         admin_api_key: str,
         events_url: str,
     ) -> bool:
-        """Delete the OpenHands webhook from Jira DC, if present.
+        """Delete the Madagascar webhook from Jira DC, if present.
 
         Counterpart to :meth:`register_webhook`. Looks up the webhook that
         targets ``events_url`` and deletes it via the same ``jira-webhook``
@@ -955,7 +955,7 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
             base_api_url: Jira base URL, e.g. ``https://jira.example.com``.
             admin_api_key: A Jira admin PAT. Used only for this call; never
                 stored.
-            events_url: The OpenHands endpoint whose webhook should be removed.
+            events_url: The Madagascar endpoint whose webhook should be removed.
 
         Returns:
             True if a webhook was deleted; False if there was nothing to delete.
@@ -1037,7 +1037,7 @@ class JiraDcManager(Manager[JiraDcViewInterface]):
                     f'Could not access any of the mentioned repositories: '
                     f'{", ".join(mentioned_repos)}. '
                     'Please ensure the repository exists and that the Git account '
-                    'linked to your OpenHands user can access it.'
+                    'linked to your Madagascar user can access it.'
                 )
 
             service_account = resolve_jira_dc_service_account(

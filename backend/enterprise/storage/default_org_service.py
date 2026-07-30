@@ -1,4 +1,4 @@
-"""Bootstrap a default OpenHands organization for OHE installs."""
+"""Bootstrap a default Madagascar organization for OHE installs."""
 
 import os
 from dataclasses import dataclass
@@ -16,7 +16,7 @@ from storage.role_store import RoleStore
 from storage.user import User
 from storage.user_store import UserStore
 
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 _TRUTHY_VALUES = {'1', 'true', 'yes', 'on'}
 
@@ -53,19 +53,19 @@ def _env_truthy(name: str, *aliases: str, default: str = 'false') -> bool:
 def get_default_org_config() -> DefaultOrgConfig:
     return DefaultOrgConfig(
         enabled=_env_truthy(
-            'OPENHANDS_DEFAULT_ORG_ENABLED',
+            'MADAGASCAR_DEFAULT_ORG_ENABLED',
             'OH_DEFAULT_ORG_ENABLED',
         ),
         # Only used as the initial name when the org is first created; owners
         # can rename it in the app afterwards (the org is tracked by its
         # is_default flag, not its name).
         org_name=_env_value(
-            'OPENHANDS_DEFAULT_ORG_NAME',
+            'MADAGASCAR_DEFAULT_ORG_NAME',
             'OH_DEFAULT_ORG_NAME',
         ).strip()
         or DEFAULT_ORG_NAME,
         auto_add_users=_env_truthy(
-            'OPENHANDS_DEFAULT_ORG_AUTO_ADD_USERS',
+            'MADAGASCAR_DEFAULT_ORG_AUTO_ADD_USERS',
             'OH_DEFAULT_ORG_AUTO_ADD_USERS',
         ),
         # Same env var the web client config injector reads to hide personal

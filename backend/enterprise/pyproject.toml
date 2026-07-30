@@ -7,11 +7,11 @@ requires = [
 [tool.poetry]
 name = "enterprise_server"
 version = "0.0.1"
-description = "Deploy OpenHands"
-authors = [ "OpenHands" ]
+description = "Deploy Madagascar"
+authors = [ "Madagascar" ]
 license = "POLYFORM"
 readme = "README.md"
-repository = "https://github.com/OpenHands/OpenHands"
+repository = "https://github.com/Madagascar/Madagascar"
 packages = [
   { include = "server" },
   { include = "storage" },
@@ -21,7 +21,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.12,<3.14"
-openhands-ai = { path = "../", develop = true }
+madagascar-ai = { path = "../", develop = true }
 authlib = "1.6.12"
 gspread = "6.2.1"
 alembic = "1.18.4"
@@ -100,4 +100,4 @@ omit = [ "tests/*" ]
 
 [tool.uv]
 exclude-newer = "7 days"
-exclude-newer-package = { openhands-agent-server = false, openhands-sdk = false, openhands-tools = false }
+exclude-newer-package = { madagascar-agent-server = false, madagascar-sdk = false, madagascar-tools = false }

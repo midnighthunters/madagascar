@@ -5,10 +5,10 @@ import time
 import httpx
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Conversation, get_logger
-from openhands.sdk.conversation.impl.remote_conversation import RemoteConversation
-from openhands.tools.preset.default import get_default_agent
-from openhands.workspace import DockerWorkspace
+from madagascar.sdk import LLM, Conversation, get_logger
+from madagascar.sdk.conversation.impl.remote_conversation import RemoteConversation
+from madagascar.tools.preset.default import get_default_agent
+from madagascar.workspace import DockerWorkspace
 
 
 logger = get_logger(__name__)
@@ -41,8 +41,8 @@ def get_server_image():
     # built-in GITHUB_SHA which resolves to the merge-commit on PRs).
     sha = os.getenv("SDK_SHA") or os.getenv("GITHUB_SHA")
     if sha:
-        return f"ghcr.io/openhands/agent-server:{sha[:7]}-python-{arch}"
-    return "ghcr.io/openhands/agent-server:latest-python"
+        return f"ghcr.io/madagascar/agent-server:{sha[:7]}-python-{arch}"
+    return "ghcr.io/madagascar/agent-server:latest-python"
 
 
 server_image = get_server_image()
@@ -112,7 +112,7 @@ with DockerWorkspace(
             "Because you've enabled extra_ports=True in DockerDevWorkspace, "
             "you can open VSCode Web to see the workspace.\n\n"
             f"VSCode URL: {vscode_url}\n\n"
-            "The VSCode should have the OpenHands settings extension installed:\n"
+            "The VSCode should have the Madagascar settings extension installed:\n"
             "  - Dark theme enabled\n"
             "  - Auto-save enabled\n"
             "  - Telemetry disabled\n"

@@ -3,8 +3,8 @@ from unittest.mock import patch
 import pytest
 from pydantic import SecretStr
 
-from openhands.app_server.integrations.gitlab.gitlab_service import GitLabService
-from openhands.app_server.integrations.service_types import (
+from madagascar.app_server.integrations.gitlab.gitlab_service import GitLabService
+from madagascar.app_server.integrations.service_types import (
     Branch,
     PaginatedBranchesResponse,
 )

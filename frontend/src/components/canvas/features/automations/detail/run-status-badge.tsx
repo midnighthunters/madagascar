@@ -57,7 +57,7 @@ function StatusIcon({ status }: { status: AutomationRunStatus }) {
 }
 
 export function RunStatusBadge({ status }: RunStatusBadgeProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const config = statusConfig[status];
 
   return (

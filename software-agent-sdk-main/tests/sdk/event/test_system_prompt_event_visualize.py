@@ -5,13 +5,13 @@ from typing import TYPE_CHECKING, Self
 
 from pydantic import Field
 
-from openhands.sdk.event.llm_convertible import SystemPromptEvent
-from openhands.sdk.llm import TextContent
-from openhands.sdk.tool import Action, Observation, ToolDefinition, ToolExecutor
+from madagascar.sdk.event.llm_convertible import SystemPromptEvent
+from madagascar.sdk.llm import TextContent
+from madagascar.sdk.tool import Action, Observation, ToolDefinition, ToolExecutor
 
 
 if TYPE_CHECKING:
-    from openhands.sdk.conversation.impl.local_conversation import LocalConversation
+    from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
 
 
 class SimpleAction(Action):

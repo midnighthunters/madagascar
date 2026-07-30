@@ -4,8 +4,8 @@ from unittest.mock import AsyncMock, MagicMock, PropertyMock, patch
 import pytest
 from pydantic import SecretStr
 
-from openhands.app_server.settings.settings_models import Settings
-from openhands.app_server.settings.settings_models import Settings as DataSettings
+from madagascar.app_server.settings.settings_models import Settings
+from madagascar.app_server.settings.settings_models import Settings as DataSettings
 
 
 def _agent_value(settings: Settings, key: str):
@@ -351,14 +351,14 @@ async def test_ensure_api_key_keeps_valid_key():
     """When the existing key is valid, it should be kept unchanged."""
     store = SaasSettingsStore('test-user-id-123')
     existing_key = 'sk-existing-key'
-    item = _make_settings(model='openhands/gpt-4', api_key=existing_key)
+    item = _make_settings(model='madagascar/gpt-4', api_key=existing_key)
 
     with patch(
         'storage.saas_settings_store.LiteLlmManager.verify_existing_key',
         new_callable=AsyncMock,
         return_value=True,
     ):
-        await store._ensure_api_key(item, 'org-123', openhands_type=True)
+        await store._ensure_api_key(item, 'org-123', madagascar_type=True)
 
         # Key should remain unchanged when it's valid
         assert _secret_value(item, 'llm.api_key') is not None
@@ -369,13 +369,13 @@ async def test_ensure_api_key_keeps_valid_key():
 async def test_ensure_api_key_generates_new_key_when_verification_fails():
     """When verification fails, a new managed key is minted under the shared
     alias after deleting any prior key — symmetric across model types so
-    switching to/from an openhands/* model never orphans a key."""
-    from storage.lite_llm_manager import get_openhands_cloud_key_alias
+    switching to/from an madagascar/* model never orphans a key."""
+    from storage.lite_llm_manager import get_madagascar_cloud_key_alias
 
     store = SaasSettingsStore('test-user-id-123')
     new_key = 'sk-new-key'
-    item = _make_settings(model='openhands/gpt-4', api_key='sk-invalid-key')
-    expected_alias = get_openhands_cloud_key_alias('test-user-id-123', 'org-123')
+    item = _make_settings(model='madagascar/gpt-4', api_key='sk-invalid-key')
+    expected_alias = get_madagascar_cloud_key_alias('test-user-id-123', 'org-123')
 
     with (
         patch(
@@ -393,14 +393,14 @@ async def test_ensure_api_key_generates_new_key_when_verification_fails():
             return_value=new_key,
         ) as mock_generate,
     ):
-        await store._ensure_api_key(item, 'org-123', openhands_type=True)
+        await store._ensure_api_key(item, 'org-123', madagascar_type=True)
 
         assert _secret_value(item, 'llm.api_key') == new_key
-        # The openhands branch now deletes the prior key under the shared alias
+        # The madagascar branch now deletes the prior key under the shared alias
         # before minting (previously it skipped the delete and orphaned keys).
         mock_delete.assert_awaited_once_with(key_alias=expected_alias)
         mock_generate.assert_awaited_once_with(
-            'test-user-id-123', 'org-123', expected_alias, {'type': 'openhands'}
+            'test-user-id-123', 'org-123', expected_alias, {'type': 'madagascar'}
         )
 
 
@@ -544,7 +544,7 @@ async def test_load_canonicalizes_legacy_litellm_proxy_active_llm(
         loaded = await store.load()
 
     assert loaded is not None
-    assert loaded.agent_settings.llm.model == 'openhands/claude-opus-4-8'
+    assert loaded.agent_settings.llm.model == 'madagascar/claude-opus-4-8'
     assert loaded.agent_settings.llm.base_url is None
 
 
@@ -599,7 +599,7 @@ async def test_load_canonicalizes_legacy_litellm_proxy_llm_profiles(
     assert loaded.llm_profiles.active == 'legacy'
 
     legacy = loaded.llm_profiles.require('legacy')
-    assert legacy.model == 'openhands/claude-opus-4-8'
+    assert legacy.model == 'madagascar/claude-opus-4-8'
     assert legacy.base_url is None
 
     custom = loaded.llm_profiles.require('custom')
@@ -727,10 +727,10 @@ async def test_store_rejects_resolved_profile_settings_view(
 
 
 @pytest.mark.asyncio
-async def test_store_keeps_openhands_managed_keys_member_specific(
+async def test_store_keeps_madagascar_managed_keys_member_specific(
     session_maker, async_session_maker, org_with_multiple_members_fixture
 ):
-    """Managed OpenHands keys should not be copied from one member to everyone else."""
+    """Managed Madagascar keys should not be copied from one member to everyone else."""
     from sqlalchemy import select
     from storage.org import Org
     from storage.org_member import OrgMember
@@ -742,7 +742,7 @@ async def test_store_keeps_openhands_managed_keys_member_specific(
 
     store = SaasSettingsStore(admin_user_id)
     new_settings = _make_settings(
-        model='openhands/claude-opus-4-5-20251101',
+        model='madagascar/claude-opus-4-5-20251101',
         base_url=LITE_LLM_API_URL,
         max_iterations=75,
         api_key='admin-managed-api-key',
@@ -761,9 +761,9 @@ async def test_store_keeps_openhands_managed_keys_member_specific(
     with session_maker() as session:
         org = session.execute(select(Org).where(Org.id == org_id)).scalars().first()
         assert org is not None
-        # Settings keeps the public openhands/ provider prefix in persisted data
+        # Settings keeps the public madagascar/ provider prefix in persisted data
         assert (
-            org.agent_settings['llm']['model'] == 'openhands/claude-opus-4-5-20251101'
+            org.agent_settings['llm']['model'] == 'madagascar/claude-opus-4-5-20251101'
         )
         assert org.agent_settings['llm']['base_url'] == LITE_LLM_API_URL
         assert org.conversation_settings['max_iterations'] == 75
@@ -789,7 +789,7 @@ async def test_store_keeps_openhands_managed_keys_member_specific(
         for member in members.values():
             assert (
                 member.agent_settings_diff['llm']['model']
-                == 'openhands/claude-opus-4-5-20251101'
+                == 'madagascar/claude-opus-4-5-20251101'
             )
             assert member.agent_settings_diff['llm']['base_url'] == LITE_LLM_API_URL
             assert member.conversation_settings_diff['max_iterations'] == 75
@@ -870,10 +870,10 @@ async def test_store_keeps_mcp_config_private_to_acting_member(
 
 
 @pytest.mark.asyncio
-async def test_store_skips_ensure_api_key_for_non_openhands_model_without_base_url(
+async def test_store_skips_ensure_api_key_for_non_madagascar_model_without_base_url(
     session_maker, async_session_maker, org_with_multiple_members_fixture
 ):
-    """When saving a non-OpenHands model with no base URL (basic view BYOR),
+    """When saving a non-Madagascar model with no base URL (basic view BYOR),
     _ensure_api_key should NOT be called, preserving the user's custom API key.
 
     This is the primary bug fix: users selecting e.g. OpenAI in basic view and
@@ -898,16 +898,16 @@ async def test_store_skips_ensure_api_key_for_non_openhands_model_without_base_u
 
 
 @pytest.mark.asyncio
-async def test_store_calls_ensure_api_key_for_openhands_model_without_base_url(
+async def test_store_calls_ensure_api_key_for_madagascar_model_without_base_url(
     session_maker, async_session_maker, org_with_multiple_members_fixture
 ):
-    """OpenHands models still require proxy-key verification without a base URL."""
+    """Madagascar models still require proxy-key verification without a base URL."""
     fixture = org_with_multiple_members_fixture
     admin_user_id = str(fixture['admin_user_id'])
     store = SaasSettingsStore(admin_user_id)
 
     settings = _make_settings(
-        model='openhands/claude-opus-4-5-20251101',
+        model='madagascar/claude-opus-4-5-20251101',
         api_key='sk-stale-openai-key',
     )
 
@@ -1082,7 +1082,7 @@ async def test_load_drops_legacy_org_level_mcp_config(
     with session_maker() as session:
         org = session.execute(select(Org).where(Org.id == org_id)).scalars().first()
         org.agent_settings = {
-            'agent_kind': 'openhands',
+            'agent_kind': 'madagascar',
             'mcp_config': legacy_org_mcp_config,
         }
         # Populate the nullable bool defaults that the Settings model
@@ -1118,7 +1118,7 @@ async def test_store_and_load_llm_profiles_round_trip(
     """Saved llm_profiles must persist on the User row and round-trip through
     store → load. Without the user.llm_profiles column they are silently
     dropped on store and always default to empty on load."""
-    from openhands.sdk.llm import LLM
+    from madagascar.sdk.llm import LLM
 
     fixture = org_with_multiple_members_fixture
     admin_user_id = str(fixture['admin_user_id'])
@@ -1308,7 +1308,7 @@ async def test_llm_profiles_are_encrypted_at_rest(
     from sqlalchemy import select, text
     from storage.user import User
 
-    from openhands.sdk.llm import LLM
+    from madagascar.sdk.llm import LLM
 
     fixture = org_with_multiple_members_fixture
     admin_user_id = fixture['admin_user_id']

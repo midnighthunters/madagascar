@@ -2,9 +2,9 @@
 
 from pydantic import SecretStr
 
-from openhands.sdk import Agent, Conversation
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.llm import LLM
+from madagascar.sdk import Agent, Conversation
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.llm import LLM
 
 
 def test_agent_execution_state_enum_basic():

@@ -31,7 +31,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from openhands.sdk.logger import get_logger
+from madagascar.sdk.logger import get_logger
 from tests.integration.api_compliance.base import BaseAPIComplianceTest, create_test_llm
 from tests.integration.api_compliance.result import (
     APIResponse,
@@ -254,7 +254,7 @@ def save_report(report: ComplianceReport, output_dir: str) -> str:
 
 # Base URL for linking to test files
 GITHUB_BASE_URL = (
-    "https://github.com/OpenHands/software-agent-sdk/blob/main/tests/integration/tests"
+    "https://github.com/Madagascar/software-agent-sdk/blob/main/tests/integration/tests"
 )
 
 # Map pattern names to test file names
@@ -367,7 +367,7 @@ def generate_markdown_report(report: ComplianceReport) -> str:
     github_run_id = os.environ.get("GITHUB_RUN_ID")
     if github_run_id:
         run_url = (
-            "https://github.com/OpenHands/software-agent-sdk/actions/runs/"
+            "https://github.com/Madagascar/software-agent-sdk/actions/runs/"
             f"{github_run_id}"
         )
         lines.append(

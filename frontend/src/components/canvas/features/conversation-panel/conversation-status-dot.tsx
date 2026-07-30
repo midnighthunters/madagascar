@@ -119,7 +119,7 @@ export function ConversationStatusDot({
   sandboxStatus,
   showTooltip = true,
 }: ConversationStatusDotProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   // sandbox_status === "MISSING" → show archived (gray) dot
   // sandbox_status === "ERROR"   → show error (red) dot

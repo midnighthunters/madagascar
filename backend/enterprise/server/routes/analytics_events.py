@@ -31,8 +31,8 @@ from typing import Literal
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
-from openhands.analytics import get_analytics_service, resolve_analytics_context
-from openhands.app_server.user_auth import get_user_id
+from madagascar.analytics import get_analytics_service, resolve_analytics_context
+from madagascar.app_server.user_auth import get_user_id
 
 analytics_events_router = APIRouter(prefix='/api/analytics/events', tags=['Analytics'])
 
@@ -57,7 +57,7 @@ class CreatePrButtonClickedEvent(BaseModel):
 
     Drives PostHog surveys (e.g. NPS) keyed off the PR action. The event
     name uses the lowercase-with-spaces convention shared by every other
-    PostHog event in ``openhands/analytics/analytics_constants.py``.
+    PostHog event in ``madagascar/analytics/analytics_constants.py``.
     """
 
     event_type: Literal['create pr button clicked']

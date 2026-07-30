@@ -1,9 +1,9 @@
-"""Tests for the canonical default tool specs (openhands.sdk.tool.defaults)."""
+"""Tests for the canonical default tool specs (madagascar.sdk.tool.defaults)."""
 
 import pytest
 
-from openhands.sdk.tool import registry
-from openhands.sdk.tool.defaults import (
+from madagascar.sdk.tool import registry
+from madagascar.sdk.tool.defaults import (
     BROWSER_TOOL_NAME,
     DEFAULT_EXEC_TOOL_NAMES,
     SUB_AGENT_TOOL_NAME,

@@ -16,9 +16,9 @@ from storage.org_member_store import OrgMemberStore
 from storage.org_service import OrgService
 from storage.user_store import UserStore
 
-from openhands.app_server.user_auth import get_user_auth, get_user_id
-from openhands.app_server.user_auth.user_auth import AuthType
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.user_auth import get_user_auth, get_user_id
+from madagascar.app_server.user_auth.user_auth import AuthType
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 
 # Helper functions for BYOR API key management

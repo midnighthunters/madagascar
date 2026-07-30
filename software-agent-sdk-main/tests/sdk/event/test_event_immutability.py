@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, Self
 
 import pytest
 
-from openhands.sdk.event import (
+from madagascar.sdk.event import (
     ActionEvent,
     AgentErrorEvent,
     Condensation,
@@ -17,18 +17,18 @@ from openhands.sdk.event import (
     SystemPromptEvent,
     UserRejectObservation,
 )
-from openhands.sdk.llm import (
+from madagascar.sdk.llm import (
     ImageContent,
     Message,
     MessageToolCall,
     TextContent,
 )
-from openhands.sdk.tool import ToolDefinition, ToolExecutor
-from openhands.sdk.tool.schema import Action, Observation
+from madagascar.sdk.tool import ToolDefinition, ToolExecutor
+from madagascar.sdk.tool.schema import Action, Observation
 
 
 if TYPE_CHECKING:
-    from openhands.sdk.conversation.impl.local_conversation import LocalConversation
+    from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
 
 
 class EventsImmutabilityMockAction(Action):

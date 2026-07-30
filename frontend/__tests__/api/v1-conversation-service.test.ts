@@ -3,8 +3,8 @@ import axios from "axios";
 import V1ConversationService from "#/api/conversation-service/v1-conversation-service.api";
 
 const { mockGet } = vi.hoisted(() => ({ mockGet: vi.fn() }));
-vi.mock("#/api/open-hands-axios", () => ({
-  openHands: { get: mockGet },
+vi.mock("#/api/madagascar-axios", () => ({
+  madagascar: { get: mockGet },
 }));
 
 vi.mock("axios");

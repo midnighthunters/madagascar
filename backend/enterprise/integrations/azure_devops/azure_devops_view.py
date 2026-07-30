@@ -14,42 +14,42 @@ from integrations.types import ResolverViewInterface, UserData
 from integrations.utils import HOST, get_oh_labels, has_exact_mention
 from jinja2 import Environment
 
-from openhands.agent_server.models import SendMessageRequest
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.agent_server.models import SendMessageRequest
+from madagascar.app_server.app_conversation.app_conversation_models import (
     AppConversationStartRequest,
     AppConversationStartTaskStatus,
     ConversationTrigger,
 )
-from openhands.app_server.config import get_app_conversation_service
-from openhands.app_server.integrations.azure_devops.azure_devops_service import (
+from madagascar.app_server.config import get_app_conversation_service
+from madagascar.app_server.integrations.azure_devops.azure_devops_service import (
     AzureDevOpsServiceImpl,
 )
-from openhands.app_server.integrations.azure_devops.service.webhooks import (
+from madagascar.app_server.integrations.azure_devops.service.webhooks import (
     AZURE_DEVOPS_PR_COMMENT_EVENT as PR_COMMENT_EVENT,
 )
-from openhands.app_server.integrations.azure_devops.service.webhooks import (
+from madagascar.app_server.integrations.azure_devops.service.webhooks import (
     AZURE_DEVOPS_WORK_ITEM_COMMENT_EVENT as WORK_ITEM_COMMENT_EVENT,
 )
-from openhands.app_server.integrations.provider import PROVIDER_TOKEN_TYPE, ProviderType
-from openhands.app_server.integrations.service_types import Comment
-from openhands.app_server.services.injector import InjectorState
-from openhands.app_server.user.specifiy_user_context import USER_CONTEXT_ATTR
-from openhands.app_server.user_auth.user_auth import UserAuth
-from openhands.app_server.utils.logger import openhands_logger as logger
-from openhands.sdk import TextContent
+from madagascar.app_server.integrations.provider import PROVIDER_TOKEN_TYPE, ProviderType
+from madagascar.app_server.integrations.service_types import Comment
+from madagascar.app_server.services.injector import InjectorState
+from madagascar.app_server.user.specifiy_user_context import USER_CONTEXT_ATTR
+from madagascar.app_server.user_auth.user_auth import UserAuth
+from madagascar.app_server.utils.logger import madagascar_logger as logger
+from madagascar.sdk import TextContent
 
 OH_LABEL, INLINE_OH_LABEL = get_oh_labels(HOST)
-OPENHANDS_COMMENT_MARKER = '<!-- openhands-azure-devops-resolver -->'
+MADAGASCAR_COMMENT_MARKER = '<!-- madagascar-azure-devops-resolver -->'
 
 
-def mark_openhands_comment(comment: str) -> str:
-    if OPENHANDS_COMMENT_MARKER in comment:
+def mark_madagascar_comment(comment: str) -> str:
+    if MADAGASCAR_COMMENT_MARKER in comment:
         return comment
-    return f'{OPENHANDS_COMMENT_MARKER}\n{comment}'
+    return f'{MADAGASCAR_COMMENT_MARKER}\n{comment}'
 
 
-def _is_openhands_comment(comment: str) -> bool:
-    return OPENHANDS_COMMENT_MARKER in comment
+def _is_madagascar_comment(comment: str) -> bool:
+    return MADAGASCAR_COMMENT_MARKER in comment
 
 
 def _strip_ref_prefix(ref_name: str | None) -> str | None:
@@ -390,7 +390,7 @@ class AzureDevOpsFactory:
         comment = ((payload.get('resource') or {}).get('comment') or {}).get(
             'content'
         ) or ''
-        if _is_openhands_comment(comment):
+        if _is_madagascar_comment(comment):
             return False
         return has_exact_mention(comment, INLINE_OH_LABEL)
 
@@ -400,7 +400,7 @@ class AzureDevOpsFactory:
             return False
         payload = message.message.get('payload') or {}
         comment = _extract_work_item_comment(payload)
-        if _is_openhands_comment(comment):
+        if _is_madagascar_comment(comment):
             return False
         return has_exact_mention(comment, INLINE_OH_LABEL)
 

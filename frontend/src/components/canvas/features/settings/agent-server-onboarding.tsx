@@ -32,7 +32,7 @@ export function AgentServerConnectionForm({
   variant = "onboarding",
   showSectionHeader,
 }: AgentServerConnectionFormProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const defaults = React.useMemo(() => getAgentServerFormDefaults(), []);
   const [baseUrl, setBaseUrl] = React.useState(defaults.baseUrl);
   const [sessionApiKey, setSessionApiKey] = React.useState(

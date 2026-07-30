@@ -20,11 +20,11 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from openhands.agent_server.conversation_lease import ConversationLeaseHeldError
-from openhands.agent_server.conversation_service import ConversationService
-from openhands.agent_server.models import StartConversationRequest
-from openhands.sdk import Agent
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.agent_server.conversation_lease import ConversationLeaseHeldError
+from madagascar.agent_server.conversation_service import ConversationService
+from madagascar.agent_server.models import StartConversationRequest
+from madagascar.sdk import Agent
+from madagascar.sdk.workspace import LocalWorkspace
 from tests.agent_server.stress.budgets import LEASE_CONTENTION
 from tests.agent_server.stress.scripts import placeholder_llm
 

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.plugin.source import (
+from madagascar.sdk.plugin.source import (
     is_local_path,
     parse_github_url,
     resolve_source_path,
@@ -15,17 +15,17 @@ from openhands.sdk.plugin.source import (
 class TestParseGitHubURL:
     def test_parse_blob_url(self):
         result = parse_github_url(
-            "https://github.com/OpenHands/extensions/blob/main/skills/github"
+            "https://github.com/Madagascar/extensions/blob/main/skills/github"
         )
         assert result is not None
-        assert result.owner == "OpenHands"
+        assert result.owner == "Madagascar"
         assert result.repo == "extensions"
         assert result.branch == "main"
         assert result.path == "skills/github"
 
     def test_parse_tree_url(self):
         result = parse_github_url(
-            "https://github.com/OpenHands/extensions/tree/main/skills/github"
+            "https://github.com/Madagascar/extensions/tree/main/skills/github"
         )
         assert result is not None
         assert result.path == "skills/github"

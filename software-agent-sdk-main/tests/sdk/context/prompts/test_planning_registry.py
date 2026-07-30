@@ -10,16 +10,16 @@ import os
 from pathlib import Path
 from typing import Final
 
-from openhands.sdk.context.prompts.presets import PromptPreset, create_registry
-from openhands.sdk.context.prompts.section import Platform, PromptContext
-from openhands.sdk.context.prompts.sections.planning import PlanningSection
+from madagascar.sdk.context.prompts.presets import PromptPreset, create_registry
+from madagascar.sdk.context.prompts.section import Platform, PromptContext
+from madagascar.sdk.context.prompts.sections.planning import PlanningSection
 
 
 SNAPSHOT_DIR: Final[Path] = Path(__file__).parent / "snapshots"
 REGEN: Final[bool] = os.environ.get("REGEN_PROMPT_SNAPSHOTS") == "1"
 
 # A representative plan_structure (the template's only substitution). Kept inline so the
-# SDK test does not depend on openhands-tools' format_plan_structure().
+# SDK test does not depend on madagascar-tools' format_plan_structure().
 PLAN_STRUCTURE: Final[str] = (
     "The plan must follow this structure exactly:\n\n"
     "1. OBJECTIVE\n   * Summarize the goal of the plan in one or two sentences.\n\n"
@@ -60,7 +60,7 @@ def test_planning_is_standalone_composition() -> None:
     ctx = _ctx(plan_structure=PLAN_STRUCTURE)
     static = create_registry(PromptPreset.PLANNING).build(ctx).static
     assert static.startswith("You are a Planning Agent")
-    # Standalone: none of the default OpenHands sections leak in.
+    # Standalone: none of the default Madagascar sections leak in.
     for tag in ("<SOUL>", "<SECURITY>", "<MEMORY>", "<VERSION_CONTROL>", "<IMPORTANT>"):
         assert tag not in static
     for tag in ("<ROLE>", "<PLANNING_WORKFLOW>", "<PLAN_SCOPE>", "<PLAN_STRUCTURE>"):

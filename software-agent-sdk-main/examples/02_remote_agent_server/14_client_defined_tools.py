@@ -1,7 +1,7 @@
 """Client-defined tools via the agent-server API.
 
 Demonstrates the server-side path for client-defined tools: the agent runs
-inside a local ``openhands.agent_server`` subprocess, tool specs are sent in
+inside a local ``madagascar.agent_server`` subprocess, tool specs are sent in
 ``POST /api/conversations``, and the SDK broadcasts ``ActionEvent`` s over
 WebSocket so this client process can intercept them — exactly what a browser
 frontend (e.g. Agent Canvas) would do.
@@ -22,10 +22,10 @@ import tempfile
 from pydantic import SecretStr
 from scripts.utils import ManagedAPIServer
 
-from openhands.sdk import LLM, Conversation, Event, RemoteConversation, get_logger
-from openhands.sdk.event.llm_convertible.action import ActionEvent
-from openhands.sdk.tool.client_tool import ClientToolSpec
-from openhands.tools.preset.default import get_default_agent
+from madagascar.sdk import LLM, Conversation, Event, RemoteConversation, get_logger
+from madagascar.sdk.event.llm_convertible.action import ActionEvent
+from madagascar.sdk.tool.client_tool import ClientToolSpec
+from madagascar.tools.preset.default import get_default_agent
 
 
 logger = get_logger(__name__)
@@ -113,7 +113,7 @@ llm = LLM(
 with ManagedAPIServer(port=8004) as server:
     workspace_dir = tempfile.mkdtemp(prefix="client_tools_demo_")
 
-    from openhands.sdk import Workspace
+    from madagascar.sdk import Workspace
 
     workspace = Workspace(host=server.base_url, working_dir=workspace_dir)
 

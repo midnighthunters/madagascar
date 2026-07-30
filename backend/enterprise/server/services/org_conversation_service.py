@@ -27,7 +27,7 @@ from server.routes.org_models import (
 )
 from sqlalchemy import case, func, or_, select, tuple_
 from sqlalchemy.ext.asyncio import AsyncSession
-from storage.openhands_pr import OpenhandsPR
+from storage.madagascar_pr import MadagascarPR
 from storage.org_budget_settings import OrgBudgetSettings
 from storage.org_user_budget_override import OrgUserBudgetOverride
 from storage.stored_conversation_cost_event import StoredConversationCostEvent
@@ -35,10 +35,10 @@ from storage.stored_conversation_metadata import StoredConversationMetadata
 from storage.stored_conversation_metadata_saas import StoredConversationMetadataSaas
 from storage.user import User
 
-from openhands.app_server.sandbox.sandbox_models import AGENT_SERVER, SandboxInfo
-from openhands.app_server.services.injector import Injector, InjectorState
-from openhands.app_server.utils.logger import openhands_logger as logger
-from openhands.sdk.llm import MetricsSnapshot, TokenUsage
+from madagascar.app_server.sandbox.sandbox_models import AGENT_SERVER, SandboxInfo
+from madagascar.app_server.services.injector import Injector, InjectorState
+from madagascar.app_server.utils.logger import madagascar_logger as logger
+from madagascar.sdk.llm import MetricsSnapshot, TokenUsage
 
 # Valid sort fields
 VALID_SORT_FIELDS = {
@@ -58,7 +58,7 @@ TIME_WINDOW_OPTIONS = {
 
 
 AGENT_LABELS = {
-    'openhands': 'OpenHands',
+    'madagascar': 'Madagascar',
     'acp': 'ACP',
 }
 
@@ -82,7 +82,7 @@ def _format_agent_label(agent_kind: str | None, llm_model: str | None) -> str:
     if agent_kind == 'acp':
         return _format_acp_agent_label(llm_model)
     if not agent_kind:
-        return AGENT_LABELS['openhands']
+        return AGENT_LABELS['madagascar']
     return AGENT_LABELS.get(agent_kind, agent_kind)
 
 
@@ -153,7 +153,7 @@ class OrgConversationService:
             id=metadata.conversation_id,
             title=metadata.title,
             llm_model=metadata.llm_model,
-            agent_kind=metadata.agent_kind or 'openhands',
+            agent_kind=metadata.agent_kind or 'madagascar',
             user_id=str(saas_metadata.user_id),
             user_email=user.email if user else None,
             created_at=metadata.created_at,
@@ -199,13 +199,13 @@ class OrgConversationService:
             return {}
 
         query = select(
-            OpenhandsPR.provider,
-            OpenhandsPR.repo_name,
-            OpenhandsPR.pr_number,
-            OpenhandsPR.merged,
+            MadagascarPR.provider,
+            MadagascarPR.repo_name,
+            MadagascarPR.pr_number,
+            MadagascarPR.merged,
         ).where(
             tuple_(
-                OpenhandsPR.provider, OpenhandsPR.repo_name, OpenhandsPR.pr_number
+                MadagascarPR.provider, MadagascarPR.repo_name, MadagascarPR.pr_number
             ).in_(pr_keys)
         )
         result = await self.db_session.execute(query)
@@ -1277,7 +1277,7 @@ class OrgConversationServiceInjector(Injector[OrgConversationService]):
         self, state: InjectorState, request: Request | None = None
     ) -> AsyncGenerator[OrgConversationService, None]:
         # Local imports to avoid circular dependencies
-        from openhands.app_server.config import get_db_session, get_sandbox_service
+        from madagascar.app_server.config import get_db_session, get_sandbox_service
 
         async with get_db_session(state, request) as db_session:
             service = OrgConversationService(db_session=db_session)

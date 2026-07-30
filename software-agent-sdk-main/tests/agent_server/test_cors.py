@@ -7,20 +7,20 @@ from uuid import UUID, uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from openhands.agent_server.api import create_app
-from openhands.agent_server.config import Config, load_config
-from openhands.agent_server.conversation_service import ConversationService
-from openhands.agent_server.dependencies import (
+from madagascar.agent_server.api import create_app
+from madagascar.agent_server.config import Config, load_config
+from madagascar.agent_server.conversation_service import ConversationService
+from madagascar.agent_server.dependencies import (
     WORKSPACE_SESSION_COOKIE_NAME,
     get_conversation_service,
 )
-from openhands.agent_server.event_service import EventService
-from openhands.agent_server.middleware import (
+from madagascar.agent_server.event_service import EventService
+from madagascar.agent_server.middleware import (
     CORSDispatcher,
     LocalhostCORSMiddleware,
     _is_workspace_cookie_path,
 )
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 SESSION_KEY = "test-key-cors"
@@ -261,7 +261,7 @@ def test_workspace_wildcard_does_not_bleed_into_other_api(tmp_path):
 
 
 # Localhost / DOCKER_HOST_ADDR auto-allow regression coverage
-# (OpenHands/OpenHands#4624 intent vs the #8675 regression).
+# (Madagascar/Madagascar#4624 intent vs the #8675 regression).
 
 
 @pytest.mark.parametrize("origin", [LOCALHOST_ORIGIN, LOOPBACK_ORIGIN])
@@ -276,7 +276,7 @@ def test_localhost_allowed_with_empty_allow_origins(tmp_path, origin):
 
 @pytest.mark.parametrize("origin", [LOCALHOST_ORIGIN, LOOPBACK_ORIGIN])
 def test_localhost_allowed_when_allow_origins_is_set(tmp_path, origin):
-    """Regression for OpenHands/OpenHands#8675: explicit allowlist must
+    """Regression for Madagascar/Madagascar#8675: explicit allowlist must
     not disable the localhost auto-allow."""
     client = _build_client(
         tmp_path,

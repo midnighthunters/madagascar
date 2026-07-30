@@ -1,13 +1,13 @@
 import React from "react";
 import { cn } from "#/utils/utils";
 import { CopyToClipboardButton } from "#/components/shared/buttons/copy-to-clipboard-button";
-import { OpenHandsSourceType } from "#/types/core/base";
+import { MadagascarSourceType } from "#/types/core/base";
 import { StyledTooltip } from "#/components/shared/buttons/styled-tooltip";
 import { MarkdownRenderer } from "../markdown/markdown-renderer";
 import { AnimalAvatar } from "#/components/shared/animal-avatar";
 
 interface ChatMessageProps {
-  type: OpenHandsSourceType;
+  type: MadagascarSourceType;
   message: string;
   actions?: Array<{
     icon: React.ReactNode;

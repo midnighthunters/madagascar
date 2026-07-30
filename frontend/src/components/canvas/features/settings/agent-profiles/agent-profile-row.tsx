@@ -31,13 +31,13 @@ export function AgentProfileRow({
   onDelete,
   isActivating,
 }: AgentProfileRowProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const [menuOpen, setMenuOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
-  // Secondary label: the referenced LLM profile (OpenHands) or the "ACP" kind.
+  // Secondary label: the referenced LLM profile (Madagascar) or the "ACP" kind.
   const secondary =
-    profile.agent_kind === "openhands"
+    profile.agent_kind === "madagascar"
       ? profile.llm_profile_ref
       : t(I18nKey.SETTINGS$AGENT_TYPE_ACP);
 

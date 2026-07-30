@@ -14,15 +14,15 @@ import httpx
 import pytest
 from fastapi import HTTPException, status
 
-from openhands.agent_server.models import TextContent
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.agent_server.models import TextContent
+from madagascar.app_server.app_conversation.app_conversation_models import (
     AppConversation,
     AppSendMessageRequest,
 )
-from openhands.app_server.app_conversation.app_conversation_router import (
+from madagascar.app_server.app_conversation.app_conversation_router import (
     send_message_to_conversation,
 )
-from openhands.app_server.sandbox.sandbox_models import (
+from madagascar.app_server.sandbox.sandbox_models import (
     AGENT_SERVER,
     ExposedUrl,
     SandboxInfo,

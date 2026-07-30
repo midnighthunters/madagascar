@@ -10,10 +10,10 @@ from integrations.jira_dc.jira_dc_view import (
     JiraDcNewConversationView,
 )
 
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.app_server.app_conversation.app_conversation_models import (
     ConversationTrigger,
 )
-from openhands.app_server.integrations.service_types import ProviderType, Repository
+from madagascar.app_server.integrations.service_types import ProviderType, Repository
 
 
 @pytest.mark.asyncio
@@ -24,7 +24,7 @@ async def test_factory_always_creates_new_conversation(
     sample_jira_dc_workspace,
     jira_dc_conversation,
 ):
-    """Every @openhands mention starts a fresh conversation (matches GitHub/BBDC).
+    """Every @madagascar mention starts a fresh conversation (matches GitHub/BBDC).
 
     JDC used to reuse the existing conversation for (issue, user), but that path
     sends the message into a possibly-recycled sandbox and 404s ("Sorry, there was

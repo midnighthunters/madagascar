@@ -5,12 +5,12 @@ from unittest.mock import MagicMock
 import pytest
 from litellm.types.utils import ModelResponse
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.agent.response_dispatch import LLMResponseType, classify_response
-from openhands.sdk.conversation import Conversation, LocalConversation
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.event import ActionEvent, Event, MessageEvent
-from openhands.sdk.llm import (
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.agent.response_dispatch import LLMResponseType, classify_response
+from madagascar.sdk.conversation import Conversation, LocalConversation
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.event import ActionEvent, Event, MessageEvent
+from madagascar.sdk.llm import (
     LLM,
     LLMResponse,
     Message,
@@ -20,7 +20,7 @@ from openhands.sdk.llm import (
     TextContent,
     ThinkingBlock,
 )
-from openhands.sdk.llm.utils.metrics import MetricsSnapshot, TokenUsage
+from madagascar.sdk.llm.utils.metrics import MetricsSnapshot, TokenUsage
 
 
 def _msg(**kwargs) -> Message:

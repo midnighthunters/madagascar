@@ -34,7 +34,7 @@ from storage.user import User
 from storage.user_settings import UserSettings
 from utils.identity import resolve_display_name
 
-from openhands.sdk.settings import AGENT_SETTINGS_SCHEMA_VERSION
+from madagascar.sdk.settings import AGENT_SETTINGS_SCHEMA_VERSION
 
 # The max possible time to wait for another process to finish creating a user before retrying
 _REDIS_CREATE_TIMEOUT_SECONDS = 30
@@ -1153,7 +1153,7 @@ class UserStore:
     from typing import TYPE_CHECKING
 
     if TYPE_CHECKING:
-        from openhands.app_server.settings.settings_models import Settings
+        from madagascar.app_server.settings.settings_models import Settings
 
     @staticmethod
     async def create_default_settings(
@@ -1170,7 +1170,7 @@ class UserStore:
         if not org_id:
             return None
 
-        from openhands.app_server.settings.settings_models import Settings
+        from madagascar.app_server.settings.settings_models import Settings
 
         default_settings = Settings(
             language='en', enable_proactive_conversation_starters=True

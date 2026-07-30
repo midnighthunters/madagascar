@@ -2,16 +2,16 @@ import uuid
 
 from pydantic import SecretStr
 
-from openhands.sdk.agent.base import AgentBase
-from openhands.sdk.conversation import Conversation, LocalConversation
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.conversation.types import (
+from madagascar.sdk.agent.base import AgentBase
+from madagascar.sdk.conversation import Conversation, LocalConversation
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.conversation.types import (
     ConversationCallbackType,
     ConversationTokenCallbackType,
 )
-from openhands.sdk.event.llm_convertible import SystemPromptEvent
-from openhands.sdk.llm import LLM, TextContent
-from openhands.sdk.security.confirmation_policy import AlwaysConfirm, NeverConfirm
+from madagascar.sdk.event.llm_convertible import SystemPromptEvent
+from madagascar.sdk.llm import LLM, TextContent
+from madagascar.sdk.security.confirmation_policy import AlwaysConfirm, NeverConfirm
 
 
 class ConversationIdDummyAgent(AgentBase):

@@ -6,12 +6,12 @@ The property ensures unmatched actions and observations are filtered out.
 
 from unittest.mock import create_autospec
 
-from openhands.sdk.context.view.manipulation_indices import ManipulationIndices
-from openhands.sdk.context.view.properties.tool_call_matching import (
+from madagascar.sdk.context.view.manipulation_indices import ManipulationIndices
+from madagascar.sdk.context.view.properties.tool_call_matching import (
     ToolCallMatchingProperty,
 )
-from openhands.sdk.event.base import LLMConvertibleEvent
-from openhands.sdk.event.llm_convertible import (
+from madagascar.sdk.event.base import LLMConvertibleEvent
+from madagascar.sdk.event.llm_convertible import (
     ActionEvent,
     AgentErrorEvent,
     ObservationEvent,

@@ -58,7 +58,7 @@ export function SkillDetailModal({
   onToggle,
   onClose,
 }: SkillDetailModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const launchSkillInChat = useLaunchSkillInChat();
   const [sourceCopied, setSourceCopied] = React.useState(false);
   const chatLaunchMessage = React.useMemo(

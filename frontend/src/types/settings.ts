@@ -121,7 +121,7 @@ export type SettingsSectionSchema = {
   label: string;
   fields: SettingsFieldSchema[];
   // SDK agent-settings is a discriminated union; non-shared sections are
-  // tagged with their variant ("openhands"/"acp"). null/absent = shared.
+  // tagged with their variant ("madagascar"/"acp"). null/absent = shared.
   variant?: string | null;
 };
 

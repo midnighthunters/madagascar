@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.logger import get_logger
-from openhands.tools.terminal.constants import TIMEOUT_MESSAGE_TEMPLATE
-from openhands.tools.terminal.terminal import create_terminal_session
+from madagascar.sdk.logger import get_logger
+from madagascar.tools.terminal.constants import TIMEOUT_MESSAGE_TEMPLATE
+from madagascar.tools.terminal.terminal import create_terminal_session
 
 
 logger = get_logger(__name__)

@@ -13,8 +13,8 @@ import pytest
 from joserfc import jwt as joserfc_jwt
 from joserfc.jwk import KeySet, RSAKey
 
-from openhands.sdk.llm.auth.credentials import CredentialStore, OAuthCredentials
-from openhands.sdk.llm.auth.openai import (
+from madagascar.sdk.llm.auth.credentials import CredentialStore, OAuthCredentials
+from madagascar.sdk.llm.auth.openai import (
     CLIENT_ID,
     CONSENT_BANNER,
     ISSUER,
@@ -66,13 +66,13 @@ def test_build_authorize_url():
     assert "code_challenge=test_challenge" in url
     assert "code_challenge_method=S256" in url
     assert "state=test_state" in url
-    assert "originator=openhands" in url
+    assert "originator=madagascar" in url
     assert "response_type=code" in url
 
 
 def test_openai_codex_models():
     """Test that OPENAI_CODEX_MODELS contains expected models."""
-    from openhands.sdk.settings.acp_providers import get_acp_provider
+    from madagascar.sdk.settings.acp_providers import get_acp_provider
 
     codex_provider = get_acp_provider("codex")
     assert codex_provider is not None
@@ -265,7 +265,7 @@ async def test_request_device_code_success():
         ]
     )
 
-    with patch("openhands.sdk.llm.auth.openai.AsyncClient", return_value=fake_client):
+    with patch("madagascar.sdk.llm.auth.openai.AsyncClient", return_value=fake_client):
         device_code = await _request_device_code()
 
     assert device_code == DeviceCode(
@@ -308,8 +308,8 @@ async def test_poll_device_code_retries_pending_then_succeeds():
     )
 
     with (
-        patch("openhands.sdk.llm.auth.openai.AsyncClient", return_value=fake_client),
-        patch("openhands.sdk.llm.auth.openai.asyncio.sleep", new_callable=AsyncMock),
+        patch("madagascar.sdk.llm.auth.openai.AsyncClient", return_value=fake_client),
+        patch("madagascar.sdk.llm.auth.openai.asyncio.sleep", new_callable=AsyncMock),
     ):
         result = await _poll_device_code(device_code)
 
@@ -352,15 +352,15 @@ async def test_openai_subscription_auth_login_device_code(tmp_path):
 
     with (
         patch(
-            "openhands.sdk.llm.auth.openai._request_device_code",
+            "madagascar.sdk.llm.auth.openai._request_device_code",
             new_callable=AsyncMock,
         ) as mock_request,
         patch(
-            "openhands.sdk.llm.auth.openai._poll_device_code",
+            "madagascar.sdk.llm.auth.openai._poll_device_code",
             new_callable=AsyncMock,
         ) as mock_poll,
         patch(
-            "openhands.sdk.llm.auth.openai._exchange_code_for_tokens",
+            "madagascar.sdk.llm.auth.openai._exchange_code_for_tokens",
             new_callable=AsyncMock,
         ) as mock_exchange,
     ):
@@ -434,7 +434,7 @@ async def test_openai_subscription_auth_refresh_if_needed_expired_creds(tmp_path
 
     # Mock the refresh function
     with patch(
-        "openhands.sdk.llm.auth.openai._refresh_access_token",
+        "madagascar.sdk.llm.auth.openai._refresh_access_token",
         new_callable=AsyncMock,
     ) as mock_refresh:
         mock_refresh.return_value = {
@@ -467,7 +467,7 @@ class TestConsentBannerSystem:
     def test_consent_marker_path(self, tmp_path):
         """Test that consent marker path is in credentials directory."""
         with patch(
-            "openhands.sdk.llm.auth.openai.get_credentials_dir", return_value=tmp_path
+            "madagascar.sdk.llm.auth.openai.get_credentials_dir", return_value=tmp_path
         ):
             marker_path = _get_consent_marker_path()
             assert marker_path.parent == tmp_path
@@ -476,14 +476,14 @@ class TestConsentBannerSystem:
     def test_has_acknowledged_consent_false_initially(self, tmp_path):
         """Test that consent is not acknowledged initially."""
         with patch(
-            "openhands.sdk.llm.auth.openai.get_credentials_dir", return_value=tmp_path
+            "madagascar.sdk.llm.auth.openai.get_credentials_dir", return_value=tmp_path
         ):
             assert not _has_acknowledged_consent()
 
     def test_mark_consent_acknowledged(self, tmp_path):
         """Test marking consent as acknowledged."""
         with patch(
-            "openhands.sdk.llm.auth.openai.get_credentials_dir", return_value=tmp_path
+            "madagascar.sdk.llm.auth.openai.get_credentials_dir", return_value=tmp_path
         ):
             assert not _has_acknowledged_consent()
             _mark_consent_acknowledged()
@@ -493,7 +493,7 @@ class TestConsentBannerSystem:
         """Test consent display when user accepts."""
         with (
             patch(
-                "openhands.sdk.llm.auth.openai.get_credentials_dir",
+                "madagascar.sdk.llm.auth.openai.get_credentials_dir",
                 return_value=tmp_path,
             ),
             patch("sys.stdin.isatty", return_value=True),
@@ -511,7 +511,7 @@ class TestConsentBannerSystem:
         """Test consent display when user declines."""
         with (
             patch(
-                "openhands.sdk.llm.auth.openai.get_credentials_dir",
+                "madagascar.sdk.llm.auth.openai.get_credentials_dir",
                 return_value=tmp_path,
             ),
             patch("sys.stdin.isatty", return_value=True),
@@ -524,7 +524,7 @@ class TestConsentBannerSystem:
         """Test that non-interactive mode raises error on first time."""
         with (
             patch(
-                "openhands.sdk.llm.auth.openai.get_credentials_dir",
+                "madagascar.sdk.llm.auth.openai.get_credentials_dir",
                 return_value=tmp_path,
             ),
             patch("sys.stdin.isatty", return_value=False),
@@ -535,7 +535,7 @@ class TestConsentBannerSystem:
     def test_display_consent_non_interactive_after_acknowledgment(self, tmp_path):
         """Test that non-interactive mode works after prior acknowledgment."""
         with patch(
-            "openhands.sdk.llm.auth.openai.get_credentials_dir", return_value=tmp_path
+            "madagascar.sdk.llm.auth.openai.get_credentials_dir", return_value=tmp_path
         ):
             # Mark consent as acknowledged
             _mark_consent_acknowledged()
@@ -548,7 +548,7 @@ class TestConsentBannerSystem:
         """Test handling of keyboard interrupt during consent."""
         with (
             patch(
-                "openhands.sdk.llm.auth.openai.get_credentials_dir",
+                "madagascar.sdk.llm.auth.openai.get_credentials_dir",
                 return_value=tmp_path,
             ),
             patch("sys.stdin.isatty", return_value=True),
@@ -561,7 +561,7 @@ class TestConsentBannerSystem:
         """Test handling of EOF during consent."""
         with (
             patch(
-                "openhands.sdk.llm.auth.openai.get_credentials_dir",
+                "madagascar.sdk.llm.auth.openai.get_credentials_dir",
                 return_value=tmp_path,
             ),
             patch("sys.stdin.isatty", return_value=True),
@@ -585,13 +585,13 @@ def test_no_authlib_jose_import():
     import sys
 
     # Remove cached module to force re-import
-    mod_name = "openhands.sdk.llm.auth.openai"
+    mod_name = "madagascar.sdk.llm.auth.openai"
     if mod_name in sys.modules:
         importlib.reload(sys.modules[mod_name])
 
     import inspect
 
-    from openhands.sdk.llm.auth import openai as openai_auth_mod
+    from madagascar.sdk.llm.auth import openai as openai_auth_mod
 
     source = inspect.getsource(openai_auth_mod)
     assert "from authlib.jose" not in source, (
@@ -643,7 +643,7 @@ def mock_jwks_cache(rsa_signing_key):
     pub_dict = rsa_signing_key.as_dict(private=False)
     key_set = KeySet.import_key_set({"keys": [pub_dict]})
     with patch(
-        "openhands.sdk.llm.auth.openai._jwks_cache.get_key_set",
+        "madagascar.sdk.llm.auth.openai._jwks_cache.get_key_set",
         return_value=key_set,
     ):
         yield
@@ -694,7 +694,7 @@ def test_extract_chatgpt_account_id_wrong_key(rsa_signing_key):
     )
 
     with patch(
-        "openhands.sdk.llm.auth.openai._jwks_cache.get_key_set",
+        "madagascar.sdk.llm.auth.openai._jwks_cache.get_key_set",
         return_value=wrong_key_set,
     ):
         assert _extract_chatgpt_account_id(token) is None
@@ -703,7 +703,7 @@ def test_extract_chatgpt_account_id_wrong_key(rsa_signing_key):
 def test_extract_chatgpt_account_id_jwks_fetch_failure():
     """Returns None when JWKS cache raises RuntimeError."""
     with patch(
-        "openhands.sdk.llm.auth.openai._jwks_cache.get_key_set",
+        "madagascar.sdk.llm.auth.openai._jwks_cache.get_key_set",
         side_effect=RuntimeError("network error"),
     ):
         assert _extract_chatgpt_account_id("dummy.jwt.token") is None

@@ -1,7 +1,7 @@
 ---
 name: address_pr_comments
 version: 1.0.0
-author: openhands
+author: madagascar
 agent: CodeActAgent
 triggers:
 - /address_pr_comments

@@ -8,7 +8,7 @@ interface NoRepositoryProps {
 }
 
 export function NoRepository({ workspaceWorkingDir }: NoRepositoryProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const folderName = workspaceWorkingDir
     ? getPathBasename(workspaceWorkingDir).trim()

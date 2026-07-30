@@ -2,7 +2,7 @@
 
 import pytest
 
-from openhands.app_server.utils.env_var_validation import (
+from madagascar.app_server.utils.env_var_validation import (
     is_valid_env_var_name,
     validate_env_var_name,
 )

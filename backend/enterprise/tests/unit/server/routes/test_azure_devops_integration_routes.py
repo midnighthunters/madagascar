@@ -18,7 +18,7 @@ async def test_verify_azure_devops_signature_accepts_header_secret(monkeypatch):
 async def test_verify_azure_devops_signature_accepts_basic_auth(monkeypatch):
     monkeypatch.setattr(azure_devops, 'IS_LOCAL_DEPLOYMENT', False)
     monkeypatch.setattr(azure_devops, 'AZURE_DEVOPS_WEBHOOK_SECRET', 'expected')
-    encoded = base64.b64encode(b'openhands:expected').decode()
+    encoded = base64.b64encode(b'madagascar:expected').decode()
 
     await azure_devops.verify_azure_devops_signature(None, f'Basic {encoded}')
 
@@ -302,7 +302,7 @@ async def test_events_route_schedules_receive_message_in_background(monkeypatch)
     response = await azure_devops.azure_devops_events(
         request=_FakeRequest(),
         background_tasks=background_tasks,
-        x_openhands_webhook_secret='secret',
+        x_madagascar_webhook_secret='secret',
         authorization=None,
     )
 
@@ -334,7 +334,7 @@ async def test_events_route_skips_duplicate_without_scheduling(monkeypatch):
     response = await azure_devops.azure_devops_events(
         request=_FakeRequest(),
         background_tasks=background_tasks,
-        x_openhands_webhook_secret='secret',
+        x_madagascar_webhook_secret='secret',
         authorization=None,
     )
 

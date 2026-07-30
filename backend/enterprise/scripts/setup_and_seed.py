@@ -15,7 +15,7 @@ from datetime import UTC, datetime, timedelta
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
-DEFAULT_DB_URL = 'postgresql://postgres:postgres@localhost:5432/openhands'
+DEFAULT_DB_URL = 'postgresql://postgres:postgres@localhost:5432/madagascar'
 
 
 # Sample data
@@ -160,7 +160,7 @@ def random_datetime(days_back: int = 90) -> datetime:
 def create_tables(engine):
     """Create required tables if they don't exist.
 
-    Note: This script seeds data into the OpenHands enterprise schema which uses:
+    Note: This script seeds data into the Madagascar enterprise schema which uses:
     - org (not organizations)
     - user (not users)
     - org_member (not organization_members)
@@ -361,7 +361,7 @@ def seed_data(
 ):
     """Seed the database with conversation data.
 
-    Uses the correct OpenHands schema: org, user, org_member tables.
+    Uses the correct Madagascar schema: org, user, org_member tables.
     """
     SessionLocal = sessionmaker(bind=engine)
     session = SessionLocal()

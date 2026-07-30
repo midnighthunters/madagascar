@@ -21,7 +21,7 @@ export function ToggleButton({
   getToggleButtonProps,
   iconClassName,
 }: ToggleButtonProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <button

@@ -6,22 +6,22 @@ Tests the behavior of action matching with various observation types including:
 - UserRejectObservation
 - AgentErrorEvent (crash recovery scenario)
 
-Related Issue: https://github.com/OpenHands/agent-sdk/issues/2298
+Related Issue: https://github.com/Madagascar/agent-sdk/issues/2298
 """
 
 from litellm import ChatCompletionMessageToolCall
 from litellm.types.utils import Function
 
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.event import (
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.event import (
     ActionEvent,
     AgentErrorEvent,
     ObservationEvent,
     UserRejectObservation,
 )
-from openhands.sdk.event.base import Event
-from openhands.sdk.llm import MessageToolCall, TextContent
-from openhands.sdk.tool.schema import Action, Observation
+from madagascar.sdk.event.base import Event
+from madagascar.sdk.llm import MessageToolCall, TextContent
+from madagascar.sdk.tool.schema import Action, Observation
 
 
 class MockTestAction(Action):
@@ -124,7 +124,7 @@ def test_action_with_agent_error_event_is_matched():
     3. On restart, crash recovery emits AgentErrorEvent (tool_call_id=X)
     4. The action should now be considered "matched" and NOT be re-executed
 
-    Related issue: https://github.com/OpenHands/agent-sdk/issues/2298
+    Related issue: https://github.com/Madagascar/agent-sdk/issues/2298
     """
     action = _create_action_event(call_id="call_crash")
     error_event = AgentErrorEvent(

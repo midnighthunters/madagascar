@@ -6,12 +6,12 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.llm import LLM
-from openhands.sdk.llm.llm_profile_store import LLMProfileStore
-from openhands.sdk.profiles import (
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.llm.llm_profile_store import LLMProfileStore
+from madagascar.sdk.profiles import (
     ACPAgentProfile,
     AgentProfileStore,
-    OpenHandsAgentProfile,
+    MadagascarAgentProfile,
     ProfileReferenced,
     cascade_rename,
     delete_llm_profile,
@@ -30,14 +30,14 @@ def llm_store(tmp_path: Path) -> LLMProfileStore:
     return LLMProfileStore(base_dir=tmp_path / "llm-profiles")
 
 
-def _oh(name: str, llm_profile_ref: str) -> OpenHandsAgentProfile:
-    return OpenHandsAgentProfile(name=name, llm_profile_ref=llm_profile_ref)
+def _oh(name: str, llm_profile_ref: str) -> MadagascarAgentProfile:
+    return MadagascarAgentProfile(name=name, llm_profile_ref=llm_profile_ref)
 
 
 def _ref(store: AgentProfileStore, name: str) -> str:
     """Load a profile and return its ``llm_profile_ref`` (narrows the union)."""
     loaded = store.load(name)
-    assert isinstance(loaded, OpenHandsAgentProfile)
+    assert isinstance(loaded, MadagascarAgentProfile)
     return loaded.llm_profile_ref
 
 
@@ -48,7 +48,7 @@ def test_find_referrers_empty(agent_store: AgentProfileStore) -> None:
     assert find_referrers(agent_store, "default") == []
 
 
-def test_find_referrers_matches_only_citing_openhands(
+def test_find_referrers_matches_only_citing_madagascar(
     agent_store: AgentProfileStore,
 ) -> None:
     agent_store.save(_oh("a", "default"))
@@ -92,7 +92,7 @@ def test_cascade_rename_preserves_id_and_other_fields(
     """The surgical raw-JSON edit (``set_llm_profile_ref``) only touches the
     ref field — id, mcp_server_refs, and everything else survive untouched.
     No cipher is involved: the profile is secret-free at rest (#4017)."""
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="a", llm_profile_ref="default", mcp_server_refs=["fetch"], revision=3
     )
     agent_store.save(profile)

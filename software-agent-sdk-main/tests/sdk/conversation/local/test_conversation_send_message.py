@@ -4,23 +4,23 @@ from unittest.mock import MagicMock, patch
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk.agent.acp_agent import ACPAgent
-from openhands.sdk.agent.base import AgentBase
-from openhands.sdk.conversation import Conversation, LocalConversation
-from openhands.sdk.conversation.impl.local_conversation import (
+from madagascar.sdk.agent.acp_agent import ACPAgent
+from madagascar.sdk.agent.base import AgentBase
+from madagascar.sdk.conversation import Conversation, LocalConversation
+from madagascar.sdk.conversation.impl.local_conversation import (
     ACP_INFLIGHT_PROMPT_USER_MESSAGE_ID,
     ACP_LAST_PROMPT_USER_MESSAGE_ID,
 )
-from openhands.sdk.conversation.state import (
+from madagascar.sdk.conversation.state import (
     ConversationExecutionStatus,
     ConversationState,
 )
-from openhands.sdk.conversation.types import (
+from madagascar.sdk.conversation.types import (
     ConversationCallbackType,
     ConversationTokenCallbackType,
 )
-from openhands.sdk.event.llm_convertible import MessageEvent, SystemPromptEvent
-from openhands.sdk.llm import LLM, Message, TextContent
+from madagascar.sdk.event.llm_convertible import MessageEvent, SystemPromptEvent
+from madagascar.sdk.llm import LLM, Message, TextContent
 
 
 class SendMessageDummyAgent(AgentBase):

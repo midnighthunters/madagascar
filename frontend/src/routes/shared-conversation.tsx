@@ -8,7 +8,7 @@ import { Messages as V1Messages } from "#/components/v1/chat";
 import { shouldRenderEvent } from "#/components/v1/chat/event-content-helpers/should-render-event";
 import { LoadingSpinner } from "#/components/shared/loading-spinner";
 import { handleEventForUI } from "#/utils/handle-event-for-ui";
-import { OpenHandsEvent } from "#/types/v1/core";
+import { MadagascarEvent } from "#/types/v1/core";
 import { useInfiniteScroll } from "#/hooks/use-infinite-scroll";
 
 export default function SharedConversation() {
@@ -44,7 +44,7 @@ export default function SharedConversation() {
     () =>
       v1Events
         .reduce<
-          OpenHandsEvent[]
+          MadagascarEvent[]
         >((uiEvents, event) => handleEventForUI(event, uiEvents), [])
         .filter(shouldRenderEvent),
     [v1Events],
@@ -81,7 +81,7 @@ export default function SharedConversation() {
           <Link
             to="/"
             className="flex-shrink-0 flex items-center"
-            aria-label={t(I18nKey.BRANDING$OPENHANDS_LOGO)}
+            aria-label={t(I18nKey.BRANDING$MADAGASCAR_LOGO)}
           >
             <span className="font-extrabold text-lg tracking-wider text-amber-400">
               MADAGASCAR

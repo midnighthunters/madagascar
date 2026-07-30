@@ -9,9 +9,9 @@ from unittest.mock import patch
 import pytest
 from cachetools import LRUCache
 
-from openhands.tools.file_editor import file_editor
-from openhands.tools.file_editor.editor import FileEditor
-from openhands.tools.file_editor.utils.encoding import (
+from madagascar.tools.file_editor import file_editor
+from madagascar.tools.file_editor.editor import FileEditor
+from madagascar.tools.file_editor.utils.encoding import (
     EncodingManager,
     with_encoding,
 )

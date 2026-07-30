@@ -13,8 +13,8 @@ import os
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Agent, LocalConversation
-from openhands.sdk.llm.llm_profile_store import LLMProfileStore
+from madagascar.sdk import LLM, Agent, LocalConversation
+from madagascar.sdk.llm.llm_profile_store import LLMProfileStore
 
 
 GPT_PROFILE = "example-gpt55"

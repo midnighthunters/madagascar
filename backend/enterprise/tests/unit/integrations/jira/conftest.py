@@ -18,8 +18,8 @@ from storage.jira_conversation import JiraConversation
 from storage.jira_user import JiraUser
 from storage.jira_workspace import JiraWorkspace
 
-from openhands.app_server.integrations.service_types import ProviderType, Repository
-from openhands.app_server.user_auth.user_auth import UserAuth
+from madagascar.app_server.integrations.service_types import ProviderType, Repository
+from madagascar.app_server.user_auth.user_auth import UserAuth
 
 
 @pytest.fixture
@@ -95,7 +95,7 @@ def sample_webhook_payload():
         account_id='user123',
         workspace_name='test.atlassian.net',
         base_api_url='https://test.atlassian.net',
-        comment_body='Fix this bug @openhands',
+        comment_body='Fix this bug @madagascar',
     )
 
 
@@ -122,7 +122,7 @@ def sample_comment_webhook_payload():
     return {
         'webhookEvent': 'comment_created',
         'comment': {
-            'body': 'Please fix this @openhands',
+            'body': 'Please fix this @madagascar',
             'author': {
                 'emailAddress': 'user@test.com',
                 'displayName': 'Test User',
@@ -143,7 +143,7 @@ def sample_issue_update_webhook_payload():
     """Sample issue update webhook payload."""
     return {
         'webhookEvent': 'jira:issue_updated',
-        'changelog': {'items': [{'field': 'labels', 'toString': 'openhands'}]},
+        'changelog': {'items': [{'field': 'labels', 'toString': 'madagascar'}]},
         'issue': {
             'id': '12345',
             'key': 'PROJ-123',

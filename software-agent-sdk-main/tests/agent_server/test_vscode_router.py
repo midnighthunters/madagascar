@@ -6,9 +6,9 @@ import pytest
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
-from openhands.agent_server.api import create_app
-from openhands.agent_server.config import Config
-from openhands.agent_server.vscode_router import (
+from madagascar.agent_server.api import create_app
+from madagascar.agent_server.config import Config
+from madagascar.agent_server.vscode_router import (
     get_vscode_status,
     get_vscode_url,
 )
@@ -25,7 +25,7 @@ def client():
 @pytest.fixture
 def mock_vscode_service():
     """Mock VSCode service for testing."""
-    with patch("openhands.agent_server.vscode_router.get_vscode_service") as mock:
+    with patch("madagascar.agent_server.vscode_router.get_vscode_service") as mock:
         yield mock.return_value
 
 
@@ -95,9 +95,9 @@ def test_vscode_router_endpoints_integration(client):
     # Patch both the router import and the service module
     with (
         patch(
-            "openhands.agent_server.vscode_router.get_vscode_service"
+            "madagascar.agent_server.vscode_router.get_vscode_service"
         ) as mock_service_getter,
-        patch("openhands.agent_server.api.get_vscode_service") as mock_api_service,
+        patch("madagascar.agent_server.api.get_vscode_service") as mock_api_service,
     ):
         mock_service = mock_service_getter.return_value
         mock_service.get_vscode_url.return_value = (
@@ -131,9 +131,9 @@ def test_vscode_router_endpoints_with_errors(client):
     # Patch both the router import and the service module
     with (
         patch(
-            "openhands.agent_server.vscode_router.get_vscode_service"
+            "madagascar.agent_server.vscode_router.get_vscode_service"
         ) as mock_service_getter,
-        patch("openhands.agent_server.api.get_vscode_service") as mock_api_service,
+        patch("madagascar.agent_server.api.get_vscode_service") as mock_api_service,
     ):
         mock_service = mock_service_getter.return_value
         mock_service.is_running.side_effect = Exception("Service down")
@@ -159,7 +159,7 @@ def test_vscode_router_endpoints_with_errors(client):
 async def test_get_vscode_url_disabled():
     """Test getting VSCode URL when VSCode is disabled."""
     with patch(
-        "openhands.agent_server.vscode_router.get_vscode_service"
+        "madagascar.agent_server.vscode_router.get_vscode_service"
     ) as mock_service:
         mock_service.return_value = None
 
@@ -174,7 +174,7 @@ async def test_get_vscode_url_disabled():
 async def test_get_vscode_status_disabled():
     """Test getting VSCode status when VSCode is disabled."""
     with patch(
-        "openhands.agent_server.vscode_router.get_vscode_service"
+        "madagascar.agent_server.vscode_router.get_vscode_service"
     ) as mock_service:
         mock_service.return_value = None
 
@@ -191,9 +191,9 @@ def test_vscode_router_disabled_integration(client):
     """Test VSCode router endpoints when VSCode is disabled."""
     with (
         patch(
-            "openhands.agent_server.vscode_router.get_vscode_service"
+            "madagascar.agent_server.vscode_router.get_vscode_service"
         ) as mock_router_service,
-        patch("openhands.agent_server.api.get_vscode_service") as mock_api_service,
+        patch("madagascar.agent_server.api.get_vscode_service") as mock_api_service,
     ):
         # Configure VSCode as disabled
         mock_router_service.return_value = None

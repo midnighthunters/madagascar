@@ -2,10 +2,10 @@
 
 from pydantic import SecretStr
 
-from openhands.sdk import Agent, LocalConversation
-from openhands.sdk.event import ActionEvent, ObservationEvent
-from openhands.sdk.llm import LLM, MessageToolCall, TextContent
-from openhands.tools.terminal.definition import (
+from madagascar.sdk import Agent, LocalConversation
+from madagascar.sdk.event import ActionEvent, ObservationEvent
+from madagascar.sdk.llm import LLM, MessageToolCall, TextContent
+from madagascar.tools.terminal.definition import (
     TerminalAction,
     TerminalObservation,
 )

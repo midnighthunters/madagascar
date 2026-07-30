@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from openhands.tools.file_editor.editor import FileEditor
-from openhands.tools.file_editor.exceptions import (
+from madagascar.tools.file_editor.editor import FileEditor
+from madagascar.tools.file_editor.exceptions import (
     EditorToolParameterInvalidError,
 )
 

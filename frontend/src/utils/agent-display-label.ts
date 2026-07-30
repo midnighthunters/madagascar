@@ -1,11 +1,11 @@
 import type { ACPProviderConfig } from "#/api/option-service/option.types";
-import type { AgentKind } from "#/api/open-hands.types";
+import type { AgentKind } from "#/api/madagascar.types";
 import { formatLlmModel } from "./format-llm-model";
 
 /**
  * Tag key on ``AppConversationInfo.tags`` holding the active ACP provider
  * discriminator (e.g. ``"claude-code"``, ``"codex"``, ``"gemini-cli"``).
- * Synced with agent-canvas and the OpenHands backend. Constrained to ^[a-z0-9]+$
+ * Synced with agent-canvas and the Madagascar backend. Constrained to ^[a-z0-9]+$
  * by the agent-server SDK validator — no underscores allowed.
  */
 export const ACP_SERVER_TAG = "acpserver";
@@ -16,7 +16,7 @@ export const ACP_SERVER_TAG = "acpserver";
  * to ``acp-generic``.
  */
 export type AgentChipKind =
-  | "openhands"
+  | "madagascar"
   | "acp-claude-code"
   | "acp-codex"
   | "acp-gemini-cli"
@@ -53,9 +53,9 @@ function acpKindFor(providerKey: string | undefined): AgentChipKind {
  * Resolve the icon, label, and tooltip for the conversation chip.
  *
  * The chip carries two signals: the icon is a brand mark for the harness
- * (OpenHands logo, Claude/OpenAI/Gemini mark), and the text is the model label.
+ * (Madagascar logo, Claude/OpenAI/Gemini mark), and the text is the model label.
  * ACP models use the curated label from the provider registry (falling back to
- * the raw id); native OpenHands models use ``formatLlmModel``. For ACP
+ * the raw id); native Madagascar models use ``formatLlmModel``. For ACP
  * conversations where the underlying model isn't exposed, the text falls back
  * to the provider brand ("Claude Code", "Codex", "Gemini CLI", …, or "ACP").
  *
@@ -92,7 +92,7 @@ export function resolveAgentChip(
   }
   if (llmModel) {
     return {
-      kind: "openhands",
+      kind: "madagascar",
       text: formatLlmModel(llmModel),
       tooltip: llmModel,
     };

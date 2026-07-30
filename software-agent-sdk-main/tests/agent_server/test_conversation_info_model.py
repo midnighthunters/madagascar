@@ -8,7 +8,7 @@ The chain is:
      on the serialized ``agent`` field of the API response.
   3. The agent-server lifts them off the live agent instance into top-level
      ``current_model_id`` / ``available_models`` fields on ``ConversationInfo``
-     so the downstream OpenHands app_server (chip) and the model picker can
+     so the downstream Madagascar app_server (chip) and the model picker can
      read them — the picker resolves the id to a label from the list itself.
 
 These tests pin down step 3 — that ``_compose_conversation_info`` reads the
@@ -23,18 +23,18 @@ from uuid import uuid4
 import pytest
 from pydantic import SecretStr
 
-from openhands.agent_server.conversation_service import _compose_conversation_info
-from openhands.agent_server.models import ConversationInfo, StoredConversation
-from openhands.agent_server.utils import utc_now
-from openhands.sdk import LLM, Agent, Tool
-from openhands.sdk.agent.acp_agent import ACPAgent
-from openhands.sdk.agent.acp_models import ACPModelInfo
-from openhands.sdk.conversation.state import (
+from madagascar.agent_server.conversation_service import _compose_conversation_info
+from madagascar.agent_server.models import ConversationInfo, StoredConversation
+from madagascar.agent_server.utils import utc_now
+from madagascar.sdk import LLM, Agent, Tool
+from madagascar.sdk.agent.acp_agent import ACPAgent
+from madagascar.sdk.agent.acp_models import ACPModelInfo
+from madagascar.sdk.conversation.state import (
     ConversationExecutionStatus,
     ConversationState,
 )
-from openhands.sdk.security.confirmation_policy import NeverConfirm
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.sdk.security.confirmation_policy import NeverConfirm
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 def _make_state(agent) -> ConversationState:
@@ -90,7 +90,7 @@ def test_current_model_id_is_none_when_acp_agent_has_no_model():
     assert info.current_model_id is None
 
 
-def test_current_model_id_is_none_for_native_openhands_agent():
+def test_current_model_id_is_none_for_native_madagascar_agent():
     """Native agents don't have the attribute; ``getattr`` returns None."""
     agent = Agent(
         llm=LLM(
@@ -215,7 +215,7 @@ def test_available_models_empty_when_server_omits_them():
     assert info.available_models == []
 
 
-def test_available_models_empty_for_native_openhands_agent():
+def test_available_models_empty_for_native_madagascar_agent():
     """Native agents don't have the attribute; the lift yields []."""
     agent = Agent(
         llm=LLM(

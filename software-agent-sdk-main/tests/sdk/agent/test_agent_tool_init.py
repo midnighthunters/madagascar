@@ -6,13 +6,13 @@ import pytest
 from pydantic import Field
 from rich.text import Text
 
-from openhands.sdk import LLM, Conversation
-from openhands.sdk.agent import Agent
-from openhands.sdk.llm.message import ImageContent, TextContent
-from openhands.sdk.tool import ToolDefinition
-from openhands.sdk.tool.registry import register_tool
-from openhands.sdk.tool.spec import Tool
-from openhands.sdk.tool.tool import Action, Observation, ToolExecutor
+from madagascar.sdk import LLM, Conversation
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.llm.message import ImageContent, TextContent
+from madagascar.sdk.tool import ToolDefinition
+from madagascar.sdk.tool.registry import register_tool
+from madagascar.sdk.tool.spec import Tool
+from madagascar.sdk.tool.tool import Action, Observation, ToolExecutor
 
 
 class _Action(Action):

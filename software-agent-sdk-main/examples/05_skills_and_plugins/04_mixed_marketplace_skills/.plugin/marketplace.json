@@ -1,7 +1,7 @@
 {
     "name": "mixed-skills-marketplace",
     "owner": {
-        "name": "OpenHands Team",
+        "name": "Madagascar Team",
         "email": "contact@all-hands.dev"
     },
     "description": "Example marketplace with both local and remote skills",
@@ -14,8 +14,8 @@
         },
         {
             "name": "github",
-            "source": "https://github.com/OpenHands/extensions/blob/main/skills/github",
-            "description": "GitHub best practices from the OpenHands extensions repository"
+            "source": "https://github.com/Madagascar/extensions/blob/main/skills/github",
+            "description": "GitHub best practices from the Madagascar extensions repository"
         }
     ]
 }

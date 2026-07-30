@@ -1,5 +1,5 @@
-from openhands.sdk.skills import Skill, TaskTrigger
-from openhands.sdk.skills.types import InputMetadata
+from madagascar.sdk.skills import Skill, TaskTrigger
+from madagascar.sdk.skills.types import InputMetadata
 
 
 def test_task_skill_prompt_appending():

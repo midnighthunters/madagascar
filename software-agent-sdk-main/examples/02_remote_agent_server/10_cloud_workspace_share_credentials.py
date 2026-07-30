@@ -1,6 +1,6 @@
-"""Example: Inherit SaaS credentials via OpenHandsCloudWorkspace.
+"""Example: Inherit SaaS credentials via MadagascarCloudWorkspace.
 
-This example shows the simplified flow where your OpenHands Cloud account's
+This example shows the simplified flow where your Madagascar Cloud account's
 LLM configuration and secrets are inherited automatically — no need to
 provide LLM_API_KEY separately.
 
@@ -16,37 +16,37 @@ Usage:
   uv run examples/02_remote_agent_server/10_cloud_workspace_share_credentials.py
 
 Requirements:
-  - OPENHANDS_CLOUD_API_KEY: API key for OpenHands Cloud (the only credential needed)
+  - MADAGASCAR_CLOUD_API_KEY: API key for Madagascar Cloud (the only credential needed)
 
 Optional:
-  - OPENHANDS_CLOUD_API_URL: Override the Cloud API URL (default: https://app.all-hands.dev)
+  - MADAGASCAR_CLOUD_API_URL: Override the Cloud API URL (default: https://app.all-hands.dev)
   - LLM_MODEL: Override the model from your SaaS settings
 """
 
 import os
 import time
 
-from openhands.sdk import (
+from madagascar.sdk import (
     Conversation,
     RemoteConversation,
     get_logger,
 )
-from openhands.tools.preset.default import get_default_agent
-from openhands.workspace import OpenHandsCloudWorkspace
+from madagascar.tools.preset.default import get_default_agent
+from madagascar.workspace import MadagascarCloudWorkspace
 
 
 logger = get_logger(__name__)
 
 
-cloud_api_key = os.getenv("OPENHANDS_CLOUD_API_KEY")
+cloud_api_key = os.getenv("MADAGASCAR_CLOUD_API_KEY")
 if not cloud_api_key:
-    logger.error("OPENHANDS_CLOUD_API_KEY required")
+    logger.error("MADAGASCAR_CLOUD_API_KEY required")
     exit(1)
 
-cloud_api_url = os.getenv("OPENHANDS_CLOUD_API_URL", "https://app.all-hands.dev")
-logger.info(f"Using OpenHands Cloud API: {cloud_api_url}")
+cloud_api_url = os.getenv("MADAGASCAR_CLOUD_API_URL", "https://app.all-hands.dev")
+logger.info(f"Using Madagascar Cloud API: {cloud_api_url}")
 
-with OpenHandsCloudWorkspace(
+with MadagascarCloudWorkspace(
     cloud_api_url=cloud_api_url,
     cloud_api_key=cloud_api_key,
 ) as workspace:
@@ -96,7 +96,7 @@ with OpenHandsCloudWorkspace(
             "Then write a short summary into SECRETS_CHECK.txt."
         )
     else:
-        # No secret was configured on OpenHands Cloud
+        # No secret was configured on Madagascar Cloud
         prompt = "Tell me, is there any secret configured for you?"
 
     try:

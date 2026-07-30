@@ -7,7 +7,7 @@ and delegates work to it from an orchestrator agent.
 import os
 from pathlib import Path
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
@@ -15,9 +15,9 @@ from openhands.sdk import (
     agent_definition_to_factory,
     register_agent,
 )
-from openhands.sdk.subagent import AgentDefinition
-from openhands.tools.delegate import DelegationVisualizer
-from openhands.tools.task import TaskToolSet
+from madagascar.sdk.subagent import AgentDefinition
+from madagascar.tools.delegate import DelegationVisualizer
+from madagascar.tools.task import TaskToolSet
 
 
 # 1. Define a sub-agent using AgentDefinition

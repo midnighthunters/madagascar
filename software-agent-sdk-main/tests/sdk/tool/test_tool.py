@@ -7,15 +7,15 @@ from abc import ABC
 import pytest
 from pydantic import Field, ValidationError
 
-from openhands.sdk.tool import Action
-from openhands.sdk.tool.spec import Tool
-from openhands.sdk.tool.tool import (
+from madagascar.sdk.tool import Action
+from madagascar.sdk.tool.spec import Tool
+from madagascar.sdk.tool.tool import (
     _action_types_with_risk,
     _action_types_with_summary,
     _create_action_type_with_summary,
     create_action_type_with_risk,
 )
-from openhands.sdk.utils.models import _get_checked_concrete_subclasses
+from madagascar.sdk.utils.models import _get_checked_concrete_subclasses
 
 
 # Must live at module scope (Pydantic rejects <locals> classes).
@@ -128,10 +128,10 @@ def test_tool_different_tool_types():
 
     # TaskTrackerTool
     tracker_tool = Tool(
-        name="TaskTrackerTool", params={"save_dir": "/workspace/.openhands"}
+        name="TaskTrackerTool", params={"save_dir": "/workspace/.madagascar"}
     )
     assert tracker_tool.name == "TaskTrackerTool"
-    assert tracker_tool.params["save_dir"] == "/workspace/.openhands"
+    assert tracker_tool.params["save_dir"] == "/workspace/.madagascar"
 
 
 def test_tool_nested_params():
@@ -163,7 +163,7 @@ def test_tool_field_descriptions():
     assert fields["name"].description is not None
     assert "Name of the tool class" in fields["name"].description
     assert (
-        "Import it from an `openhands.tools.<module>` subpackage."
+        "Import it from an `madagascar.tools.<module>` subpackage."
         in fields["name"].description
     )
 
@@ -217,7 +217,7 @@ def test_issue_2199_1(request):
     same ``__name__``, causing ``_get_checked_concrete_subclasses(Action)``
     to raise ``ValueError("Duplicate class definition ...")``.
 
-    Ref: https://github.com/issues/assigned?issue=OpenHands%7Csoftware-agent-sdk%7C2199
+    Ref: https://github.com/issues/assigned?issue=Madagascar%7Csoftware-agent-sdk%7C2199
     """
     """Many threads wrapping the same type must all get the same class object."""
     saved_risk = dict(_action_types_with_risk)
@@ -290,7 +290,7 @@ def test_issue_2642(request):
     them.  ``_get_checked_concrete_subclasses(Action)`` then raises
     ``ValueError("Duplicate class definition ...")``.
 
-    Ref: https://github.com/OpenHands/software-agent-sdk/issues/2642
+    Ref: https://github.com/Madagascar/software-agent-sdk/issues/2642
     """
     bug_actions: list[type[Action]] = [
         _Bug2642ActionA,

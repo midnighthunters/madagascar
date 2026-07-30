@@ -5,7 +5,7 @@ import json
 import pytest
 from pydantic import ValidationError
 
-from openhands.sdk.event import (
+from madagascar.sdk.event import (
     ActionEvent,
     AgentErrorEvent,
     Condensation,
@@ -15,12 +15,12 @@ from openhands.sdk.event import (
     ObservationEvent,
     SystemPromptEvent,
 )
-from openhands.sdk.llm import (
+from madagascar.sdk.llm import (
     Message,
     MessageToolCall,
     TextContent,
 )
-from openhands.sdk.tool import Action, Observation
+from madagascar.sdk.tool import Action, Observation
 
 
 class EventSerializationMockEvent(Event):
@@ -122,7 +122,7 @@ def test_observation_event_serialization() -> None:
 
 def test_message_event_serialization() -> None:
     """Test MessageEvent serialization/deserialization."""
-    from openhands.sdk.llm import Message
+    from madagascar.sdk.llm import Message
 
     llm_message = Message(
         role="user",

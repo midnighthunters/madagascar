@@ -3,7 +3,7 @@
 Verifies that 422 error responses do not leak sensitive fields such as
 ``api_key``, ``env``, or other secret-bearing request values.
 
-Refs: OpenHands/evaluation#385
+Refs: Madagascar/evaluation#385
 """
 
 import pytest
@@ -11,7 +11,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from pydantic import BaseModel
 
-from openhands.agent_server.api import (
+from madagascar.agent_server.api import (
     _add_exception_handlers,
     _sanitize_validation_errors,
 )

@@ -7,7 +7,7 @@ interface SkillsEmptyStateProps {
 }
 
 export function SkillsEmptyState({ isError }: SkillsEmptyStateProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <div className="flex items-center justify-center h-full p-4">

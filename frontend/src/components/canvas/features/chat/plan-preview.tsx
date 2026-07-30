@@ -37,7 +37,7 @@ export function PlanPreview({
   isStreaming,
   isBuildDisabled,
 }: PlanPreviewProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { navigateToTab } = useSelectConversationTab();
   const { handleBuildPlanClick } = useHandleBuildPlanClick();
   const { scrollDomToBottom } = useScrollContext();

@@ -6,20 +6,20 @@ from pathlib import Path
 import pytest
 from litellm.types.utils import ChatCompletionMessageToolCall, Function
 
-from openhands.agent_server.conversation_lease import (
+from madagascar.agent_server.conversation_lease import (
     LEASE_FILE_NAME,
     ConversationOwnershipLostError,
 )
-from openhands.agent_server.conversation_service import ConversationService
-from openhands.agent_server.models import StartConversationRequest
-from openhands.sdk import LLM, Agent
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.event import ActionEvent, AgentErrorEvent, Event, ObservationEvent
-from openhands.sdk.llm import MessageToolCall, TextContent
-from openhands.sdk.security.confirmation_policy import NeverConfirm
-from openhands.sdk.security.risk import SecurityRisk
-from openhands.sdk.workspace import LocalWorkspace
-from openhands.tools.terminal.definition import TerminalAction, TerminalObservation
+from madagascar.agent_server.conversation_service import ConversationService
+from madagascar.agent_server.models import StartConversationRequest
+from madagascar.sdk import LLM, Agent
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.event import ActionEvent, AgentErrorEvent, Event, ObservationEvent
+from madagascar.sdk.llm import MessageToolCall, TextContent
+from madagascar.sdk.security.confirmation_policy import NeverConfirm
+from madagascar.sdk.security.risk import SecurityRisk
+from madagascar.sdk.workspace import LocalWorkspace
+from madagascar.tools.terminal.definition import TerminalAction, TerminalObservation
 
 
 def _request(workspace_dir: Path) -> StartConversationRequest:

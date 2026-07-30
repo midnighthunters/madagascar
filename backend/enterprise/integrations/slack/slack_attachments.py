@@ -11,7 +11,7 @@ from integrations.slack.slack_errors import SlackError, SlackErrorCode
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 MAX_SLACK_ATTACHMENTS_PER_MESSAGE = 5
 MAX_SLACK_ATTACHMENT_BYTES = 5 * 1024 * 1024

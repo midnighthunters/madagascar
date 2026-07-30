@@ -1,6 +1,6 @@
 # Enterprise Architecture Documentation
 
-Architecture diagrams specific to the OpenHands SaaS/Enterprise deployment.
+Architecture diagrams specific to the Madagascar SaaS/Enterprise deployment.
 
 ## Documentation
 
@@ -9,5 +9,5 @@ Architecture diagrams specific to the OpenHands SaaS/Enterprise deployment.
 
 ## Related Documentation
 
-For core OpenHands architecture (applicable to all deployments), see:
-- [Architecture Documentation](https://docs.openhands.dev/openhands/usage/architecture/backend)
+For core Madagascar architecture (applicable to all deployments), see:
+- [Architecture Documentation](https://docs.madagascar.dev/madagascar/usage/architecture/backend)

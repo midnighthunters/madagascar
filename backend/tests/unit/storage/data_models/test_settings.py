@@ -5,28 +5,28 @@ from unittest.mock import patch
 import pytest
 from pydantic import SecretStr, ValidationError
 
-import openhands.app_server.settings.settings_models as settings_module
-from openhands.app_server.settings.llm_profiles import ProfileNotFoundError
-from openhands.app_server.settings.settings_models import (
+import madagascar.app_server.settings.settings_models as settings_module
+from madagascar.app_server.settings.llm_profiles import ProfileNotFoundError
+from madagascar.app_server.settings.settings_models import (
     GETSettingsModel,
     MarketplaceRegistration,
     Settings,
 )
-from openhands.app_server.settings.settings_router import LITE_LLM_API_URL
-from openhands.sdk.llm import LLM
-from openhands.sdk.mcp.config import dump_mcp_config
-from openhands.sdk.settings import (
+from madagascar.app_server.settings.settings_router import LITE_LLM_API_URL
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.mcp.config import dump_mcp_config
+from madagascar.sdk.settings import (
     AGENT_SETTINGS_SCHEMA_VERSION,
     ConversationSettings,
-    OpenHandsAgentSettings,
+    MadagascarAgentSettings,
 )
-from openhands.sdk.settings.model import CondenserSettings, VerificationSettings
+from madagascar.sdk.settings.model import CondenserSettings, VerificationSettings
 
 
 def test_settings_handles_sensitive_data():
     settings = Settings(
         language='en',
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             agent='test-agent',
             llm=LLM(
                 model='test-model',
@@ -48,7 +48,7 @@ def test_settings_handles_sensitive_data():
 
 
 def test_settings_loads_persisted_settings_via_sdk_loaders():
-    loaded_agent_settings = OpenHandsAgentSettings(agent='migrated-agent')
+    loaded_agent_settings = MadagascarAgentSettings(agent='migrated-agent')
     loaded_conversation_settings = ConversationSettings(max_iterations=77)
 
     with (
@@ -77,7 +77,7 @@ def test_settings_loads_persisted_settings_via_sdk_loaders():
 def test_settings_update_deep_merges_agent_settings():
     """Updating agent_settings with a partial dict must not overwrite sibling sub-fields."""
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(model='existing-model', api_key=SecretStr('existing-key')),
             condenser=CondenserSettings(enabled=True, max_size=200),
         ),
@@ -93,7 +93,7 @@ def test_settings_update_deep_merges_agent_settings():
 
 def test_settings_preserve_agent_settings():
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(
                 model='test-model',
                 api_key=SecretStr('test-key'),
@@ -121,7 +121,7 @@ def test_settings_preserve_agent_settings():
 
 def test_settings_to_agent_settings_uses_agent_vals():
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(
                 model='sdk-model',
                 base_url='https://sdk.example.com',
@@ -147,7 +147,7 @@ def test_settings_to_agent_settings_uses_agent_vals():
 
 def test_settings_agent_settings_keeps_sdk_mcp_shape_canonical():
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(model='sdk-model'),
             mcp_config={
                 'sse_server': {
@@ -170,7 +170,7 @@ def test_settings_agent_settings_keeps_sdk_mcp_shape_canonical():
 
 def test_settings_update_mcp_config():
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(llm=LLM(model='sdk-model'))
+        agent_settings=MadagascarAgentSettings(llm=LLM(model='sdk-model'))
     )
 
     settings.update(
@@ -197,7 +197,7 @@ def test_settings_update_mcp_config():
 
 def test_settings_update_replaces_existing_mcp_servers():
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(model='sdk-model'),
             mcp_config={
                 'stale': {
@@ -234,7 +234,7 @@ def _settings_with_mcp_auth(
     url: str = 'https://integration.example.com/mcp',
 ) -> Settings:
     return Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             mcp_config={
                 'integration-hub': {
                     'url': url,
@@ -303,7 +303,7 @@ def test_settings_update_preserves_typed_auth_from_redacted_bearer(
     auth: dict[str, object],
 ):
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             mcp_config={
                 'server': {
                     'url': 'https://integration.example.com/mcp',
@@ -335,7 +335,7 @@ def test_settings_update_preserves_typed_auth_from_redacted_bearer(
 
 def test_settings_update_preserves_custom_headers_with_typed_auth():
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             mcp_config={
                 'server': {
                     'url': 'https://integration.example.com/mcp',
@@ -440,7 +440,7 @@ def test_settings_update_clears_explicit_mcp_auth():
 
 def test_settings_update_clears_auth_without_clearing_custom_headers():
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             mcp_config={
                 'server': {
                     'url': 'https://integration.example.com/mcp',
@@ -474,7 +474,7 @@ def test_settings_update_clears_auth_without_clearing_custom_headers():
 
 def test_settings_update_preserves_redacted_mcp_env_for_same_command():
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             mcp_config={
                 'local': {
                     'command': 'mcp-server',
@@ -522,7 +522,7 @@ def test_settings_update_preserves_redacted_mcp_env_for_same_command():
 
 def test_settings_update_preserves_redacted_mcp_env_across_rename():
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             mcp_config={
                 'old-name': {
                     'command': 'mcp-server',
@@ -554,7 +554,7 @@ def test_settings_update_preserves_redacted_mcp_env_across_rename():
 
 def test_settings_update_does_not_copy_mcp_env_to_duplicate_server():
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             mcp_config={
                 'original': {
                     'command': 'mcp-server',
@@ -592,7 +592,7 @@ def test_settings_update_does_not_copy_mcp_env_to_duplicate_server():
 
 def test_settings_update_drops_redacted_mcp_env_when_args_change():
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             mcp_config={
                 'local': {
                     'command': 'npx',
@@ -642,7 +642,7 @@ def _mcp_config_as_seen_by_frontend(settings: Settings) -> dict:
 def test_get_settings_roundtrip_strips_mcp_auth_secret_to_absent():
     """Document the root cause: the GET response omits the secret entirely."""
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             mcp_config={
                 'server': {
                     'url': 'https://mcp.example.com',
@@ -667,7 +667,7 @@ def test_settings_update_preserves_mcp_auth_across_get_roundtrip_on_add():
     map back — exactly the payload the browser sends.
     """
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             mcp_config={
                 'shttp': {
                     'url': 'https://a.example.com',
@@ -726,7 +726,7 @@ def test_settings_update_preserves_typed_mcp_auth_across_get_roundtrip(
 ):
     """Every typed strategy survives the stripped-secret round trip on an edit."""
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             mcp_config={
                 'server': {
                     'url': 'https://mcp.example.com',
@@ -759,7 +759,7 @@ def test_settings_update_preserves_typed_mcp_auth_across_get_roundtrip(
 def test_settings_update_preserves_stdio_env_across_get_roundtrip():
     """A stdio server's env secrets survive when another server is added."""
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             mcp_config={
                 'local': {
                     'command': 'mcp-server',
@@ -785,7 +785,7 @@ def test_settings_update_preserves_stdio_env_across_get_roundtrip():
 
 def test_settings_update_can_clear_mcp_config():
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(model='sdk-model'),
             mcp_config={
                 'custom': {
@@ -872,7 +872,7 @@ def test_switch_to_profile_preserves_other_agent_settings():
     ``switch_to_profile`` would silently drop those sibling configs.
     """
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(model='openai/gpt-4o'),
             condenser=CondenserSettings(enabled=True, max_size=321),
             verification=VerificationSettings(
@@ -960,7 +960,7 @@ def test_update_ignores_llm_profiles_payload():
 def test_update_clears_active_when_llm_diverges():
     """Editing agent_settings.llm via ``update`` must drop a now-stale active profile."""
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(model='openai/gpt-4o', api_key=SecretStr('sk-a'))
         )
     )
@@ -980,7 +980,7 @@ def test_update_clears_active_when_llm_diverges():
 def test_update_keeps_active_when_llm_unchanged():
     """A no-op LLM update must not spuriously clear ``active``."""
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(model='openai/gpt-4o', api_key=SecretStr('sk-a'))
         )
     )
@@ -1037,10 +1037,10 @@ def test_settings_no_pydantic_frozen_field_warning():
         )
 
 
-def test_litellm_proxy_with_openhands_proxy_keeps_prefix_for_display():
+def test_litellm_proxy_with_madagascar_proxy_keeps_prefix_for_display():
     """Display data no longer reverse-maps LiteLLM proxy model names."""
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(
                 model='litellm_proxy/claude-opus-4-5-20251101',
                 base_url=LITE_LLM_API_URL,
@@ -1055,7 +1055,7 @@ def test_litellm_proxy_with_openhands_proxy_keeps_prefix_for_display():
 def test_litellm_proxy_custom_endpoint_keeps_prefix():
     """Test that custom litellm_proxy endpoints keep their litellm_proxy/ prefix."""
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(
                 model='litellm_proxy/gpt-5.3-codex',
                 base_url='http://custom-proxy.example.com:4000',
@@ -1066,16 +1066,16 @@ def test_litellm_proxy_custom_endpoint_keeps_prefix():
     # Internal representation
     assert settings.agent_settings.llm.model == 'litellm_proxy/gpt-5.3-codex'
 
-    # Display should NOT convert to openhands/ because it's a custom endpoint
+    # Display should NOT convert to madagascar/ because it's a custom endpoint
     api_data = settings.get_agent_settings_display()
     assert api_data['llm']['model'] == 'litellm_proxy/gpt-5.3-codex'
 
 
-def test_openhands_model_display_does_not_reverse_map():
+def test_madagascar_model_display_does_not_reverse_map():
     """Display data reflects the LLM model shape provided by the SDK."""
     settings = Settings(
-        agent_settings=OpenHandsAgentSettings(
-            llm=LLM(model='openhands/claude-opus-4-5-20251101')
+        agent_settings=MadagascarAgentSettings(
+            llm=LLM(model='madagascar/claude-opus-4-5-20251101')
         )
     )
 
@@ -1105,7 +1105,7 @@ class TestMarketplaceRegistration:
         """Test registration with auto_load=True."""
         reg = MarketplaceRegistration(
             name='public',
-            source='github:OpenHands/skills',
+            source='github:Madagascar/skills',
             auto_load=True,
         )
         assert reg.auto_load
@@ -1151,8 +1151,8 @@ class TestMarketplaceRegistration:
         with pytest.raises(ValidationError, match='not a URL'):
             MarketplaceRegistration(
                 name='test',
-                source='github:OpenHands/extensions',
-                repo_path='https://github.com/OpenHands/extensions',
+                source='github:Madagascar/extensions',
+                repo_path='https://github.com/Madagascar/extensions',
             )
 
     def test_serialization(self):
@@ -1266,7 +1266,7 @@ class TestSettingsRegisteredMarketplaces:
         marketplaces = [
             MarketplaceRegistration(
                 name='public',
-                source='github:OpenHands/skills',
+                source='github:Madagascar/skills',
                 auto_load=True,
             ),
             MarketplaceRegistration(

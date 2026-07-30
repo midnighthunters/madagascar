@@ -2,9 +2,9 @@
 
 import mcp.types
 
-from openhands.sdk.mcp.client import MCPClient
-from openhands.sdk.mcp.definition import MCPToolAction, MCPToolObservation
-from openhands.sdk.mcp.tool import MCPToolDefinition
+from madagascar.sdk.mcp.client import MCPClient
+from madagascar.sdk.mcp.definition import MCPToolAction, MCPToolObservation
+from madagascar.sdk.mcp.tool import MCPToolDefinition
 
 
 class MockMCPClient(MCPClient):

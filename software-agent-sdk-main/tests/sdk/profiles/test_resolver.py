@@ -12,21 +12,21 @@ from pathlib import Path
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk.agent import ACPAgent, Agent
-from openhands.sdk.llm import LLM
-from openhands.sdk.llm.llm_profile_store import LLMProfileStore
-from openhands.sdk.mcp.config import MCPServer, coerce_mcp_config
-from openhands.sdk.profiles import (
+from madagascar.sdk.agent import ACPAgent, Agent
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.llm.llm_profile_store import LLMProfileStore
+from madagascar.sdk.mcp.config import MCPServer, coerce_mcp_config
+from madagascar.sdk.profiles import (
     ACPAgentProfile,
     DanglingMcpServerRef,
-    OpenHandsAgentProfile,
+    MadagascarAgentProfile,
     ProfileNotFound,
     resolve_agent_profile,
     resolve_agent_profile_dry_run,
 )
-from openhands.sdk.settings.model import ACPAgentSettings, OpenHandsAgentSettings
-from openhands.sdk.skills import Skill
-from openhands.sdk.tool import Tool
+from madagascar.sdk.settings.model import ACPAgentSettings, MadagascarAgentSettings
+from madagascar.sdk.skills import Skill
+from madagascar.sdk.tool import Tool
 
 
 _LLM_SECRET = "sk-LLM-SECRET-SHOULD-NOT-LEAK"
@@ -60,14 +60,14 @@ def mcp_config() -> dict[str, MCPServer]:
 
 
 # --------------------------------------------------------------------------- #
-# OpenHands path
+# Madagascar path
 # --------------------------------------------------------------------------- #
 
 
-def test_openhands_resolves_to_settings_with_injected_llm(
+def test_madagascar_resolves_to_settings_with_injected_llm(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh",
         llm_profile_ref="default",
         agent="CodeActAgent",
@@ -84,7 +84,7 @@ def test_openhands_resolves_to_settings_with_injected_llm(
         cipher=None,
     )
 
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.agent == "CodeActAgent"
     assert settings.enable_sub_agents is True
     assert settings.tool_concurrency_limit == 3
@@ -107,7 +107,7 @@ def test_openhands_resolves_to_settings_with_injected_llm(
     assert "task_tool_set" in agent_tool_names
 
 
-def test_openhands_resolves_default_exec_tools(
+def test_madagascar_resolves_default_exec_tools(
     llm_store: LLMProfileStore,
 ) -> None:
     """A profile with no explicit ``tools`` resolves to ``tools=None``, and
@@ -116,7 +116,7 @@ def test_openhands_resolves_default_exec_tools(
     or edit files. The sub-agent tool set stays out when ``enable_sub_agents``
     is False (default); browser is a serving-layer injection, never part of
     the deterministic default (see tests/sdk/tool/test_defaults.py)."""
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="default")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="default")
     assert profile.enable_sub_agents is False
     assert profile.tools is None
 
@@ -127,7 +127,7 @@ def test_openhands_resolves_default_exec_tools(
         available_skills=None,
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.tools is None
     # The built agent carries the exec tools, not just the built-ins.
     agent = settings.create_agent()
@@ -138,12 +138,12 @@ def test_openhands_resolves_default_exec_tools(
     ]
 
 
-def test_openhands_profile_tools_selection_is_passed_through(
+def test_madagascar_profile_tools_selection_is_passed_through(
     llm_store: LLMProfileStore,
 ) -> None:
     """An explicit profile ``tools`` list is authoritative: used exactly as
     given ([] = deliberately bare), independent of ``enable_sub_agents``."""
-    picked = OpenHandsAgentProfile(
+    picked = MadagascarAgentProfile(
         name="picked",
         llm_profile_ref="default",
         tools=[Tool(name="terminal")],
@@ -156,11 +156,11 @@ def test_openhands_profile_tools_selection_is_passed_through(
         available_skills=None,
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.tools == [Tool(name="terminal")]
     assert [t.name for t in settings.create_agent().tools] == ["terminal"]
 
-    bare = OpenHandsAgentProfile(name="bare", llm_profile_ref="default", tools=[])
+    bare = MadagascarAgentProfile(name="bare", llm_profile_ref="default", tools=[])
     settings = resolve_agent_profile(
         bare,
         llm_store=llm_store,
@@ -168,15 +168,15 @@ def test_openhands_profile_tools_selection_is_passed_through(
         available_skills=None,
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.tools == []
     assert settings.create_agent().tools == []
 
 
-def test_openhands_copies_verification(
+def test_madagascar_copies_verification(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="default")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="default")
     profile.verification.critic_enabled = True
     profile.verification.critic_model_name = "critic-x"
 
@@ -187,21 +187,21 @@ def test_openhands_copies_verification(
         available_skills=None,
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.verification.critic_enabled is True
     assert settings.verification.critic_model_name == "critic-x"
     # The profile carries no critic_api_key; it defaults to None on resolve.
     assert settings.verification.critic_api_key is None
 
 
-def test_openhands_resolve_sets_load_project_skills(
+def test_madagascar_resolve_sets_load_project_skills(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
     """Project skills are repo-scoped and can't be resolved at profile-resolve
     time (no workspace yet); ``LocalConversation`` loads them lazily on first
     use, gated on ``load_project_skills`` (#4016). The resolver must set it,
     since the resolved ``AgentContext`` otherwise defaults it False."""
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="default")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="default")
     settings = resolve_agent_profile(
         profile,
         llm_store=llm_store,
@@ -209,7 +209,7 @@ def test_openhands_resolve_sets_load_project_skills(
         available_skills=None,
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.agent_context is not None
     assert settings.agent_context.load_project_skills is True
 
@@ -217,7 +217,7 @@ def test_openhands_resolve_sets_load_project_skills(
 def test_missing_llm_ref_raises_profile_not_found(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="does-not-exist")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="does-not-exist")
     with pytest.raises(ProfileNotFound):
         resolve_agent_profile(
             profile,
@@ -236,7 +236,7 @@ def test_missing_llm_ref_raises_profile_not_found(
 def test_enable_switch_llm_tool_defaults_true_threads_through(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="default")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="default")
     settings = resolve_agent_profile(
         profile,
         llm_store=llm_store,
@@ -244,7 +244,7 @@ def test_enable_switch_llm_tool_defaults_true_threads_through(
         available_skills=None,
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     # Defaults True to match the global agent settings default.
     assert settings.enable_switch_llm_tool is True
 
@@ -252,7 +252,7 @@ def test_enable_switch_llm_tool_defaults_true_threads_through(
 def test_enable_switch_llm_tool_false_threads_through(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", enable_switch_llm_tool=False
     )
     settings = resolve_agent_profile(
@@ -262,7 +262,7 @@ def test_enable_switch_llm_tool_false_threads_through(
         available_skills=None,
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.enable_switch_llm_tool is False
 
 
@@ -283,7 +283,7 @@ def test_disabled_skills_empty_includes_all_discovered(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
     # The default deny-list ([]) keeps every discovered skill.
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="default")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="default")
     assert profile.disabled_skills == []
     settings = resolve_agent_profile(
         profile,
@@ -292,7 +292,7 @@ def test_disabled_skills_empty_includes_all_discovered(
         available_skills=_discovered_skills(),
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert {s.name for s in settings.agent_context.skills} == {
         "alpha",
         "beta",
@@ -307,7 +307,7 @@ def test_disabled_skills_excludes_named(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
     # Disabling one skill drops exactly it; the rest of the catalog remains.
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", disabled_skills=["beta"]
     )
     settings = resolve_agent_profile(
@@ -317,7 +317,7 @@ def test_disabled_skills_excludes_named(
         available_skills=_discovered_skills(),
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert {s.name for s in settings.agent_context.skills} == {"alpha", "gamma"}
     assert settings.agent_context.disabled_skills == ["beta"]
 
@@ -328,7 +328,7 @@ def test_disabled_skills_missing_name_is_noop(
     # The #4017 fix: a disabled name absent from the catalog is a harmless no-op
     # — resolution succeeds (never DanglingSkillRef) and yields all catalog
     # skills. This is the whole point of the deny-list over an allow-list.
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", disabled_skills=["not-in-catalog"]
     )
     settings = resolve_agent_profile(
@@ -338,7 +338,7 @@ def test_disabled_skills_missing_name_is_noop(
         available_skills=_discovered_skills(),
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert {s.name for s in settings.agent_context.skills} == {
         "alpha",
         "beta",
@@ -357,7 +357,7 @@ def test_duplicate_named_catalog_is_deduped(
         Skill(name="beta", content="b"),
         Skill(name="alpha", content="second"),
     ]
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", disabled_skills=["beta"]
     )
     settings = resolve_agent_profile(
@@ -367,7 +367,7 @@ def test_duplicate_named_catalog_is_deduped(
         available_skills=catalog,
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     skills = {s.name: s.content for s in settings.agent_context.skills}
     assert skills == {"alpha": "second"}  # de-duped (last wins); beta disabled
 
@@ -398,7 +398,7 @@ def test_no_available_skills_yields_no_skills(
     # available_skills=None (no discovery run) → no user/public skills reach the
     # agent. Profiles no longer embed skills (#4017), so there is no other
     # source (project skills load separately in LocalConversation).
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="default")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="default")
     settings = resolve_agent_profile(
         profile,
         llm_store=llm_store,
@@ -406,7 +406,7 @@ def test_no_available_skills_yields_no_skills(
         available_skills=None,
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert settings.agent_context.skills == []
 
 
@@ -418,17 +418,17 @@ def test_seed_then_resolve_with_narrower_catalog_does_not_dangle(
     # would name that skill and then hard-fail at launch (DanglingSkillRef). The
     # deny-list seed disables nothing, so seed->resolve against the narrower
     # catalog succeeds and yields exactly the catalog skills.
-    from openhands.sdk.profiles import build_seed_profile
-    from openhands.sdk.settings.model import validate_agent_settings
+    from madagascar.sdk.profiles import build_seed_profile
+    from madagascar.sdk.settings.model import validate_agent_settings
 
     settings = validate_agent_settings(
         {
-            "agent_kind": "openhands",
+            "agent_kind": "madagascar",
             "agent_context": {"skills": [{"name": "inline-only", "content": "x"}]},
         }
     )
     profile = build_seed_profile(settings, active_llm_profile="default")
-    assert isinstance(profile, OpenHandsAgentProfile)
+    assert isinstance(profile, MadagascarAgentProfile)
     assert profile.disabled_skills == []
 
     # Launch catalog does NOT contain "inline-only" — must still resolve.
@@ -439,7 +439,7 @@ def test_seed_then_resolve_with_narrower_catalog_does_not_dangle(
         available_skills=_discovered_skills(),
         cipher=None,
     )
-    assert isinstance(resolved, OpenHandsAgentSettings)
+    assert isinstance(resolved, MadagascarAgentSettings)
     assert {s.name for s in resolved.agent_context.skills} == {
         "alpha",
         "beta",
@@ -455,7 +455,7 @@ def test_seed_then_resolve_with_narrower_catalog_does_not_dangle(
 def test_mcp_null_refs_passes_config_through(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", mcp_server_refs=None
     )
     settings = resolve_agent_profile(
@@ -472,7 +472,7 @@ def test_mcp_null_refs_passes_config_through(
 def test_mcp_empty_refs_means_none(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", mcp_server_refs=[]
     )
     settings = resolve_agent_profile(
@@ -488,7 +488,7 @@ def test_mcp_empty_refs_means_none(
 def test_mcp_filter_selects_named_keys(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", mcp_server_refs=["other"]
     )
     settings = resolve_agent_profile(
@@ -505,7 +505,7 @@ def test_mcp_filter_selects_named_keys(
 def test_mcp_dangling_ref_raises(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", mcp_server_refs=["fetch", "missing"]
     )
     with pytest.raises(DanglingMcpServerRef) as exc:
@@ -522,7 +522,7 @@ def test_mcp_dangling_ref_raises(
 def test_mcp_dangling_when_config_is_none(
     llm_store: LLMProfileStore,
 ) -> None:
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", mcp_server_refs=["fetch"]
     )
     with pytest.raises(DanglingMcpServerRef) as exc:
@@ -617,10 +617,10 @@ def test_acp_carries_no_user_public_skills_but_keeps_load_project_skills(
 # --------------------------------------------------------------------------- #
 
 
-def test_dry_run_openhands_valid_and_redacted(
+def test_dry_run_madagascar_valid_and_redacted(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", mcp_server_refs=["fetch"]
     )
     diag = resolve_agent_profile_dry_run(
@@ -630,7 +630,7 @@ def test_dry_run_openhands_valid_and_redacted(
         available_skills=None,
         cipher=None,
     )
-    assert diag.agent_kind == "openhands"
+    assert diag.agent_kind == "madagascar"
     assert diag.valid is True
     assert diag.errors == []
     assert diag.llm_profile_ref == "default"
@@ -649,7 +649,7 @@ def test_dry_run_openhands_valid_and_redacted(
 def test_dry_run_reports_dangling_llm_and_mcp(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="nope", mcp_server_refs=["missing"]
     )
     diag = resolve_agent_profile_dry_run(
@@ -673,7 +673,7 @@ def test_dry_run_reports_disabled_and_resolved_skills(
     # Deny-list: the dry-run reports the disabled names and the resolved set
     # (catalog minus disabled). A disabled name absent from the catalog does not
     # invalidate the profile — the deny-list can't dangle.
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", disabled_skills=["beta", "missing"]
     )
     diag = resolve_agent_profile_dry_run(
@@ -694,7 +694,7 @@ def test_dry_run_default_disabled_resolves_all_discovered(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
     # Default deny-list ([]) resolves the whole catalog.
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="default")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="default")
     diag = resolve_agent_profile_dry_run(
         profile,
         llm_store=llm_store,
@@ -716,7 +716,7 @@ def test_dry_run_total_on_llm_store_transient_error(
         raise TimeoutError("profile store lock acquisition timed out")
 
     llm_store.load = _boom  # type: ignore[method-assign]
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", mcp_server_refs=["fetch"]
     )
     diag = resolve_agent_profile_dry_run(
@@ -737,7 +737,7 @@ def test_dry_run_verdict_matches_real_resolve(
     llm_store: LLMProfileStore, mcp_config: dict[str, MCPServer]
 ) -> None:
     # A dangling MCP ref: dry-run says invalid, real resolve raises.
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", mcp_server_refs=["missing"]
     )
     diag = resolve_agent_profile_dry_run(
@@ -803,7 +803,7 @@ def test_dry_run_skill_verdict_matches_real_resolve(
     # A disabled name absent from the catalog never invalidates: dry-run stays
     # valid and the real resolve succeeds with the full catalog. The deny-list
     # cannot dangle (unlike the MCP allow-list).
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", disabled_skills=["missing"]
     )
     diag = resolve_agent_profile_dry_run(
@@ -821,7 +821,7 @@ def test_dry_run_skill_verdict_matches_real_resolve(
         available_skills=_discovered_skills(),
         cipher=None,
     )
-    assert isinstance(settings, OpenHandsAgentSettings)
+    assert isinstance(settings, MadagascarAgentSettings)
     assert {s.name for s in settings.agent_context.skills} == {
         "alpha",
         "beta",
@@ -834,7 +834,7 @@ def test_dry_run_unknown_catalog_resolves_no_skills(
 ) -> None:
     # available_skills=None (discovery skipped/failed) → no user/public skills
     # resolve, and the profile stays valid (the deny-list has nothing to flag).
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="oh", llm_profile_ref="default", disabled_skills=["alpha"]
     )
     diag = resolve_agent_profile_dry_run(

@@ -43,12 +43,12 @@ Toggle the `test-examples` label:
 ```bash
 # Remove label
 curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
-  "https://api.github.com/repos/OpenHands/software-agent-sdk/issues/${PR_NUMBER}/labels/test-examples"
+  "https://api.github.com/repos/Madagascar/software-agent-sdk/issues/${PR_NUMBER}/labels/test-examples"
 
 # Add label
 curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
   -H "Accept: application/vnd.github.v3+json" \
-  "https://api.github.com/repos/OpenHands/software-agent-sdk/issues/{PR_NUMBER}/labels" \
+  "https://api.github.com/repos/Madagascar/software-agent-sdk/issues/{PR_NUMBER}/labels" \
   -d '{"labels":["test-examples"]}'
 ```
 
@@ -57,11 +57,11 @@ curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
 ```bash
 # Check status
 curl -s -H "Authorization: token $GITHUB_TOKEN" \
-  "https://api.github.com/repos/OpenHands/software-agent-sdk/actions/runs/{RUN_ID}" | jq '{status, conclusion}'
+  "https://api.github.com/repos/Madagascar/software-agent-sdk/actions/runs/{RUN_ID}" | jq '{status, conclusion}'
 
 # Download logs
 curl -sL -H "Authorization: token $GITHUB_TOKEN" \
-  "https://api.github.com/repos/OpenHands/software-agent-sdk/actions/runs/{RUN_ID}/logs" -o logs.zip
+  "https://api.github.com/repos/Madagascar/software-agent-sdk/actions/runs/{RUN_ID}/logs" -o logs.zip
 unzip logs.zip -d logs
 ```
 

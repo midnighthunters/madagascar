@@ -52,7 +52,7 @@ def run_agent_server(port, api_key):
     os.environ["OH_SESSION_API_KEYS_0"] = api_key
     os.environ["SESSION_API_KEY"] = api_key
     sys.argv = ["agent-server", "--port", str(port)]
-    from openhands.agent_server.__main__ import main
+    from madagascar.agent_server.__main__ import main
 
     main()
 
@@ -114,7 +114,7 @@ def test_agent_server_starts_with_wsproto(agent_server):
     response = requests.get(f"http://127.0.0.1:{agent_server['port']}/docs")
     assert response.status_code == 200
     assert (
-        "OpenHands Agent Server" in response.text or "swagger" in response.text.lower()
+        "Madagascar Agent Server" in response.text or "swagger" in response.text.lower()
     )
 
 

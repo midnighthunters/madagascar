@@ -57,7 +57,7 @@ export function ConversationGroupFolderRow({
   onLaunchFromGroup,
   renderConversationCard,
 }: ConversationGroupFolderRowProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const sectionRef = useRef<HTMLElement>(null);
   const headingId = `thread-folder-${group.id.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
   const groupTestIdSuffix = group.id.replace(/[^a-zA-Z0-9_-]/g, "-");

@@ -32,12 +32,12 @@ from server.sharing.sql_shared_conversation_info_service import (
     SQLSharedConversationInfoService,
 )
 
-from openhands.agent_server.models import EventPage, EventSortOrder
-from openhands.app_server.event.aws_event_service import AwsEventService
-from openhands.app_server.event.event_service import EventService
-from openhands.app_server.event_callback.event_callback_models import EventKind
-from openhands.app_server.services.injector import InjectorState
-from openhands.sdk import Event
+from madagascar.agent_server.models import EventPage, EventSortOrder
+from madagascar.app_server.event.aws_event_service import AwsEventService
+from madagascar.app_server.event.event_service import EventService
+from madagascar.app_server.event_callback.event_callback_models import EventKind
+from madagascar.app_server.services.injector import InjectorState
+from madagascar.sdk import Event
 
 logger = logging.getLogger(__name__)
 
@@ -143,7 +143,7 @@ class AwsSharedEventServiceInjector(SharedEventServiceInjector):
         self, state: InjectorState, request: Request | None = None
     ) -> AsyncGenerator[SharedEventService, None]:
         # Define inline to prevent circular lookup
-        from openhands.app_server.config import get_db_session
+        from madagascar.app_server.config import get_db_session
 
         async with get_db_session(state, request) as db_session:
             shared_conversation_info_service = SQLSharedConversationInfoService(

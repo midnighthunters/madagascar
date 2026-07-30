@@ -1,6 +1,6 @@
 {
   "backing_model": "gpt-5-nano",
-  "gateway_model": "openhands_openai_nano",
+  "gateway_model": "madagascar_openai_nano",
   "messages": [
     {
       "content": "Answer directly and do not use tools.",
@@ -31,7 +31,7 @@
     ],
     "created": 1780752878,
     "id": "chatcmpl-a948351964a24d2191092e150033b594",
-    "model": "openhands_openai_nano",
+    "model": "madagascar_openai_nano",
     "object": "chat.completion",
     "service_tier": null,
     "system_fingerprint": null,

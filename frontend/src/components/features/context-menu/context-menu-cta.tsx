@@ -44,7 +44,7 @@ export function ContextMenuCTA() {
 
         <div className="flex mt-auto">
           <a
-            href="https://openhands.dev/enterprise/"
+            href="https://madagascar.dev/enterprise/"
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleLearnMoreClick}

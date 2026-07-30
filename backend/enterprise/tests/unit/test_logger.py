@@ -8,7 +8,7 @@ import pytest
 from freezegun import freeze_time
 from server.logger import format_stack, setup_json_logger
 
-from openhands.app_server.utils.logger import openhands_logger
+from madagascar.app_server.utils.logger import madagascar_logger
 
 FROZEN_TIMESTAMP = '2024-01-15T10:30:00+00:00'
 # datetime.now().isoformat() doesn't include timezone info
@@ -283,9 +283,9 @@ class TestLogOutput:
         string_io = StringIO()
         with (
             patch.dict(os.environ, {'my_secret_key': 'supersecretvalue'}),
-            patch.object(openhands_logger.handlers[0], 'stream', string_io),
+            patch.object(madagascar_logger.handlers[0], 'stream', string_io),
         ):
-            openhands_logger.info('The secret key was supersecretvalue')
+            madagascar_logger.info('The secret key was supersecretvalue')
         output = json.loads(string_io.getvalue())
         assert output['message'] == 'The secret key was ******'
         assert output['severity'] == 'INFO'

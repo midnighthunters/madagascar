@@ -9,11 +9,11 @@ from pathlib import Path
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation import Conversation
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.llm import LLM
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation import Conversation
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 @pytest.fixture

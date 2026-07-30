@@ -15,7 +15,7 @@ import { HooksModal } from "../conversation-panel/hooks-modal";
 import { cn } from "#/utils/utils";
 
 export function Tools() {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   // Optional because this control also renders inside the home-page chat
   // input shell, before any conversation exists.
   const { conversationId } = useOptionalConversationId();

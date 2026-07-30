@@ -2,10 +2,10 @@
 
 import pytest
 
-from openhands.sdk.context import AgentContext
-from openhands.sdk.mcp.config import MCPServer
-from openhands.sdk.plugin import Plugin, PluginManifest
-from openhands.sdk.skills import Skill
+from madagascar.sdk.context import AgentContext
+from madagascar.sdk.mcp.config import MCPServer
+from madagascar.sdk.plugin import Plugin, PluginManifest
+from madagascar.sdk.skills import Skill
 
 
 def mcp_config(

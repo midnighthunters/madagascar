@@ -27,7 +27,7 @@ export function LlmProfilesManager({
   onAddProfile,
   onEditProfile,
 }: LlmProfilesManagerProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { data, isLoading, error } = useLlmProfiles();
   const activateProfile = useActivateLlmProfile();
   const saveProfile = useSaveLlmProfile();

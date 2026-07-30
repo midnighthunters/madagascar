@@ -15,20 +15,20 @@ from fastapi import Request
 from fastapi.testclient import TestClient
 from pydantic import SecretStr
 
-from openhands.app_server.app import app
-from openhands.app_server.file_store import get_file_store
-from openhands.app_server.integrations.provider import ProviderToken, ProviderType
-from openhands.app_server.integrations.service_types import UserGitInfo
-from openhands.app_server.secrets.secrets_models import Secrets
-from openhands.app_server.secrets.secrets_store import SecretsStore
-from openhands.app_server.settings.file_settings_store import FileSettingsStore
-from openhands.app_server.settings.llm_profiles import MAX_PROFILES_PER_USER
-from openhands.app_server.settings.settings_models import Settings
-from openhands.app_server.settings.settings_router import _user_profile_locks
-from openhands.app_server.settings.settings_store import SettingsStore
-from openhands.app_server.user_auth.user_auth import UserAuth
-from openhands.sdk.llm import LLM
-from openhands.sdk.settings import OpenHandsAgentSettings
+from madagascar.app_server.app import app
+from madagascar.app_server.file_store import get_file_store
+from madagascar.app_server.integrations.provider import ProviderToken, ProviderType
+from madagascar.app_server.integrations.service_types import UserGitInfo
+from madagascar.app_server.secrets.secrets_models import Secrets
+from madagascar.app_server.secrets.secrets_store import SecretsStore
+from madagascar.app_server.settings.file_settings_store import FileSettingsStore
+from madagascar.app_server.settings.llm_profiles import MAX_PROFILES_PER_USER
+from madagascar.app_server.settings.settings_models import Settings
+from madagascar.app_server.settings.settings_router import _user_profile_locks
+from madagascar.app_server.settings.settings_store import SettingsStore
+from madagascar.app_server.user_auth.user_auth import UserAuth
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.settings import MadagascarAgentSettings
 
 
 @pytest.fixture(autouse=True)
@@ -99,13 +99,13 @@ def test_client(settings_store):
             {'SESSION_API_KEY': '', 'ALLOW_SHORT_CONTEXT_WINDOWS': 'true'},
             clear=False,
         ),
-        patch('openhands.app_server.utils.dependencies._SESSION_API_KEY', None),
+        patch('madagascar.app_server.utils.dependencies._SESSION_API_KEY', None),
         patch(
-            'openhands.app_server.user_auth.user_auth.UserAuth.get_instance',
+            'madagascar.app_server.user_auth.user_auth.UserAuth.get_instance',
             return_value=auth,
         ),
         patch(
-            'openhands.app_server.settings.file_settings_store.FileSettingsStore.get_instance',
+            'madagascar.app_server.settings.file_settings_store.FileSettingsStore.get_instance',
             AsyncMock(return_value=settings_store),
         ),
     ):
@@ -115,7 +115,7 @@ def test_client(settings_store):
 def _base_settings() -> Settings:
     """A Settings instance with an LLM configured so 'snapshot current' works."""
     return Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(
                 model='openai/gpt-4o',
                 api_key=SecretStr('sk-current'),
@@ -147,13 +147,13 @@ def _client_for_user(user_id: str, store: FileSettingsStore):
             {'SESSION_API_KEY': '', 'ALLOW_SHORT_CONTEXT_WINDOWS': 'true'},
             clear=False,
         ),
-        patch('openhands.app_server.utils.dependencies._SESSION_API_KEY', None),
+        patch('madagascar.app_server.utils.dependencies._SESSION_API_KEY', None),
         patch(
-            'openhands.app_server.user_auth.user_auth.UserAuth.get_instance',
+            'madagascar.app_server.user_auth.user_auth.UserAuth.get_instance',
             return_value=auth,
         ),
         patch(
-            'openhands.app_server.settings.file_settings_store.FileSettingsStore.get_instance',
+            'madagascar.app_server.settings.file_settings_store.FileSettingsStore.get_instance',
             AsyncMock(return_value=store),
         ),
     ):
@@ -406,7 +406,7 @@ async def test_save_profile_rejects_client_declared_is_subscription(
     setting it to ``True`` directly must not survive validation, since it
     only becomes true via ``LLM.subscription_login()`` — a path this
     endpoint doesn't use. This is a temporary compensating control pending
-    OpenHands/software-agent-sdk#3942; see ``StrictLLM._restore_is_subscription``.
+    Madagascar/software-agent-sdk#3942; see ``StrictLLM._restore_is_subscription``.
     """
     await _seed(settings_store, _base_settings())
 
@@ -677,7 +677,7 @@ async def test_activate_profile_applies_base_url_fixup(test_client, settings_sto
     settings = _base_settings()
     settings.llm_profiles.save(
         'oh-profile',
-        LLM(model='openhands/claude-sonnet-4-20250514'),
+        LLM(model='madagascar/claude-sonnet-4-20250514'),
     )
     await _seed(settings_store, settings)
 
@@ -696,7 +696,7 @@ async def test_activate_does_not_mutate_saved_profile_base_url(
     profile. A shallow ``model_copy(update={'llm': llm})`` would share the
     LLM reference and propagate the fixup to ``llm_profiles[name]``.
 
-    Use a custom base_url (not an openhands/* model) so the LLM SDK does
+    Use a custom base_url (not an madagascar/* model) so the LLM SDK does
     not auto-resolve base_url at construction time — that would mask the
     mutation we want to detect.
     """
@@ -1165,7 +1165,7 @@ async def test_concurrent_writes_all_persist(tmp_path: Path):
     the module-level ``asyncio.Lock`` unreachable across calls)."""
     import asyncio
 
-    from openhands.app_server.settings.settings_router import (
+    from madagascar.app_server.settings.settings_router import (
         SaveProfileRequest,
         save_profile,
     )

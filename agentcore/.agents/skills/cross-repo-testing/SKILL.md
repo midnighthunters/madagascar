@@ -1,19 +1,19 @@
 ---
 name: cross-repo-testing
-description: This skill should be used when the user asks to "test a saas cross-repo feature", "deploy a feature branch to staging", "test SDK against OH Cloud branch", "e2e test a cloud workspace feature", "test secrets saas inheritance", or when changes span the SDK and OpenHands enterprise and need end-to-end validation against a staging deployment.
+description: This skill should be used when the user asks to "test a saas cross-repo feature", "deploy a feature branch to staging", "test SDK against OH Cloud branch", "e2e test a cloud workspace feature", "test secrets saas inheritance", or when changes span the SDK and Madagascar enterprise and need end-to-end validation against a staging deployment.
 ---
 
-# Cross-Repo Testing: SDK ↔ OpenHands Cloud
+# Cross-Repo Testing: SDK ↔ Madagascar Cloud
 
-How to end-to-end test features that span `OpenHands/software-agent-sdk` and `OpenHands/OpenHands` (the Cloud backend).
+How to end-to-end test features that span `Madagascar/software-agent-sdk` and `Madagascar/Madagascar` (the Cloud backend).
 
 ## Repository Map
 
 | Repo | Role | What lives here |
 |------|------|-----------------|
-| [`software-agent-sdk`](https://github.com/OpenHands/software-agent-sdk) | Agent core | `openhands-sdk`, `openhands-workspace`, `openhands-tools` packages. `OpenHandsCloudWorkspace` lives here. |
-| [`OpenHands`](https://github.com/OpenHands/OpenHands) | Cloud backend | FastAPI server (`openhands/app_server/`), sandbox management, auth, enterprise integrations. Deployed as OH Cloud. |
-| [`deploy`](https://github.com/OpenHands/deploy) | Infrastructure | Helm charts + GitHub Actions that build the enterprise Docker image and deploy to staging/production. |
+| [`software-agent-sdk`](https://github.com/Madagascar/software-agent-sdk) | Agent core | `madagascar-sdk`, `madagascar-workspace`, `madagascar-tools` packages. `MadagascarCloudWorkspace` lives here. |
+| [`Madagascar`](https://github.com/Madagascar/Madagascar) | Cloud backend | FastAPI server (`madagascar/app_server/`), sandbox management, auth, enterprise integrations. Deployed as OH Cloud. |
+| [`deploy`](https://github.com/Madagascar/deploy) | Infrastructure | Helm charts + GitHub Actions that build the enterprise Docker image and deploy to staging/production. |
 
 **Data flow:** SDK client → OH Cloud API (`/api/v1/...`) → sandbox agent-server (inside runtime container)
 
@@ -36,22 +36,22 @@ Use this when the SDK calls an endpoint that only exists on the server PR branch
 
 ### A1. Write and test the server-side changes
 
-In the `OpenHands` repo, implement the new API endpoint(s). Run unit tests:
+In the `Madagascar` repo, implement the new API endpoint(s). Run unit tests:
 
 ```bash
-cd OpenHands
+cd Madagascar
 poetry run pytest tests/unit/app_server/test_<relevant>.py -v
 ```
 
-Push a PR. Wait for the **"Push Enterprise Image" (Docker) CI job** to succeed — this builds `ghcr.io/openhands/enterprise-server:sha-<COMMIT>`.
+Push a PR. Wait for the **"Push Enterprise Image" (Docker) CI job** to succeed — this builds `ghcr.io/madagascar/enterprise-server:sha-<COMMIT>`.
 
 ### A2. Write the SDK-side changes
 
-In `software-agent-sdk`, implement the client code (e.g., new methods on `OpenHandsCloudWorkspace`). Run SDK unit tests:
+In `software-agent-sdk`, implement the client code (e.g., new methods on `MadagascarCloudWorkspace`). Run SDK unit tests:
 
 ```bash
 cd software-agent-sdk
-pip install -e openhands-sdk -e openhands-workspace
+pip install -e madagascar-sdk -e madagascar-workspace
 pytest tests/ -v
 ```
 
@@ -79,26 +79,26 @@ Find the correct image tag:
 - Check the SDK PR description for an `AGENT_SERVER_IMAGES` section
 - Or check the "Consolidate Build Information" CI job for `"short_sha": "<tag>"`
 
-### B2. Pin SDK packages to the commit in the OpenHands PR
+### B2. Pin SDK packages to the commit in the Madagascar PR
 
-In the `OpenHands` repo PR, update 3 files + regenerate 3 lock files (see the `update-sdk` skill for full details):
+In the `Madagascar` repo PR, update 3 files + regenerate 3 lock files (see the `update-sdk` skill for full details):
 
 **`pyproject.toml`** — pin all 3 SDK packages in **both** `dependencies` and `[tool.poetry.dependencies]`:
 ```toml
 # dependencies array (PEP 508)
-"openhands-sdk @ git+https://github.com/OpenHands/software-agent-sdk.git@<COMMIT>#subdirectory=openhands-sdk",
-"openhands-agent-server @ git+https://github.com/OpenHands/software-agent-sdk.git@<COMMIT>#subdirectory=openhands-agent-server",
-"openhands-tools @ git+https://github.com/OpenHands/software-agent-sdk.git@<COMMIT>#subdirectory=openhands-tools",
+"madagascar-sdk @ git+https://github.com/Madagascar/software-agent-sdk.git@<COMMIT>#subdirectory=madagascar-sdk",
+"madagascar-agent-server @ git+https://github.com/Madagascar/software-agent-sdk.git@<COMMIT>#subdirectory=madagascar-agent-server",
+"madagascar-tools @ git+https://github.com/Madagascar/software-agent-sdk.git@<COMMIT>#subdirectory=madagascar-tools",
 
 # [tool.poetry.dependencies]
-openhands-sdk = { git = "https://github.com/OpenHands/software-agent-sdk.git", rev = "<COMMIT>", subdirectory = "openhands-sdk" }
-openhands-agent-server = { git = "https://github.com/OpenHands/software-agent-sdk.git", rev = "<COMMIT>", subdirectory = "openhands-agent-server" }
-openhands-tools = { git = "https://github.com/OpenHands/software-agent-sdk.git", rev = "<COMMIT>", subdirectory = "openhands-tools" }
+madagascar-sdk = { git = "https://github.com/Madagascar/software-agent-sdk.git", rev = "<COMMIT>", subdirectory = "madagascar-sdk" }
+madagascar-agent-server = { git = "https://github.com/Madagascar/software-agent-sdk.git", rev = "<COMMIT>", subdirectory = "madagascar-agent-server" }
+madagascar-tools = { git = "https://github.com/Madagascar/software-agent-sdk.git", rev = "<COMMIT>", subdirectory = "madagascar-tools" }
 ```
 
-**`openhands/app_server/sandbox/sandbox_spec_service.py`** — use the SDK's merge-commit SHA:
+**`madagascar/app_server/sandbox/sandbox_spec_service.py`** — use the SDK's merge-commit SHA:
 ```python
-AGENT_SERVER_IMAGE = 'ghcr.io/openhands/agent-server:<merge-commit-sha>-python'
+AGENT_SERVER_IMAGE = 'ghcr.io/madagascar/agent-server:<merge-commit-sha>-python'
 ```
 
 **Regenerate lock files:**
@@ -106,40 +106,40 @@ AGENT_SERVER_IMAGE = 'ghcr.io/openhands/agent-server:<merge-commit-sha>-python'
 poetry lock && uv lock && cd enterprise && poetry lock && cd ..
 ```
 
-### B3. Wait for the OpenHands enterprise image to build
+### B3. Wait for the Madagascar enterprise image to build
 
-Push the pinned changes. The OpenHands CI will build a new enterprise Docker image (`ghcr.io/openhands/enterprise-server:sha-<OH_COMMIT>`) that bundles the unreleased SDK. Wait for the "Push Enterprise Image" job to succeed.
+Push the pinned changes. The Madagascar CI will build a new enterprise Docker image (`ghcr.io/madagascar/enterprise-server:sha-<OH_COMMIT>`) that bundles the unreleased SDK. Wait for the "Push Enterprise Image" job to succeed.
 
 ### B4. Deploy and test
 
-Follow [Deploying to a Staging Feature Environment](#deploying-to-a-staging-feature-environment) using the new OpenHands commit SHA.
+Follow [Deploying to a Staging Feature Environment](#deploying-to-a-staging-feature-environment) using the new Madagascar commit SHA.
 
 ### B5. Before merging: remove the pin
 
-**CI guard:** `check-package-versions.yml` blocks merge to `main` if `[tool.poetry.dependencies]` contains `rev` fields. Before the OpenHands PR can merge, the SDK PR must be merged and released to PyPI, then the pin must be replaced with the released version number.
+**CI guard:** `check-package-versions.yml` blocks merge to `main` if `[tool.poetry.dependencies]` contains `rev` fields. Before the Madagascar PR can merge, the SDK PR must be merged and released to PyPI, then the pin must be replaced with the released version number.
 
 ---
 
 ## Deploying to a Staging Feature Environment
 
-The `deploy` repo creates preview environments from OpenHands PRs.
+The `deploy` repo creates preview environments from Madagascar PRs.
 
 **Option A — GitHub Actions UI (preferred):**
-Go to `OpenHands/deploy` → Actions → "Create OpenHands preview PR" → enter the OpenHands PR number. This creates a branch `ohpr-<PR>-<random>` and opens a deploy PR.
+Go to `Madagascar/deploy` → Actions → "Create Madagascar preview PR" → enter the Madagascar PR number. This creates a branch `ohpr-<PR>-<random>` and opens a deploy PR.
 
 **Option B — Update an existing feature branch:**
 ```bash
 cd deploy
 git checkout ohpr-<PR>-<random>
 # In .github/workflows/deploy.yaml, update BOTH:
-#   OPENHANDS_SHA: "<full-40-char-commit>"
-#   OPENHANDS_RUNTIME_IMAGE_TAG: "<same-commit>-nikolaik"
-git commit -am "Update OPENHANDS_SHA to <commit>" && git push
+#   MADAGASCAR_SHA: "<full-40-char-commit>"
+#   MADAGASCAR_RUNTIME_IMAGE_TAG: "<same-commit>-nikolaik"
+git commit -am "Update MADAGASCAR_SHA to <commit>" && git push
 ```
 
 **Before updating the SHA**, verify the enterprise Docker image exists:
 ```bash
-gh api repos/OpenHands/OpenHands/actions/runs \
+gh api repos/Madagascar/Madagascar/actions/runs \
   --jq '.workflow_runs[] | select(.head_sha=="<COMMIT>") | "\(.name): \(.conclusion)"' \
   | grep Docker
 # Must show: "Docker: success"
@@ -158,14 +158,14 @@ curl -s -o /dev/null -w "%{http_code}" https://ohpr-<PR>-<random>.staging.all-ha
 
 ## Running E2E Tests Against Staging
 
-**Critical: Feature deployments have their own Keycloak instance.** API keys from `app.all-hands.dev` or `$OPENHANDS_API_KEY` will NOT work. You need a test API key for the specific feature deployment. The user must provide one.
+**Critical: Feature deployments have their own Keycloak instance.** API keys from `app.all-hands.dev` or `$MADAGASCAR_API_KEY` will NOT work. You need a test API key for the specific feature deployment. The user must provide one.
 
 ```python
-from openhands.workspace import OpenHandsCloudWorkspace
+from madagascar.workspace import MadagascarCloudWorkspace
 
 STAGING = "https://ohpr-<PR>-<random>.staging.all-hands.dev"
 
-with OpenHandsCloudWorkspace(
+with MadagascarCloudWorkspace(
     cloud_api_url=STAGING,
     cloud_api_key="<test-api-key-for-this-deployment>",
 ) as workspace:
@@ -177,8 +177,8 @@ with OpenHandsCloudWorkspace(
 
 Or run an example script:
 ```bash
-OPENHANDS_CLOUD_API_KEY="<key>" \
-OPENHANDS_CLOUD_API_URL="https://ohpr-<PR>-<random>.staging.all-hands.dev" \
+MADAGASCAR_CLOUD_API_KEY="<key>" \
+MADAGASCAR_CLOUD_API_URL="https://ohpr-<PR>-<random>.staging.all-hands.dev" \
 python examples/02_remote_agent_server/10_cloud_workspace_saas_credentials.py
 ```
 
@@ -199,10 +199,10 @@ Comment on **both PRs** with pass/fail summary and link to logs.
 | Gotcha | Details |
 |--------|---------|
 | **Feature env auth is isolated** | Each `ohpr-*` deployment has its own Keycloak. Production API keys don't work. |
-| **Two SHAs in deploy.yaml** | `OPENHANDS_SHA` and `OPENHANDS_RUNTIME_IMAGE_TAG` must both be updated. The runtime tag is `<sha>-nikolaik`. |
-| **Enterprise image must exist** | The Docker CI job on the OpenHands PR must succeed before you can deploy. If it hasn't run, push an empty commit to trigger it. |
+| **Two SHAs in deploy.yaml** | `MADAGASCAR_SHA` and `MADAGASCAR_RUNTIME_IMAGE_TAG` must both be updated. The runtime tag is `<sha>-nikolaik`. |
+| **Enterprise image must exist** | The Docker CI job on the Madagascar PR must succeed before you can deploy. If it hasn't run, push an empty commit to trigger it. |
 | **DNS propagation** | First deployment of a new branch takes 1-2 min for DNS. Subsequent deploys are instant. |
 | **Merge-commit SHA ≠ head SHA** | SDK CI tags Docker images with GitHub Actions' merge-commit SHA, not the PR head SHA. Check the SDK PR description or CI logs for the correct tag. |
-| **SDK pin blocks merge** | `check-package-versions.yml` prevents merging an OpenHands PR that has `rev` fields in `[tool.poetry.dependencies]`. The SDK must be released to PyPI first. |
-| **Flow A: stock agent-server is fine** | When only the Cloud API changes, `OpenHandsCloudWorkspace` talks to the Cloud server, not the agent-server. No custom image needed. |
+| **SDK pin blocks merge** | `check-package-versions.yml` prevents merging an Madagascar PR that has `rev` fields in `[tool.poetry.dependencies]`. The SDK must be released to PyPI first. |
+| **Flow A: stock agent-server is fine** | When only the Cloud API changes, `MadagascarCloudWorkspace` talks to the Cloud server, not the agent-server. No custom image needed. |
 | **Flow B: agent-server image is required** | When the server needs new SDK code inside runtime containers, you must pin to the SDK PR's agent-server image. |

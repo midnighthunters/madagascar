@@ -285,7 +285,7 @@ async def test_create_checkout_session_success(
                         'unit_amount': 2500,
                         'currency': 'usd',
                         'product_data': {
-                            'name': 'OpenHands Credits',
+                            'name': 'Madagascar Credits',
                             'tax_code': 'txcd_10000000',
                         },
                         'tax_behavior': 'exclusive',

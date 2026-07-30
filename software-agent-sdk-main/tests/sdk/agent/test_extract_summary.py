@@ -6,10 +6,10 @@ import mcp.types
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.llm import LLM
-from openhands.sdk.mcp.client import MCPClient
-from openhands.sdk.mcp.tool import MCPToolDefinition
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.mcp.client import MCPClient
+from madagascar.sdk.mcp.tool import MCPToolDefinition
 
 
 @pytest.fixture

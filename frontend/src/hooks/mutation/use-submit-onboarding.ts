@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import { openHands } from "#/api/open-hands-axios";
+import { madagascar } from "#/api/madagascar-axios";
 import { SETTINGS_QUERY_KEYS } from "#/hooks/query/query-keys";
 import { displayErrorToast } from "#/utils/custom-toast-handlers";
 import { navigateOrHardRedirect } from "#/utils/cross-app-redirect";
@@ -27,7 +27,7 @@ export const useSubmitOnboarding = () => {
 
   return useMutation({
     mutationFn: async ({ selections }: SubmitOnboardingArgs) => {
-      const { data } = await openHands.post<OnboardingResponse>(
+      const { data } = await madagascar.post<OnboardingResponse>(
         "/api/complete_onboarding",
         { selections },
       );

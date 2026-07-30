@@ -1,10 +1,10 @@
 # Resend Sync Service
 
-This service syncs users from the OpenHands database to a Resend.com audience. It runs as a Kubernetes CronJob that periodically queries the OpenHands database and adds any new users to the specified Resend audience.
+This service syncs users from the Madagascar database to a Resend.com audience. It runs as a Kubernetes CronJob that periodically queries the Madagascar database and adds any new users to the specified Resend audience.
 
 ## Features
 
-- Syncs OpenHands users with email addresses to a Resend.com audience
+- Syncs Madagascar users with email addresses to a Resend.com audience
 - Handles rate limiting and retries with exponential backoff
 - Runs as a Kubernetes CronJob
 - Configurable batch size and sync frequency
@@ -27,15 +27,15 @@ The service is configured using environment variables:
 
 ### Migration from Keycloak-backed sync
 
-This sync no longer reads or counts users through Keycloak. Deployments should remove the old `KEYCLOAK_SERVER_URL`, `KEYCLOAK_REALM_NAME`, and `KEYCLOAK_ADMIN_PASSWORD` wiring for this CronJob and ensure it has the same OpenHands database configuration as the application server. If the database session cannot be created, the job fails before attempting to sync contacts.
+This sync no longer reads or counts users through Keycloak. Deployments should remove the old `KEYCLOAK_SERVER_URL`, `KEYCLOAK_REALM_NAME`, and `KEYCLOAK_ADMIN_PASSWORD` wiring for this CronJob and ensure it has the same Madagascar database configuration as the application server. If the database session cannot be created, the job fails before attempting to sync contacts.
 
 Display-name personalization now comes from the local `user.git_user_name` field when present; users without a stored display name continue to receive the generic `Hi there,` greeting.
 
-**Failure modes:** If the OpenHands database is unavailable, the sync job exits with status code 1 and logs the failure. No contacts are synced until the database connection is restored. Monitor the CronJob logs for database connection errors.
+**Failure modes:** If the Madagascar database is unavailable, the sync job exits with status code 1 and logs the failure. No contacts are synced until the database connection is restored. Monitor the CronJob logs for database connection errors.
 
 ## Deployment
 
-The service is deployed as part of the openhands Helm chart. To enable it, set the following in your values.yaml:
+The service is deployed as part of the madagascar Helm chart. To enable it, set the following in your values.yaml:
 
 ```yaml
 resendSync:
@@ -45,7 +45,7 @@ resendSync:
 
 ### Prerequisites
 
-- Kubernetes cluster with the openhands chart deployed
+- Kubernetes cluster with the madagascar chart deployed
 - Resend.com API key stored in a Kubernetes secret named `resend-api-key`
 - Resend.com audience ID
 

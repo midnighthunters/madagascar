@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from openhands.sdk.llm.utils.metrics import (
+from madagascar.sdk.llm.utils.metrics import (
     Cost,
     Metrics,
     MetricsSnapshot,

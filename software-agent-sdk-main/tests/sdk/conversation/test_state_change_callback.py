@@ -5,14 +5,14 @@ import uuid
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Agent
-from openhands.sdk.conversation.state import (
+from madagascar.sdk import LLM, Agent
+from madagascar.sdk.conversation.state import (
     ConversationExecutionStatus,
     ConversationState,
 )
-from openhands.sdk.event.conversation_state import ConversationStateUpdateEvent
-from openhands.sdk.io import InMemoryFileStore
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.sdk.event.conversation_state import ConversationStateUpdateEvent
+from madagascar.sdk.io import InMemoryFileStore
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 @pytest.fixture

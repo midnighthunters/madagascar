@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 import pytest
 
-from openhands.tools.browser_use.impl import BrowserToolExecutor
+from madagascar.tools.browser_use.impl import BrowserToolExecutor
 
 
 @pytest.fixture(autouse=True)
@@ -78,7 +78,7 @@ class TestVNCIntegration:
         """Test that VNC enabled logs appropriate message by mocking logger."""
         with (
             patch.dict(os.environ, {"OH_ENABLE_VNC": "true"}, clear=False),
-            patch("openhands.tools.browser_use.impl.logger") as mock_logger,
+            patch("madagascar.tools.browser_use.impl.logger") as mock_logger,
         ):
             BrowserToolExecutor(headless=True)
             mock_logger.info.assert_called_with(
@@ -89,7 +89,7 @@ class TestVNCIntegration:
         """Test that VNC disabled doesn't log VNC-specific messages."""
         with (
             patch.dict(os.environ, {"OH_ENABLE_VNC": "false"}, clear=False),
-            patch("openhands.tools.browser_use.impl.logger") as mock_logger,
+            patch("madagascar.tools.browser_use.impl.logger") as mock_logger,
         ):
             BrowserToolExecutor(headless=True)
             # Verify that the VNC-specific log message was not called

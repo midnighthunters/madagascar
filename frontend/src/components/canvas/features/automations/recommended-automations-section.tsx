@@ -4,11 +4,11 @@ import { I18nKey } from "#/i18n/declaration";
 import {
   AUTOMATION_CATALOG,
   type RecommendedAutomation,
-} from "@openhands/extensions/automations";
+} from "@madagascar/extensions/automations";
 import {
   INTEGRATION_CATALOG as MCP_MARKETPLACE,
   type IntegrationCatalogEntry as MarketplaceEntry,
-} from "@openhands/extensions/integrations";
+} from "@madagascar/extensions/integrations";
 import { McpLogoStackBadge } from "#/components/features/mcp-page/mcp-logo-stack-badge";
 import { McpLogoBadge } from "#/components/features/mcp-logo-badge";
 import {
@@ -230,7 +230,7 @@ export function RecommendedAutomationsSection({
   onSelect,
   scrollableGrid = false,
 }: RecommendedAutomationsSectionProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const visibleAutomations = RECOMMENDED_AUTOMATIONS.filter((automation) => {
     const requiredEntries = getRequiredEntries(automation);

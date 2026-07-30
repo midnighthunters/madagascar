@@ -1,4 +1,4 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 
 export interface LlmProfileSummary {
   name: string;
@@ -27,7 +27,7 @@ export interface SaveLlmProfileRequest {
 
 class ProfilesService {
   static async listProfiles(): Promise<LlmProfileListResponse> {
-    const { data } = await openHands.get<LlmProfileListResponse>(
+    const { data } = await madagascar.get<LlmProfileListResponse>(
       "/api/v1/settings/profiles",
     );
     return data;
@@ -37,26 +37,26 @@ class ProfilesService {
     name: string,
     request: SaveLlmProfileRequest = {},
   ): Promise<void> {
-    await openHands.post(
+    await madagascar.post(
       `/api/v1/settings/profiles/${encodeURIComponent(name)}`,
       request,
     );
   }
 
   static async deleteProfile(name: string): Promise<void> {
-    await openHands.delete(
+    await madagascar.delete(
       `/api/v1/settings/profiles/${encodeURIComponent(name)}`,
     );
   }
 
   static async activateProfile(name: string): Promise<void> {
-    await openHands.post(
+    await madagascar.post(
       `/api/v1/settings/profiles/${encodeURIComponent(name)}/activate`,
     );
   }
 
   static async renameProfile(name: string, newName: string): Promise<void> {
-    await openHands.post(
+    await madagascar.post(
       `/api/v1/settings/profiles/${encodeURIComponent(name)}/rename`,
       { new_name: newName },
     );

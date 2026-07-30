@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from openhands.tools.browser_use.impl import BrowserToolExecutor, _install_chromium
+from madagascar.tools.browser_use.impl import BrowserToolExecutor, _install_chromium
 
 
 @pytest.fixture(autouse=True)
@@ -51,7 +51,7 @@ class TestChromiumDetection:
             return None
 
         with (
-            patch("openhands.tools.browser_use.impl.sys.platform", "linux"),
+            patch("madagascar.tools.browser_use.impl.sys.platform", "linux"),
             patch.object(Path, "exists", return_value=False),
             patch("shutil.which", side_effect=mock_which),
         ):
@@ -68,7 +68,7 @@ class TestChromiumDetection:
             return None
 
         with (
-            patch("openhands.tools.browser_use.impl.sys.platform", "linux"),
+            patch("madagascar.tools.browser_use.impl.sys.platform", "linux"),
             patch.object(Path, "exists", return_value=False),
             patch("shutil.which", side_effect=mock_which),
         ):
@@ -84,7 +84,7 @@ class TestChromiumDetection:
             return str(self) == str(chrome_path)
 
         with (
-            patch("openhands.tools.browser_use.impl.sys.platform", "linux"),
+            patch("madagascar.tools.browser_use.impl.sys.platform", "linux"),
             patch("shutil.which", return_value=None),
             patch.object(Path, "exists", mock_exists),
         ):
@@ -102,7 +102,7 @@ class TestChromiumDetection:
             return str(self) == str(chrome_path)
 
         with (
-            patch("openhands.tools.browser_use.impl.sys.platform", "darwin"),
+            patch("madagascar.tools.browser_use.impl.sys.platform", "darwin"),
             patch("shutil.which", return_value=None),
             patch.object(Path, "exists", mock_exists),
         ):
@@ -127,7 +127,7 @@ class TestChromiumDetection:
             return default
 
         with (
-            patch("openhands.tools.browser_use.impl.sys.platform", "win32"),
+            patch("madagascar.tools.browser_use.impl.sys.platform", "win32"),
             patch("shutil.which", return_value=None),
             patch("os.environ.get", side_effect=mock_environ_get),
             patch.object(Path, "exists", mock_exists),
@@ -146,7 +146,7 @@ class TestChromiumDetection:
             return str(self) in [str(mock_cache_dir), str(mock_chrome_path)]
 
         with (
-            patch("openhands.tools.browser_use.impl.sys.platform", "linux"),
+            patch("madagascar.tools.browser_use.impl.sys.platform", "linux"),
             patch("shutil.which", return_value=None),
             patch("pathlib.Path.home", return_value=Path("/home/user")),
             patch.object(Path, "exists", mock_exists),
@@ -175,7 +175,7 @@ class TestChromiumDetection:
             return str(self) in [str(mock_cache_dir), str(mock_chrome_path)]
 
         with (
-            patch("openhands.tools.browser_use.impl.sys.platform", "darwin"),
+            patch("madagascar.tools.browser_use.impl.sys.platform", "darwin"),
             patch("shutil.which", return_value=None),
             patch("pathlib.Path.home", return_value=Path("/Users/user")),
             patch.object(Path, "exists", mock_exists),
@@ -203,7 +203,7 @@ class TestChromiumDetection:
             return default
 
         with (
-            patch("openhands.tools.browser_use.impl.sys.platform", "win32"),
+            patch("madagascar.tools.browser_use.impl.sys.platform", "win32"),
             patch("shutil.which", return_value=None),
             patch("os.environ.get", side_effect=mock_environ_get),
             patch.object(Path, "exists", mock_exists),
@@ -218,7 +218,7 @@ class TestChromiumDetection:
         """Test when no Chromium binary is found."""
         executor = BrowserToolExecutor.__new__(BrowserToolExecutor)
         with (
-            patch("openhands.tools.browser_use.impl.sys.platform", "linux"),
+            patch("madagascar.tools.browser_use.impl.sys.platform", "linux"),
             patch("shutil.which", return_value=None),
             patch("pathlib.Path.home", return_value=Path("/home/user")),
             patch.object(Path, "exists", return_value=False),
@@ -230,7 +230,7 @@ class TestChromiumDetection:
         """Test when Playwright cache directory doesn't exist."""
         executor = BrowserToolExecutor.__new__(BrowserToolExecutor)
         with (
-            patch("openhands.tools.browser_use.impl.sys.platform", "linux"),
+            patch("madagascar.tools.browser_use.impl.sys.platform", "linux"),
             patch("shutil.which", return_value=None),
             patch("pathlib.Path.home", return_value=Path("/home/user")),
             patch.object(Path, "exists", return_value=False),

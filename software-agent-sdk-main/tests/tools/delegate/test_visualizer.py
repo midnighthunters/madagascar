@@ -3,11 +3,11 @@
 import json
 from unittest.mock import MagicMock
 
-from openhands.sdk.conversation.conversation_stats import ConversationStats
-from openhands.sdk.event import ActionEvent, MessageEvent, ObservationEvent
-from openhands.sdk.llm import Message, MessageToolCall, TextContent
-from openhands.sdk.tool import Action, Observation
-from openhands.tools.delegate import DelegationVisualizer
+from madagascar.sdk.conversation.conversation_stats import ConversationStats
+from madagascar.sdk.event import ActionEvent, MessageEvent, ObservationEvent
+from madagascar.sdk.llm import Message, MessageToolCall, TextContent
+from madagascar.sdk.tool import Action, Observation
+from madagascar.tools.delegate import DelegationVisualizer
 
 
 class MockDelegateAction(Action):

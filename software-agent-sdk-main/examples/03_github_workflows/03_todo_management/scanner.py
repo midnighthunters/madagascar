@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-TODO Scanner for OpenHands Automated TODO Management
+TODO Scanner for Madagascar Automated TODO Management
 
 Scans for configurable TODO comments in Python, TypeScript, Java, and Rust files.
-Default identifier: TODO(openhands)
+Default identifier: TODO(madagascar)
 """
 
 import argparse
@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 def scan_file_for_todos(
-    file_path: Path, todo_identifier: str = "TODO(openhands)"
+    file_path: Path, todo_identifier: str = "TODO(madagascar)"
 ) -> list[dict]:
     """Scan a single file for configurable TODO comments."""
     # Only scan specific file extensions
@@ -118,7 +118,7 @@ def scan_file_for_todos(
 
 
 def scan_directory(
-    directory: Path, todo_identifier: str = "TODO(openhands)"
+    directory: Path, todo_identifier: str = "TODO(madagascar)"
 ) -> list[dict]:
     """Recursively scan a directory for configurable TODO comments."""
     logger.info(f"Scanning directory: {directory}")
@@ -164,8 +164,8 @@ def main():
     parser.add_argument(
         "--identifier",
         "-i",
-        default="TODO(openhands)",
-        help="TODO identifier to search for (default: TODO(openhands))",
+        default="TODO(madagascar)",
+        help="TODO identifier to search for (default: TODO(madagascar))",
     )
 
     args = parser.parse_args()

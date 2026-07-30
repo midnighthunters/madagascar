@@ -4,10 +4,10 @@ import time
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Conversation, get_logger
-from openhands.sdk.conversation.impl.remote_conversation import RemoteConversation
-from openhands.tools.preset.default import get_default_agent
-from openhands.workspace import DockerWorkspace
+from madagascar.sdk import LLM, Conversation, get_logger
+from madagascar.sdk.conversation.impl.remote_conversation import RemoteConversation
+from madagascar.tools.preset.default import get_default_agent
+from madagascar.workspace import DockerWorkspace
 
 
 logger = get_logger(__name__)
@@ -39,8 +39,8 @@ def get_server_image():
     # built-in GITHUB_SHA which resolves to the merge-commit on PRs).
     sha = os.getenv("SDK_SHA") or os.getenv("GITHUB_SHA")
     if sha:
-        return f"ghcr.io/openhands/agent-server:{sha[:7]}-python-{arch}"
-    return "ghcr.io/openhands/agent-server:latest-python"
+        return f"ghcr.io/madagascar/agent-server:{sha[:7]}-python-{arch}"
+    return "ghcr.io/madagascar/agent-server:latest-python"
 
 
 # Create a Docker-based remote workspace with extra ports for browser access.
@@ -89,7 +89,7 @@ with DockerWorkspace(
     logger.info(f"\n📋 Conversation ID: {conversation.state.id}")
     logger.info("📝 Sending first message...")
     conversation.send_message(
-        "Could you go to https://openhands.dev/ blog page and summarize main "
+        "Could you go to https://madagascar.dev/ blog page and summarize main "
         "points of the latest blog?"
     )
     conversation.run()
@@ -107,7 +107,7 @@ with DockerWorkspace(
         while y != "y":
             y = input(
                 "Because you've enabled extra_ports=True in DockerDevWorkspace, "
-                "you can open a browser tab to see the *actual* browser OpenHands "
+                "you can open a browser tab to see the *actual* browser Madagascar "
                 "is interacting with via VNC.\n\n"
                 "Link: http://localhost:8012/vnc.html?autoconnect=1&resize=remote\n\n"
                 "Press 'y' and Enter to exit and terminate the workspace.\n"

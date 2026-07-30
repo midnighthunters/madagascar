@@ -4,9 +4,9 @@
 
 The evaluation pipeline spans three repositories:
 
-1. **OpenHands/software-agent-sdk** — Triggers evaluations via `run-eval.yml` workflow
-2. **OpenHands/evaluation** — Orchestrates the eval job via `eval-job.yml` workflow
-3. **OpenHands/benchmarks** — Contains benchmark runners (inference + evaluation)
+1. **Madagascar/software-agent-sdk** — Triggers evaluations via `run-eval.yml` workflow
+2. **Madagascar/evaluation** — Orchestrates the eval job via `eval-job.yml` workflow
+3. **Madagascar/benchmarks** — Contains benchmark runners (inference + evaluation)
 
 ## Trigger Flow
 
@@ -15,7 +15,7 @@ The evaluation pipeline spans three repositories:
 1. A label (`run-eval-1`, `run-eval-50`, `run-eval-200`, `run-eval-500`) is added to a PR
 2. `software-agent-sdk/.github/workflows/run-eval.yml` fires
 3. It resolves model configs from `.github/run-eval/resolve_model_config.py`
-4. Dispatches `eval-job.yml` in `OpenHands/evaluation` with:
+4. Dispatches `eval-job.yml` in `Madagascar/evaluation` with:
    - `sdk_commit`: The PR's head SHA
    - `sdk_workflow_run_id`: The `run-eval.yml` workflow run ID
    - `eval_limit`: Extracted from label name
@@ -33,7 +33,7 @@ Via `workflow_dispatch` on `run-eval.yml` with explicit parameters.
 
 ## Results Storage (GCS)
 
-Results are stored in Google Cloud Storage bucket `openhands-evaluation-results`
+Results are stored in Google Cloud Storage bucket `madagascar-evaluation-results`
 and served via CDN at `https://results.eval.all-hands.dev/`.
 
 ### Run Path Format
@@ -45,7 +45,7 @@ and served via CDN at `https://results.eval.all-hands.dev/`.
 - **benchmark**: `swebench`, `swebenchpro`, `gaia`, `swtbench`, `commit0`, `swebenchmultimodal`, `terminalbench`, `programbench`
 - **model_slug**: Model name with `/:@.` replaced by `-`
   - Example: `litellm_proxy/claude-sonnet-4-5-20250929` → `litellm_proxy-claude-sonnet-4-5-20250929`
-- **github_run_id**: The GitHub Actions run ID from the `OpenHands/evaluation` repo
+- **github_run_id**: The GitHub Actions run ID from the `Madagascar/evaluation` repo
 
 ### Files Per Run
 
@@ -120,11 +120,11 @@ have `Cache-Control: no-cache` set.
 
 ## Dashboard
 
-The eval monitor dashboard at `https://openhands-eval-monitor.vercel.app/`
+The eval monitor dashboard at `https://madagascar-eval-monitor.vercel.app/`
 provides a visual view of runs. Construct URLs as:
 
 ```
-https://openhands-eval-monitor.vercel.app/?run={benchmark}/{model_slug}/{run_id}/
+https://madagascar-eval-monitor.vercel.app/?run={benchmark}/{model_slug}/{run_id}/
 ```
 
 ## Bot Comments

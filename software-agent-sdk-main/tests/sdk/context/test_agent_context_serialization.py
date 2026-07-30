@@ -5,15 +5,15 @@ from base64 import urlsafe_b64encode
 
 from pydantic import SecretStr
 
-from openhands.sdk.context.agent_context import AgentContext
-from openhands.sdk.secret import SecretSource, StaticSecret
-from openhands.sdk.skills import (
+from madagascar.sdk.context.agent_context import AgentContext
+from madagascar.sdk.secret import SecretSource, StaticSecret
+from madagascar.sdk.skills import (
     KeywordTrigger,
     Skill,
     TaskTrigger,
 )
-from openhands.sdk.skills.types import InputMetadata
-from openhands.sdk.utils.cipher import Cipher
+from madagascar.sdk.skills.types import InputMetadata
+from madagascar.sdk.utils.cipher import Cipher
 
 
 def test_agent_context_serialization_roundtrip():

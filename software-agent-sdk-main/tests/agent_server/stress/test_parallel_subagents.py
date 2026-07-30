@@ -24,12 +24,12 @@ import time
 
 import pytest
 
-from openhands.agent_server.conversation_service import ConversationService
-from openhands.sdk import Agent, Tool
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.llm import Message, MessageToolCall, TextContent
-from openhands.sdk.subagent.registry import _reset_registry_for_tests, register_agent
-from openhands.tools.task import TaskToolSet
+from madagascar.agent_server.conversation_service import ConversationService
+from madagascar.sdk import Agent, Tool
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.llm import Message, MessageToolCall, TextContent
+from madagascar.sdk.subagent.registry import _reset_registry_for_tests, register_agent
+from madagascar.tools.task import TaskToolSet
 from tests.agent_server.stress.budgets import PARALLEL_SUBAGENTS
 from tests.agent_server.stress.probe import ResourceProbe
 from tests.agent_server.stress.scripts import (

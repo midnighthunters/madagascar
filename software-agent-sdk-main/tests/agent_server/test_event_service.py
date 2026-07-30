@@ -13,45 +13,45 @@ from uuid import uuid4
 import pytest
 import pytest_asyncio
 
-from openhands.agent_server.conversation_lease import LEASE_FILE_NAME
-from openhands.agent_server.conversation_service import ConversationService
-from openhands.agent_server.event_service import EventService
-from openhands.agent_server.models import (
+from madagascar.agent_server.conversation_lease import LEASE_FILE_NAME
+from madagascar.agent_server.conversation_service import ConversationService
+from madagascar.agent_server.event_service import EventService
+from madagascar.agent_server.models import (
     ConfirmationResponseRequest,
     EventPage,
     EventSortOrder,
     StoredConversation,
 )
-from openhands.agent_server.pub_sub import Subscriber
-from openhands.sdk import LLM, Agent, AgentBase, Conversation, Message
-from openhands.sdk.agent import ACPAgent
-from openhands.sdk.conversation.event_store import EventLog
-from openhands.sdk.conversation.fifo_lock import FIFOLock
-from openhands.sdk.conversation.impl.local_conversation import (
+from madagascar.agent_server.pub_sub import Subscriber
+from madagascar.sdk import LLM, Agent, AgentBase, Conversation, Message
+from madagascar.sdk.agent import ACPAgent
+from madagascar.sdk.conversation.event_store import EventLog
+from madagascar.sdk.conversation.fifo_lock import FIFOLock
+from madagascar.sdk.conversation.impl.local_conversation import (
     ACP_INFLIGHT_PROMPT_USER_MESSAGE_ID,
     ACP_SUPERSEDE_INFLIGHT_PROMPT,
     LocalConversation,
 )
-from openhands.sdk.conversation.state import (
+from madagascar.sdk.conversation.state import (
     ConversationExecutionStatus,
     ConversationState,
 )
-from openhands.sdk.event import AgentErrorEvent, Event
-from openhands.sdk.event.conversation_state import ConversationStateUpdateEvent
-from openhands.sdk.event.llm_convertible import (
+from madagascar.sdk.event import AgentErrorEvent, Event
+from madagascar.sdk.event.conversation_state import ConversationStateUpdateEvent
+from madagascar.sdk.event.llm_convertible import (
     ActionEvent,
     MessageEvent,
     ObservationEvent,
 )
-from openhands.sdk.io.local import LocalFileStore
-from openhands.sdk.io.memory import InMemoryFileStore
-from openhands.sdk.llm import MessageToolCall, TextContent
-from openhands.sdk.mcp.config import coerce_mcp_config
-from openhands.sdk.security.confirmation_policy import NeverConfirm
-from openhands.sdk.subagent.schema import AgentDefinition
-from openhands.sdk.utils.cipher import Cipher
-from openhands.sdk.workspace import LocalWorkspace
-from openhands.tools.terminal import TerminalAction, TerminalObservation
+from madagascar.sdk.io.local import LocalFileStore
+from madagascar.sdk.io.memory import InMemoryFileStore
+from madagascar.sdk.llm import MessageToolCall, TextContent
+from madagascar.sdk.mcp.config import coerce_mcp_config
+from madagascar.sdk.security.confirmation_policy import NeverConfirm
+from madagascar.sdk.subagent.schema import AgentDefinition
+from madagascar.sdk.utils.cipher import Cipher
+from madagascar.sdk.workspace import LocalWorkspace
+from madagascar.tools.terminal import TerminalAction, TerminalObservation
 from tests.agent_server.stress.scripts import (
     SlowTestLLM,
     start_conversation_with_test_llm,
@@ -241,7 +241,7 @@ class TestEventServiceSearchEvents:
 
         # Test filtering by MessageEvent
         result = await event_service.search_events(
-            kind="openhands.sdk.event.llm_convertible.message.MessageEvent"
+            kind="madagascar.sdk.event.llm_convertible.message.MessageEvent"
         )
         assert len(result.items) == 5
         for event in result.items:
@@ -303,7 +303,7 @@ class TestEventServiceSearchEvents:
 
         # Filter by ActionEvent and sort by TIMESTAMP_DESC
         result = await event_service.search_events(
-            kind="openhands.sdk.event.llm_convertible.message.MessageEvent",
+            kind="madagascar.sdk.event.llm_convertible.message.MessageEvent",
             sort_order=EventSortOrder.TIMESTAMP_DESC,
         )
 
@@ -322,7 +322,7 @@ class TestEventServiceSearchEvents:
 
         # Filter by MessageEvent with limit 1
         result = await event_service.search_events(
-            kind="openhands.sdk.event.llm_convertible.message.MessageEvent", limit=1
+            kind="madagascar.sdk.event.llm_convertible.message.MessageEvent", limit=1
         )
         assert len(result.items) == 1
         assert result.items[0].__class__.__name__ == "MessageEvent"
@@ -330,7 +330,7 @@ class TestEventServiceSearchEvents:
 
         # Get second page
         result = await event_service.search_events(
-            kind="openhands.sdk.event.llm_convertible.message.MessageEvent",
+            kind="madagascar.sdk.event.llm_convertible.message.MessageEvent",
             page_id=result.next_page_id,
             limit=4,
         )
@@ -691,7 +691,7 @@ class TestEventServiceCountEvents:
 
         # Count ActionEvent events (should be 5)
         result = await event_service.count_events(
-            kind="openhands.sdk.event.llm_convertible.message.MessageEvent"
+            kind="madagascar.sdk.event.llm_convertible.message.MessageEvent"
         )
         assert result == 5
 
@@ -1236,7 +1236,7 @@ class TestEventServiceSendMessage:
         message = Message(role="user", content=[])
 
         # Patch the logger to verify exception logging
-        with patch("openhands.agent_server.event_service.logger") as mock_logger:
+        with patch("madagascar.agent_server.event_service.logger") as mock_logger:
             # Call send_message with run=True
             await event_service.send_message(message, run=True)
 
@@ -1481,7 +1481,7 @@ class TestEventServiceBodyFiltering:
 
     def test_event_matches_body_with_message_event(self, event_service):
         """Test _event_matches_body with MessageEvent containing text content."""
-        from openhands.sdk.llm.message import TextContent
+        from madagascar.sdk.llm.message import TextContent
 
         # Create a MessageEvent with text content
         message = Message(role="user", content=[TextContent(text="Hello world")])
@@ -1499,7 +1499,7 @@ class TestEventServiceBodyFiltering:
 
     def test_event_matches_body_with_non_message_event(self, event_service):
         """Test _event_matches_body with non-MessageEvent (should return False)."""
-        from openhands.sdk.event.user_action import PauseEvent
+        from madagascar.sdk.event.user_action import PauseEvent
 
         # Create a non-MessageEvent
         event = PauseEvent(id="test")
@@ -1522,7 +1522,7 @@ class TestEventServiceBodyFiltering:
     @pytest.mark.asyncio
     async def test_search_events_with_body_filter_integration(self, event_service):
         """Test search_events with body filter using real MessageEvents."""
-        from openhands.sdk.llm.message import TextContent
+        from madagascar.sdk.llm.message import TextContent
 
         # Create a conversation with MessageEvents containing different text
         conversation = MagicMock(spec=Conversation)
@@ -1581,7 +1581,7 @@ class TestEventServiceBodyFiltering:
     @pytest.mark.asyncio
     async def test_count_events_with_body_filter_integration(self, event_service):
         """Test count_events with body filter using real MessageEvents."""
-        from openhands.sdk.llm.message import TextContent
+        from madagascar.sdk.llm.message import TextContent
 
         # Create a conversation with MessageEvents containing different text
         conversation = MagicMock(spec=Conversation)
@@ -1827,7 +1827,7 @@ class TestEventServiceSaveMeta:
         base_state.json on resume. So the switched model must also be written
         to meta.json, otherwise a restart silently reverts to the old model.
         """
-        from openhands.sdk.agent import ACPAgent
+        from madagascar.sdk.agent import ACPAgent
 
         stored = StoredConversation(
             id=uuid4(),
@@ -1869,7 +1869,7 @@ class TestEventServiceSaveMeta:
         the first run(), so the only failure mode here is a closed/never-started
         service.
         """
-        from openhands.sdk.agent import ACPAgent
+        from madagascar.sdk.agent import ACPAgent
 
         stored = StoredConversation(
             id=uuid4(),
@@ -1901,10 +1901,10 @@ class TestEventServiceStartWithRunningStatus:
         1. Set execution_status to ERROR
         2. Add an AgentErrorEvent for the first unmatched action to inform the agent
         """
-        from openhands.sdk.event import AgentErrorEvent
-        from openhands.sdk.event.llm_convertible import ActionEvent
-        from openhands.sdk.llm import MessageToolCall, TextContent
-        from openhands.tools.terminal import TerminalAction
+        from madagascar.sdk.event import AgentErrorEvent
+        from madagascar.sdk.event.llm_convertible import ActionEvent
+        from madagascar.sdk.llm import MessageToolCall, TextContent
+        from madagascar.tools.terminal import TerminalAction
 
         # Setup paths
         event_service.conversations_dir = tmp_path
@@ -1915,7 +1915,7 @@ class TestEventServiceStartWithRunningStatus:
         event_service.stored.workspace = LocalWorkspace(working_dir=str(tmp_path))
 
         with patch(
-            "openhands.agent_server.event_service.LocalConversation"
+            "madagascar.agent_server.event_service.LocalConversation"
         ) as MockConversation:
             mock_conv = MagicMock()
             mock_state = MagicMock()
@@ -1982,7 +1982,7 @@ class TestEventServiceStartWithRunningStatus:
         Even if execution_status is RUNNING, if there are no unmatched actions,
         no AgentErrorEvent should be added.
         """
-        from openhands.sdk.event import AgentErrorEvent
+        from madagascar.sdk.event import AgentErrorEvent
 
         # Setup paths
         event_service.conversations_dir = tmp_path
@@ -1993,7 +1993,7 @@ class TestEventServiceStartWithRunningStatus:
         event_service.stored.workspace = LocalWorkspace(working_dir=str(tmp_path))
 
         with patch(
-            "openhands.agent_server.event_service.LocalConversation"
+            "madagascar.agent_server.event_service.LocalConversation"
         ) as MockConversation:
             mock_conv = MagicMock()
             mock_state = MagicMock()
@@ -2032,7 +2032,7 @@ class TestEventServiceStartWithRunningStatus:
         self, event_service, tmp_path
     ):
         """Test that start() doesn't modify execution_status when it's not RUNNING."""
-        from openhands.sdk.event import AgentErrorEvent
+        from madagascar.sdk.event import AgentErrorEvent
 
         # Setup paths
         event_service.conversations_dir = tmp_path
@@ -2043,7 +2043,7 @@ class TestEventServiceStartWithRunningStatus:
         event_service.stored.workspace = LocalWorkspace(working_dir=str(tmp_path))
 
         with patch(
-            "openhands.agent_server.event_service.LocalConversation"
+            "madagascar.agent_server.event_service.LocalConversation"
         ) as MockConversation:
             mock_conv = MagicMock()
             mock_state = MagicMock()
@@ -2094,7 +2094,7 @@ class TestEventServiceStartWithRunningStatus:
         event_service.stored.workspace = LocalWorkspace(working_dir=str(tmp_path))
 
         with patch(
-            "openhands.agent_server.event_service.LocalConversation"
+            "madagascar.agent_server.event_service.LocalConversation"
         ) as MockConversation:
             mock_conv = MagicMock()
             mock_state = MagicMock()
@@ -2164,7 +2164,7 @@ class TestEventServiceStartWithRunningStatus:
         event_service.stored.workspace = LocalWorkspace(working_dir=str(workspace_dir))
 
         with patch(
-            "openhands.agent_server.event_service.LocalConversation"
+            "madagascar.agent_server.event_service.LocalConversation"
         ) as MockConversation:
             mock_conv = MagicMock()
             mock_state = MagicMock()
@@ -2202,7 +2202,7 @@ class TestEventServiceStartWithRunningStatus:
         conv_dir.mkdir(parents=True, exist_ok=True)
         workspace_dir = tmp_path / "existing_repo"
         workspace_dir.mkdir(parents=True, exist_ok=True)
-        from openhands.sdk.git.utils import run_git_command
+        from madagascar.sdk.git.utils import run_git_command
 
         run_git_command(["git", "init"], workspace_dir)
         marker = workspace_dir / ".git" / "_idempotency_marker"
@@ -2211,7 +2211,7 @@ class TestEventServiceStartWithRunningStatus:
         event_service.stored.workspace = LocalWorkspace(working_dir=str(workspace_dir))
 
         with patch(
-            "openhands.agent_server.event_service.LocalConversation"
+            "madagascar.agent_server.event_service.LocalConversation"
         ) as MockConversation:
             mock_conv = MagicMock()
             mock_state = MagicMock()
@@ -2703,7 +2703,7 @@ class TestEventServiceClose:
             with (
                 caplog.at_level("WARNING"),
                 patch(
-                    "openhands.agent_server.event_service.asyncio.wait_for",
+                    "madagascar.agent_server.event_service.asyncio.wait_for",
                     AsyncMock(side_effect=asyncio.TimeoutError),
                 ),
             ):
@@ -2724,7 +2724,7 @@ class TestEventServiceClose:
         conversation only inherits the default BaseConversation.arun()
         (which delegates to sync run()).  This prevents sync-only
         subclasses from accidentally blocking the event loop."""
-        from openhands.sdk.conversation.base import BaseConversation
+        from madagascar.sdk.conversation.base import BaseConversation
 
         run_thread_id: int | None = None
         mock = MagicMock()
@@ -2832,7 +2832,7 @@ class TestEventServiceClose:
         custom agents through the native async path, running their sync
         step() in a worker thread while arun() holds the state lock on the
         event-loop thread (B5)."""
-        from openhands.sdk.conversation.base import BaseConversation
+        from madagascar.sdk.conversation.base import BaseConversation
 
         run_called = False
         arun_called = False
@@ -3376,7 +3376,7 @@ async def test_event_service_skips_lease_when_ttl_is_zero(tmp_path: Path) -> Non
         lease_ttl_seconds=0,
     )
     with patch(
-        "openhands.agent_server.event_service.LocalConversation",
+        "madagascar.agent_server.event_service.LocalConversation",
         return_value=_make_mock_conv(),
     ):
         await service.start()
@@ -3394,7 +3394,7 @@ async def test_event_service_creates_lease_with_custom_ttl(tmp_path: Path) -> No
         lease_ttl_seconds=10.0,
     )
     with patch(
-        "openhands.agent_server.event_service.LocalConversation",
+        "madagascar.agent_server.event_service.LocalConversation",
         return_value=_make_mock_conv(),
     ):
         await service.start()

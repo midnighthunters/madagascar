@@ -7,7 +7,7 @@ from integrations.azure_devops.azure_devops_manager import AzureDevOpsManager
 from integrations.models import Message, SourceType
 
 
-def _pr_comment_message(body: str = '@openhands please fix this') -> Message:
+def _pr_comment_message(body: str = '@madagascar please fix this') -> Message:
     return Message(
         source=SourceType.AZURE_DEVOPS,
         message={

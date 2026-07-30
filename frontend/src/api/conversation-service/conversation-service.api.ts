@@ -3,8 +3,8 @@ import {
   GetVSCodeUrlResponse,
   GetTrajectoryResponse,
   FileUploadSuccessResponse,
-} from "../open-hands.types";
-import { openHands } from "../open-hands-axios";
+} from "../madagascar.types";
+import { madagascar } from "../madagascar-axios";
 import { V1AppConversation } from "./v1-conversation-service.types";
 
 class ConversationService {
@@ -57,7 +57,7 @@ class ConversationService {
     conversationId: string,
   ): Promise<GetVSCodeUrlResponse> {
     const url = `${this.getConversationUrl(conversationId)}/vscode-url`;
-    const { data } = await openHands.get<GetVSCodeUrlResponse>(url, {
+    const { data } = await madagascar.get<GetVSCodeUrlResponse>(url, {
       headers: this.getConversationHeaders(),
     });
     return data;
@@ -67,7 +67,7 @@ class ConversationService {
     conversationId: string,
   ): Promise<GetTrajectoryResponse> {
     const url = `${this.getConversationUrl(conversationId)}/trajectory`;
-    const { data } = await openHands.get<GetTrajectoryResponse>(url, {
+    const { data } = await madagascar.get<GetTrajectoryResponse>(url, {
       headers: this.getConversationHeaders(),
     });
     return data;
@@ -88,7 +88,7 @@ class ConversationService {
       formData.append("files", file);
     }
     const url = `${this.getConversationUrl(conversationId)}/upload-files`;
-    const response = await openHands.post<FileUploadSuccessResponse>(
+    const response = await madagascar.post<FileUploadSuccessResponse>(
       url,
       formData,
       {

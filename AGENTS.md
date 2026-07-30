@@ -1,16 +1,16 @@
-This repository contains the code for OpenHands, an automated AI software engineer. It has a Python backend
-(in the `openhands` directory) and React frontend (in the `frontend` directory).
+This repository contains the code for Madagascar, an automated AI software engineer. It has a Python backend
+(in the `madagascar` directory) and React frontend (in the `frontend` directory).
 
 ## General Setup:
 To set up the entire repo, including frontend and backend, run `make build`.
 You don't need to do this unless the user asks you to, or if you're trying to run the entire application.
 
-## Running OpenHands with OpenHands:
+## Running Madagascar with Madagascar:
 To run the full application to debug issues:
 ```bash
 export INSTALL_DOCKER=0
 export RUNTIME=local
-make build && make run FRONTEND_PORT=12000 FRONTEND_HOST=0.0.0.0 BACKEND_HOST=0.0.0.0 &> /tmp/openhands-log.txt &
+make build && make run FRONTEND_PORT=12000 FRONTEND_HOST=0.0.0.0 BACKEND_HOST=0.0.0.0 &> /tmp/madagascar-log.txt &
 ```
 
 Local run troubleshooting notes:
@@ -27,7 +27,7 @@ Before pushing any changes, you MUST ensure that any lint errors or simple test 
 
 * If you've made changes to the backend, you should run `pre-commit run --config ./dev_config/python/.pre-commit-config.yaml` (this will run on staged files).
 * If you've made changes to the frontend, you should run `cd frontend && npm run lint:fix && npm run build ; cd ..`
-* If you've made changes to the VSCode extension, you should run `cd openhands/app_server/integrations/vscode && npm run lint:fix && npm run compile ; cd ../../..`
+* If you've made changes to the VSCode extension, you should run `cd madagascar/app_server/integrations/vscode && npm run lint:fix && npm run compile ; cd ../../..`
 
 The pre-commit hooks MUST pass successfully before pushing any changes to the repository. This is a mandatory requirement to maintain code quality and consistency.
 
@@ -47,7 +47,7 @@ then re-run the command to ensure it passes. Common issues include:
 ## GitHub Actions
 
 - Pin external third-party actions to a full 40-character commit SHA, with the version tag in a trailing comment (e.g. `uses: owner/repo@<sha> # v1.2.3`). Do not use mutable tags (`@v1`) or branches for third-party actions.
-- GitHub-authored (`actions/*`, `github/*`) and first-party (`OpenHands/*`) actions are currently exempt.
+- GitHub-authored (`actions/*`, `github/*`) and first-party (`Madagascar/*`) actions are currently exempt.
 - Dependabot's `github-actions` ecosystem bumps the pinned SHA and the trailing comment under the configured cooldown, so pinning does not block security or version updates.
 
 ## Lockfile Regeneration (Preserve Original Tool Versions)
@@ -122,8 +122,8 @@ When working on a PR that requires design documents, scripts meant for developme
 
 ## Repository Structure
 Backend:
-- Located in the `openhands` directory
-- The current V1 application server lives in `openhands/app_server/`. `make start-backend` still launches `openhands.server.listen:app`, which includes the V1 routes by default unless `ENABLE_V1=0`.
+- Located in the `madagascar` directory
+- The current V1 application server lives in `madagascar/app_server/`. `make start-backend` still launches `madagascar.server.listen:app`, which includes the V1 routes by default unless `ENABLE_V1=0`.
 - For V1 web-app docs, LLM setup should point users to the Settings UI.
 - Testing:
   - All tests are in `tests/unit/test_*.py`
@@ -160,7 +160,7 @@ Frontend:
 
 
 VSCode Extension:
-- Located in the `openhands/app_server/integrations/vscode` directory
+- Located in the `madagascar/app_server/integrations/vscode` directory
 - Setup: Run `npm install` in the extension directory
 - Linting:
   - Run linting with fixes: `npm run lint:fix`
@@ -177,7 +177,7 @@ VSCode Extension:
 
 ## Enterprise Directory
 
-The `enterprise/` directory contains additional functionality that extends the open-source OpenHands codebase. This includes:
+The `enterprise/` directory contains additional functionality that extends the open-source Madagascar codebase. This includes:
 - Authentication and user management (Keycloak integration)
 - Database migrations (Alembic)
 - Integration services (GitHub, GitLab, Jira, Linear, Slack)
@@ -199,7 +199,7 @@ The `enterprise/` directory contains additional functionality that extends the o
 - Docker (optional)
 
 **Setup Steps:**
-1. First, build the main OpenHands project: `make build`
+1. First, build the main Madagascar project: `make build`
 2. Then install enterprise dependencies: `cd enterprise && poetry install --with dev,test` (This can take a very long time. Be patient.)
 3. Set up enterprise pre-commit hooks: `poetry run pre-commit install --config ./dev_config/python/.pre-commit-config.yaml`
 
@@ -248,11 +248,11 @@ Each integration follows a consistent pattern with service classes, storage mode
 
 **Important Notes:**
 - Enterprise code is licensed under Polyform Free Trial License (30-day limit)
-- The enterprise server extends the OpenHands server through dynamic imports
+- The enterprise server extends the Madagascar server through dynamic imports
 - Database changes require careful migration planning in `enterprise/migrations/`
-- Always test changes in both OpenHands and enterprise contexts
+- Always test changes in both Madagascar and enterprise contexts
 - Use the enterprise-specific Makefile commands for development
-- When the `openhands-ai` package (root project) version has been updated, run `poetry lock` in the `enterprise/` folder to update the version in the enterprise poetry lockfile.
+- When the `madagascar-ai` package (root project) version has been updated, run `poetry lock` in the `enterprise/` folder to update the version in the enterprise poetry lockfile.
 
 **Enterprise Testing Best Practices:**
 
@@ -265,7 +265,7 @@ Each integration follows a consistent pattern with service classes, storage mode
 **Import Patterns:**
 - Use relative imports without `enterprise.` prefix in enterprise code
 - Example: `from storage.database import a_session_maker` not `from enterprise.storage.database import a_session_maker`
-- This ensures code works in both OpenHands and enterprise contexts
+- This ensures code works in both Madagascar and enterprise contexts
 
 **Test Structure:**
 - Place tests in `enterprise/tests/unit/` following the same structure as the source code
@@ -287,7 +287,7 @@ Each integration follows a consistent pattern with service classes, storage mode
 **Troubleshooting:**
 - If tests fail, ensure all dependencies are installed: `poetry install --with dev,test`
 - For database issues, check migration status and run migrations if needed
-- For frontend issues, ensure the main OpenHands frontend is built: `make build`
+- For frontend issues, ensure the main Madagascar frontend is built: `make build`
 - Check logs in the `logs/` directory for runtime issues
 - If tests fail with import errors, verify `PYTHONPATH=".:$PYTHONPATH"` is set
 - **If GitHub CI fails but local linting passes**: Always use `--show-diff-on-failure` flag to match CI behavior exactly
@@ -331,11 +331,11 @@ vi.mock("#/hooks/use-agent-state", () => ({
 
 ### Microagents
 
-Microagents are specialized prompts that enhance OpenHands with domain-specific knowledge and task-specific workflows. They are Markdown files that can include frontmatter for configuration.
+Microagents are specialized prompts that enhance Madagascar with domain-specific knowledge and task-specific workflows. They are Markdown files that can include frontmatter for configuration.
 
 #### Types:
 - **Public Microagents**: Located in `microagents/`, available to all users
-- **Repository Microagents**: Located in `.openhands/microagents/`, specific to this repository
+- **Repository Microagents**: Located in `.madagascar/microagents/`, specific to this repository
 
 #### Loading Behavior:
 - **Without frontmatter**: Always loaded into LLM context
@@ -366,7 +366,7 @@ Your specialized knowledge and instructions here...
   - Special actions (like "think") are displayed as collapsible elements only
 
 #### Adding User Settings:
-- To add a new user setting to OpenHands, follow these steps:
+- To add a new user setting to Madagascar, follow these steps:
   1. Add the setting to the frontend:
      - Add the setting to the `Settings` type in `frontend/src/types/settings.ts`
      - Add the setting to the `ApiSettings` type in the same file
@@ -377,12 +377,12 @@ Your specialized knowledge and instructions here...
      - Add i18n translations for the setting name and any tooltips in `frontend/src/i18n/translation.json`
      - Add the translation key to `frontend/src/i18n/declaration.ts`
   2. Add the setting to the backend:
-     - Add the setting to the `Settings` model in `openhands/app_server/settings/settings_models.py`
+     - Add the setting to the `Settings` model in `madagascar/app_server/settings/settings_models.py`
      - Update any relevant backend code to apply the setting (e.g., in session creation)
 
 #### Settings UI Patterns:
 
-There are two main patterns for saving settings in the OpenHands frontend:
+There are two main patterns for saving settings in the Madagascar frontend:
 
 **Pattern 1: Entity-based Resources (Immediate Save)**
 - Used for: API Keys, Secrets, MCP Servers
@@ -412,7 +412,7 @@ There are two main patterns for saving settings in the OpenHands frontend:
 
 ### Adding New LLM Models
 
-To add a new LLM model to OpenHands, you need to update multiple files across both frontend and backend:
+To add a new LLM model to Madagascar, you need to update multiple files across both frontend and backend:
 
 #### Model Configuration Procedure:
 
@@ -422,18 +422,18 @@ To add a new LLM model to OpenHands, you need to update multiple files across bo
      - `VERIFIED_OPENAI_MODELS` for OpenAI models
      - `VERIFIED_ANTHROPIC_MODELS` for Anthropic models
      - `VERIFIED_MISTRAL_MODELS` for Mistral models
-     - `VERIFIED_OPENHANDS_MODELS` for models available through OpenHands provider
+     - `VERIFIED_MADAGASCAR_MODELS` for models available through Madagascar provider
 
-2. **Backend CLI Integration** (`openhands/cli/utils.py`):
+2. **Backend CLI Integration** (`madagascar/cli/utils.py`):
    - Add the model to the appropriate `VERIFIED_*_MODELS` arrays
    - This ensures the model appears in CLI model selection
 
-3. **Backend Model List** (`openhands/utils/llm.py`):
-   - **CRITICAL**: Add the model to the `openhands_models` list (lines 57-66) if using OpenHands provider
+3. **Backend Model List** (`madagascar/utils/llm.py`):
+   - **CRITICAL**: Add the model to the `madagascar_models` list (lines 57-66) if using Madagascar provider
    - This is required for the model to appear in the frontend model selector
-   - Format: `'openhands/model-name'` (e.g., `'openhands/o3'`)
+   - Format: `'madagascar/model-name'` (e.g., `'madagascar/o3'`)
 
-4. **Backend LLM Configuration** (`openhands/llm/llm.py`):
+4. **Backend LLM Configuration** (`madagascar/llm/llm.py`):
    - Add to feature-specific arrays based on model capabilities:
      - `FUNCTION_CALLING_SUPPORTED_MODELS` if the model supports function calling
      - `REASONING_EFFORT_SUPPORTED_MODELS` if the model supports reasoning effort parameters
@@ -451,7 +451,7 @@ To add a new LLM model to OpenHands, you need to update multiple files across bo
 - **VERIFIED_OPENAI_MODELS**: OpenAI models (LiteLLM doesn't return provider prefix)
 - **VERIFIED_ANTHROPIC_MODELS**: Anthropic models (LiteLLM doesn't return provider prefix)
 - **VERIFIED_MISTRAL_MODELS**: Mistral models (LiteLLM doesn't return provider prefix)
-- **VERIFIED_OPENHANDS_MODELS**: Models available through OpenHands managed provider
+- **VERIFIED_MADAGASCAR_MODELS**: Models available through Madagascar managed provider
 
 #### Model Feature Support Arrays:
 
@@ -496,29 +496,29 @@ The sandbox settings API allows SDK-created conversations to inherit the user's 
 (LLM config, secrets) securely via `LookupSecret`. Raw secret values only flow SaaS→sandbox,
 never through the SDK client.
 
-#### User Credentials with Exposed Secrets (in `openhands/app_server/user/user_router.py`):
+#### User Credentials with Exposed Secrets (in `madagascar/app_server/user/user_router.py`):
 - `GET /api/v1/users/me?expose_secrets=true` → Full user settings with unmasked secrets (e.g., `llm_api_key`)
 - `GET /api/v1/users/me` → Full user settings (secrets masked, Bearer only)
 
 Auth requirements for `expose_secrets=true`:
-- Bearer token (proves user identity via `OPENHANDS_API_KEY`)
+- Bearer token (proves user identity via `MADAGASCAR_API_KEY`)
 - `X-Session-API-Key` header (proves caller has an active sandbox owned by the authenticated user)
 
 Called by `workspace.get_llm()` in the SDK to retrieve LLM config with the API key.
 
-#### Sandbox-Scoped Secrets Endpoints (in `openhands/app_server/sandbox/sandbox_router.py`):
+#### Sandbox-Scoped Secrets Endpoints (in `madagascar/app_server/sandbox/sandbox_router.py`):
 - `GET /sandboxes/{id}/settings/secrets` → list secret names (no values)
 - `GET /sandboxes/{id}/settings/secrets/{name}` → raw secret value (called FROM sandbox)
 
 #### Auth: `X-Session-API-Key` header, validated via `SandboxService.get_sandbox_by_session_api_key()`
 
 #### Related SDK code (in `software-agent-sdk` repo):
-- `openhands/sdk/llm/llm.py`: `LLM.api_key` accepts `SecretSource` (including `LookupSecret`)
-- `openhands/workspace/cloud/workspace.py`: `get_llm()` and `get_secrets()` return LookupSecret-backed objects
+- `madagascar/sdk/llm/llm.py`: `LLM.api_key` accepts `SecretSource` (including `LookupSecret`)
+- `madagascar/workspace/cloud/workspace.py`: `get_llm()` and `get_secrets()` return LookupSecret-backed objects
 - Tests: `tests/sdk/llm/test_llm_secret_source_api_key.py`, `tests/workspace/test_cloud_workspace_sdk_settings.py`
 
 ### Issue Triage Automation
 
 - `.github/workflows/issue-opened.yml` has a second issue-opened job that auto-applies `good first issue` after the duplicate check completes.
 - The duplicate check is used only as a veto/guardrail for `good first issue` automation: duplicate or overlapping-scope issues should not be auto-labeled.
-- The OpenHands classifier logic for newcomer suitability lives in `scripts/issue_good_first_issue_check_openhands.py`, with focused unit coverage in `tests/unit/test_issue_good_first_issue_check_openhands.py`.
+- The Madagascar classifier logic for newcomer suitability lives in `scripts/issue_good_first_issue_check_madagascar.py`, with focused unit coverage in `tests/unit/test_issue_good_first_issue_check_madagascar.py`.

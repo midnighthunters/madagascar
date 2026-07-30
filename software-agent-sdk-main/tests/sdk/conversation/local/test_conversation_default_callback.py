@@ -1,14 +1,14 @@
 from pydantic import SecretStr
 
-from openhands.sdk.agent.base import AgentBase
-from openhands.sdk.conversation import Conversation, LocalConversation
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.conversation.types import (
+from madagascar.sdk.agent.base import AgentBase
+from madagascar.sdk.conversation import Conversation, LocalConversation
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.conversation.types import (
     ConversationCallbackType,
     ConversationTokenCallbackType,
 )
-from openhands.sdk.event.llm_convertible import MessageEvent, SystemPromptEvent
-from openhands.sdk.llm import LLM, Message, TextContent
+from madagascar.sdk.event.llm_convertible import MessageEvent, SystemPromptEvent
+from madagascar.sdk.llm import LLM, Message, TextContent
 
 
 class ConversationDefaultCallbackDummyAgent(AgentBase):

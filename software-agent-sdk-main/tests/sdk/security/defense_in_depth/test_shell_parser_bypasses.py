@@ -8,7 +8,7 @@ command text. Regex cannot understand quoting, escaping, or command-name
 indirection -- the bypass classes encoded here exist by construction.
 
 Issue #2721 tracks the migration to ``tree-sitter-bash``. Phase 1 (replacing
-``bashlex`` in ``openhands-tools``) shipped as #3237. Phase 2 will move the
+``bashlex`` in ``madagascar-tools``) shipped as #3237. Phase 2 will move the
 security analyzers onto the same parser substrate, at which point each
 bypass below becomes structurally visible to the detector.
 
@@ -49,10 +49,10 @@ import json
 
 import pytest
 
-from openhands.sdk.event import ActionEvent
-from openhands.sdk.llm import MessageToolCall, TextContent
-from openhands.sdk.security.defense_in_depth.pattern import PatternSecurityAnalyzer
-from openhands.sdk.security.risk import SecurityRisk
+from madagascar.sdk.event import ActionEvent
+from madagascar.sdk.llm import MessageToolCall, TextContent
+from madagascar.sdk.security.defense_in_depth.pattern import PatternSecurityAnalyzer
+from madagascar.sdk.security.risk import SecurityRisk
 
 
 def make_action(command: str, tool_name: str = "bash") -> ActionEvent:

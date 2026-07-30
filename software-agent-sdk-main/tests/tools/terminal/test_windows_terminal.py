@@ -10,15 +10,15 @@ from typing import cast
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.llm import LLM
-from openhands.sdk.tool import Tool, register_tool
-from openhands.sdk.workspace import LocalWorkspace
-from openhands.tools.terminal import TerminalAction, TerminalTool
-from openhands.tools.terminal.impl import TerminalExecutor
-from openhands.tools.terminal.terminal import TerminalSession, create_terminal_session
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.tool import Tool, register_tool
+from madagascar.sdk.workspace import LocalWorkspace
+from madagascar.tools.terminal import TerminalAction, TerminalTool
+from madagascar.tools.terminal.impl import TerminalExecutor
+from madagascar.tools.terminal.terminal import TerminalSession, create_terminal_session
 
 
 pytestmark = pytest.mark.skipif(

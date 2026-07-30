@@ -6,7 +6,7 @@ import re
 from jinja2 import Environment, FileSystemLoader
 from server.constants import WEB_HOST
 
-from openhands.app_server.integrations.service_types import Repository
+from madagascar.app_server.integrations.service_types import Repository
 
 # ---- DO NOT REMOVE ----
 # WARNING: Langfuse depends on the WEB_HOST environment variable being set to track events.
@@ -40,15 +40,15 @@ def get_session_expired_message(username: str | None = None) -> str:
         A formatted session expired message
     """
     if username:
-        return f'@{username} your session has expired. Please login again at [OpenHands Cloud]({HOST_URL}) and try again.'
-    return f'Your session has expired. Please login again at [OpenHands Cloud]({HOST_URL}) and try again.'
+        return f'@{username} your session has expired. Please login again at [Madagascar Cloud]({HOST_URL}) and try again.'
+    return f'Your session has expired. Please login again at [Madagascar Cloud]({HOST_URL}) and try again.'
 
 
 def get_user_not_found_message(username: str | None = None) -> str:
-    """Get a user-friendly message when a user hasn't created an OpenHands account.
+    """Get a user-friendly message when a user hasn't created an Madagascar account.
 
-    Used by integrations to notify users when they try to use OpenHands features
-    but haven't logged into OpenHands Cloud yet (no Keycloak account exists).
+    Used by integrations to notify users when they try to use Madagascar features
+    but haven't logged into Madagascar Cloud yet (no Keycloak account exists).
 
     Args:
         username: Optional username to mention in the message. If provided,
@@ -59,12 +59,12 @@ def get_user_not_found_message(username: str | None = None) -> str:
         A formatted user not found message
     """
     if username:
-        return f"@{username} it looks like you haven't created an OpenHands account yet. Please sign up at [OpenHands Cloud]({HOST_URL}) and try again."
-    return f"It looks like you haven't created an OpenHands account yet. Please sign up at [OpenHands Cloud]({HOST_URL}) and try again."
+        return f"@{username} it looks like you haven't created an Madagascar account yet. Please sign up at [Madagascar Cloud]({HOST_URL}) and try again."
+    return f"It looks like you haven't created an Madagascar account yet. Please sign up at [Madagascar Cloud]({HOST_URL}) and try again."
 
 
 def get_account_not_linked_message(username: str | None = None) -> str:
-    """Get a message when a user has an OpenHands account but hasn't linked it.
+    """Get a message when a user has an Madagascar account but hasn't linked it.
 
     Used by workspace-linking integrations (e.g. Jira Data Center) when the user
     has a Keycloak account but hasn't linked their platform identity to the
@@ -79,8 +79,8 @@ def get_account_not_linked_message(username: str | None = None) -> str:
         A formatted account-not-linked message.
     """
     if username:
-        return f"@{username} you have an OpenHands account but haven't linked it to this workspace yet. Please link it at [OpenHands Cloud]({HOST_URL}) under Settings > Integrations and try again."
-    return f"You have an OpenHands account but haven't linked it to this workspace yet. Please link it at [OpenHands Cloud]({HOST_URL}) under Settings > Integrations and try again."
+        return f"@{username} you have an Madagascar account but haven't linked it to this workspace yet. Please link it at [Madagascar Cloud]({HOST_URL}) under Settings > Integrations and try again."
+    return f"You have an Madagascar account but haven't linked it to this workspace yet. Please link it at [Madagascar Cloud]({HOST_URL}) under Settings > Integrations and try again."
 
 
 def get_jira_dc_relink_message(display_name: str | None = None) -> str:
@@ -98,20 +98,20 @@ def get_jira_dc_relink_message(display_name: str | None = None) -> str:
     greeting = f'Hi {display_name}, ' if display_name else ''
     return (
         f'{greeting}your Jira workspace link has expired or is not yet set up. '
-        f'Please re-link in [OpenHands Cloud|{HOST_URL}] under '
-        f'Settings → Integrations to continue using OpenHands from Jira.'
+        f'Please re-link in [Madagascar Cloud|{HOST_URL}] under '
+        f'Settings → Integrations to continue using Madagascar from Jira.'
     )
 
 
-OPENHANDS_RESOLVER_TEMPLATES_DIR = (
-    os.getenv('OPENHANDS_RESOLVER_TEMPLATES_DIR')
-    or 'openhands/app_server/integrations/templates/resolver/'
+MADAGASCAR_RESOLVER_TEMPLATES_DIR = (
+    os.getenv('MADAGASCAR_RESOLVER_TEMPLATES_DIR')
+    or 'madagascar/app_server/integrations/templates/resolver/'
 )
-_jinja_env = Environment(loader=FileSystemLoader(OPENHANDS_RESOLVER_TEMPLATES_DIR))
+_jinja_env = Environment(loader=FileSystemLoader(MADAGASCAR_RESOLVER_TEMPLATES_DIR))
 
 
 def get_oh_labels(web_host: str) -> tuple[str, str]:
-    """Get the OpenHands labels based on the web host.
+    """Get the Madagascar labels based on the web host.
 
     An explicit ``OH_RESOLVER_LABEL`` environment variable takes precedence and
     lets each deployment declare its own trigger macro (issue label + mention)
@@ -123,8 +123,8 @@ def get_oh_labels(web_host: str) -> tuple[str, str]:
 
     Returns:
         A tuple of (oh_label, inline_oh_label) where:
-        - oh_label is OH_RESOLVER_LABEL when set; otherwise 'openhands-exp' for
-          staging/local hosts and 'openhands' for everything else
+        - oh_label is OH_RESOLVER_LABEL when set; otherwise 'madagascar-exp' for
+          staging/local hosts and 'madagascar' for everything else
         - inline_oh_label is oh_label prefixed with '@'
     """
     override = os.getenv('OH_RESOLVER_LABEL', '').strip()
@@ -133,8 +133,8 @@ def get_oh_labels(web_host: str) -> tuple[str, str]:
 
     web_host = web_host.strip()
     is_staging_or_local = 'staging' in web_host or 'local' in web_host
-    oh_label = 'openhands-exp' if is_staging_or_local else 'openhands'
-    inline_oh_label = '@openhands-exp' if is_staging_or_local else '@openhands'
+    oh_label = 'madagascar-exp' if is_staging_or_local else 'madagascar'
+    inline_oh_label = '@madagascar-exp' if is_staging_or_local else '@madagascar'
     return oh_label, inline_oh_label
 
 
@@ -149,17 +149,17 @@ def has_exact_mention(text: str, mention: str) -> bool:
 
     Args:
         text: The text to check for mentions
-        mention: The mention to look for (e.g. "@openhands")
+        mention: The mention to look for (e.g. "@madagascar")
 
     Returns:
         bool: True if the exact mention is found, False otherwise
 
     Example:
-        >>> has_exact_mention("Hello @openhands!", "@openhands")  # True
-        >>> has_exact_mention("Hello @openhands-agent!", "@openhands")  # False
-        >>> has_exact_mention("(@openhands)", "@openhands")  # True
-        >>> has_exact_mention("user@openhands.com", "@openhands")  # False
-        >>> has_exact_mention("Hello @OpenHands!", "@openhands")  # True (case-insensitive)
+        >>> has_exact_mention("Hello @madagascar!", "@madagascar")  # True
+        >>> has_exact_mention("Hello @madagascar-agent!", "@madagascar")  # False
+        >>> has_exact_mention("(@madagascar)", "@madagascar")  # True
+        >>> has_exact_mention("user@madagascar.com", "@madagascar")  # False
+        >>> has_exact_mention("Hello @Madagascar!", "@madagascar")  # True (case-insensitive)
     """
     # Convert both text and mention to lowercase for case-insensitive matching
     text_lower = text.lower()

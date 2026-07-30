@@ -7,12 +7,12 @@ import json
 import pytest
 from pydantic import ValidationError
 
-from openhands.sdk.event import ActionEvent
-from openhands.sdk.llm import MessageToolCall, TextContent
-from openhands.sdk.security.analyzer import SecurityAnalyzerBase
-from openhands.sdk.security.confirmation_policy import ConfirmRisky
-from openhands.sdk.security.ensemble import EnsembleSecurityAnalyzer
-from openhands.sdk.security.risk import SecurityRisk
+from madagascar.sdk.event import ActionEvent
+from madagascar.sdk.llm import MessageToolCall, TextContent
+from madagascar.sdk.security.analyzer import SecurityAnalyzerBase
+from madagascar.sdk.security.confirmation_policy import ConfirmRisky
+from madagascar.sdk.security.ensemble import EnsembleSecurityAnalyzer
+from madagascar.sdk.security.risk import SecurityRisk
 
 
 # ---------------------------------------------------------------------------

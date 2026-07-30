@@ -1,25 +1,25 @@
 import uuid
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.conversation.stuck_detector import (
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.conversation.stuck_detector import (
     MAX_EVENTS_TO_SCAN_FOR_STUCK_DETECTION,
     StuckDetector,
 )
-from openhands.sdk.event import (
+from madagascar.sdk.event import (
     ActionEvent,
     AgentErrorEvent,
     MessageEvent,
     ObservationEvent,
 )
-from openhands.sdk.llm import (
+from madagascar.sdk.llm import (
     LLM,
     Message,
     MessageToolCall,
     TextContent,
 )
-from openhands.sdk.workspace import LocalWorkspace
-from openhands.tools.terminal.definition import (
+from madagascar.sdk.workspace import LocalWorkspace
+from madagascar.tools.terminal.definition import (
     TerminalAction,
     TerminalObservation,
 )

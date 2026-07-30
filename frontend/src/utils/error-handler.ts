@@ -38,18 +38,18 @@ export function showChatError({
 }
 
 /**
- * Checks if an error message indicates an OpenHands budget or credit limit issue.
+ * Checks if an error message indicates an Madagascar budget or credit limit issue.
  * Provider-side errors can also mention "credits"; those should stay as raw
- * provider errors instead of being rewritten as OpenHands billing failures.
+ * provider errors instead of being rewritten as Madagascar billing failures.
  */
 export function isBudgetOrCreditError(errorMessage: string): boolean {
   const lowerCaseError = errorMessage.toLowerCase();
   const isBudgetLimitError =
     lowerCaseError.includes("budget") &&
     /(exceed|exceeded|limit|max budget|spent)/.test(lowerCaseError);
-  const isOpenHandsCreditError =
-    /openhands\s+credits?/.test(lowerCaseError) ||
+  const isMadagascarCreditError =
+    /madagascar\s+credits?/.test(lowerCaseError) ||
     lowerCaseError.includes("credit limit reached");
 
-  return isBudgetLimitError || isOpenHandsCreditError;
+  return isBudgetLimitError || isMadagascarCreditError;
 }

@@ -8,14 +8,14 @@ import pytest
 from litellm.types.utils import Delta, ModelResponseStream, StreamingChoices
 from pydantic import SecretStr
 
-from openhands.agent_server.event_service import EventService
-from openhands.agent_server.models import StoredConversation
-from openhands.agent_server.pub_sub import Subscriber
-from openhands.sdk import Event
-from openhands.sdk.agent import ACPAgent, Agent
-from openhands.sdk.event import StreamingDeltaEvent
-from openhands.sdk.llm import LLM
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.agent_server.event_service import EventService
+from madagascar.agent_server.models import StoredConversation
+from madagascar.agent_server.pub_sub import Subscriber
+from madagascar.sdk import Event
+from madagascar.sdk.agent import ACPAgent, Agent
+from madagascar.sdk.event import StreamingDeltaEvent
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.workspace import LocalWorkspace
 
 
 def _make_chunk(
@@ -47,7 +47,7 @@ class _CollectorSubscriber(Subscriber):
 
 @pytest.fixture
 def event_service(tmp_path):
-    with patch("openhands.sdk.llm.utils.model_info.httpx.get") as mock_get:
+    with patch("madagascar.sdk.llm.utils.model_info.httpx.get") as mock_get:
         mock_get.return_value = MagicMock(json=lambda: {"data": []})
         service = EventService(
             stored=StoredConversation(
@@ -70,7 +70,7 @@ def event_service(tmp_path):
 
 def _mock_local_conversation():
     """Return a patch context manager for LocalConversation."""
-    return patch("openhands.agent_server.event_service.LocalConversation")
+    return patch("madagascar.agent_server.event_service.LocalConversation")
 
 
 async def _start_and_capture_callback(event_service, tmp_path):
@@ -187,7 +187,7 @@ async def test_callback_handles_none_choices(event_service, tmp_path):
 @pytest.mark.asyncio
 async def test_token_callbacks_not_wired_when_stream_disabled(tmp_path):
     """If no LLM has stream=True, don't attach the streaming callback at all."""
-    with patch("openhands.sdk.llm.utils.model_info.httpx.get") as mock_get:
+    with patch("madagascar.sdk.llm.utils.model_info.httpx.get") as mock_get:
         mock_get.return_value = MagicMock(json=lambda: {"data": []})
         service = EventService(
             stored=StoredConversation(

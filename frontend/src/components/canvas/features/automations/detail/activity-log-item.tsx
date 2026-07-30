@@ -39,7 +39,7 @@ function getConversationUrl(conversationId: string): string {
 }
 
 export function ActivityLogItem({ run, automation }: ActivityLogItemProps) {
-  const { t, i18n } = useTranslation("openhands");
+  const { t, i18n } = useTranslation("madagascar");
   const hasConversation = !!run.conversation_id;
   const hasBashCommand = !!run.bash_command_id;
   // Only surface "Conversation not created" when the run has reached a

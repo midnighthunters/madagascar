@@ -2,12 +2,12 @@ from unittest.mock import AsyncMock, call
 
 import pytest
 
-from openhands.app_server.integrations.github.github_service import GitHubService
-from openhands.app_server.integrations.github.queries import (
+from madagascar.app_server.integrations.github.github_service import GitHubService
+from madagascar.app_server.integrations.github.queries import (
     suggested_task_issue_graphql_query,
     suggested_task_pr_graphql_query,
 )
-from openhands.app_server.integrations.service_types import TaskType, User
+from madagascar.app_server.integrations.service_types import TaskType, User
 
 
 @pytest.mark.asyncio

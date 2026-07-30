@@ -6,7 +6,7 @@ from collections.abc import Sequence
 
 from pydantic import Field, SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Action,
     Agent,
@@ -19,13 +19,13 @@ from openhands.sdk import (
     ToolDefinition,
     get_logger,
 )
-from openhands.sdk.tool import (
+from madagascar.sdk.tool import (
     Tool,
     ToolExecutor,
     register_tool,
 )
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import (
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import (
     TerminalAction,
     TerminalExecutor,
     TerminalTool,

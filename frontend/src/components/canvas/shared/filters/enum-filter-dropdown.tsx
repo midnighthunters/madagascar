@@ -25,7 +25,7 @@ export function EnumFilterDropdown<T extends string>({
   options,
   labelKeyByValue,
 }: EnumFilterDropdownProps<T>) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const [open, setOpen] = React.useState(false);
   const containerRef = useClickOutsideElement<HTMLDivElement>(() =>
     setOpen(false),

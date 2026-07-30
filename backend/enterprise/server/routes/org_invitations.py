@@ -30,9 +30,9 @@ from storage.default_org_service import get_default_org_config
 from storage.org_store import OrgStore
 from storage.role_store import RoleStore
 
-from openhands.analytics import get_analytics_service
-from openhands.app_server.user_auth import get_user_id
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.analytics import get_analytics_service
+from madagascar.app_server.user_auth import get_user_id
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 # Router for invitation operations on an organization (requires org_id).
 # Every route under this prefix has ``{org_id}`` in its path, so we
@@ -120,7 +120,7 @@ async def create_invitation(
             if analytics and user_id:
                 from storage.user_store import UserStore
 
-                from openhands.analytics.analytics_context import AnalyticsContext
+                from madagascar.analytics.analytics_context import AnalyticsContext
 
                 user_obj = await UserStore.get_user_by_id(user_id)
                 ctx = AnalyticsContext(

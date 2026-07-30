@@ -66,8 +66,8 @@ def benchmark_replay_and_recovery(
     event_pool: list[dict], n_trials: int = 5
 ) -> list[dict]:
     """Measure replay time and time-to-recover at increasing log sizes."""
-    from openhands.sdk.conversation.state import ConversationState
-    from openhands.sdk.event.base import Event
+    from madagascar.sdk.conversation.state import ConversationState
+    from madagascar.sdk.event.base import Event
 
     checkpoints = [10, 25, 50, 100, 200, 500, 1000, 1500]
     pattern = re.compile(r"^event-(\d+)-([a-f0-9\-]+)\.json$")
@@ -178,7 +178,7 @@ def benchmark_replay_and_recovery(
 def main():
     import logging
 
-    logging.getLogger("openhands").setLevel(logging.ERROR)
+    logging.getLogger("madagascar").setLevel(logging.ERROR)
     register_tool_types()
 
     parser = argparse.ArgumentParser(

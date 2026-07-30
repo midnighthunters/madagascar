@@ -31,18 +31,18 @@ import pytest
 import pytest_asyncio
 from fastapi import FastAPI
 
-from openhands.agent_server import bash_router as bash_router_module
-from openhands.agent_server.bash_service import BashEventService
-from openhands.agent_server.config import Config, WebhookSpec
-from openhands.agent_server.conversation_router import conversation_router
-from openhands.agent_server.conversation_service import (
+from madagascar.agent_server import bash_router as bash_router_module
+from madagascar.agent_server.bash_service import BashEventService
+from madagascar.agent_server.config import Config, WebhookSpec
+from madagascar.agent_server.conversation_router import conversation_router
+from madagascar.agent_server.conversation_service import (
     ConversationService,
     WebhookSubscriber,
 )
-from openhands.agent_server.dependencies import get_conversation_service
-from openhands.agent_server.event_router import event_router
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.event.conversation_state import ConversationStateUpdateEvent
+from madagascar.agent_server.dependencies import get_conversation_service
+from madagascar.agent_server.event_router import event_router
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.event.conversation_state import ConversationStateUpdateEvent
 from tests.agent_server.stress.budgets import SLOW_WEBHOOK
 from tests.agent_server.stress.probe import ResourceProbe
 from tests.agent_server.stress.scripts import (

@@ -51,7 +51,7 @@ export function ToolsContextMenu({
   shouldShowPlugins = false,
   footerAction,
 }: ToolsContextMenuProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { data: conversation } = useActiveConversation();
   const { providers } = useUserProviders();
   const isArchivedConversation = useIsArchivedConversation();

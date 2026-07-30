@@ -15,7 +15,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from openhands.app_server.integrations.service_types import ProviderType
+from madagascar.app_server.integrations.service_types import ProviderType
 
 REDIS_PATCH = 'server.services.automation_event_service.get_redis_client_async'
 
@@ -418,7 +418,7 @@ class TestForwardEvent:
         self, mock_token_manager, github_user_payload
     ):
         """
-        GIVEN: A GitHub event from a personal repo with linked OpenHands account
+        GIVEN: A GitHub event from a personal repo with linked Madagascar account
         WHEN: forward_event is called
         THEN: Event is forwarded using the user's personal org (keycloak ID)
         """
@@ -460,7 +460,7 @@ class TestForwardEvent:
             assert call_args[0][1] == uuid.UUID(keycloak_id)
             payload = call_args[0][2]
             assert payload['organization']['git_org'] == 'testuser'
-            assert payload['organization']['openhands_org_id'] == keycloak_id
+            assert payload['organization']['madagascar_org_id'] == keycloak_id
 
     @pytest.mark.asyncio
     async def test_forward_event_no_owner_in_payload(self, mock_token_manager):
@@ -678,7 +678,7 @@ class TestBuildEventPayload:
         assert result == {
             'organization': {
                 'git_org': 'test-org',
-                'openhands_org_id': '12345678-1234-5678-1234-567812345678',
+                'madagascar_org_id': '12345678-1234-5678-1234-567812345678',
             },
             'payload': test_payload,
         }
@@ -785,7 +785,7 @@ class TestSendToAutomationService:
     @pytest.mark.asyncio
     async def test_forward_jira_dc_event_uses_jira_dc_source(self, mock_token_manager):
         """
-        GIVEN: A Jira DC webhook and resolved OpenHands org
+        GIVEN: A Jira DC webhook and resolved Madagascar org
         WHEN: forward_jira_dc_event is called
         THEN: The event is forwarded to the jira_dc automation source
         """
@@ -812,7 +812,7 @@ class TestSendToAutomationService:
                 'organization': {
                     'jira_dc_workspace': 'jira.company.com',
                     'jira_dc_connection_id': 7,
-                    'openhands_org_id': str(org_id),
+                    'madagascar_org_id': str(org_id),
                 },
                 'payload': payload,
             }
@@ -1236,7 +1236,7 @@ class TestResolveDefaultOrgFallback:
         WHEN: _resolve_default_org_fallback is called
         THEN: The default org id is returned and cached
         """
-        monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
+        monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
         org = self._team_org()
         mock_redis = AsyncMock()
         mock_redis.get = AsyncMock(return_value=None)
@@ -1267,7 +1267,7 @@ class TestResolveDefaultOrgFallback:
         WHEN: _resolve_default_org_fallback is called
         THEN: None is returned without touching the DB
         """
-        monkeypatch.delenv('OPENHANDS_DEFAULT_ORG_ENABLED', raising=False)
+        monkeypatch.delenv('MADAGASCAR_DEFAULT_ORG_ENABLED', raising=False)
         mock_redis = AsyncMock()
 
         with (
@@ -1294,7 +1294,7 @@ class TestResolveDefaultOrgFallback:
         WHEN: _resolve_default_org_fallback is called
         THEN: None is returned (multi-org installs require explicit claims)
         """
-        monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
+        monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
         org = self._team_org()
         mock_redis = AsyncMock()
         mock_redis.get = AsyncMock(return_value=None)
@@ -1322,7 +1322,7 @@ class TestResolveDefaultOrgFallback:
         WHEN: _resolve_default_org_fallback is called
         THEN: The cached org id is returned without DB lookups
         """
-        monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
+        monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
         cached_id = '87654321-4321-8765-4321-876543218765'
         mock_redis = AsyncMock()
         mock_redis.get = AsyncMock(return_value=cached_id.encode())
@@ -1351,7 +1351,7 @@ class TestResolveDefaultOrgFallback:
         WHEN: _resolve_org_context is called
         THEN: The event resolves to the default org instead of being dropped
         """
-        monkeypatch.setenv('OPENHANDS_DEFAULT_ORG_ENABLED', 'true')
+        monkeypatch.setenv('MADAGASCAR_DEFAULT_ORG_ENABLED', 'true')
         org = self._team_org()
         mock_redis = AsyncMock()
         mock_redis.get = AsyncMock(return_value=None)

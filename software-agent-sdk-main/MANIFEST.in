@@ -8,41 +8,41 @@ include pyproject.toml
 include uv.lock
 
 # ==============================================================================
-# openhands-sdk
+# madagascar-sdk
 # ==============================================================================
-include openhands-sdk/pyproject.toml
-recursive-include openhands-sdk *.py
-recursive-include openhands-sdk *.j2
-recursive-include openhands-sdk py.typed
+include madagascar-sdk/pyproject.toml
+recursive-include madagascar-sdk *.py
+recursive-include madagascar-sdk *.j2
+recursive-include madagascar-sdk py.typed
 
 # ==============================================================================
-# openhands-tools
+# madagascar-tools
 # ==============================================================================
-include openhands-tools/pyproject.toml
-recursive-include openhands-tools *.py
-recursive-include openhands-tools *.j2
-recursive-include openhands-tools py.typed
+include madagascar-tools/pyproject.toml
+recursive-include madagascar-tools *.py
+recursive-include madagascar-tools *.j2
+recursive-include madagascar-tools py.typed
 
 # ==============================================================================
-# openhands-workspace
+# madagascar-workspace
 # ==============================================================================
-include openhands-workspace/pyproject.toml
-recursive-include openhands-workspace *.py
-recursive-include openhands-workspace py.typed
+include madagascar-workspace/pyproject.toml
+recursive-include madagascar-workspace *.py
+recursive-include madagascar-workspace py.typed
 
 # ==============================================================================
-# openhands-agent-server
+# madagascar-agent-server
 # ==============================================================================
-include openhands-agent-server/pyproject.toml
-recursive-include openhands-agent-server *.py
-recursive-include openhands-agent-server py.typed
+include madagascar-agent-server/pyproject.toml
+recursive-include madagascar-agent-server *.py
+recursive-include madagascar-agent-server py.typed
 
 # Docker build files
-include openhands-agent-server/openhands/agent_server/docker/Dockerfile
-include openhands-agent-server/openhands/agent_server/docker/wallpaper.svg
+include madagascar-agent-server/madagascar/agent_server/docker/Dockerfile
+include madagascar-agent-server/madagascar/agent_server/docker/wallpaper.svg
 
 # PyInstaller spec
-include openhands-agent-server/openhands/agent_server/agent-server.spec
+include madagascar-agent-server/madagascar/agent_server/agent-server.spec
 
 # VSCode extensions
-recursive-include openhands-agent-server/openhands/agent_server/vscode_extensions *
+recursive-include madagascar-agent-server/madagascar/agent_server/vscode_extensions *

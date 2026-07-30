@@ -1,6 +1,6 @@
 """Add is_paused to v1_remote_sandbox.
 
-The OpenHands app-server RemoteSandboxService stores pause state on
+The Madagascar app-server RemoteSandboxService stores pause state on
 v1_remote_sandbox and queries it during concurrency-limit checks. Enterprise
 migrations create the table separately from the OSS app-lifespan migrations, so
 SaaS deployments need this column in the enterprise migration chain as well.

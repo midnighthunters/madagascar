@@ -1,6 +1,6 @@
 # Datadog Error Debugging Workflow
 
-This example demonstrates how to use OpenHands agents to automatically debug errors from Datadog in a GitHub Actions workflow.
+This example demonstrates how to use Madagascar agents to automatically debug errors from Datadog in a GitHub Actions workflow.
 
 ## Overview
 
@@ -8,7 +8,7 @@ The workflow:
 1. Fetches errors from Datadog based on configurable queries
 2. Searches for or creates GitHub issues to track errors
 3. Clones relevant repositories for comprehensive analysis
-4. Uses OpenHands AI agents to analyze code and identify root causes
+4. Uses Madagascar AI agents to analyze code and identify root causes
 5. Posts debugging insights as comments on GitHub issues
 
 ## Files
@@ -42,7 +42,7 @@ Run on-demand via GitHub Actions UI with configurable inputs:
 - Identifies root causes across repository boundaries
 
 ### AI-Powered Debugging
-- Automatic code analysis using OpenHands agents
+- Automatic code analysis using Madagascar agents
 - Identifies error locations and root causes
 - Provides actionable fix recommendations
 - Posts detailed findings as GitHub comments
@@ -83,7 +83,7 @@ LLM_BASE_URL: Base URL for LLM service (optional)
    - **Datadog Query**: 
      - For `log-query`: Search query (default: `service:deploy ClientDisconnect`)
      - For `log-error-id`: Error tracking ID (e.g., `2adba034-ab5a-11f0-b04e-da7ad0900000`)
-   - **Repository List**: Comma-separated repos to analyze (default: `OpenHands/OpenHands,All-Hands-AI/infra`)
+   - **Repository List**: Comma-separated repos to analyze (default: `Madagascar/Madagascar,All-Hands-AI/infra`)
    - **Issue Repository**: Where to create issues (default: `All-Hands-AI/infra`)
    - **Parent Issue**: Optional parent issue URL for tracking
    - **Issue Prefix**: Prefix for issue titles (default: `DataDog Error: `)
@@ -97,7 +97,7 @@ LLM_BASE_URL: Base URL for LLM service (optional)
 gh workflow run datadog-debugging.yml \
   -f query_type="log-query" \
   -f datadog_query="service:deploy ClientDisconnect" \
-  -f repo_list="OpenHands/OpenHands,All-Hands-AI/infra" \
+  -f repo_list="Madagascar/Madagascar,All-Hands-AI/infra" \
   -f issue_repo="All-Hands-AI/infra"
 ```
 
@@ -106,7 +106,7 @@ gh workflow run datadog-debugging.yml \
 gh workflow run datadog-debugging.yml \
   -f query_type="log-error-id" \
   -f datadog_query="2adba034-ab5a-11f0-b04e-da7ad0900000" \
-  -f repo_list="OpenHands/OpenHands,All-Hands-AI/infra,All-Hands-AI/deploy" \
+  -f repo_list="Madagascar/Madagascar,All-Hands-AI/infra,All-Hands-AI/deploy" \
   -f issue_repo="All-Hands-AI/infra"
 ```
 
@@ -116,7 +116,7 @@ gh workflow run datadog-debugging.yml \
 ```yaml
 query_type: "log-query"
 datadog_query: "service:deploy ClientDisconnect"
-repo_list: "OpenHands/OpenHands,All-Hands-AI/infra,All-Hands-AI/deploy"
+repo_list: "Madagascar/Madagascar,All-Hands-AI/infra,All-Hands-AI/deploy"
 issue_repo: "All-Hands-AI/infra"
 issue_parent: "https://github.com/All-Hands-AI/infra/issues/672"
 ```
@@ -125,7 +125,7 @@ issue_parent: "https://github.com/All-Hands-AI/infra/issues/672"
 ```yaml
 query_type: "log-error-id"
 datadog_query: "2adba034-ab5a-11f0-b04e-da7ad0900000"
-repo_list: "OpenHands/OpenHands,All-Hands-AI/infra,All-Hands-AI/deploy"
+repo_list: "Madagascar/Madagascar,All-Hands-AI/infra,All-Hands-AI/deploy"
 issue_repo: "All-Hands-AI/infra"
 issue_parent: "https://github.com/All-Hands-AI/infra/issues/672"
 ```
@@ -173,13 +173,13 @@ service:deploy rate_limit status:error
 
 Comma-separated list of `owner/repo`:
 ```
-OpenHands/OpenHands,All-Hands-AI/infra,All-Hands-AI/deploy
+Madagascar/Madagascar,All-Hands-AI/infra,All-Hands-AI/deploy
 ```
 
 ### LLM Model Options
 
 - `gpt-5.5` - Best quality (default)
-- `openhands/claude-haiku-4-5-20251001` - Faster, cheaper
+- `madagascar/claude-haiku-4-5-20251001` - Faster, cheaper
 - `anthropic/claude-3-5-sonnet-20241022` - Alternative
 
 ## Workflow Details
@@ -189,7 +189,7 @@ OpenHands/OpenHands,All-Hands-AI/infra,All-Hands-AI/deploy
 | Input | Type | Required | Default | Description |
 |-------|------|----------|---------|-------------|
 | `datadog_query` | string | Yes | `service:deploy ClientDisconnect` | Datadog query to search for errors |
-| `repo_list` | string | Yes | `OpenHands/OpenHands,All-Hands-AI/infra` | Comma-separated list of repositories |
+| `repo_list` | string | Yes | `Madagascar/Madagascar,All-Hands-AI/infra` | Comma-separated list of repositories |
 | `issue_repo` | string | Yes | `All-Hands-AI/infra` | Repository to create/update issues in |
 | `issue_parent` | string | No | - | Parent GitHub issue URL for tracking |
 | `issue_prefix` | string | No | `DataDog Error: ` | Prefix for issue titles |
@@ -296,4 +296,4 @@ jobs:
 
 - [Datadog API Documentation](https://docs.datadoghq.com/api/)
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [OpenHands SDK Documentation](https://github.com/OpenHands/software-agent-sdk)
+- [Madagascar SDK Documentation](https://github.com/Madagascar/software-agent-sdk)

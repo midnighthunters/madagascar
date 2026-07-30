@@ -57,7 +57,7 @@ function matchesQuery({
 }
 
 export function CommandMenu() {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { navigate } = useNavigation();
   const isOpen = useCommandMenuStore((state) => state.isOpen);
   const open = useCommandMenuStore((state) => state.open);

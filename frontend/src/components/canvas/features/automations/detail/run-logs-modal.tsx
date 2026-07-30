@@ -6,7 +6,7 @@ import {
   useBashCommandLogs,
   type SandboxIssue,
 } from "#/hooks/query/use-bash-command-logs";
-import type { BashOutput } from "@openhands/typescript-client";
+import type { BashOutput } from "@madagascar/typescript-client";
 import { cn } from "#/utils/utils";
 import { modalTitleLgMediumClassName } from "#/utils/modal-classes";
 import {
@@ -65,7 +65,7 @@ export function RunLogsModal({
   run,
   automation,
 }: RunLogsModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const [activeTab, setActiveTab] = useState<LogTab>("stdout");
 
   const {

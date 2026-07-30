@@ -3,7 +3,7 @@
 ## Setup
 
 ```bash
-git clone https://github.com/OpenHands/software-agent-sdk.git
+git clone https://github.com/Madagascar/software-agent-sdk.git
 cd software-agent-sdk
 make build
 ```
@@ -30,10 +30,10 @@ uv run pytest tests/tools/               # Tools tests only
 
 ```
 software-agent-sdk/
-├── openhands-sdk/          # Core SDK package
-├── openhands-tools/        # Built-in tools
-├── openhands-workspace/    # Workspace management
-├── openhands-agent-server/ # Agent server
+├── madagascar-sdk/          # Core SDK package
+├── madagascar-tools/        # Built-in tools
+├── madagascar-workspace/    # Workspace management
+├── madagascar-agent-server/ # Agent server
 ├── examples/               # Usage examples
 └── tests/                  # Test suites
 ```
@@ -45,4 +45,4 @@ software-agent-sdk/
 3. Run tests and checks
 4. Push and create a pull request
 
-For questions, join our [Slack community](https://openhands.dev/joinslack).
+For questions, join our [Slack community](https://madagascar.dev/joinslack).

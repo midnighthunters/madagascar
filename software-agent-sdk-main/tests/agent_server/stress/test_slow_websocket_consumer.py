@@ -31,11 +31,11 @@ from dataclasses import dataclass, field
 import psutil
 import pytest
 
-from openhands.agent_server.conversation_service import ConversationService
-from openhands.agent_server.event_service import EventService
-from openhands.agent_server.pub_sub import Subscriber
-from openhands.sdk.event import Event
-from openhands.sdk.event.conversation_state import ConversationStateUpdateEvent
+from madagascar.agent_server.conversation_service import ConversationService
+from madagascar.agent_server.event_service import EventService
+from madagascar.agent_server.pub_sub import Subscriber
+from madagascar.sdk.event import Event
+from madagascar.sdk.event.conversation_state import ConversationStateUpdateEvent
 from tests.agent_server.stress.budgets import SLOW_WEBSOCKET_CONSUMER
 from tests.agent_server.stress.scripts import (
     SlowTestLLM,

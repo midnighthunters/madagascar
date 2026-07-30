@@ -22,7 +22,7 @@ from storage.role_store import RoleStore
 from storage.user import User
 from storage.user_store import UserStore
 
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 
 class OrgInvitationService:

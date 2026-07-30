@@ -8,13 +8,13 @@ from uuid import uuid4
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.llm import LLM
-from openhands.sdk.tool import ToolDefinition
-from openhands.sdk.workspace import LocalWorkspace
-from openhands.tools.browser_use import BrowserToolSet
-from openhands.tools.browser_use.impl import BrowserToolExecutor
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.tool import ToolDefinition
+from madagascar.sdk.workspace import LocalWorkspace
+from madagascar.tools.browser_use import BrowserToolSet
+from madagascar.tools.browser_use.impl import BrowserToolExecutor
 
 
 @pytest.fixture(autouse=True)
@@ -368,7 +368,7 @@ def test_browser_toolset_warns_when_config_ignored(caplog):
 
         # Second call with different config should warn
         with caplog.at_level(
-            "WARNING", logger="openhands.tools.browser_use.definition"
+            "WARNING", logger="madagascar.tools.browser_use.definition"
         ):
             BrowserToolSet.create(conv_state=conv_state, headless=False)
 
@@ -383,7 +383,7 @@ def test_browser_toolset_no_warning_when_no_config(caplog):
         BrowserToolSet.create(conv_state=conv_state)
 
         with caplog.at_level(
-            "WARNING", logger="openhands.tools.browser_use.definition"
+            "WARNING", logger="madagascar.tools.browser_use.definition"
         ):
             BrowserToolSet.create(conv_state=conv_state)
 

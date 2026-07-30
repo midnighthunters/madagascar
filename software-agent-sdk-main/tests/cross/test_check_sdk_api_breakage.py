@@ -46,9 +46,9 @@ get_pypi_baseline_version = _prod.get_pypi_baseline_version
 
 # Reusable test config matching the _write_pkg_init helper
 _SDK_CFG = PackageConfig(
-    package="openhands.sdk",
-    distribution="openhands-sdk",
-    source_dir="openhands-sdk",
+    package="madagascar.sdk",
+    distribution="madagascar-sdk",
+    source_dir="madagascar-sdk",
 )
 
 
@@ -57,10 +57,10 @@ def _write_pkg_init(
 ):
     """Create a minimal package with ``__all__`` under *tmp_path/root*.
 
-    *module_parts* defaults to ``("openhands", "sdk")``; pass a different
-    tuple to create e.g. ``("openhands", "workspace")``.
+    *module_parts* defaults to ``("madagascar", "sdk")``; pass a different
+    tuple to create e.g. ``("madagascar", "workspace")``.
     """
-    parts = module_parts or ("openhands", "sdk")
+    parts = module_parts or ("madagascar", "sdk")
     pkg = tmp_path / root / Path(*parts)
     pkg.mkdir(parents=True, exist_ok=True)
     # ensure parent __init__.py files exist
@@ -100,13 +100,13 @@ def _mock_pypi_releases(monkeypatch, releases: list[str]) -> None:
 def test_get_pypi_baseline_version_returns_current_when_published(monkeypatch):
     _mock_pypi_releases(monkeypatch, ["1.0.0", "1.1.0"])
 
-    assert get_pypi_baseline_version("openhands-sdk", "1.1.0") == "1.1.0"
+    assert get_pypi_baseline_version("madagascar-sdk", "1.1.0") == "1.1.0"
 
 
 def test_get_pypi_baseline_version_falls_back_to_previous(monkeypatch):
     _mock_pypi_releases(monkeypatch, ["1.0.0", "1.1.0"])
 
-    assert get_pypi_baseline_version("openhands-sdk", "1.2.0") == "1.1.0"
+    assert get_pypi_baseline_version("madagascar-sdk", "1.2.0") == "1.1.0"
 
 
 def _git(repo_root: Path, *args: str) -> str:
@@ -130,7 +130,7 @@ def _init_git_repo(tmp_path: Path) -> Path:
 
 
 def _write_repo_sdk_model(repo_root: Path, default: str) -> None:
-    pkg = repo_root / "openhands-sdk" / "openhands" / "sdk"
+    pkg = repo_root / "madagascar-sdk" / "madagascar" / "sdk"
     pkg.mkdir(parents=True, exist_ok=True)
     (pkg.parent / "__init__.py").write_text("")
     (pkg / "__init__.py").write_text(
@@ -168,8 +168,8 @@ def test_griffe_breakage_removed_attribute_requires_minor_bump(tmp_path):
         + "        self.text = text\n"
     )
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, _undeprecated = _prod._compute_breakages(old_root, new_root, _SDK_CFG)
     assert total_breaks > 0
@@ -182,8 +182,8 @@ def test_griffe_removed_export_from_all_is_breaking(tmp_path):
     _write_pkg_init(tmp_path, "old", ["Foo", "Bar"])
     _write_pkg_init(tmp_path, "new", ["Foo"])
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(
         old_root,
@@ -202,8 +202,8 @@ def test_removal_of_deprecated_symbol_does_not_count_as_undeprecated(tmp_path):
     )
     _write_pkg_init(tmp_path, "new", ["Foo"])
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(
         old_root,
@@ -226,8 +226,8 @@ def test_removal_with_warn_deprecated_is_not_undeprecated(tmp_path):
     )
     _write_pkg_init(tmp_path, "new", ["Foo"])
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(
         old_root,
@@ -242,7 +242,7 @@ def test_find_deprecated_symbols_reads_export_registry(tmp_path):
     """``_DEPRECATED_SDK_EXPORTS`` registry entries are recognized as deprecated
     top-level symbols (the SDK's data-driven mechanism for renamed import
     aliases such as ``LLMAgentSettings``)."""
-    src = tmp_path / "openhands" / "sdk"
+    src = tmp_path / "madagascar" / "sdk"
     src.mkdir(parents=True)
     (src / "__init__.py").write_text(
         "_DEPRECATED_SDK_EXPORTS: dict[str, dict[str, str]] = {\n"
@@ -273,8 +273,8 @@ def test_removal_via_export_registry_is_not_undeprecated(tmp_path):
     )
     _write_pkg_init(tmp_path, "new", ["Foo"])
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(old_root, new_root, _SDK_CFG)
 
@@ -297,8 +297,8 @@ def test_removed_public_method_requires_deprecation(tmp_path):
     )
     new_init.write_text(new_init.read_text() + "\n\nclass Foo:\n    pass\n")
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(
         old_root,
@@ -325,8 +325,8 @@ def test_removed_public_method_with_deprecation_is_not_undeprecated(tmp_path):
     )
     new_init.write_text(new_init.read_text() + "\n\nclass Foo:\n    pass\n")
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(
         old_root,
@@ -339,15 +339,15 @@ def test_removed_public_method_with_deprecation_is_not_undeprecated(tmp_path):
 
 def test_missing_all_in_previous_release_skips_breakage_check(tmp_path):
     """If previous release lacks __all__, skip instead of failing workflow."""
-    old_pkg = tmp_path / "old" / "openhands" / "sdk"
+    old_pkg = tmp_path / "old" / "madagascar" / "sdk"
     old_pkg.mkdir(parents=True)
-    (tmp_path / "old" / "openhands" / "__init__.py").write_text("")
+    (tmp_path / "old" / "madagascar" / "__init__.py").write_text("")
     (old_pkg / "__init__.py").write_text("# no __all__ in previous release\n")
 
     _write_pkg_init(tmp_path, "new", ["Foo"])
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(old_root, new_root, _SDK_CFG)
     assert total_breaks == 0
@@ -485,8 +485,8 @@ def test_removed_public_method_requires_removal_target_to_be_reached(tmp_path):
     )
     new_init.write_text(new_init.read_text() + "\n\nclass Foo:\n    pass\n")
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, removal_policy_errors = _prod._compute_breakages(
         old_root,
@@ -515,8 +515,8 @@ def test_removed_public_method_requires_five_minor_release_runway(tmp_path):
     )
     new_init.write_text(new_init.read_text() + "\n\nclass Foo:\n    pass\n")
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, removal_policy_errors = _prod._compute_breakages(
         old_root,
@@ -530,19 +530,19 @@ def test_removed_public_method_requires_five_minor_release_runway(tmp_path):
 
 
 def test_workspace_removed_export_is_breaking(tmp_path):
-    """Breakage detection works for non-SDK packages (openhands.workspace)."""
+    """Breakage detection works for non-SDK packages (madagascar.workspace)."""
     ws_cfg = PackageConfig(
-        package="openhands.workspace",
-        distribution="openhands-workspace",
-        source_dir="openhands-workspace",
+        package="madagascar.workspace",
+        distribution="madagascar-workspace",
+        source_dir="madagascar-workspace",
     )
     _write_pkg_init(
-        tmp_path, "old", ["Foo", "Bar"], module_parts=("openhands", "workspace")
+        tmp_path, "old", ["Foo", "Bar"], module_parts=("madagascar", "workspace")
     )
-    _write_pkg_init(tmp_path, "new", ["Foo"], module_parts=("openhands", "workspace"))
+    _write_pkg_init(tmp_path, "new", ["Foo"], module_parts=("madagascar", "workspace"))
 
-    old_root = griffe.load("openhands.workspace", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.workspace", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.workspace", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.workspace", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(
         old_root,
@@ -555,34 +555,34 @@ def test_workspace_removed_export_is_breaking(tmp_path):
 
 def test_accepted_docker_mount_dir_member_removal_detection_is_exact():
     assert _is_accepted_removed_member(
-        "openhands.workspace", "DockerWorkspace.mount_dir"
+        "madagascar.workspace", "DockerWorkspace.mount_dir"
     )
     assert _is_accepted_removed_member(
-        "openhands.workspace", "DockerDevWorkspace.mount_dir"
+        "madagascar.workspace", "DockerDevWorkspace.mount_dir"
     )
     assert not _is_accepted_removed_member(
-        "openhands.workspace", "ApptainerWorkspace.mount_dir"
+        "madagascar.workspace", "ApptainerWorkspace.mount_dir"
     )
-    assert not _is_accepted_removed_member("openhands.sdk", "DockerWorkspace.mount_dir")
+    assert not _is_accepted_removed_member("madagascar.sdk", "DockerWorkspace.mount_dir")
 
 
 def test_accepted_docker_mount_dir_removal_is_not_breaking(tmp_path, capsys):
     ws_cfg = PackageConfig(
-        package="openhands.workspace",
-        distribution="openhands-workspace",
-        source_dir="openhands-workspace",
+        package="madagascar.workspace",
+        distribution="madagascar-workspace",
+        source_dir="madagascar-workspace",
     )
     old_pkg = _write_pkg_init(
         tmp_path,
         "old",
         ["DockerWorkspace", "DockerDevWorkspace"],
-        module_parts=("openhands", "workspace"),
+        module_parts=("madagascar", "workspace"),
     )
     new_pkg = _write_pkg_init(
         tmp_path,
         "new",
         ["DockerWorkspace", "DockerDevWorkspace"],
-        module_parts=("openhands", "workspace"),
+        module_parts=("madagascar", "workspace"),
     )
 
     old_pkg.joinpath("__init__.py").write_text(
@@ -602,8 +602,8 @@ def test_accepted_docker_mount_dir_removal_is_not_breaking(tmp_path, capsys):
         + "    pass\n"
     )
 
-    old_root = griffe.load("openhands.workspace", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.workspace", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.workspace", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.workspace", search_paths=[str(tmp_path / "new")])
 
     total_breaks, removal_policy_errors = _prod._compute_breakages(
         old_root,
@@ -624,18 +624,18 @@ def test_unresolved_alias_exports_do_not_crash_breakage_detection(tmp_path):
     """
 
     ws_cfg = PackageConfig(
-        package="openhands.workspace",
-        distribution="openhands-workspace",
-        source_dir="openhands-workspace",
+        package="madagascar.workspace",
+        distribution="madagascar-workspace",
+        source_dir="madagascar-workspace",
     )
 
     def _write_workspace(root: str, *, include_method: bool) -> None:
-        pkg = tmp_path / root / "openhands" / "workspace"
+        pkg = tmp_path / root / "madagascar" / "workspace"
         pkg.mkdir(parents=True)
-        (tmp_path / root / "openhands" / "__init__.py").write_text("")
+        (tmp_path / root / "madagascar" / "__init__.py").write_text("")
 
         content = (
-            "from openhands.sdk.workspace import PlatformType\n\n"
+            "from madagascar.sdk.workspace import PlatformType\n\n"
             "__all__ = [\n"
             "    'PlatformType',\n"
             "    'Foo',\n"
@@ -652,8 +652,8 @@ def test_unresolved_alias_exports_do_not_crash_breakage_detection(tmp_path):
     _write_workspace("old", include_method=True)
     _write_workspace("new", include_method=False)
 
-    old_root = griffe.load("openhands.workspace", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.workspace", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.workspace", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.workspace", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(
         old_root,
@@ -739,11 +739,11 @@ def test_is_field_metadata_only_change_long_description():
     """Long descriptions with URLs are handled correctly."""
     old = (
         "Field(default=False, description='Whether to automatically load "
-        "skills from https://github.com/OpenHands/skills.')"
+        "skills from https://github.com/Madagascar/skills.')"
     )
     new = (
         "Field(default=False, description='Whether to automatically load "
-        "skills from https://github.com/OpenHands/extensions.')"
+        "skills from https://github.com/Madagascar/extensions.')"
     )
     assert _is_field_metadata_only_change(old, new) is True
 
@@ -788,7 +788,7 @@ def test_is_field_metadata_only_change_json_schema_extra_dict():
     old = "Field(default='claude-sonnet-4-20250514', description='Model name.')"
     new = (
         "Field(default='claude-sonnet-4-20250514', description='Model name.', "
-        "json_schema_extra={'openhands_settings': "
+        "json_schema_extra={'madagascar_settings': "
         "{'label': None, 'prominence': 'critical', 'depends_on': []}})"
     )
     assert _is_field_metadata_only_change(old, new) is True
@@ -835,8 +835,8 @@ def test_field_deprecated_change_is_not_breaking(tmp_path):
         + "    enabled: bool = Field(default=False, deprecated=True)\n"
     )
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(
         old_root,
@@ -872,8 +872,8 @@ def test_field_added_deprecated_kwarg_is_not_breaking(tmp_path):
         + "    )\n"
     )
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(
         old_root,
@@ -905,8 +905,8 @@ def test_field_description_change_is_not_breaking(tmp_path):
         + "    enabled: bool = Field(default=False, description='New description')\n"
     )
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(
         old_root,
@@ -967,8 +967,8 @@ def test_field_multiline_description_with_quotes_is_not_breaking(tmp_path):
         + "    )\n"
     )
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(
         old_root,
@@ -1000,8 +1000,8 @@ def test_field_default_change_is_reported_but_not_breaking(tmp_path):
         + "    model: str = Field(default='gpt-5.5')\n"
     )
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     field_default_changes: list[FieldDefaultChange] = []
     total_breaks, undeprecated = _prod._compute_breakages(
@@ -1015,8 +1015,8 @@ def test_field_default_change_is_reported_but_not_breaking(tmp_path):
     assert undeprecated == 0
     assert field_default_changes == [
         _prod.FieldDefaultChange(
-            package="openhands.sdk",
-            object_path="openhands.sdk.Config.model",
+            package="madagascar.sdk",
+            object_path="madagascar.sdk.Config.model",
             old_default="'claude-sonnet-4-20250514'",
             new_default="'gpt-5.5'",
         )
@@ -1048,8 +1048,8 @@ def test_field_default_factory_change_is_reported_but_not_breaking(tmp_path):
         + "    )\n"
     )
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     field_default_changes: list[FieldDefaultChange] = []
     total_breaks, undeprecated = _prod._compute_breakages(
@@ -1063,8 +1063,8 @@ def test_field_default_factory_change_is_reported_but_not_breaking(tmp_path):
     assert undeprecated == 0
     assert field_default_changes == [
         _prod.FieldDefaultChange(
-            package="openhands.sdk",
-            object_path="openhands.sdk.Config.current_datetime",
+            package="madagascar.sdk",
+            object_path="madagascar.sdk.Config.current_datetime",
             old_default="datetime.now",
             new_default="lambda: datetime.now().astimezone()",
         )
@@ -1105,11 +1105,11 @@ def test_field_json_schema_extra_dict_is_not_breaking(tmp_path):
     )
 
     old_root = griffe.load(
-        "openhands.sdk",
+        "madagascar.sdk",
         search_paths=[str(tmp_path / "old")],
     )
     new_root = griffe.load(
-        "openhands.sdk",
+        "madagascar.sdk",
         search_paths=[str(tmp_path / "new")],
     )
 
@@ -1192,8 +1192,8 @@ def test_subclass_member_deprecated_on_base_is_not_undeprecated(tmp_path):
         + "    pass\n"
     )
 
-    old_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "old")])
-    new_root = griffe.load("openhands.sdk", search_paths=[str(tmp_path / "new")])
+    old_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "old")])
+    new_root = griffe.load("madagascar.sdk", search_paths=[str(tmp_path / "new")])
 
     total_breaks, undeprecated = _prod._compute_breakages(old_root, new_root, _SDK_CFG)
     assert total_breaks > 0
@@ -1219,8 +1219,8 @@ def test_collect_field_default_changes_since_ref_reports_pr_introduced_change(tm
 
     assert changes == [
         FieldDefaultChange(
-            package="openhands.sdk",
-            object_path="openhands.sdk.Config.model",
+            package="madagascar.sdk",
+            object_path="madagascar.sdk.Config.model",
             old_default="'claude-sonnet-4-20250514'",
             new_default="'gpt-5.5'",
         )
@@ -1268,7 +1268,7 @@ def test_collect_field_default_changes_since_ref_is_quiet_for_structural_changes
     tmp_path, capsys
 ):
     repo_root = _init_git_repo(tmp_path)
-    pkg = repo_root / "openhands-sdk" / "openhands" / "sdk"
+    pkg = repo_root / "madagascar-sdk" / "madagascar" / "sdk"
     pkg.mkdir(parents=True, exist_ok=True)
     (pkg.parent / "__init__.py").write_text("")
     (pkg / "__init__.py").write_text(
@@ -1308,8 +1308,8 @@ def test_write_field_default_change_report_includes_base_ref_changes(
 
     changes = [
         FieldDefaultChange(
-            package="openhands.sdk",
-            object_path="openhands.sdk.Config.model",
+            package="madagascar.sdk",
+            object_path="madagascar.sdk.Config.model",
             old_default="'claude-sonnet-4-20250514'",
             new_default="'gpt-5.5'",
         )
@@ -1323,8 +1323,8 @@ def test_write_field_default_change_report_includes_base_ref_changes(
     assert json.loads(report_path.read_text()) == {
         "field_default_changes": [
             {
-                "package": "openhands.sdk",
-                "object_path": "openhands.sdk.Config.model",
+                "package": "madagascar.sdk",
+                "object_path": "madagascar.sdk.Config.model",
                 "old_default": "'claude-sonnet-4-20250514'",
                 "new_default": "'gpt-5.5'",
             }
@@ -1341,8 +1341,8 @@ def test_write_field_default_change_report_omits_unavailable_base_ref(
 
     changes = [
         FieldDefaultChange(
-            package="openhands.sdk",
-            object_path="openhands.sdk.Config.model",
+            package="madagascar.sdk",
+            object_path="madagascar.sdk.Config.model",
             old_default="'claude-sonnet-4-20250514'",
             new_default="'gpt-5.5'",
         )
@@ -1356,8 +1356,8 @@ def test_write_field_default_change_report_omits_unavailable_base_ref(
     assert json.loads(report_path.read_text()) == {
         "field_default_changes": [
             {
-                "package": "openhands.sdk",
-                "object_path": "openhands.sdk.Config.model",
+                "package": "madagascar.sdk",
+                "object_path": "madagascar.sdk.Config.model",
                 "old_default": "'claude-sonnet-4-20250514'",
                 "new_default": "'gpt-5.5'",
             }

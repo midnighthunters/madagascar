@@ -19,15 +19,15 @@ from storage.org_member import OrgMember
 from storage.role import Role
 from storage.user import User
 
-from openhands.app_server.settings.agent_profiles import (
+from madagascar.app_server.settings.agent_profiles import (
     MAX_AGENT_PROFILES,
     AgentProfiles,
 )
-from openhands.app_server.user_auth import get_user_id
-from openhands.sdk.profiles import (
+from madagascar.app_server.user_auth import get_user_id
+from madagascar.sdk.profiles import (
     ACPAgentProfile,
     AgentProfileStoreProtocol,
-    OpenHandsAgentProfile,
+    MadagascarAgentProfile,
     save_profile_preserving_identity,
 )
 
@@ -72,12 +72,12 @@ class TestAgentProfilesContainer:
     def test_id_lifecycle_and_name_keyed_protocol_ops(self):
         store = AgentProfiles()
         created = save_profile_preserving_identity(
-            store, OpenHandsAgentProfile(name='reviewer', llm_profile_ref='gpt')
+            store, MadagascarAgentProfile(name='reviewer', llm_profile_ref='gpt')
         )
         assert created.revision == 0
         # overwrite keeps id, bumps revision; create mints a fresh id
         again = save_profile_preserving_identity(
-            store, OpenHandsAgentProfile(name='reviewer', llm_profile_ref='haiku')
+            store, MadagascarAgentProfile(name='reviewer', llm_profile_ref='haiku')
         )
         assert again.id == created.id and again.revision == 1
         assert store.load('reviewer').llm_profile_ref == 'haiku'
@@ -93,7 +93,7 @@ class TestAgentProfilesContainer:
     def test_rename_preserves_id_and_active_pointer(self):
         store = AgentProfiles()
         p = save_profile_preserving_identity(
-            store, OpenHandsAgentProfile(name='a', llm_profile_ref='gpt')
+            store, MadagascarAgentProfile(name='a', llm_profile_ref='gpt')
         )
         store.active = str(p.id)
         store.rename('a', 'b')
@@ -105,7 +105,7 @@ class TestAgentProfilesContainer:
     def test_delete_clears_org_active_pointer(self):
         store = AgentProfiles()
         p = save_profile_preserving_identity(
-            store, OpenHandsAgentProfile(name='a', llm_profile_ref='gpt')
+            store, MadagascarAgentProfile(name='a', llm_profile_ref='gpt')
         )
         store.active = str(p.id)
         store.delete('a')
@@ -115,21 +115,21 @@ class TestAgentProfilesContainer:
         store = AgentProfiles()
         for i in range(MAX_AGENT_PROFILES):
             save_profile_preserving_identity(
-                store, OpenHandsAgentProfile(name=f'p{i}', llm_profile_ref='gpt')
+                store, MadagascarAgentProfile(name=f'p{i}', llm_profile_ref='gpt')
             )
-        from openhands.sdk.profiles import ProfileLimitExceeded
+        from madagascar.sdk.profiles import ProfileLimitExceeded
 
         with pytest.raises(ProfileLimitExceeded):
             save_profile_preserving_identity(
                 store,
-                OpenHandsAgentProfile(name='over', llm_profile_ref='gpt'),
+                MadagascarAgentProfile(name='over', llm_profile_ref='gpt'),
                 max_profiles=MAX_AGENT_PROFILES,
             )
 
     def test_encrypted_json_roundtrip_via_dict(self):
         store = AgentProfiles()
         save_profile_preserving_identity(
-            store, OpenHandsAgentProfile(name='r', llm_profile_ref='gpt')
+            store, MadagascarAgentProfile(name='r', llm_profile_ref='gpt')
         )
         dumped = store.model_dump(mode='json', context={'expose_secrets': True})
         reloaded = AgentProfiles.model_validate(dumped)
@@ -255,7 +255,7 @@ class TestAgentProfileRouterLifecycle:
         detail = await get_agent_profile(
             name='reviewer', effective_org_id=org_id, user_id=uid
         )
-        assert detail.profile.agent_kind == 'openhands'
+        assert detail.profile.agent_kind == 'madagascar'
         assert detail.profile.llm_profile_ref == 'Default'
 
         # overwrite bumps revision, keeps id
@@ -494,7 +494,7 @@ class TestListAgentProfiles:
 
         store = AgentProfiles()
         profile = save_profile_preserving_identity(
-            store, OpenHandsAgentProfile(name='default', llm_profile_ref='Default')
+            store, MadagascarAgentProfile(name='default', llm_profile_ref='Default')
         )
         object.__setattr__(store, 'active', str(profile.id))
         await _set_agent_profiles(async_session_maker, org_id, store)
@@ -546,7 +546,7 @@ class TestLLMProfileFKGuard:
         # Reference the org's 'Default' LLM profile from an agent profile.
         ap = AgentProfiles()
         save_profile_preserving_identity(
-            ap, OpenHandsAgentProfile(name='reviewer', llm_profile_ref='Default')
+            ap, MadagascarAgentProfile(name='reviewer', llm_profile_ref='Default')
         )
         await _set_agent_profiles(async_session_maker, org_id, ap)
 
@@ -562,7 +562,7 @@ class TestLLMProfileFKGuard:
         org_id = patch_org_profile_routes
         ap = AgentProfiles()
         save_profile_preserving_identity(
-            ap, OpenHandsAgentProfile(name='reviewer', llm_profile_ref='Default')
+            ap, MadagascarAgentProfile(name='reviewer', llm_profile_ref='Default')
         )
         await _set_agent_profiles(async_session_maker, org_id, ap)
 
@@ -621,7 +621,7 @@ class TestResolveActiveAgentProfile:
         happens to be set, rather than falling back to composed settings."""
         store = self._store()
         org, pid = self._org_with(
-            OpenHandsAgentProfile(name='reviewer', llm_profile_ref='Default')
+            MadagascarAgentProfile(name='reviewer', llm_profile_ref='Default')
         )
         ap = AgentProfiles.model_validate(org.agent_profiles)
         ap.active = pid
@@ -647,10 +647,10 @@ class TestResolveActiveAgentProfile:
         # Profile deleted out from under the pointer -> graceful None, no raise.
         assert store._resolve_active_agent_profile(org, member, {}, None) is None
 
-    def test_resolves_openhands_profile_and_returns_provenance(self):
+    def test_resolves_madagascar_profile_and_returns_provenance(self):
         store = self._store()
         org, pid = self._org_with(
-            OpenHandsAgentProfile(name='reviewer', llm_profile_ref='Default')
+            MadagascarAgentProfile(name='reviewer', llm_profile_ref='Default')
         )
         member = MagicMock(spec=OrgMember)
         member.active_agent_profile_id = pid
@@ -660,14 +660,14 @@ class TestResolveActiveAgentProfile:
         dump, resolved_id, revision = result
         assert resolved_id == pid
         assert revision == 0
-        assert dump['agent_kind'] == 'openhands'
+        assert dump['agent_kind'] == 'madagascar'
         # The resolved LLM came from the referenced org LLM profile.
         assert dump['llm']['model'] == 'gpt-4o'
 
     def test_resolve_canonicalizes_legacy_litellm_proxy_llm(self):
         """A profile referencing an org LLM profile with a legacy
         ``litellm_proxy/`` managed name must resolve to the canonical
-        ``openhands/`` name (proxy base_url dropped), matching the non-profile
+        ``madagascar/`` name (proxy base_url dropped), matching the non-profile
         composed path so a profile launch and a plain launch normalize an
         org's pre-canonical llm_profiles identically."""
         from server.constants import LITE_LLM_API_URL
@@ -677,7 +677,7 @@ class TestResolveActiveAgentProfile:
         org.id = ORG_ID
         ap = AgentProfiles()
         save_profile_preserving_identity(
-            ap, OpenHandsAgentProfile(name='reviewer', llm_profile_ref='Default')
+            ap, MadagascarAgentProfile(name='reviewer', llm_profile_ref='Default')
         )
         pid = next(iter(ap.profiles))
         org.agent_profiles = ap.model_dump(
@@ -699,13 +699,13 @@ class TestResolveActiveAgentProfile:
         result = store._resolve_active_agent_profile(org, member, {}, None)
         assert result is not None
         dump, _resolved_id, _revision = result
-        assert dump['llm']['model'] == 'openhands/claude-opus-4-8'
+        assert dump['llm']['model'] == 'madagascar/claude-opus-4-8'
         assert dump['llm'].get('base_url') is None
 
     def test_override_id_wins_over_member_pointer(self):
         store = self._store()
         org, pid = self._org_with(
-            OpenHandsAgentProfile(name='reviewer', llm_profile_ref='Default')
+            MadagascarAgentProfile(name='reviewer', llm_profile_ref='Default')
         )
         member = MagicMock(spec=OrgMember)
         member.active_agent_profile_id = None  # no ambient pointer at all
@@ -720,7 +720,7 @@ class TestResolveActiveAgentProfile:
     def test_override_id_does_not_mutate_member_pointer(self):
         store = self._store()
         org, pid = self._org_with(
-            OpenHandsAgentProfile(name='reviewer', llm_profile_ref='Default')
+            MadagascarAgentProfile(name='reviewer', llm_profile_ref='Default')
         )
         member = MagicMock(spec=OrgMember)
         member.active_agent_profile_id = None
@@ -809,7 +809,7 @@ class TestPersistedVsResolvedSettingsView:
         ap = AgentProfiles()
         profile = save_profile_preserving_identity(
             ap,
-            OpenHandsAgentProfile(
+            MadagascarAgentProfile(
                 name='reviewer',
                 llm_profile_ref='Default',
                 mcp_server_refs=mcp_server_refs,
@@ -1043,7 +1043,7 @@ class TestNoWriteBackWithoutMutation:
         blob_before = dict(org.agent_profiles)
         blob_before['profiles'] = {
             **blob_before['profiles'],
-            invalid_id: {'name': '', 'agent_kind': 'openhands'},
+            invalid_id: {'name': '', 'agent_kind': 'madagascar'},
         }
         async with async_session_maker() as session:
             org = (
@@ -1212,7 +1212,7 @@ class TestAgentProfilesRouterAuthorizationBoundary:
         org_id = patch_agent_routes
         ap = AgentProfiles()
         save_profile_preserving_identity(
-            ap, OpenHandsAgentProfile(name='reviewer', llm_profile_ref='Default')
+            ap, MadagascarAgentProfile(name='reviewer', llm_profile_ref='Default')
         )
         await _set_agent_profiles(async_session_maker, org_id, ap)
 

@@ -9,7 +9,7 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from openhands.agent_server.api import _add_exception_handlers
+from madagascar.agent_server.api import _add_exception_handlers
 
 
 @pytest.fixture

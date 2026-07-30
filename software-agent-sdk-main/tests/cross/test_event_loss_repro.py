@@ -5,7 +5,7 @@ when the WebSocket callback is delayed and run() returns before events are
 delivered to the client.
 
 This is a regression test for the issue observed in PR #1829:
-https://github.com/OpenHands/software-agent-sdk/actions/runs/21364607784/job/61492749827?pr=1829#step:7:5709
+https://github.com/Madagascar/software-agent-sdk/actions/runs/21364607784/job/61492749827?pr=1829#step:7:5709
 
 Run with: uv run pytest tests/cross/test_event_loss_repro.py -v
 """
@@ -21,11 +21,11 @@ import uvicorn
 from litellm.types.utils import Choices, Message as LiteLLMMessage, ModelResponse
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Agent, Conversation
-from openhands.sdk.conversation import RemoteConversation
-from openhands.sdk.event import ActionEvent, Event, ObservationEvent
-from openhands.sdk.workspace import RemoteWorkspace
-from openhands.workspace.docker.workspace import find_available_tcp_port
+from madagascar.sdk import LLM, Agent, Conversation
+from madagascar.sdk.conversation import RemoteConversation
+from madagascar.sdk.event import ActionEvent, Event, ObservationEvent
+from madagascar.sdk.workspace import RemoteWorkspace
+from madagascar.workspace.docker.workspace import find_available_tcp_port
 
 
 @pytest.fixture
@@ -50,11 +50,11 @@ def server_env_for_repro(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     cfg_file = tmp_path / "config.json"
     cfg_file.write_text(json.dumps(cfg))
 
-    monkeypatch.setenv("OPENHANDS_AGENT_SERVER_CONFIG_PATH", str(cfg_file))
+    monkeypatch.setenv("MADAGASCAR_AGENT_SERVER_CONFIG_PATH", str(cfg_file))
     monkeypatch.delenv("SESSION_API_KEY", raising=False)
 
-    from openhands.agent_server.api import create_app
-    from openhands.agent_server.config import Config
+    from madagascar.agent_server.api import create_app
+    from madagascar.agent_server.config import Config
 
     cfg_obj = Config.model_validate_json(cfg_file.read_text())
     app = create_app(cfg_obj)
@@ -111,9 +111,9 @@ def test_event_loss_race_condition_with_ws_delay(
         add_security_risk_prediction=False,
         **kwargs,
     ):
-        from openhands.sdk.llm.llm_response import LLMResponse
-        from openhands.sdk.llm.message import Message
-        from openhands.sdk.llm.utils.metrics import MetricsSnapshot
+        from madagascar.sdk.llm.llm_response import LLMResponse
+        from madagascar.sdk.llm.message import Message
+        from madagascar.sdk.llm.utils.metrics import MetricsSnapshot
 
         litellm_msg = LiteLLMMessage.model_validate(
             {

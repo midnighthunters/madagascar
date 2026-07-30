@@ -14,22 +14,22 @@ import pytest
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 
-from openhands.agent_server.models import ConversationInfo, Success
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.agent_server.models import ConversationInfo, Success
+from madagascar.app_server.app_conversation.app_conversation_models import (
     AppConversationInfo,
 )
-from openhands.app_server.app_conversation.sql_app_conversation_info_service import (
+from madagascar.app_server.app_conversation.sql_app_conversation_info_service import (
     SQLAppConversationInfoService,
 )
-from openhands.app_server.event_callback.event_callback_models import EventCallback
-from openhands.app_server.event_callback.set_title_callback_processor import (
+from madagascar.app_server.event_callback.event_callback_models import EventCallback
+from madagascar.app_server.event_callback.set_title_callback_processor import (
     SetTitleCallbackProcessor,
 )
-from openhands.app_server.event_callback.webhook_router import on_conversation_update
-from openhands.app_server.sandbox.sandbox_models import SandboxRecord
-from openhands.app_server.user.specifiy_user_context import SpecifyUserContext
-from openhands.app_server.utils.sql_utils import Base
-from openhands.sdk.conversation import ConversationExecutionStatus
+from madagascar.app_server.event_callback.webhook_router import on_conversation_update
+from madagascar.app_server.sandbox.sandbox_models import SandboxRecord
+from madagascar.app_server.user.specifiy_user_context import SpecifyUserContext
+from madagascar.app_server.utils.sql_utils import Base
+from madagascar.sdk.conversation import ConversationExecutionStatus
 
 
 @pytest.fixture
@@ -150,11 +150,11 @@ class TestOnConversationUpdateAutoTitle:
         # Act
         with (
             patch(
-                'openhands.app_server.event_callback.webhook_router.valid_conversation',
+                'madagascar.app_server.event_callback.webhook_router.valid_conversation',
                 return_value=stub_conv,
             ),
             patch(
-                'openhands.app_server.event_callback.webhook_router.get_event_callback_service',
+                'madagascar.app_server.event_callback.webhook_router.get_event_callback_service',
                 mock_get_event_callback_service,
             ),
         ):
@@ -218,11 +218,11 @@ class TestOnConversationUpdateAutoTitle:
         # Act
         with (
             patch(
-                'openhands.app_server.event_callback.webhook_router.valid_conversation',
+                'madagascar.app_server.event_callback.webhook_router.valid_conversation',
                 return_value=existing_conv,
             ),
             patch(
-                'openhands.app_server.event_callback.webhook_router.get_event_callback_service',
+                'madagascar.app_server.event_callback.webhook_router.get_event_callback_service',
                 mock_get_event_callback_service,
             ),
         ):
@@ -286,11 +286,11 @@ class TestOnConversationUpdateAutoTitle:
         # Act
         with (
             patch(
-                'openhands.app_server.event_callback.webhook_router.valid_conversation',
+                'madagascar.app_server.event_callback.webhook_router.valid_conversation',
                 return_value=stub_conv,
             ),
             patch(
-                'openhands.app_server.event_callback.webhook_router.get_event_callback_service',
+                'madagascar.app_server.event_callback.webhook_router.get_event_callback_service',
                 mock_get_event_callback_service,
             ),
         ):
@@ -349,11 +349,11 @@ class TestOnConversationUpdateAutoTitle:
         # Act
         with (
             patch(
-                'openhands.app_server.event_callback.webhook_router.valid_conversation',
+                'madagascar.app_server.event_callback.webhook_router.valid_conversation',
                 return_value=stub_conv,
             ),
             patch(
-                'openhands.app_server.event_callback.webhook_router.get_event_callback_service',
+                'madagascar.app_server.event_callback.webhook_router.get_event_callback_service',
                 mock_get_event_callback_service,
             ),
         ):
@@ -368,7 +368,7 @@ class TestOnConversationUpdateAutoTitle:
         assert captured_state is not None
 
         # Verify the user context was set correctly
-        from openhands.app_server.user.specifiy_user_context import USER_CONTEXT_ATTR
+        from madagascar.app_server.user.specifiy_user_context import USER_CONTEXT_ATTR
 
         user_context = getattr(captured_state, USER_CONTEXT_ATTR)
         # get_user_id() is async, so we need to await it
@@ -429,11 +429,11 @@ class TestOnConversationUpdateAutoTitle:
         # Act
         with (
             patch(
-                'openhands.app_server.event_callback.webhook_router.valid_conversation',
+                'madagascar.app_server.event_callback.webhook_router.valid_conversation',
                 return_value=stub_conv,
             ),
             patch(
-                'openhands.app_server.event_callback.webhook_router.get_event_callback_service',
+                'madagascar.app_server.event_callback.webhook_router.get_event_callback_service',
                 mock_get_event_callback_service,
             ),
             patch.object(

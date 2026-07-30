@@ -59,19 +59,19 @@ def upgrade() -> None:
         ['is_enabled'],
     )
 
-    # Seed with current openhands provider models
+    # Seed with current madagascar provider models
     models = [
-        ('claude-opus-4-5-20251101', 'openhands'),
-        ('claude-sonnet-4-5-20250929', 'openhands'),
-        ('gpt-5.2-codex', 'openhands'),
-        ('gpt-5.2', 'openhands'),
-        ('minimax-m2.5', 'openhands'),
-        ('gemini-3-pro-preview', 'openhands'),
-        ('gemini-3-flash-preview', 'openhands'),
-        ('deepseek-chat', 'openhands'),
-        ('devstral-medium-2512', 'openhands'),
-        ('kimi-k2-0711-preview', 'openhands'),
-        ('qwen3-coder-480b', 'openhands'),
+        ('claude-opus-4-5-20251101', 'madagascar'),
+        ('claude-sonnet-4-5-20250929', 'madagascar'),
+        ('gpt-5.2-codex', 'madagascar'),
+        ('gpt-5.2', 'madagascar'),
+        ('minimax-m2.5', 'madagascar'),
+        ('gemini-3-pro-preview', 'madagascar'),
+        ('gemini-3-flash-preview', 'madagascar'),
+        ('deepseek-chat', 'madagascar'),
+        ('devstral-medium-2512', 'madagascar'),
+        ('kimi-k2-0711-preview', 'madagascar'),
+        ('qwen3-coder-480b', 'madagascar'),
     ]
 
     for model_name, provider in models:

@@ -16,7 +16,7 @@ from storage.encrypt_utils import (
     encrypt_legacy_value,
 )
 
-from openhands.app_server.settings.settings_models import MarketplaceRegistration
+from madagascar.app_server.settings.settings_models import MarketplaceRegistration
 
 logger = logging.getLogger(__name__)
 
@@ -100,7 +100,7 @@ class UserSettings(Base):
     ] = mapped_column(JSON, nullable=True)
 
     def to_settings(self):
-        from openhands.app_server.settings.settings_models import (
+        from madagascar.app_server.settings.settings_models import (
             Settings,
             validate_and_convert_marketplaces,
         )

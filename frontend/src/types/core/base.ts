@@ -1,4 +1,4 @@
-export type OpenHandsEventType =
+export type MadagascarEventType =
   | "message"
   | "system"
   | "agent_state_changed"
@@ -21,25 +21,25 @@ export type OpenHandsEventType =
   | "task_tracking"
   | "user_rejected";
 
-export type OpenHandsSourceType = "agent" | "user" | "environment" | "hook";
+export type MadagascarSourceType = "agent" | "user" | "environment" | "hook";
 
-interface OpenHandsBaseEvent {
+interface MadagascarBaseEvent {
   id: number;
-  source: OpenHandsSourceType;
+  source: MadagascarSourceType;
   message: string;
   timestamp: string; // ISO 8601
 }
 
-export interface OpenHandsActionEvent<
-  T extends OpenHandsEventType,
-> extends OpenHandsBaseEvent {
+export interface MadagascarActionEvent<
+  T extends MadagascarEventType,
+> extends MadagascarBaseEvent {
   action: T;
   args: Record<string, unknown>;
 }
 
-export interface OpenHandsObservationEvent<
-  T extends OpenHandsEventType,
-> extends OpenHandsBaseEvent {
+export interface MadagascarObservationEvent<
+  T extends MadagascarEventType,
+> extends MadagascarBaseEvent {
   cause: number;
   observation: T;
   content: string;

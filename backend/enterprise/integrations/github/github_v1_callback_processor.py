@@ -8,22 +8,22 @@ from integrations.v1_utils import handle_callback_error
 from pydantic import Field
 from server.auth.constants import GITHUB_APP_CLIENT_ID, GITHUB_APP_PRIVATE_KEY
 
-from openhands.app_server.event_callback.event_callback_models import (
+from madagascar.app_server.event_callback.event_callback_models import (
     EventCallback,
     EventCallbackProcessor,
     EventKind,
 )
-from openhands.app_server.event_callback.event_callback_result_models import (
+from madagascar.app_server.event_callback.event_callback_result_models import (
     EventCallbackResult,
     EventCallbackResultStatus,
 )
-from openhands.app_server.event_callback.util import (
+from madagascar.app_server.event_callback.util import (
     ensure_conversation_found,
     ensure_running_sandbox,
     get_agent_server_url_from_sandbox,
 )
-from openhands.sdk import Event
-from openhands.sdk.event import ConversationStateUpdateEvent
+from madagascar.sdk import Event
+from madagascar.sdk.event import ConversationStateUpdateEvent
 
 _logger = logging.getLogger(__name__)
 
@@ -236,13 +236,13 @@ class GithubV1CallbackProcessor(EventCallbackProcessor):
     async def _request_final_response(self, conversation_id: UUID) -> str:
         """Return the agent's final response without asking the LLM to summarize."""
         # Import services within the method to avoid circular imports
-        from openhands.app_server.config import (
+        from madagascar.app_server.config import (
             get_app_conversation_info_service,
             get_httpx_client,
             get_sandbox_service,
         )
-        from openhands.app_server.services.injector import InjectorState
-        from openhands.app_server.user.specifiy_user_context import (
+        from madagascar.app_server.services.injector import InjectorState
+        from madagascar.app_server.user.specifiy_user_context import (
             ADMIN,
             USER_CONTEXT_ATTR,
         )

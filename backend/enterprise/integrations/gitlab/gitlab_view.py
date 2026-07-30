@@ -14,21 +14,21 @@ from jinja2 import Environment
 from server.auth.token_manager import TokenManager
 from storage.saas_secrets_store import SaasSecretsStore
 
-from openhands.agent_server.models import SendMessageRequest
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.agent_server.models import SendMessageRequest
+from madagascar.app_server.app_conversation.app_conversation_models import (
     AppConversationStartRequest,
     AppConversationStartTaskStatus,
     ConversationTrigger,
 )
-from openhands.app_server.config import get_app_conversation_service
-from openhands.app_server.integrations.gitlab.gitlab_service import GitLabServiceImpl
-from openhands.app_server.integrations.provider import PROVIDER_TOKEN_TYPE, ProviderType
-from openhands.app_server.integrations.service_types import Comment
-from openhands.app_server.services.injector import InjectorState
-from openhands.app_server.user.specifiy_user_context import USER_CONTEXT_ATTR
-from openhands.app_server.user_auth.user_auth import UserAuth
-from openhands.app_server.utils.logger import openhands_logger as logger
-from openhands.sdk import TextContent
+from madagascar.app_server.config import get_app_conversation_service
+from madagascar.app_server.integrations.gitlab.gitlab_service import GitLabServiceImpl
+from madagascar.app_server.integrations.provider import PROVIDER_TOKEN_TYPE, ProviderType
+from madagascar.app_server.integrations.service_types import Comment
+from madagascar.app_server.services.injector import InjectorState
+from madagascar.app_server.user.specifiy_user_context import USER_CONTEXT_ATTR
+from madagascar.app_server.user_auth.user_auth import UserAuth
+from madagascar.app_server.utils.logger import madagascar_logger as logger
+from madagascar.sdk import TextContent
 
 OH_LABEL, INLINE_OH_LABEL = get_oh_labels(HOST)
 CONFIDENTIAL_NOTE = 'confidential_note'

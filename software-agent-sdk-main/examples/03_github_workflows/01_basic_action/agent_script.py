@@ -2,7 +2,7 @@
 """
 Example: Task Runner
 
-This script runs OpenHands agent for an arbitrary task. It accepts a
+This script runs Madagascar agent for an arbitrary task. It accepts a
 prompt either as a string or from a file/URL and executes the task.
 Designed for use with GitHub Actions workflows.
 
@@ -31,8 +31,8 @@ import sys
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
-from openhands.sdk import LLM, Conversation, get_logger
-from openhands.tools.preset.default import get_default_agent
+from madagascar.sdk import LLM, Conversation, get_logger
+from madagascar.tools.preset.default import get_default_agent
 
 
 logger = get_logger(__name__)
@@ -76,7 +76,7 @@ def load_prompt(prompt_location: str) -> str:
 def main():
     """Run the task with the provided prompt."""
     parser = argparse.ArgumentParser(
-        description="Run OpenHands agent for arbitrary tasks"
+        description="Run Madagascar agent for arbitrary tasks"
     )
     parser.add_argument(
         "prompt_location",

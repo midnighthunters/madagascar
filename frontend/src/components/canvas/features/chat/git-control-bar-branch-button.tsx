@@ -17,7 +17,7 @@ export function GitControlBarBranchButton({
   selectedRepository,
   gitProvider,
 }: GitControlBarBranchButtonProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { data: settings } = useSettings();
 
   const providerHost = gitProvider

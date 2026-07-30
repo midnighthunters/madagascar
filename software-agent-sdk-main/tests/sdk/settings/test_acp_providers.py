@@ -6,7 +6,7 @@ from types import MappingProxyType
 
 import pytest
 
-from openhands.sdk.settings.acp_providers import (
+from madagascar.sdk.settings.acp_providers import (
     ACP_PROVIDERS,
     ACPModelOption,
     ACPProviderInfo,
@@ -309,7 +309,7 @@ class TestACPFileSecrets:
         assert spec.warn_if_unset == ("GOOGLE_CLOUD_PROJECT", "GOOGLE_CLOUD_LOCATION")
 
     def test_default_acp_file_secrets_aggregates_all_providers(self):
-        from openhands.sdk.settings.acp_providers import default_acp_file_secrets
+        from madagascar.sdk.settings.acp_providers import default_acp_file_secrets
 
         specs = default_acp_file_secrets()
         assert {s.secret_name for s in specs} == {
@@ -327,7 +327,7 @@ class TestACPFileSecrets:
     def test_file_secret_spec_is_frozen(self):
         from pydantic import ValidationError
 
-        from openhands.sdk.settings.acp_providers import ACPFileSecretSpec
+        from madagascar.sdk.settings.acp_providers import ACPFileSecretSpec
 
         spec = ACPFileSecretSpec(
             secret_name="X", filename="x.json", env_var="X_HOME", subdir="x"
@@ -338,7 +338,7 @@ class TestACPFileSecrets:
     def test_file_secret_spec_rejects_path_traversal(self):
         from pydantic import ValidationError
 
-        from openhands.sdk.settings.acp_providers import ACPFileSecretSpec
+        from madagascar.sdk.settings.acp_providers import ACPFileSecretSpec
 
         # filename must be a bare basename.
         with pytest.raises(ValidationError):

@@ -16,9 +16,9 @@ Usage:
 
 import os
 
-from openhands.sdk import ImageContent, Message, TextContent
-from openhands.sdk.agent import ACPAgent
-from openhands.sdk.conversation import Conversation
+from madagascar.sdk import ImageContent, Message, TextContent
+from madagascar.sdk.agent import ACPAgent
+from madagascar.sdk.conversation import Conversation
 
 
 IMAGE_URL = "https://www.python.org/static/opengraph-icon-200x200.png"
@@ -31,7 +31,7 @@ try:
 
     # --- Main conversation turn (text only) ---
     conversation.send_message(
-        "List the Python source files under openhands-sdk/openhands/sdk/agent/, "
+        "List the Python source files under madagascar-sdk/madagascar/sdk/agent/, "
         "then read the __init__.py and summarize what agent classes are exported."
     )
     conversation.run()

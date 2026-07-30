@@ -3,9 +3,9 @@ from pathlib import Path
 import pytest
 from binaryornot.check import is_binary
 
-from openhands.sdk import ImageContent
-from openhands.tools.file_editor.editor import FileEditor
-from openhands.tools.file_editor.exceptions import (
+from madagascar.sdk import ImageContent
+from madagascar.tools.file_editor.editor import FileEditor
+from madagascar.tools.file_editor.exceptions import (
     FileValidationError,
 )
 

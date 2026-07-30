@@ -1,4 +1,4 @@
-"""Tests for events_to_messages conversion in openhands-sdk/event/base.py."""  # type: ignore
+"""Tests for events_to_messages conversion in madagascar-sdk/event/base.py."""  # type: ignore
 
 import json
 from collections.abc import Sequence
@@ -6,21 +6,21 @@ from typing import cast
 
 import pytest
 
-from openhands.sdk.event.base import LLMConvertibleEvent
-from openhands.sdk.event.llm_convertible import (
+from madagascar.sdk.event.base import LLMConvertibleEvent
+from madagascar.sdk.event.llm_convertible import (
     ActionEvent,
     AgentErrorEvent,
     MessageEvent,
     ObservationEvent,
     SystemPromptEvent,
 )
-from openhands.sdk.llm import (
+from madagascar.sdk.llm import (
     ImageContent,
     Message,
     MessageToolCall,
     TextContent,
 )
-from openhands.sdk.tool import Action, Observation
+from madagascar.sdk.tool import Action, Observation
 
 
 class EventsToMessagesMockAction(Action):

@@ -23,11 +23,11 @@ def test_scan_python_file_with_todos():
     """Test scanning a Python file with TODO comments."""
     content = """#!/usr/bin/env python3
 def function1():
-    # TODO(openhands): Add input validation
+    # TODO(madagascar): Add input validation
     return "hello"
 
 def function2():
-    # TODO(openhands): Implement error handling
+    # TODO(madagascar): Implement error handling
     pass
 """
 
@@ -47,7 +47,7 @@ def function2():
 def test_scan_typescript_file():
     """Test scanning a TypeScript file."""
     content = """function processData(): string {
-    // TODO(openhands): Add validation
+    // TODO(madagascar): Add validation
     return data;
 }
 """
@@ -68,7 +68,7 @@ def test_scan_java_file():
     """Test scanning a Java file."""
     content = """public class Test {
     public void method() {
-        // TODO(openhands): Implement this method
+        // TODO(madagascar): Implement this method
         System.out.println("Hello");
     }
 }
@@ -89,7 +89,7 @@ def test_scan_java_file():
 def test_scan_rust_file():
     """Test scanning Rust files."""
     content = """fn main() {
-    // TODO(openhands): Add error handling
+    // TODO(madagascar): Add error handling
     println!("Hello, world!");
 }"""
 
@@ -107,7 +107,7 @@ def test_scan_rust_file():
 
 def test_scan_unsupported_file_extension():
     """Test that unsupported file extensions are ignored."""
-    content = """// TODO(openhands): This should be ignored"""
+    content = """// TODO(madagascar): This should be ignored"""
 
     with tempfile.NamedTemporaryFile(mode="w", suffix=".js", delete=False) as f:
         f.write(content)
@@ -121,11 +121,11 @@ def test_scan_unsupported_file_extension():
 
 
 def test_scan_all_todos():
-    """Test that all TODO(openhands) comments are found."""
+    """Test that all TODO(madagascar) comments are found."""
     content = """def test():
-    # TODO(openhands): This should be found
-    # TODO(openhands): This should also be found
-    # TODO(openhands): https://github.com/owner/repo/pull/123
+    # TODO(madagascar): This should be found
+    # TODO(madagascar): This should also be found
+    # TODO(madagascar): https://github.com/owner/repo/pull/123
     pass
 """
 
@@ -150,15 +150,15 @@ def test_scan_directory():
 
         # Create Python file with TODO (avoid "test" in filename)
         py_file = temp_path / "main.py"
-        py_file.write_text("# TODO(openhands): Python todo\nprint('hello')")
+        py_file.write_text("# TODO(madagascar): Python todo\nprint('hello')")
 
         # Create TypeScript file with TODO (avoid "test" in filename)
         ts_file = temp_path / "app.ts"
-        ts_file.write_text("// TODO(openhands): TypeScript todo\nconsole.log('hello');")
+        ts_file.write_text("// TODO(madagascar): TypeScript todo\nconsole.log('hello');")
 
         # Create unsupported file (should be ignored)
         js_file = temp_path / "script.js"
-        js_file.write_text("// TODO(openhands): Should be ignored")
+        js_file.write_text("// TODO(madagascar): Should be ignored")
 
         todos = scan_directory(temp_path)
 
@@ -171,7 +171,7 @@ def test_scan_directory():
 def test_todo_with_continuation_lines():
     """Test TODO with continuation comment lines."""
     content = """def test():
-    # TODO(openhands): Add error handling
+    # TODO(madagascar): Add error handling
     # This should handle network timeouts
     # and retry failed requests
     # with exponential backoff
@@ -197,7 +197,7 @@ def test_todo_with_continuation_lines():
 def test_todo_without_description():
     """Test TODO without initial description but with continuation lines."""
     content = """def test():
-    # TODO(openhands)
+    # TODO(madagascar)
     # Implement user authentication
     # with proper session management
     pass

@@ -1,6 +1,6 @@
 """Tests for GrepExecutor implementation.
 
-These tests verify that grep behaves like OpenHands:
+These tests verify that grep behaves like Madagascar:
 - Case-insensitive search (rg -i)
 - Returns file paths only (rg -l)
 - Sorted by modification time (--sortr=modified)
@@ -12,10 +12,10 @@ from pathlib import Path
 
 import pytest
 
-import openhands.tools.grep.impl as grep_impl
-from openhands.tools.grep import GrepAction
-from openhands.tools.grep.impl import GrepExecutor
-from openhands.tools.utils import _check_grep_available
+import madagascar.tools.grep.impl as grep_impl
+from madagascar.tools.grep import GrepAction
+from madagascar.tools.grep.impl import GrepExecutor
+from madagascar.tools.utils import _check_grep_available
 
 
 def test_grep_executor_initialization():

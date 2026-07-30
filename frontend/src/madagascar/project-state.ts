@@ -35,8 +35,8 @@ export interface ProjectStateReadResult {
 export const LEGACY_PROJECT_STATE_KEY_PREFIXES = [
   "agent-canvas-project:",
   "agent-canvas:project:",
-  "openhands-project:",
-  "openhands:project:",
+  "madagascar-project:",
+  "madagascar:project:",
 ] as const;
 
 export const DEFAULT_MADAGASCAR_PROJECT_ROOT =

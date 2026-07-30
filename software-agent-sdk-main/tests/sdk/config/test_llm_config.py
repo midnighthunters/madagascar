@@ -4,7 +4,7 @@ from unittest.mock import patch
 import pytest
 from pydantic import SecretStr, ValidationError
 
-from openhands.sdk.llm import LLM
+from madagascar.sdk.llm import LLM
 
 
 def test_llm_config_defaults():
@@ -142,7 +142,7 @@ def test_llm_config_openrouter_defaults():
     """Test OpenRouter default values."""
     config = LLM(model="gpt-4o-mini", usage_id="test-llm")
     assert config.openrouter_site_url == "https://docs.all-hands.dev/"
-    assert config.openrouter_app_name == "OpenHands"
+    assert config.openrouter_app_name == "Madagascar"
 
 
 def test_llm_config_post_init_openrouter_does_not_set_env():

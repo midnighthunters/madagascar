@@ -22,7 +22,7 @@ export function AgentChipIcon({
   className = "shrink-0",
 }: AgentChipIconProps) {
   switch (kind) {
-    case "openhands":
+    case "madagascar":
       return (
         <span
           className={`font-bold text-[10px] leading-none text-amber-400 select-none ${className}`}

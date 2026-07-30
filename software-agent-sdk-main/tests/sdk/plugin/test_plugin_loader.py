@@ -6,17 +6,17 @@ from pathlib import Path
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Agent
-from openhands.sdk.context import AgentContext
-from openhands.sdk.hooks import HookConfig
-from openhands.sdk.hooks.config import HookDefinition, HookMatcher
-from openhands.sdk.mcp.config import coerce_mcp_config
-from openhands.sdk.plugin import (
+from madagascar.sdk import LLM, Agent
+from madagascar.sdk.context import AgentContext
+from madagascar.sdk.hooks import HookConfig
+from madagascar.sdk.hooks.config import HookDefinition, HookMatcher
+from madagascar.sdk.mcp.config import coerce_mcp_config
+from madagascar.sdk.plugin import (
     PluginFetchError,
     PluginSource,
     load_plugins,
 )
-from openhands.sdk.skills import Skill
+from madagascar.sdk.skills import Skill
 
 
 @pytest.fixture

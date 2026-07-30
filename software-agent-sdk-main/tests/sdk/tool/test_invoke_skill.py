@@ -9,18 +9,18 @@ from typing import Any
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Agent, AgentContext
-from openhands.sdk.context import KeywordTrigger
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.skills import Skill
-from openhands.sdk.tool.builtins import (
+from madagascar.sdk import LLM, Agent, AgentContext
+from madagascar.sdk.context import KeywordTrigger
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.skills import Skill
+from madagascar.sdk.tool.builtins import (
     BUILT_IN_TOOL_CLASSES,
     BUILT_IN_TOOLS,
     InvokeSkillAction,
     InvokeSkillObservation,
     InvokeSkillTool,
 )
-from openhands.sdk.workspace.local import LocalWorkspace
+from madagascar.sdk.workspace.local import LocalWorkspace
 
 
 def _make_skill(

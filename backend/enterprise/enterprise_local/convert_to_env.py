@@ -99,21 +99,21 @@ os.remove(yaml_file)
 lines = []
 lines.append('KEYCLOAK_SERVER_URL=https://auth.staging.all-hands.dev/')
 lines.append('KEYCLOAK_SERVER_URL_EXT=https://auth.staging.all-hands.dev/')
-lines.append('OPENHANDS_CONFIG_CLS=server.config.SaaSServerConfig')
+lines.append('MADAGASCAR_CONFIG_CLS=server.config.SaaSServerConfig')
 lines.append(
-    'OPENHANDS_GITHUB_SERVICE_CLS=integrations.github.github_service.SaaSGitHubService'
+    'MADAGASCAR_GITHUB_SERVICE_CLS=integrations.github.github_service.SaaSGitHubService'
 )
 lines.append(
-    'OPENHANDS_GITLAB_SERVICE_CLS=integrations.gitlab.gitlab_service.SaaSGitLabService'
+    'MADAGASCAR_GITLAB_SERVICE_CLS=integrations.gitlab.gitlab_service.SaaSGitLabService'
 )
 lines.append(
-    'OPENHANDS_BITBUCKET_SERVICE_CLS=integrations.bitbucket.bitbucket_service.SaaSBitBucketService'
+    'MADAGASCAR_BITBUCKET_SERVICE_CLS=integrations.bitbucket.bitbucket_service.SaaSBitBucketService'
 )
 lines.append(
-    'OPENHANDS_BITBUCKET_DATA_CENTER_SERVICE_CLS=integrations.bitbucket_data_center.bitbucket_dc_service.SaaSBitbucketDCService'
+    'MADAGASCAR_BITBUCKET_DATA_CENTER_SERVICE_CLS=integrations.bitbucket_data_center.bitbucket_dc_service.SaaSBitbucketDCService'
 )
 lines.append(
-    'OPENHANDS_AZURE_DEVOPS_SERVICE_CLS=integrations.azure_devops.azure_devops_service.SaaSAzureDevOpsService'
+    'MADAGASCAR_AZURE_DEVOPS_SERVICE_CLS=integrations.azure_devops.azure_devops_service.SaaSAzureDevOpsService'
 )
 lines.append('POSTHOG_CLIENT_KEY=test')
 lines.append('ENABLE_PROACTIVE_CONVERSATION_STARTERS=true')

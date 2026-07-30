@@ -64,7 +64,7 @@ class ResendSyncedUserStore:
         Args:
             email: The email address of the user.
             audience_id: The Resend audience ID.
-            user_id: Optional OpenHands user ID. Stored in the legacy keycloak_user_id column.
+            user_id: Optional Madagascar user ID. Stored in the legacy keycloak_user_id column.
 
         Returns:
             The ResendSyncedUser record.

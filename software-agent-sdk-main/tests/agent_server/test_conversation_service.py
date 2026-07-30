@@ -13,17 +13,17 @@ import pytest
 from litellm.types.utils import ChatCompletionMessageToolCall, Function
 from pydantic import SecretStr
 
-from openhands.agent_server.conversation_lease import (
+from madagascar.agent_server.conversation_lease import (
     LEASE_FILE_NAME,
     ConversationOwnershipLostError,
 )
-from openhands.agent_server.conversation_service import (
+from madagascar.agent_server.conversation_service import (
     AutoTitleSubscriber,
     ConversationService,
     _get_worktree_start_point,
 )
-from openhands.agent_server.event_service import EventService
-from openhands.agent_server.models import (
+from madagascar.agent_server.event_service import EventService
+from madagascar.agent_server.models import (
     ACPConversationInfo,
     ConversationInfo,
     ConversationPage,
@@ -32,26 +32,26 @@ from openhands.agent_server.models import (
     StoredConversation,
     UpdateConversationRequest,
 )
-from openhands.agent_server.utils import safe_rmtree as _safe_rmtree
-from openhands.sdk import LLM, Agent, Message
-from openhands.sdk.agent.acp_agent import ACPAgent
-from openhands.sdk.conversation.state import (
+from madagascar.agent_server.utils import safe_rmtree as _safe_rmtree
+from madagascar.sdk import LLM, Agent, Message
+from madagascar.sdk.agent.acp_agent import ACPAgent
+from madagascar.sdk.conversation.state import (
     ConversationExecutionStatus,
     ConversationState,
 )
-from openhands.sdk.critic.impl.api import APIBasedCritic
-from openhands.sdk.event import ActionEvent, AgentErrorEvent, ObservationEvent
-from openhands.sdk.event.conversation_state import ConversationStateUpdateEvent
-from openhands.sdk.event.llm_convertible import MessageEvent
-from openhands.sdk.git.utils import run_git_command
-from openhands.sdk.llm import MessageToolCall, TextContent
-from openhands.sdk.mcp.config import dump_mcp_config
-from openhands.sdk.secret import SecretSource, StaticSecret
-from openhands.sdk.security.confirmation_policy import NeverConfirm
-from openhands.sdk.security.risk import SecurityRisk
-from openhands.sdk.utils.cipher import Cipher
-from openhands.sdk.workspace import LocalWorkspace
-from openhands.tools.terminal.definition import TerminalAction, TerminalObservation
+from madagascar.sdk.critic.impl.api import APIBasedCritic
+from madagascar.sdk.event import ActionEvent, AgentErrorEvent, ObservationEvent
+from madagascar.sdk.event.conversation_state import ConversationStateUpdateEvent
+from madagascar.sdk.event.llm_convertible import MessageEvent
+from madagascar.sdk.git.utils import run_git_command
+from madagascar.sdk.llm import MessageToolCall, TextContent
+from madagascar.sdk.mcp.config import dump_mcp_config
+from madagascar.sdk.secret import SecretSource, StaticSecret
+from madagascar.sdk.security.confirmation_policy import NeverConfirm
+from madagascar.sdk.security.risk import SecurityRisk
+from madagascar.sdk.utils.cipher import Cipher
+from madagascar.sdk.workspace import LocalWorkspace
+from madagascar.tools.terminal.definition import TerminalAction, TerminalObservation
 
 
 @pytest.fixture
@@ -115,9 +115,9 @@ def _init_git_repo(repo_dir: Path) -> None:
         [
             "git",
             "-c",
-            "user.name=OpenHands Test",
+            "user.name=Madagascar Test",
             "-c",
-            "user.email=openhands@example.com",
+            "user.email=madagascar@example.com",
             "commit",
             "-m",
             "init",
@@ -162,7 +162,7 @@ async def test_start_conversation_registers_and_injects_client_tools(
     Persistence on ``StoredConversation`` is what allows forks and server
     restarts to re-register the dynamic client tools.
     """
-    from openhands.sdk.tool.client_tool import ClientToolSpec
+    from madagascar.sdk.tool.client_tool import ClientToolSpec
 
     workspace_dir = tmp_path / "workspace"
     workspace_dir.mkdir()
@@ -212,7 +212,7 @@ async def test_start_conversation_registers_and_injects_client_tools(
     # Persisted so forks / restarts can re-register the dynamic action type
     assert [s.name for s in stored.client_tools] == ["srv_show_dialog"]
     # The class is registered in the global tool registry
-    from openhands.sdk.tool.registry import list_registered_tools
+    from madagascar.sdk.tool.registry import list_registered_tools
 
     assert "srv_show_dialog" in list_registered_tools()
 
@@ -443,7 +443,7 @@ async def test_centralized_lease_renewal_invokes_renew(tmp_path):
     )
 
     with patch(
-        "openhands.agent_server.conversation_service.LEASE_RENEW_INTERVAL_SECONDS",
+        "madagascar.agent_server.conversation_service.LEASE_RENEW_INTERVAL_SECONDS",
         0.05,
     ):
         async with ConversationService(conversations_dir=conversations_dir) as svc:
@@ -682,7 +682,7 @@ async def test_waiting_hydration_cannot_restore_deleted_conversation(
                 "_start_event_service",
                 side_effect=publish_replacement,
             ) as start_event_service,
-            patch("openhands.agent_server.conversation_service.safe_rmtree"),
+            patch("madagascar.agent_server.conversation_service.safe_rmtree"),
         ):
             await service._lifecycle_lock.acquire()
             try:
@@ -742,7 +742,7 @@ async def test_shutdown_closes_runtime_from_in_flight_hydration(
 
     try:
         with patch(
-            "openhands.agent_server.conversation_service.EventService",
+            "madagascar.agent_server.conversation_service.EventService",
             return_value=runtime,
         ):
             hydration_task = asyncio.create_task(
@@ -1326,7 +1326,7 @@ class TestConversationServiceStartConversation:
 
             # Mock the EventService constructor and start method
             with patch(
-                "openhands.agent_server.conversation_service.EventService"
+                "madagascar.agent_server.conversation_service.EventService"
             ) as mock_event_service_class:
                 mock_event_service = AsyncMock(spec=EventService)
                 mock_event_service_class.return_value = mock_event_service
@@ -1388,7 +1388,7 @@ class TestConversationServiceStartConversation:
 
             # Mock the EventService constructor and start method
             with patch(
-                "openhands.agent_server.conversation_service.EventService"
+                "madagascar.agent_server.conversation_service.EventService"
             ) as mock_event_service_class:
                 mock_event_service = AsyncMock(spec=EventService)
                 mock_event_service_class.return_value = mock_event_service
@@ -1462,11 +1462,11 @@ class TestConversationServiceStartConversation:
 
         with (
             patch(
-                "openhands.agent_server.conversation_service.CONVERSATION_WORKTREE_ROOT",
+                "madagascar.agent_server.conversation_service.CONVERSATION_WORKTREE_ROOT",
                 worktree_root,
             ),
             patch(
-                "openhands.agent_server.conversation_service.EventService",
+                "madagascar.agent_server.conversation_service.EventService",
                 side_effect=_event_service_factory,
             ),
         ):
@@ -1474,7 +1474,7 @@ class TestConversationServiceStartConversation:
 
         stored = captured["stored"]
         expected_worktree = worktree_root / str(conversation_id) / repo_dir.name
-        expected_branch = f"openhands/{conversation_id}"
+        expected_branch = f"madagascar/{conversation_id}"
 
         assert stored.worktree is True
         assert stored.workspace.working_dir == str(expected_worktree)
@@ -1532,11 +1532,11 @@ class TestConversationServiceStartConversation:
 
         with (
             patch(
-                "openhands.agent_server.conversation_service.CONVERSATION_WORKTREE_ROOT",
+                "madagascar.agent_server.conversation_service.CONVERSATION_WORKTREE_ROOT",
                 worktree_root,
             ),
             patch(
-                "openhands.agent_server.conversation_service.EventService",
+                "madagascar.agent_server.conversation_service.EventService",
                 side_effect=_event_service_factory,
             ),
         ):
@@ -1586,11 +1586,11 @@ class TestConversationServiceStartConversation:
 
         with (
             patch(
-                "openhands.agent_server.conversation_service.CONVERSATION_WORKTREE_ROOT",
+                "madagascar.agent_server.conversation_service.CONVERSATION_WORKTREE_ROOT",
                 worktree_root,
             ),
             patch(
-                "openhands.agent_server.conversation_service.EventService",
+                "madagascar.agent_server.conversation_service.EventService",
                 side_effect=_event_service_factory,
             ),
         ):
@@ -1643,9 +1643,9 @@ class TestConversationServiceStartConversation:
             [
                 "git",
                 "-c",
-                "user.name=OpenHands Test",
+                "user.name=Madagascar Test",
                 "-c",
-                "user.email=openhands@example.com",
+                "user.email=madagascar@example.com",
                 "commit",
                 "-m",
                 "remote update",
@@ -1938,7 +1938,7 @@ class TestConversationServiceStartConversation:
 
             # Mock EventService to simulate startup failure
             with patch(
-                "openhands.agent_server.conversation_service.EventService"
+                "madagascar.agent_server.conversation_service.EventService"
             ) as mock_event_service_class:
                 mock_event_service = AsyncMock()
                 mock_event_service.start.side_effect = Exception("Startup failed")
@@ -1974,7 +1974,7 @@ class TestConversationServiceStartConversation:
 
             # Mock EventService to simulate successful startup
             with patch(
-                "openhands.agent_server.conversation_service.EventService"
+                "madagascar.agent_server.conversation_service.EventService"
             ) as mock_event_service_class:
                 mock_event_service = AsyncMock()
                 mock_event_service.start = AsyncMock()  # Successful startup
@@ -2420,7 +2420,7 @@ class TestConversationServiceDeleteConversation:
 
         # Mock the directory removal to avoid actual filesystem operations
         with patch(
-            "openhands.agent_server.conversation_service.safe_rmtree"
+            "madagascar.agent_server.conversation_service.safe_rmtree"
         ) as mock_rmtree:
             mock_rmtree.return_value = True
 
@@ -2470,7 +2470,7 @@ class TestConversationServiceDeleteConversation:
         ) as mock_notify:
             # Mock the directory removal
             with patch(
-                "openhands.agent_server.conversation_service.safe_rmtree"
+                "madagascar.agent_server.conversation_service.safe_rmtree"
             ) as mock_rmtree:
                 mock_rmtree.return_value = True
 
@@ -2525,7 +2525,7 @@ class TestConversationServiceDeleteConversation:
 
         # Mock the directory removal
         with patch(
-            "openhands.agent_server.conversation_service.safe_rmtree"
+            "madagascar.agent_server.conversation_service.safe_rmtree"
         ) as mock_rmtree:
             mock_rmtree.return_value = True
 
@@ -2576,7 +2576,7 @@ class TestConversationServiceDeleteConversation:
 
         # Mock the directory removal
         with patch(
-            "openhands.agent_server.conversation_service.safe_rmtree"
+            "madagascar.agent_server.conversation_service.safe_rmtree"
         ) as mock_rmtree:
             mock_rmtree.return_value = True
 
@@ -2623,7 +2623,7 @@ class TestConversationServiceDeleteConversation:
 
         # Mock directory removal to fail (simulating permission errors)
         with patch(
-            "openhands.agent_server.conversation_service.safe_rmtree"
+            "madagascar.agent_server.conversation_service.safe_rmtree"
         ) as mock_rmtree:
             mock_rmtree.return_value = False  # Simulate removal failure
 
@@ -2717,7 +2717,7 @@ class TestAutoTitle:
     """Tests for AutoTitleSubscriber."""
 
     _GENERATE_TITLE_PATH = (
-        "openhands.agent_server.conversation_service.generate_title_from_message"
+        "madagascar.agent_server.conversation_service.generate_title_from_message"
     )
 
     def _make_service(
@@ -2746,7 +2746,7 @@ class TestAutoTitle:
         return service
 
     def _user_message_event(self, text: str = "Fix the login bug") -> MessageEvent:
-        from openhands.sdk.llm.message import TextContent
+        from madagascar.sdk.llm.message import TextContent
 
         return MessageEvent(
             id="evt-1",
@@ -2858,7 +2858,7 @@ class TestAutoTitle:
 
         with (
             patch(
-                "openhands.agent_server.persistence.store.get_llm_profile_store"
+                "madagascar.agent_server.persistence.store.get_llm_profile_store"
             ) as MockStore,
             patch(
                 self._GENERATE_TITLE_PATH, return_value="✨ Profile LLM Title"
@@ -2890,7 +2890,7 @@ class TestAutoTitle:
 
         with (
             patch(
-                "openhands.agent_server.persistence.store.get_llm_profile_store"
+                "madagascar.agent_server.persistence.store.get_llm_profile_store"
             ) as MockStore,
             patch(
                 self._GENERATE_TITLE_PATH, return_value="✨ Agent LLM Title"
@@ -2940,7 +2940,7 @@ class TestAutoTitle:
 
         with (
             patch(
-                "openhands.agent_server.persistence.store.get_llm_profile_store"
+                "madagascar.agent_server.persistence.store.get_llm_profile_store"
             ) as MockStore,
             patch(
                 self._GENERATE_TITLE_PATH, return_value="✨ Agent LLM Title"
@@ -2990,8 +2990,8 @@ class TestAutoTitle:
             Usage,
         )
 
-        from openhands.sdk.llm import LLMResponse, MetricsSnapshot
-        from openhands.sdk.llm.llm_profile_store import LLMProfileStore
+        from madagascar.sdk.llm import LLMResponse, MetricsSnapshot
+        from madagascar.sdk.llm.llm_profile_store import LLMProfileStore
 
         # Persist a real LLM profile to disk with a distinctive usage_id so we
         # can tell the title LLM apart from the agent's LLM in the assertion.
@@ -3035,7 +3035,7 @@ class TestAutoTitle:
         # Point the agent-server profile store singleton at our tmp dir via
         # OH_PERSISTENCE_DIR so the real _load_title_llm code path finds our
         # on-disk profile under `{tmp_path}/profiles`.
-        from openhands.agent_server.persistence import reset_stores
+        from madagascar.agent_server.persistence import reset_stores
 
         monkeypatch.setenv("OH_PERSISTENCE_DIR", str(tmp_path))
         reset_stores()
@@ -3044,7 +3044,7 @@ class TestAutoTitle:
         request.addfinalizer(reset_stores)
 
         with patch(
-            "openhands.sdk.llm.llm.LLM.completion",
+            "madagascar.sdk.llm.llm.LLM.completion",
             autospec=True,
             side_effect=fake_completion,
         ):
@@ -3080,9 +3080,9 @@ class TestAutoTitle:
             Usage,
         )
 
-        from openhands.sdk.llm import LLMResponse, MetricsSnapshot
-        from openhands.sdk.llm.llm_profile_store import LLMProfileStore
-        from openhands.sdk.utils.cipher import Cipher
+        from madagascar.sdk.llm import LLMResponse, MetricsSnapshot
+        from madagascar.sdk.llm.llm_profile_store import LLMProfileStore
+        from madagascar.sdk.utils.cipher import Cipher
 
         cipher = Cipher("title-cipher-test-key")
 
@@ -3129,7 +3129,7 @@ class TestAutoTitle:
                 raw_response=raw,
             )
 
-        from openhands.agent_server.persistence import reset_stores
+        from madagascar.agent_server.persistence import reset_stores
 
         monkeypatch.setenv("OH_PERSISTENCE_DIR", str(tmp_path))
         reset_stores()
@@ -3138,7 +3138,7 @@ class TestAutoTitle:
         request.addfinalizer(reset_stores)
 
         with patch(
-            "openhands.sdk.llm.llm.LLM.completion",
+            "madagascar.sdk.llm.llm.LLM.completion",
             autospec=True,
             side_effect=fake_completion,
         ):
@@ -3159,8 +3159,8 @@ class TestACPActivityHeartbeatWiring:
 
     def test_acp_agent_gets_on_activity_wired(self):
         """_setup_acp_activity_heartbeat should set _on_activity on ACPAgent."""
-        from openhands.agent_server.event_service import EventService
-        from openhands.agent_server.server_details_router import (
+        from madagascar.agent_server.event_service import EventService
+        from madagascar.agent_server.server_details_router import (
             update_last_execution_time,
         )
 
@@ -3175,7 +3175,7 @@ class TestACPActivityHeartbeatWiring:
 
     def test_non_acp_agent_unchanged(self):
         """_setup_acp_activity_heartbeat is a no-op for non-ACP agents."""
-        from openhands.agent_server.event_service import EventService
+        from madagascar.agent_server.event_service import EventService
 
         service = AsyncMock(spec=EventService)
         agent = Agent(llm=LLM(model="test-model"))
@@ -3206,7 +3206,7 @@ class TestConversationTreeForkAndNavigate:
 
     async def _start_with_events(self, svc, workspace_dir, texts):
         """Start a conversation and append ``texts`` as user messages (no run)."""
-        from openhands.sdk.testing import TestLLM
+        from madagascar.sdk.testing import TestLLM
         from tests.agent_server.stress.scripts import (
             start_conversation_with_test_llm,
         )

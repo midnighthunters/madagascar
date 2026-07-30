@@ -15,26 +15,26 @@ from integrations.utils import (
 )
 from jinja2 import Environment
 
-from openhands.agent_server.models import SendMessageRequest
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.agent_server.models import SendMessageRequest
+from madagascar.app_server.app_conversation.app_conversation_models import (
     AppConversationStartRequest,
     AppConversationStartTaskStatus,
     ConversationTrigger,
 )
-from openhands.app_server.config import get_app_conversation_service
-from openhands.app_server.integrations.bitbucket_data_center.bitbucket_dc_service import (
+from madagascar.app_server.config import get_app_conversation_service
+from madagascar.app_server.integrations.bitbucket_data_center.bitbucket_dc_service import (
     BitbucketDCServiceImpl,
 )
-from openhands.app_server.integrations.provider import (
+from madagascar.app_server.integrations.provider import (
     PROVIDER_TOKEN_TYPE,
     ProviderType,
 )
-from openhands.app_server.integrations.service_types import Comment
-from openhands.app_server.services.injector import InjectorState
-from openhands.app_server.user.specifiy_user_context import USER_CONTEXT_ATTR
-from openhands.app_server.user_auth.user_auth import UserAuth
-from openhands.app_server.utils.logger import openhands_logger as logger
-from openhands.sdk import TextContent
+from madagascar.app_server.integrations.service_types import Comment
+from madagascar.app_server.services.injector import InjectorState
+from madagascar.app_server.user.specifiy_user_context import USER_CONTEXT_ATTR
+from madagascar.app_server.user_auth.user_auth import UserAuth
+from madagascar.app_server.utils.logger import madagascar_logger as logger
+from madagascar.sdk import TextContent
 
 OH_LABEL, INLINE_OH_LABEL = get_oh_labels(HOST)
 
@@ -52,7 +52,7 @@ def extract_actor_slug(actor: dict) -> str:
 
 
 # Created-only, like GitHub (action == 'created') and Jira DC (comment_created):
-# editing an existing @openhands comment must not start a second job.
+# editing an existing @madagascar comment must not start a second job.
 PR_COMMENT_EVENTS = ('pr:comment:added',)
 
 
@@ -261,7 +261,7 @@ class BitbucketDCFactory:
     Bitbucket DC fires ``pr:comment:added`` when a PR receives a comment;
     we act only on that (not ``pr:comment:edited``, so editing a comment
     can't re-trigger). The resolver activates when the comment body
-    contains a case-insensitive mention of the configured ``@openhands``
+    contains a case-insensitive mention of the configured ``@madagascar``
     handle. Inline comments include an ``anchor`` block with the file path
     and line number.
     """
@@ -290,7 +290,7 @@ class BitbucketDCFactory:
     ) -> BitbucketDCViewType:
         """Build a view from a Bitbucket DC webhook payload.
 
-        ``keycloak_user_id`` is the OpenHands user the resolver runs the
+        ``keycloak_user_id`` is the Madagascar user the resolver runs the
         job as — the @-mentioning user when they have an OHE account, or
         the webhook installer as a fallback. ``installer_keycloak_user_id``
         is the user that installed the webhook (looked up from the

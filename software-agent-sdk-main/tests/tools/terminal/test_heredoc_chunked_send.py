@@ -17,7 +17,7 @@ if platform.system() == "Windows":
         allow_module_level=True,
     )
 
-from openhands.tools.terminal.terminal.subprocess_terminal import SubprocessTerminal
+from madagascar.tools.terminal.terminal.subprocess_terminal import SubprocessTerminal
 
 
 @pytest.fixture

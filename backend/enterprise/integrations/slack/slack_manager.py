@@ -17,7 +17,7 @@ from integrations.slack.slack_view import (
 )
 from integrations.utils import (
     HOST_URL,
-    OPENHANDS_RESOLVER_TEMPLATES_DIR,
+    MADAGASCAR_RESOLVER_TEMPLATES_DIR,
     get_session_expired_message,
     infer_repo_from_message,
 )
@@ -31,20 +31,20 @@ from storage.database import a_session_maker
 from storage.redis import get_redis_client_async
 from storage.slack_user import SlackUser
 
-from openhands.app_server.integrations.provider import ProviderHandler
-from openhands.app_server.integrations.service_types import (
+from madagascar.app_server.integrations.provider import ProviderHandler
+from madagascar.app_server.integrations.service_types import (
     AuthenticationError,
     ProviderTimeoutError,
     Repository,
 )
-from openhands.app_server.shared import server_config
-from openhands.app_server.types import (
+from madagascar.app_server.shared import server_config
+from madagascar.app_server.types import (
     LLMAuthenticationError,
     MissingSettingsError,
     SessionExpiredError,
 )
-from openhands.app_server.user_auth.user_auth import UserAuth
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.user_auth.user_auth import UserAuth
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 authorize_url_generator = AuthorizeUrlGenerator(
     client_id=SLACK_CLIENT_ID,
@@ -74,11 +74,11 @@ class SlackManager(Manager[SlackViewInterface]):
     def __init__(self, token_manager):
         self.token_manager = token_manager
         self.login_link = (
-            'User has not yet authenticated: [Click here to Login to OpenHands]({}).'
+            'User has not yet authenticated: [Click here to Login to Madagascar]({}).'
         )
 
         self.jinja_env = Environment(
-            loader=FileSystemLoader(OPENHANDS_RESOLVER_TEMPLATES_DIR + 'slack')
+            loader=FileSystemLoader(MADAGASCAR_RESOLVER_TEMPLATES_DIR + 'slack')
         )
 
     def _confirm_incoming_source_type(self, message: Message):
@@ -88,7 +88,7 @@ class SlackManager(Manager[SlackViewInterface]):
     async def authenticate_user(
         self, slack_user_id: str
     ) -> tuple[SlackUser | None, UserAuth | None]:
-        # We get the user and correlate them back to a user in OpenHands - if we can
+        # We get the user and correlate them back to a user in Madagascar - if we can
         slack_user = None
         async with a_session_maker() as session:
             result = await session.execute(
@@ -96,14 +96,14 @@ class SlackManager(Manager[SlackViewInterface]):
             )
             slack_user = result.scalar_one_or_none()
 
-            # slack_view.slack_to_openhands_user = slack_user # attach user auth info to view
+            # slack_view.slack_to_madagascar_user = slack_user # attach user auth info to view
 
         saas_user_auth = None
         if slack_user:
             saas_user_auth = await get_saas_user_auth(
                 slack_user.keycloak_user_id, self.token_manager
             )
-            # slack_view.saas_user_auth = await self._get_user_auth(slack_view.slack_to_openhands_user.keycloak_user_id)
+            # slack_view.saas_user_auth = await self._get_user_auth(slack_view.slack_to_madagascar_user.keycloak_user_id)
 
         return slack_user, saas_user_auth
 
@@ -713,7 +713,7 @@ class SlackManager(Manager[SlackViewInterface]):
         Returns:
             True if a valid repo was found and verified, False otherwise
         """
-        user = slack_view.slack_to_openhands_user
+        user = slack_view.slack_to_madagascar_user
         inferred_repos = infer_repo_from_message(slack_view.user_msg)
 
         if len(inferred_repos) != 1:
@@ -757,7 +757,7 @@ class SlackManager(Manager[SlackViewInterface]):
         Raises:
             SlackError: If storing the user message fails (REDIS_STORE_FAILED)
         """
-        user = slack_view.slack_to_openhands_user
+        user = slack_view.slack_to_madagascar_user
         logger.info(
             'render_repository_selector',
             extra={
@@ -816,7 +816,7 @@ class SlackManager(Manager[SlackViewInterface]):
         """Start a Slack job using V1 app conversation system."""
         try:
             msg_info = None
-            user_info = slack_view.slack_to_openhands_user
+            user_info = slack_view.slack_to_madagascar_user
             try:
                 logger.info(
                     f'[Slack] Starting job for user {user_info.slack_display_name} (id={user_info.slack_user_id})',
@@ -839,14 +839,14 @@ class SlackManager(Manager[SlackViewInterface]):
                     f'[Slack] Missing settings error for user {user_info.slack_display_name}: {str(e)}'
                 )
 
-                msg_info = f'{user_info.slack_display_name} please re-login into [OpenHands Cloud]({HOST_URL}) before starting a job.'
+                msg_info = f'{user_info.slack_display_name} please re-login into [Madagascar Cloud]({HOST_URL}) before starting a job.'
 
             except LLMAuthenticationError as e:
                 logger.warning(
                     f'[Slack] LLM authentication error for user {user_info.slack_display_name}: {str(e)}'
                 )
 
-                msg_info = f'@{user_info.slack_display_name} please set a valid LLM API key in [OpenHands Cloud]({HOST_URL}) before starting a job.'
+                msg_info = f'@{user_info.slack_display_name} please set a valid LLM API key in [Madagascar Cloud]({HOST_URL}) before starting a job.'
 
             except SessionExpiredError as e:
                 logger.warning(

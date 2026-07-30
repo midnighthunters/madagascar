@@ -1,6 +1,6 @@
 """Unit tests for ``Settings.update`` agent-kind switch behaviour.
 
-The discriminated ``OpenHandsAgentSettings | ACPAgentSettings`` union means a
+The discriminated ``MadagascarAgentSettings | ACPAgentSettings`` union means a
 naive deep-merge of the incoming kind's fields onto the outgoing kind's dump
 produces a mongrel (e.g. ``llm`` plus ``acp_command``) that fails validation
 and 500s the settings endpoint. The fix is to start from a fresh base for
@@ -13,11 +13,11 @@ is tracked as a follow-up.
 
 from __future__ import annotations
 
-from openhands.app_server.settings.settings_models import (
+from madagascar.app_server.settings.settings_models import (
     Settings,
     _load_persisted_agent_settings,
 )
-from openhands.sdk.settings.model import AGENT_SETTINGS_SCHEMA_VERSION
+from madagascar.sdk.settings.model import AGENT_SETTINGS_SCHEMA_VERSION
 
 
 def _set_acp(
@@ -33,12 +33,12 @@ def _set_acp(
     }
 
 
-def _set_openhands(
+def _set_madagascar(
     *,
     llm_model: str | None = None,
     mcp_config: dict | None = None,
 ) -> dict:
-    diff: dict = {'agent_kind': 'openhands'}
+    diff: dict = {'agent_kind': 'madagascar'}
     if llm_model is not None:
         diff['llm'] = {'model': llm_model}
     if mcp_config is not None:
@@ -55,13 +55,13 @@ def test_kind_switch_does_not_raise():
     ``AgentSettingsConfig`` accepts.
     """
     s = Settings()
-    s.update(_set_openhands(llm_model='anthropic/claude-sonnet-4-5'))
+    s.update(_set_madagascar(llm_model='anthropic/claude-sonnet-4-5'))
 
     s.update(_set_acp())
     assert s.agent_settings.agent_kind == 'acp'
 
-    s.update(_set_openhands())
-    assert s.agent_settings.agent_kind == 'openhands'
+    s.update(_set_madagascar())
+    assert s.agent_settings.agent_kind == 'madagascar'
 
 
 def test_kind_switch_resets_new_kind_to_defaults():
@@ -71,7 +71,7 @@ def test_kind_switch_resets_new_kind_to_defaults():
     new kind — preserving it across switches is the follow-up feature.
     """
     s = Settings()
-    s.update(_set_openhands(llm_model='anthropic/claude-sonnet-4-5'))
+    s.update(_set_madagascar(llm_model='anthropic/claude-sonnet-4-5'))
 
     s.update(_set_acp())
 
@@ -90,8 +90,8 @@ def test_kind_switch_with_inline_field_override():
     s = Settings()
     s.update(_set_acp())
 
-    s.update(_set_openhands(llm_model='model-c'))
-    assert s.agent_settings.agent_kind == 'openhands'
+    s.update(_set_madagascar(llm_model='model-c'))
+    assert s.agent_settings.agent_kind == 'madagascar'
     assert s.agent_settings.llm.model == 'model-c'
 
 
@@ -100,20 +100,20 @@ def test_replace_mcp_config_in_kind_switch():
     s = Settings()
     s.update(_set_acp())
 
-    s.update(_set_openhands(mcp_config={'mcpServers': {'foo': {'command': 'foo-bin'}}}))
+    s.update(_set_madagascar(mcp_config={'mcpServers': {'foo': {'command': 'foo-bin'}}}))
     assert s.agent_settings.mcp_config is not None
     assert 'foo' in s.agent_settings.mcp_config
 
 
 def test_loader_normalizes_legacy_llm_tag_at_current_schema_version():
     """A persisted ``agent_kind: 'llm'`` row already at the current
-    ``schema_version`` must read back as ``openhands``.
+    ``schema_version`` must read back as ``madagascar``.
 
-    The SDK's ``llm -> openhands`` rename only fires while advancing the
+    The SDK's ``llm -> madagascar`` rename only fires while advancing the
     schema version, so an ``'llm'`` payload already at the current version is
     not migrated and would otherwise validate as the deprecated
     ``LLMAgentSettings`` (``agent_kind == 'llm'``). The loader normalizes it so
-    every read stays on the canonical ``{openhands, acp}`` variants — this is
+    every read stays on the canonical ``{madagascar, acp}`` variants — this is
     the one legitimate job the deleted force-cast used to do.
     """
     loaded = _load_persisted_agent_settings(
@@ -124,14 +124,14 @@ def test_loader_normalizes_legacy_llm_tag_at_current_schema_version():
         }
     )
 
-    assert loaded.agent_kind == 'openhands'
+    assert loaded.agent_kind == 'madagascar'
     assert loaded.llm.model == 'anthropic/claude-sonnet-4-5'
 
 
 def test_loader_preserves_acp_variant_without_coercion():
     """The loader must leave ``agent_kind: 'acp'`` alone — the ``llm``
     normalization must not regress into the cross-variant coercion that 500'd
-    ACP settings (``ACPAgentSettings.agent_context`` is nullable; the OpenHands
+    ACP settings (``ACPAgentSettings.agent_context`` is nullable; the Madagascar
     shape rejects ``None``).
     """
     loaded = _load_persisted_agent_settings(

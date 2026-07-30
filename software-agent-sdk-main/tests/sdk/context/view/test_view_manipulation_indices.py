@@ -5,8 +5,8 @@ events (inserting new events or forgetting ranges) while respecting atomicity
 constraints.
 """
 
-from openhands.sdk.context.view import View
-from openhands.sdk.llm import (
+from madagascar.sdk.context.view import View
+from madagascar.sdk.llm import (
     ThinkingBlock,
 )
 from tests.sdk.context.view.conftest import (  # noqa: F401

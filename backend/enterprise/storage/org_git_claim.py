@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class OrgGitClaim(Base):
-    """Model for tracking which OpenHands org has claimed a Git organization."""
+    """Model for tracking which Madagascar org has claimed a Git organization."""
 
     __tablename__ = 'org_git_claim'
 

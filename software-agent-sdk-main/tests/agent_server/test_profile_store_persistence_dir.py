@@ -1,8 +1,8 @@
 """Regression test for #3815.
 
 Without this, ``get_llm_profile_store`` / ``get_agent_profile_store`` would
-read and write the user's ``~/.openhands/profiles/`` and
-``~/.openhands/agent-profiles/`` regardless of ``OH_PERSISTENCE_DIR``,
+read and write the user's ``~/.madagascar/profiles/`` and
+``~/.madagascar/agent-profiles/`` regardless of ``OH_PERSISTENCE_DIR``,
 leaking host state into supposedly-isolated agent-server instances and
 making first-run / onboarding tests non-reproducible.
 """
@@ -16,7 +16,7 @@ from pathlib import Path
 
 import pytest
 
-from openhands.agent_server.persistence import (
+from madagascar.agent_server.persistence import (
     get_agent_profile_store,
     get_llm_profile_store,
     reset_stores,
@@ -61,7 +61,7 @@ def home_without_persistence_env(
     """No ``OH_PERSISTENCE_DIR``; ``Path.home()`` redirected to a tempdir.
 
     Profile stores hold credentials, so without the env var they must fall
-    back to ``~/.openhands`` rather than a workspace-relative dir.
+    back to ``~/.madagascar`` rather than a workspace-relative dir.
     """
     reset_stores()
     monkeypatch.delenv("OH_PERSISTENCE_DIR", raising=False)
@@ -78,7 +78,7 @@ def test_llm_profile_store_falls_back_to_home(
     home_without_persistence_env: Path,
 ) -> None:
     store = get_llm_profile_store()
-    assert store.base_dir == home_without_persistence_env / ".openhands" / "profiles"
+    assert store.base_dir == home_without_persistence_env / ".madagascar" / "profiles"
 
 
 def test_agent_profile_store_falls_back_to_home(
@@ -86,14 +86,14 @@ def test_agent_profile_store_falls_back_to_home(
 ) -> None:
     store = get_agent_profile_store()
     assert (
-        store.base_dir == home_without_persistence_env / ".openhands" / "agent-profiles"
+        store.base_dir == home_without_persistence_env / ".madagascar" / "agent-profiles"
     )
 
 
 def test_profile_stores_do_not_read_home_directory(
     isolated_persistence_dir: Path,
 ) -> None:
-    """The host user's ``~/.openhands/profiles/*.json`` must not appear."""
+    """The host user's ``~/.madagascar/profiles/*.json`` must not appear."""
     llm = get_llm_profile_store()
     agent = get_agent_profile_store()
 
@@ -101,9 +101,9 @@ def test_profile_stores_do_not_read_home_directory(
     # persistence dir, not anywhere else.
     assert llm.base_dir.is_dir()
     assert agent.base_dir.is_dir()
-    home_profiles = Path.home() / ".openhands" / "profiles"
+    home_profiles = Path.home() / ".madagascar" / "profiles"
     assert llm.base_dir != home_profiles
-    assert agent.base_dir != Path.home() / ".openhands" / "agent-profiles"
+    assert agent.base_dir != Path.home() / ".madagascar" / "agent-profiles"
 
     # And the new dir should contain nothing the host happens to have.
     visible_names = set(llm.list()) | set(agent.list())

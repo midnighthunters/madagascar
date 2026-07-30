@@ -1,7 +1,7 @@
 {
   "__expected__": {
     "active_profile": "fixture-profile",
-    "agent_settings.agent_kind": "openhands",
+    "agent_settings.agent_kind": "madagascar",
     "agent_settings.llm.model": "fixture-persisted-llm",
     "agent_settings.tools": [
       {

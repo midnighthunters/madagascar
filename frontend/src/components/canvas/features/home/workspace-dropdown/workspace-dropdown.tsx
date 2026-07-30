@@ -64,7 +64,7 @@ export function WorkspaceDropdown({
   onAddClick,
   onManageClick,
 }: WorkspaceDropdownProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const [inputValue, setInputValue] = useState(value?.name ?? "");
   const menuRef = useRef<HTMLUListElement>(null);
 

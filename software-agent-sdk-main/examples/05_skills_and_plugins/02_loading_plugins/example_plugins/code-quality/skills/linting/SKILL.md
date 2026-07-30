@@ -6,7 +6,7 @@ description: >
 license: MIT
 compatibility: Requires Python and ruff
 metadata:
-  author: openhands
+  author: madagascar
   version: "1.0"
 triggers:
   - lint

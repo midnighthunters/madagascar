@@ -21,14 +21,14 @@ import threading
 from collections.abc import Sequence
 from typing import ClassVar
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation import Conversation
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.event import MessageEvent
-from openhands.sdk.event.conversation_error import ConversationErrorEvent
-from openhands.sdk.llm import ImageContent, Message, MessageToolCall, TextContent
-from openhands.sdk.testing import TestLLM
-from openhands.sdk.tool import (
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation import Conversation
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.event import MessageEvent
+from madagascar.sdk.event.conversation_error import ConversationErrorEvent
+from madagascar.sdk.llm import ImageContent, Message, MessageToolCall, TextContent
+from madagascar.sdk.testing import TestLLM
+from madagascar.sdk.tool import (
     Action,
     Observation,
     Tool,
@@ -258,7 +258,7 @@ def test_execution_status_transitions_to_running_from_paused():
 
 def test_execution_status_transitions_from_waiting_for_confirmation():
     """Test WAITING_FOR_CONFIRMATION -> RUNNING transition when run() is called."""
-    from openhands.sdk.security.confirmation_policy import AlwaysConfirm
+    from madagascar.sdk.security.confirmation_policy import AlwaysConfirm
 
     test_tool = StatusTransitionTestTool.create(executor=StatusCheckingExecutor([]))[0]
     register_tool("test_tool", test_tool)
@@ -546,8 +546,8 @@ def test_execution_status_finished_on_final_iteration():
 def test_execution_status_error_on_max_budget(tmp_path):
     """Run halts with ERROR + MaxBudgetReached when the cost budget is exceeded,
     even before the iteration cap is reached."""
-    from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-    from openhands.sdk.llm.utils.metrics import Metrics
+    from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+    from madagascar.sdk.llm.utils.metrics import Metrics
 
     events_received: list = []
     test_tool = StatusTransitionTestTool.create(executor=StatusCheckingExecutor([]))[0]
@@ -597,8 +597,8 @@ def test_execution_status_error_on_max_budget(tmp_path):
 
 def test_finished_preserved_even_when_over_budget(tmp_path):
     """A run that finishes is kept FINISHED even if it is over budget."""
-    from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-    from openhands.sdk.llm.utils.metrics import Metrics
+    from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+    from madagascar.sdk.llm.utils.metrics import Metrics
 
     events_received: list = []
     # Text-only response -> agent finishes on the first iteration.

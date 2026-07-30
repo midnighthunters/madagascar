@@ -1,4 +1,4 @@
-import { MessageEvent, OpenHandsEvent } from "#/types/v1/core";
+import { MessageEvent, MadagascarEvent } from "#/types/v1/core";
 import { StreamingDeltaEvent } from "#/types/v1/core/events/streaming-delta-event";
 import {
   isACPToolCallEvent,
@@ -34,7 +34,7 @@ const appendContentToStreamingDeltaEvent = (
   content: `${existing.content ?? ""}${content}` || null,
 });
 
-const findLastUserMessageIndex = (events: OpenHandsEvent[]): number => {
+const findLastUserMessageIndex = (events: MadagascarEvent[]): number => {
   for (let index = events.length - 1; index >= 0; index -= 1) {
     if (isUserMessageEvent(events[index])) {
       return index;
@@ -51,7 +51,7 @@ const findLastUserMessageIndex = (events: OpenHandsEvent[]): number => {
  * the REST deltas can arrive AFTER the turn's final message was rendered).
  */
 const findNewestDurableTimestamp = (
-  events: OpenHandsEvent[],
+  events: MadagascarEvent[],
 ): string | null => {
   let newest: string | null = null;
   for (const uiEvent of events) {
@@ -79,7 +79,7 @@ const getAgentMessageText = (event: MessageEvent): string =>
     .map((content) => content.text)
     .join("");
 
-const getFinalAgentText = (event: OpenHandsEvent): string | null => {
+const getFinalAgentText = (event: MadagascarEvent): string | null => {
   if (isActionEvent(event) && event.action.kind === "FinishAction") {
     return event.action.message;
   }
@@ -123,9 +123,9 @@ const findTextSegmentsInOrder = (
  * final event normally (e.g. non-streamed responses, or reasoning-only deltas).
  */
 const finalizeStreamingDeltasInPlace = (
-  finalEvent: OpenHandsEvent,
-  uiEvents: OpenHandsEvent[],
-): OpenHandsEvent[] | null => {
+  finalEvent: MadagascarEvent,
+  uiEvents: MadagascarEvent[],
+): MadagascarEvent[] | null => {
   const lastUserMessageIndex = findLastUserMessageIndex(uiEvents);
   const currentTurnStreamingDeltaIndexes = uiEvents
     .map((uiEvent, index) => ({ uiEvent, index }))
@@ -230,9 +230,9 @@ const finalizeStreamingDeltasInPlace = (
  * (no change) when there is nothing to reconcile or the text doesn't match.
  */
 const supersedeStreamingDeltasForAction = (
-  actionEvent: OpenHandsEvent,
-  uiEvents: OpenHandsEvent[],
-): OpenHandsEvent[] | null => {
+  actionEvent: MadagascarEvent,
+  uiEvents: MadagascarEvent[],
+): MadagascarEvent[] | null => {
   if (!isActionEvent(actionEvent)) {
     return null;
   }
@@ -261,7 +261,7 @@ const supersedeStreamingDeltasForAction = (
     Boolean(actionEvent.reasoning_content?.trim()) ||
     (actionEvent.thinking_blocks?.length ?? 0) > 0;
   const stripSet = new Set(currentTurnDeltaIndexes);
-  const nextUiEvents: OpenHandsEvent[] = [];
+  const nextUiEvents: MadagascarEvent[] = [];
   uiEvents.forEach((uiEvent, index) => {
     if (!stripSet.has(index) || !isStreamingDeltaEvent(uiEvent)) {
       nextUiEvents.push(uiEvent);
@@ -291,9 +291,9 @@ const supersedeStreamingDeltasForAction = (
  * the latest state at the original position so the card updates in place.
  */
 export const handleEventForUI = (
-  event: OpenHandsEvent,
-  uiEvents: OpenHandsEvent[],
-): OpenHandsEvent[] => {
+  event: MadagascarEvent,
+  uiEvents: MadagascarEvent[],
+): MadagascarEvent[] => {
   const newUiEvents = [...uiEvents];
 
   if (isStreamingDeltaEvent(event)) {

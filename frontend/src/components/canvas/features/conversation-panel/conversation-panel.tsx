@@ -85,7 +85,7 @@ export function ConversationPanel({
   onClose,
   compact = false,
 }: ConversationPanelProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { conversationId: currentConversationId, navigate } = useNavigation();
   const { backend: activeBackend } = useActiveBackend();
   // Click-outside is only relevant in the legacy drawer mode where an

@@ -10,8 +10,8 @@ from alembic.migration import MigrationContext
 from alembic.operations import Operations
 from pydantic import SecretStr
 
-from openhands.app_server.services.jwt_service import JwtService
-from openhands.app_server.utils.encryption_key import EncryptionKey
+from madagascar.app_server.services.jwt_service import JwtService
+from madagascar.app_server.utils.encryption_key import EncryptionKey
 
 MIGRATION_PATH = (
     Path(__file__).resolve().parents[2]

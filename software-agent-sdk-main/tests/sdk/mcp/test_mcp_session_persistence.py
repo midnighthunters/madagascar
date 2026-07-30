@@ -3,7 +3,7 @@
 Verifies that MCP connections are reused across multiple tool calls,
 avoiding the overhead of reconnecting for each call.
 
-Related issue: https://github.com/OpenHands/software-agent-sdk/issues/1739
+Related issue: https://github.com/Madagascar/software-agent-sdk/issues/1739
 """
 
 import asyncio
@@ -14,9 +14,9 @@ import time
 import pytest
 from fastmcp import FastMCP
 
-from openhands.sdk.mcp import create_mcp_tools
-from openhands.sdk.mcp.config import coerce_mcp_config
-from openhands.sdk.mcp.tool import MCPToolExecutor
+from madagascar.sdk.mcp import create_mcp_tools
+from madagascar.sdk.mcp.config import coerce_mcp_config
+from madagascar.sdk.mcp.tool import MCPToolExecutor
 
 
 def _find_free_port() -> int:

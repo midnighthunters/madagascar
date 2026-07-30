@@ -47,7 +47,7 @@ export function ModelSelector({
     isLoading: isLoadingModels,
     error: modelsError,
   } = useProviderModels(selectedProvider);
-  // The OpenHands-account CTA points at the cloud product; only show it there.
+  // The Madagascar-account CTA points at the cloud product; only show it there.
   const { isEnterpriseCloud } = useAppMode();
 
   const verifiedProviders = React.useMemo(
@@ -209,10 +209,10 @@ export function ModelSelector({
         </fieldset>
       ) : null}
 
-      {selectedProvider === "openhands" && isEnterpriseCloud && (
+      {selectedProvider === "madagascar" && isEnterpriseCloud && (
         <HelpLink
-          testId="openhands-account-help"
-          text={t(I18nKey.SETTINGS$NEED_OPENHANDS_ACCOUNT)}
+          testId="madagascar-account-help"
+          text={t(I18nKey.SETTINGS$NEED_MADAGASCAR_ACCOUNT)}
           linkText={t(I18nKey.SETTINGS$CLICK_HERE)}
           href={PRODUCT_URL.PRODUCTION}
           size="settings"

@@ -27,7 +27,7 @@ export function PluginsToolbar({
   statusFilter,
   onStatusFilterChange,
 }: PluginsToolbarProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <div data-testid="plugins-toolbar" className="flex items-stretch gap-2">

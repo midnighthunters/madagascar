@@ -17,7 +17,7 @@ interface BackendStatusLabelHealth {
 }
 
 export function getBackendStatusLabel(
-  t: TFunction<"openhands">,
+  t: TFunction<"madagascar">,
   backend:
     | {
         kind?: "local" | "cloud";

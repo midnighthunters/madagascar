@@ -8,12 +8,12 @@ from uuid import uuid4
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.llm import LLM
-from openhands.sdk.tool import DeclaredResources
-from openhands.sdk.workspace import LocalWorkspace
-from openhands.tools.file_editor import (
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.tool import DeclaredResources
+from madagascar.sdk.workspace import LocalWorkspace
+from madagascar.tools.file_editor import (
     FileEditorAction,
     FileEditorObservation,
     FileEditorTool,

@@ -3,14 +3,14 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from openhands.sdk import register_tool
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.llm.message import ImageContent, TextContent
-from openhands.sdk.tool import ToolDefinition
-from openhands.sdk.tool.registry import list_usable_tools, resolve_tool
-from openhands.sdk.tool.schema import Action, Observation
-from openhands.sdk.tool.spec import Tool
-from openhands.sdk.tool.tool import ToolExecutor
+from madagascar.sdk import register_tool
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.llm.message import ImageContent, TextContent
+from madagascar.sdk.tool import ToolDefinition
+from madagascar.sdk.tool.registry import list_usable_tools, resolve_tool
+from madagascar.sdk.tool.schema import Action, Observation
+from madagascar.sdk.tool.spec import Tool
+from madagascar.sdk.tool.tool import ToolExecutor
 
 
 def _create_mock_conv_state() -> ConversationState:

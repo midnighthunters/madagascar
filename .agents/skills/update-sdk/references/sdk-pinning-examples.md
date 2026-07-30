@@ -9,37 +9,37 @@ Example from commit `169fb76` (pinning all 3 packages to SDK commit `100e9af`):
 ### `dependencies` array (PEP 508 format)
 
 ```toml
-"openhands-agent-server @ git+https://github.com/OpenHands/software-agent-sdk.git@100e9af#subdirectory=openhands-agent-server",
-"openhands-sdk @ git+https://github.com/OpenHands/software-agent-sdk.git@100e9af#subdirectory=openhands-sdk",
-"openhands-tools @ git+https://github.com/OpenHands/software-agent-sdk.git@100e9af#subdirectory=openhands-tools",
+"madagascar-agent-server @ git+https://github.com/Madagascar/software-agent-sdk.git@100e9af#subdirectory=madagascar-agent-server",
+"madagascar-sdk @ git+https://github.com/Madagascar/software-agent-sdk.git@100e9af#subdirectory=madagascar-sdk",
+"madagascar-tools @ git+https://github.com/Madagascar/software-agent-sdk.git@100e9af#subdirectory=madagascar-tools",
 ```
 
 ### `[tool.poetry.dependencies]` (Poetry format)
 
 ```toml
-openhands-sdk = { git = "https://github.com/OpenHands/software-agent-sdk.git", rev = "100e9af", subdirectory = "openhands-sdk" }
-openhands-agent-server = { git = "https://github.com/OpenHands/software-agent-sdk.git", rev = "100e9af", subdirectory = "openhands-agent-server" }
-openhands-tools = { git = "https://github.com/OpenHands/software-agent-sdk.git", rev = "100e9af", subdirectory = "openhands-tools" }
+madagascar-sdk = { git = "https://github.com/Madagascar/software-agent-sdk.git", rev = "100e9af", subdirectory = "madagascar-sdk" }
+madagascar-agent-server = { git = "https://github.com/Madagascar/software-agent-sdk.git", rev = "100e9af", subdirectory = "madagascar-agent-server" }
+madagascar-tools = { git = "https://github.com/Madagascar/software-agent-sdk.git", rev = "100e9af", subdirectory = "madagascar-tools" }
 ```
 
-### `openhands/app_server/sandbox/sandbox_spec_service.py`
+### `madagascar/app_server/sandbox/sandbox_spec_service.py`
 
 ```python
-AGENT_SERVER_IMAGE = 'ghcr.io/openhands/agent-server:<merge-commit-sha>-python'
+AGENT_SERVER_IMAGE = 'ghcr.io/madagascar/agent-server:<merge-commit-sha>-python'
 ```
 
 **⚠️ Important:** The image tag is the **merge-commit SHA** from the SDK CI, not the commit hash used in `pyproject.toml`. Look up the correct tag from the SDK PR description or CI logs.
 
 ## Pin to a Branch
 
-Example from commit `430ee1c` (pinning to branch `openhands/issue-2228-sdk-settings-schema`):
+Example from commit `430ee1c` (pinning to branch `madagascar/issue-2228-sdk-settings-schema`):
 
 ### `[tool.poetry.dependencies]`
 
 ```toml
-openhands-sdk = { git = "https://github.com/OpenHands/software-agent-sdk.git", branch = "openhands/issue-2228-sdk-settings-schema", subdirectory = "openhands-sdk" }
-openhands-agent-server = { git = "https://github.com/OpenHands/software-agent-sdk.git", branch = "openhands/issue-2228-sdk-settings-schema", subdirectory = "openhands-agent-server" }
-openhands-tools = { git = "https://github.com/OpenHands/software-agent-sdk.git", branch = "openhands/issue-2228-sdk-settings-schema", subdirectory = "openhands-tools" }
+madagascar-sdk = { git = "https://github.com/Madagascar/software-agent-sdk.git", branch = "madagascar/issue-2228-sdk-settings-schema", subdirectory = "madagascar-sdk" }
+madagascar-agent-server = { git = "https://github.com/Madagascar/software-agent-sdk.git", branch = "madagascar/issue-2228-sdk-settings-schema", subdirectory = "madagascar-agent-server" }
+madagascar-tools = { git = "https://github.com/Madagascar/software-agent-sdk.git", branch = "madagascar/issue-2228-sdk-settings-schema", subdirectory = "madagascar-tools" }
 ```
 
 ## Using `[tool.uv.sources]` Override
@@ -48,9 +48,9 @@ When only `uv` needs the override (keep PyPI versions in the main arrays), add a
 
 ```toml
 [tool.uv.sources]
-openhands-sdk = { git = "https://github.com/OpenHands/software-agent-sdk.git", subdirectory = "openhands-sdk", rev = "4170cca" }
-openhands-agent-server = { git = "https://github.com/OpenHands/software-agent-sdk.git", subdirectory = "openhands-agent-server", rev = "4170cca" }
-openhands-tools = { git = "https://github.com/OpenHands/software-agent-sdk.git", subdirectory = "openhands-tools", rev = "4170cca" }
+madagascar-sdk = { git = "https://github.com/Madagascar/software-agent-sdk.git", subdirectory = "madagascar-sdk", rev = "4170cca" }
+madagascar-agent-server = { git = "https://github.com/Madagascar/software-agent-sdk.git", subdirectory = "madagascar-agent-server", rev = "4170cca" }
+madagascar-tools = { git = "https://github.com/Madagascar/software-agent-sdk.git", subdirectory = "madagascar-tools", rev = "4170cca" }
 ```
 
 ## Released PyPI Version (standard release)
@@ -60,31 +60,31 @@ Example from commit `929dcc3` (SDK 1.11.5):
 ### `dependencies` array
 
 ```toml
-"openhands-agent-server==1.11.5",
-"openhands-sdk==1.11.5",
-"openhands-tools==1.11.5",
+"madagascar-agent-server==1.11.5",
+"madagascar-sdk==1.11.5",
+"madagascar-tools==1.11.5",
 ```
 
 ### `[tool.poetry.dependencies]`
 
 ```toml
-openhands-sdk = "1.11.5"
-openhands-agent-server = "1.11.5"
-openhands-tools = "1.11.5"
+madagascar-sdk = "1.11.5"
+madagascar-agent-server = "1.11.5"
+madagascar-tools = "1.11.5"
 ```
 
-### `openhands/app_server/sandbox/sandbox_spec_service.py`
+### `madagascar/app_server/sandbox/sandbox_spec_service.py`
 
 For released versions, the image tag uses the version number:
 
 ```python
-AGENT_SERVER_IMAGE = 'ghcr.io/openhands/agent-server:1.11.5-python'
+AGENT_SERVER_IMAGE = 'ghcr.io/madagascar/agent-server:1.11.5-python'
 ```
 
 However, **some releases use a commit-hash tag** even for the released version. Check which tag format exists on GHCR. Example from `929dcc3`:
 
 ```python
-AGENT_SERVER_IMAGE = 'ghcr.io/openhands/agent-server:010e847-python'
+AGENT_SERVER_IMAGE = 'ghcr.io/madagascar/agent-server:010e847-python'
 ```
 
 ## Regenerate Lock Files

@@ -1,14 +1,14 @@
-from openhands.sdk.context.view import View
-from openhands.sdk.event.base import Event
-from openhands.sdk.event.condenser import (
+from madagascar.sdk.context.view import View
+from madagascar.sdk.event.base import Event
+from madagascar.sdk.event.condenser import (
     Condensation,
     CondensationRequest,
     CondensationSummaryEvent,
 )
-from openhands.sdk.event.llm_convertible import (
+from madagascar.sdk.event.llm_convertible import (
     MessageEvent,
 )
-from openhands.sdk.llm import TextContent
+from madagascar.sdk.llm import TextContent
 from tests.sdk.context.view.conftest import message_event  # noqa: F401
 
 

@@ -7,7 +7,7 @@ through ``Settings``) live in ``test_settings.py``.
 import pytest
 from pydantic import SecretStr, ValidationError
 
-from openhands.app_server.settings.llm_profiles import (
+from madagascar.app_server.settings.llm_profiles import (
     MAX_PROFILES_PER_USER,
     LLMProfiles,
     ProfileAlreadyExistsError,
@@ -15,7 +15,7 @@ from openhands.app_server.settings.llm_profiles import (
     ProfileNotFoundError,
     StrictLLM,
 )
-from openhands.sdk.llm import LLM
+from madagascar.sdk.llm import LLM
 
 
 def _make_llm(model: str = 'openai/gpt-4o', api_key: str | None = None) -> LLM:
@@ -86,8 +86,8 @@ def test_summaries_empty_by_default():
 def test_summaries_resolves_base_url_with_managed_proxy_url():
     profiles = LLMProfiles()
     # Managed model saved in the public SDK shape without a base_url.
-    managed_llm = LLM(model='openhands/minimax-m2.7').model_copy(
-        update={'model': 'openhands/minimax-m2.7', 'base_url': None}
+    managed_llm = LLM(model='madagascar/minimax-m2.7').model_copy(
+        update={'model': 'madagascar/minimax-m2.7', 'base_url': None}
     )
     profiles.save('managed', managed_llm)
     # BYOR model with its own base_url.

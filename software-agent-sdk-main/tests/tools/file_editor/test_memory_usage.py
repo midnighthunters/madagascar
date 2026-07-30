@@ -9,7 +9,7 @@ import psutil
 import pytest
 from filelock import FileLock
 
-from openhands.tools.file_editor import file_editor
+from madagascar.tools.file_editor import file_editor
 from tests.platform_utils import (
     can_fork_test_process,
     set_address_space_limit_if_available,
@@ -27,7 +27,7 @@ if can_fork_test_process():
 @pytest.fixture(scope="function")
 def isolate_memory_usage_tests():
     """Guard memory-sensitive tests from parallel execution."""
-    lock_path = Path(tempfile.gettempdir()) / "openhands_str_replace_memory.lock"
+    lock_path = Path(tempfile.gettempdir()) / "madagascar_str_replace_memory.lock"
     with FileLock(lock_path):
         yield
 

@@ -9,9 +9,9 @@ from abc import ABC, abstractmethod
 
 from pydantic import BaseModel
 
-from openhands.sdk.event.base import Event
-from openhands.sdk.event.llm_convertible.action import ActionEvent
-from openhands.sdk.logger import get_logger
+from madagascar.sdk.event.base import Event
+from madagascar.sdk.event.llm_convertible.action import ActionEvent
+from madagascar.sdk.logger import get_logger
 
 
 logger = get_logger(__name__)
@@ -69,7 +69,7 @@ class FileEditPruner(EarlyStopperBase):
 
     def check(self, events: list[Event]) -> EarlyStopResult:
         """Check if any file editing operations were performed."""
-        from openhands.tools.file_editor.definition import (
+        from madagascar.tools.file_editor.definition import (
             FileEditorAction,
             FileEditorTool,
         )
@@ -111,7 +111,7 @@ class BashCommandPruner(EarlyStopperBase):
 
     def check(self, events: list[Event]) -> EarlyStopResult:
         """Check if any forbidden bash commands were executed."""
-        from openhands.tools.terminal.definition import (
+        from madagascar.tools.terminal.definition import (
             TerminalAction,
             TerminalTool,
         )

@@ -15,9 +15,9 @@ gemini-style tools (read_file, write_file, edit, list_directory).
 
 import os
 
-from openhands.sdk import LLM, Agent, Conversation, Tool
-from openhands.tools.gemini import GEMINI_FILE_TOOLS
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk import LLM, Agent, Conversation, Tool
+from madagascar.tools.gemini import GEMINI_FILE_TOOLS
+from madagascar.tools.terminal import TerminalTool
 
 
 # Route logs in their own directory for easy tracing

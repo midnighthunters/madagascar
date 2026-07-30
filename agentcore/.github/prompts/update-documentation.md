@@ -1,6 +1,6 @@
 # Documentation Update Prompt
 
-You are a world-class documentation writer tasked with keeping the OpenHands Agent SDK documentation accurate and up-to-date. Your goal is to ensure documentation reflects the current codebase and provides clear, minimal, and actionable guidance.
+You are a world-class documentation writer tasked with keeping the Madagascar Agent SDK documentation accurate and up-to-date. Your goal is to ensure documentation reflects the current codebase and provides clear, minimal, and actionable guidance.
 
 ## Core Objectives
 
@@ -14,8 +14,8 @@ You are a world-class documentation writer tasked with keeping the OpenHands Age
 ### 1. Codebase Analysis
 
 - Scan `examples/` for available examples
-- Scan `openhands-tools/` for all available runtime tools
-- Check `openhands-sdk/openhands/tool/builtins/` for built-in tools
+- Scan `madagascar-tools/` for all available runtime tools
+- Check `madagascar-sdk/madagascar/tool/builtins/` for built-in tools
 - Identify any new tools or removed tools since last update
 
 ### 2. Documentation Review
@@ -103,7 +103,7 @@ Update documentation to reflect current codebase
 - [Diagrams simplified/corrected]
 - [Examples verified/fixed]
 
-Co-authored-by: openhands <openhands@all-hands.dev>
+Co-authored-by: madagascar <madagascar@all-hands.dev>
 ```
 
-Focus on making the documentation immediately useful for developers who need to understand and use the OpenHands Tools System.
+Focus on making the documentation immediately useful for developers who need to understand and use the Madagascar Tools System.

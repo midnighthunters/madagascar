@@ -1,4 +1,4 @@
-"""OpenHands Agent SDK — Configurable Security Policy Example
+"""Madagascar Agent SDK — Configurable Security Policy Example
 
 This example demonstrates how to use a custom security policy with an agent.
 Security policies define risk assessment guidelines that help agents evaluate
@@ -18,7 +18,7 @@ from pathlib import Path
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
@@ -26,9 +26,9 @@ from openhands.sdk import (
     LLMConvertibleEvent,
     get_logger,
 )
-from openhands.sdk.tool import Tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.tool import Tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 
 
 logger = get_logger(__name__)

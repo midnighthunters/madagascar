@@ -57,7 +57,7 @@ export const EXTENSIONS_NAV_ITEMS: ExtensionNavItem[] = [
 ];
 
 export function ExtensionsNavigation() {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <aside

@@ -22,7 +22,7 @@ from sqlalchemy.orm import joinedload
 from storage.database import a_session_maker
 from storage.lite_llm_manager import (
     LiteLlmManager,
-    get_openhands_cloud_key_alias,
+    get_madagascar_cloud_key_alias,
     get_org_team_alias,
 )
 from storage.org import Org
@@ -32,18 +32,18 @@ from storage.org_member import OrgMember
 from storage.user import User
 from storage.user_settings import UserSettings
 
-from openhands.app_server.settings.settings_models import (
+from madagascar.app_server.settings.settings_models import (
     Settings,
     _load_persisted_agent_settings,
     _load_persisted_conversation_settings,
 )
-from openhands.app_server.utils.jsonpatch_compat import deep_merge
-from openhands.app_server.utils.llm import is_openhands_model
-from openhands.app_server.utils.logger import openhands_logger as logger
-from openhands.sdk.settings import (
+from madagascar.app_server.utils.jsonpatch_compat import deep_merge
+from madagascar.app_server.utils.llm import is_madagascar_model
+from madagascar.app_server.utils.logger import madagascar_logger as logger
+from madagascar.sdk.settings import (
     AgentSettingsConfig,
     ConversationSettings,
-    OpenHandsAgentSettings,
+    MadagascarAgentSettings,
     apply_agent_settings_diff,
 )
 
@@ -79,9 +79,9 @@ class OrgStore:
     @staticmethod
     def get_agent_settings_from_org(org: Org) -> AgentSettingsConfig:
         # Route through the shared SDK loader: it applies persisted-settings
-        # migrations (incl. the legacy ``agent_kind: 'llm'`` -> ``'openhands'``
+        # migrations (incl. the legacy ``agent_kind: 'llm'`` -> ``'madagascar'``
         # rename) and returns the actual variant. ACP settings are returned as
-        # ``ACPAgentSettings``, not coerced into the OpenHands shape — that
+        # ``ACPAgentSettings``, not coerced into the Madagascar shape — that
         # coercion 500s on ACP's nullable ``agent_context``.
         return _load_persisted_agent_settings(dict(org.agent_settings))
 
@@ -339,16 +339,16 @@ class OrgStore:
     def _merge_and_validate_settings(
         current_settings: dict[str, Any],
         settings_diff: dict[str, Any],
-        settings_type: type[OpenHandsAgentSettings] | type[ConversationSettings],
+        settings_type: type[MadagascarAgentSettings] | type[ConversationSettings],
     ) -> AgentSettingsConfig | ConversationSettings:
         """Apply a sparse settings diff to the persisted base and validate it.
 
         Agent settings delegate to the SDK's :func:`apply_agent_settings_diff`,
         which owns the discriminated-union merge (replace on ``agent_kind``
         change, deep-merge within a variant) and returns the correct variant
-        (OpenHands or ACP) rather than a coerced OpenHands shape.
+        (Madagascar or ACP) rather than a coerced Madagascar shape.
         """
-        if settings_type is OpenHandsAgentSettings:
+        if settings_type is MadagascarAgentSettings:
             return apply_agent_settings_diff(current_settings or {}, settings_diff)
 
         base_settings = _load_persisted_conversation_settings(current_settings)  # type: ignore[assignment]
@@ -415,7 +415,7 @@ class OrgStore:
                 org.agent_settings = OrgStore._merge_and_validate_settings(
                     org.agent_settings,
                     agent_settings_diff,
-                    OpenHandsAgentSettings,
+                    MadagascarAgentSettings,
                 ).model_dump(mode='json', exclude_unset=True)
 
             if conversation_settings_diff is not None:
@@ -817,10 +817,10 @@ class OrgStore:
         llm_base_url = llm_settings.base_url
         normalized_llm_base_url = llm_base_url.rstrip('/') if llm_base_url else None
         normalized_managed_base_url = LITE_LLM_API_URL.rstrip('/')
-        openhands_type = is_openhands_model(llm_model)
+        madagascar_type = is_madagascar_model(llm_model)
         uses_managed_llm_key = (
             normalized_llm_base_url == normalized_managed_base_url
-            or (normalized_llm_base_url is None and openhands_type)
+            or (normalized_llm_base_url is None and madagascar_type)
         )
         if not uses_managed_llm_key:
             return None
@@ -847,14 +847,14 @@ class OrgStore:
             existing_key_raw,
             user_id,
             str(updated_org.id),
-            openhands_type=openhands_type,
+            madagascar_type=madagascar_type,
         ):
             return existing_key_raw
 
         # One managed key per (user, org) under the same deterministic alias,
-        # deleting any prior key first — symmetric across openhands/* and BYOR
+        # deleting any prior key first — symmetric across madagascar/* and BYOR
         # defaults so switching between them never orphans a key.
-        key_alias = get_openhands_cloud_key_alias(user_id, str(updated_org.id))
+        key_alias = get_madagascar_cloud_key_alias(user_id, str(updated_org.id))
         await LiteLlmManager.delete_key_by_alias(key_alias=key_alias)
         logger.info(
             'Generated managed LLM key for acting user on org-defaults save',
@@ -864,7 +864,7 @@ class OrgStore:
             user_id,
             str(updated_org.id),
             key_alias,
-            {'type': 'openhands'} if openhands_type else None,
+            {'type': 'madagascar'} if madagascar_type else None,
         )
 
     @staticmethod

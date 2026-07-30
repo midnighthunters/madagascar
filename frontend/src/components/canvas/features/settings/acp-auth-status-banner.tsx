@@ -27,7 +27,7 @@ export function AcpAuthStatusBanner({
   providerName,
   testIdPrefix,
 }: AcpAuthStatusBannerProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   if (status === "authenticated") {
     return (

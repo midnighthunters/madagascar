@@ -2,7 +2,7 @@ import os
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
@@ -13,8 +13,8 @@ from openhands.sdk import (
     TextContent,
     get_logger,
 )
-from openhands.sdk.tool import Tool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.tool import Tool
+from madagascar.tools.terminal import TerminalTool
 
 
 logger = get_logger(__name__)
@@ -80,7 +80,7 @@ resp = llm.completion(
         Message(role="user", content=[TextContent(text="Say hello in one word.")])
     ]
 )
-# Access the response content via OpenHands LLMResponse
+# Access the response content via Madagascar LLMResponse
 msg = resp.message
 texts = [c.text for c in msg.content if isinstance(c, TextContent)]
 print(f"Direct completion response: {texts[0] if texts else str(msg)}")

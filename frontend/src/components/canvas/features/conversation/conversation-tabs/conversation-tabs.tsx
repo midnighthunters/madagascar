@@ -77,7 +77,7 @@ export function ConversationTabs({
     handlePanelVisibilityChange();
   }, [isRightPanelShown, selectedTab, onTabChange]);
 
-  const { t, i18n } = useTranslation("openhands");
+  const { t, i18n } = useTranslation("madagascar");
 
   // `files` is intentionally the leftmost tab — it's the primary entry
   // point for inspecting agent output (workspace files + git diff).

@@ -19,7 +19,7 @@ on:
             repo_list:
                 description: Comma-separated list of repos to analyze (owner/repo)
                 required: true
-                default: OpenHands/OpenHands,All-Hands-AI/infra
+                default: Madagascar/Madagascar,All-Hands-AI/infra
             issue_repo:
                 description: Repository to create issues in (owner/repo)
                 required: true
@@ -64,15 +64,15 @@ jobs:
                   cd posthog_debug_tools
 
                   # Download the debugging script and template
-                  curl -O https://raw.githubusercontent.com/OpenHands/software-agent-sdk/main/examples/03_github_workflows/05_posthog_debugging/posthog_debugging.py
-                  curl -O https://raw.githubusercontent.com/OpenHands/software-agent-sdk/main/examples/03_github_workflows/05_posthog_debugging/debug_prompt.jinja
+                  curl -O https://raw.githubusercontent.com/Madagascar/software-agent-sdk/main/examples/03_github_workflows/05_posthog_debugging/posthog_debugging.py
+                  curl -O https://raw.githubusercontent.com/Madagascar/software-agent-sdk/main/examples/03_github_workflows/05_posthog_debugging/debug_prompt.jinja
 
                   chmod +x posthog_debugging.py
 
             - name: Install dependencies
               run: |
                   python -m pip install --upgrade pip
-                  pip install openhands-sdk requests jinja2
+                  pip install madagascar-sdk requests jinja2
 
             - name: Run PostHog debugging
               env:

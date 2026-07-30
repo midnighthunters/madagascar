@@ -11,13 +11,13 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from openhands.agent_server import plugins_service
-from openhands.agent_server.plugins_router import plugins_router
-from openhands.agent_server.plugins_service import (
+from madagascar.agent_server import plugins_service
+from madagascar.agent_server.plugins_router import plugins_router
+from madagascar.agent_server.plugins_service import (
     MarketplacePluginInfo,
     service_get_plugins_marketplace_catalog,
 )
-from openhands.sdk.plugin import install_plugin
+from madagascar.sdk.plugin import install_plugin
 
 
 @pytest.fixture(autouse=True)
@@ -41,7 +41,7 @@ def _write_marketplace(repo_dir: Path, plugins: list[dict]) -> Path:
 def _write_manifest_marketplace(repo_dir: Path, plugins: list[dict]) -> Path:
     """Write the catalog as a ``.plugin/marketplace.json`` manifest.
 
-    Mirrors the real OpenHands/extensions layout, where the catalog is
+    Mirrors the real Madagascar/extensions layout, where the catalog is
     discovered via ``Marketplace.load`` (``.plugin/marketplace.json``) and
     ``marketplaces/default.json`` is absent.
     """
@@ -65,7 +65,7 @@ def _make_installable_plugin(plugin_dir: Path, name: str) -> Path:
 
 def test_catalog_returns_only_true_plugins(tmp_path: Path, monkeypatch):
     # Arrange: a marketplace mixing a true plugin (./plugins/) and a skill
-    # (./skills/), as the real OpenHands marketplace does.
+    # (./skills/), as the real Madagascar marketplace does.
     repo = _write_marketplace(
         tmp_path / "ext",
         [
@@ -273,7 +273,7 @@ class TestPluginsMarketplaceRoute:
             )
         ]
         monkeypatch.setattr(
-            "openhands.agent_server.plugins_router."
+            "madagascar.agent_server.plugins_router."
             "service_get_plugins_marketplace_catalog",
             lambda: sample,
         )

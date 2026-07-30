@@ -3,11 +3,11 @@
 from pathlib import Path
 from unittest.mock import patch
 
-from openhands.sdk.subagent.load import (
+from madagascar.sdk.subagent.load import (
     load_project_agents,
     load_user_agents,
 )
-from openhands.sdk.subagent.registry import (
+from madagascar.sdk.subagent.registry import (
     _reset_registry_for_tests,
 )
 
@@ -98,9 +98,9 @@ def test_load_project_agents_skips_readme(tmp_path: Path) -> None:
     assert names == ["real-agent"]
 
 
-def test_load_project_agents_from_openhands_dir(tmp_path: Path) -> None:
-    """Loads .md files from .openhands/ when .agents/ does not exist."""
-    oh_dir = tmp_path / ".openhands" / "agents"
+def test_load_project_agents_from_madagascar_dir(tmp_path: Path) -> None:
+    """Loads .md files from .madagascar/ when .agents/ does not exist."""
+    oh_dir = tmp_path / ".madagascar" / "agents"
     oh_dir.mkdir(parents=True)
 
     (oh_dir / "legacy-agent.md").write_text(
@@ -112,20 +112,20 @@ def test_load_project_agents_from_openhands_dir(tmp_path: Path) -> None:
     assert agents[0].name == "legacy-agent"
 
 
-def test_load_project_agents_agents_dir_wins_over_openhands(tmp_path: Path) -> None:
-    """.agents/ takes precedence over .openhands/ for duplicate names."""
+def test_load_project_agents_agents_dir_wins_over_madagascar(tmp_path: Path) -> None:
+    """.agents/ takes precedence over .madagascar/ for duplicate names."""
     agents_dir = tmp_path / ".agents" / "agents"
     agents_dir.mkdir(parents=True)
     (agents_dir / "shared.md").write_text(
         "---\nname: shared\ndescription: From .agents\n---\nAgents prompt."
     )
 
-    oh_dir = tmp_path / ".openhands" / "agents"
+    oh_dir = tmp_path / ".madagascar" / "agents"
     oh_dir.mkdir(parents=True)
     (oh_dir / "shared.md").write_text(
-        "---\nname: shared\ndescription: From .openhands\n---\nOH prompt."
+        "---\nname: shared\ndescription: From .madagascar\n---\nOH prompt."
     )
-    # Also put a unique agent in .openhands/ to verify it still loads
+    # Also put a unique agent in .madagascar/ to verify it still loads
     (oh_dir / "only-in-oh.md").write_text(
         "---\nname: only-in-oh\ndescription: OH only\n---\nOH only prompt."
     )
@@ -140,14 +140,14 @@ def test_load_project_agents_agents_dir_wins_over_openhands(tmp_path: Path) -> N
 
 
 def test_load_project_agents_merges_both_dirs(tmp_path: Path) -> None:
-    """Agents from both .agents/ and .openhands/ are merged."""
+    """Agents from both .agents/ and .madagascar/ are merged."""
     agents_dir = tmp_path / ".agents" / "agents"
     agents_dir.mkdir(parents=True)
     (agents_dir / "agent-a.md").write_text(
         "---\nname: agent-a\ndescription: A\n---\nA."
     )
 
-    oh_dir = tmp_path / ".openhands" / "agents"
+    oh_dir = tmp_path / ".madagascar" / "agents"
     oh_dir.mkdir(parents=True)
     (oh_dir / "agent-b.md").write_text("---\nname: agent-b\ndescription: B\n---\nB.")
 
@@ -165,44 +165,44 @@ def test_load_user_agents(tmp_path: Path) -> None:
         "---\nname: global-agent\ndescription: Global\n---\nGlobal prompt."
     )
 
-    with patch("openhands.sdk.subagent.load.Path.home", return_value=tmp_path):
+    with patch("madagascar.sdk.subagent.load.Path.home", return_value=tmp_path):
         agents = load_user_agents()
 
     assert len(agents) == 1
     assert agents[0].name == "global-agent"
 
 
-def test_load_user_agents_from_openhands_dir(tmp_path: Path) -> None:
-    """Loads from ~/.openhands/ when ~/.agents/ does not exist."""
-    oh_dir = tmp_path / ".openhands" / "agents"
+def test_load_user_agents_from_madagascar_dir(tmp_path: Path) -> None:
+    """Loads from ~/.madagascar/ when ~/.agents/ does not exist."""
+    oh_dir = tmp_path / ".madagascar" / "agents"
     oh_dir.mkdir(parents=True)
 
     (oh_dir / "legacy-user.md").write_text(
         "---\nname: legacy-user\ndescription: Legacy user\n---\nLegacy."
     )
 
-    with patch("openhands.sdk.subagent.load.Path.home", return_value=tmp_path):
+    with patch("madagascar.sdk.subagent.load.Path.home", return_value=tmp_path):
         agents = load_user_agents()
 
     assert len(agents) == 1
     assert agents[0].name == "legacy-user"
 
 
-def test_load_user_agents_agents_dir_wins_over_openhands(tmp_path: Path) -> None:
-    """~/.agents/ takes precedence over ~/.openhands/ for duplicate names."""
+def test_load_user_agents_agents_dir_wins_over_madagascar(tmp_path: Path) -> None:
+    """~/.agents/ takes precedence over ~/.madagascar/ for duplicate names."""
     agents_dir = tmp_path / ".agents" / "agents"
     agents_dir.mkdir(parents=True)
     (agents_dir / "shared.md").write_text(
         "---\nname: shared\ndescription: From .agents\n---\nAgents."
     )
 
-    oh_dir = tmp_path / ".openhands" / "agents"
+    oh_dir = tmp_path / ".madagascar" / "agents"
     oh_dir.mkdir(parents=True)
     (oh_dir / "shared.md").write_text(
-        "---\nname: shared\ndescription: From .openhands\n---\nOH."
+        "---\nname: shared\ndescription: From .madagascar\n---\nOH."
     )
 
-    with patch("openhands.sdk.subagent.load.Path.home", return_value=tmp_path):
+    with patch("madagascar.sdk.subagent.load.Path.home", return_value=tmp_path):
         agents = load_user_agents()
 
     assert len(agents) == 1

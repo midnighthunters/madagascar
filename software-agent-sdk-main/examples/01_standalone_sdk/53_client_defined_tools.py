@@ -14,10 +14,10 @@ import os
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Agent, Conversation, Event, Tool
-from openhands.sdk.event.llm_convertible.action import ActionEvent
-from openhands.sdk.tool import ClientToolSpec
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk import LLM, Agent, Conversation, Event, Tool
+from madagascar.sdk.event.llm_convertible.action import ActionEvent
+from madagascar.sdk.tool import ClientToolSpec
+from madagascar.tools.terminal import TerminalTool
 
 
 # ---------------------------------------------------------------------------

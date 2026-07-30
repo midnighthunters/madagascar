@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-from openhands.sdk.llm import LLM
-from openhands.sdk.llm.llm import LLMCallContext
-from openhands.sdk.llm.options.chat_options import select_chat_options
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.llm.llm import LLMCallContext
+from madagascar.sdk.llm.options.chat_options import select_chat_options
 
 
 @dataclass

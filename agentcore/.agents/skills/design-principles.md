@@ -1,11 +1,11 @@
 ---
 name: design-principles
-description: Core architectural design principles of the OpenHands Software Agent SDK. Reference when making architectural decisions, reviewing PRs that change agent/tool/state boundaries, or evaluating whether a proposed change aligns with V1 design goals.
+description: Core architectural design principles of the Madagascar Software Agent SDK. Reference when making architectural decisions, reviewing PRs that change agent/tool/state boundaries, or evaluating whether a proposed change aligns with V1 design goals.
 ---
 
 # SDK Design Principles
 
-Reference: <https://docs.openhands.dev/sdk/arch/design>
+Reference: <https://docs.madagascar.dev/sdk/arch/design>
 
 ## Quick Summary
 

@@ -26,7 +26,7 @@ describe("ContextMenuCTA", () => {
     });
     expect(learnMoreLink).toHaveAttribute(
       "href",
-      "https://openhands.dev/enterprise/",
+      "https://madagascar.dev/enterprise/",
     );
     expect(learnMoreLink).toHaveAttribute("target", "_blank");
     expect(learnMoreLink).toHaveAttribute("rel", "noopener noreferrer");

@@ -13,13 +13,13 @@ import pytest
 from fastapi import HTTPException, status
 from fastapi.responses import JSONResponse
 
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.app_server.app_conversation.app_conversation_models import (
     AppConversation,
     AppConversationInfo,
     AppConversationPage,
     SwitchProfileRequest,
 )
-from openhands.app_server.app_conversation.app_conversation_router import (
+from madagascar.app_server.app_conversation.app_conversation_router import (
     AgentServerContext,
     _finalize_sandbox_delete,
     batch_get_app_conversations,
@@ -29,11 +29,11 @@ from openhands.app_server.app_conversation.app_conversation_router import (
     search_app_conversations,
     switch_conversation_profile,
 )
-from openhands.app_server.sandbox.sandbox_models import SandboxStatus
-from openhands.app_server.settings.llm_profiles import LLMProfiles
-from openhands.app_server.settings.settings_models import Settings
-from openhands.sdk.llm import LLM
-from openhands.sdk.settings import OpenHandsAgentSettings
+from madagascar.app_server.sandbox.sandbox_models import SandboxStatus
+from madagascar.app_server.settings.llm_profiles import LLMProfiles
+from madagascar.app_server.settings.settings_models import Settings
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.settings import MadagascarAgentSettings
 
 
 def _make_mock_app_conversation(
@@ -416,7 +416,7 @@ def _make_settings_for_switch(
     the effective ``agent_settings.llm.api_key`` holds the resolved managed key.
     """
     return Settings(
-        agent_settings=OpenHandsAgentSettings(
+        agent_settings=MadagascarAgentSettings(
             llm=LLM(model=model, api_key=settings_api_key)
         ),
         llm_profiles=LLMProfiles(
@@ -499,7 +499,7 @@ class TestSwitchConversationProfile:
         settings = _make_settings_with_profile()
 
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=None),
         ):
@@ -527,7 +527,7 @@ class TestSwitchConversationProfile:
         )
 
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=helper_response),
         ):
@@ -561,7 +561,7 @@ class TestSwitchConversationProfile:
         client = _make_httpx_client(post_return=bad_response)
 
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=ctx),
         ):
@@ -590,7 +590,7 @@ class TestSwitchConversationProfile:
         )
 
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=ctx),
         ):
@@ -634,7 +634,7 @@ class TestSwitchConversationProfile:
         info_service.save_app_conversation_info = AsyncMock()
 
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=ctx),
         ):
@@ -682,7 +682,7 @@ class TestSwitchConversationProfile:
         info_service.save_app_conversation_info = AsyncMock()
 
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=ctx),
         ):
@@ -720,7 +720,7 @@ class TestSwitchConversationProfile:
         info_service.save_app_conversation_info = AsyncMock()
 
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=ctx),
         ):
@@ -763,7 +763,7 @@ class TestSwitchConversationProfile:
         info_service.save_app_conversation_info = AsyncMock()
 
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=ctx),
         ):
@@ -798,7 +798,7 @@ class TestSwitchConversationProfile:
         info_service.save_app_conversation_info = AsyncMock()
 
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=ctx),
         ):
@@ -853,7 +853,7 @@ class TestGitProxyEndpoints:
 
         # Act
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=ctx),
         ):
@@ -890,7 +890,7 @@ class TestGitProxyEndpoints:
 
         # Act
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=ctx),
         ):
@@ -923,7 +923,7 @@ class TestGitProxyEndpoints:
 
         # Act + Assert
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=helper_response),
         ):
@@ -944,7 +944,7 @@ class TestGitProxyEndpoints:
         """``_get_agent_server_context`` None (paused) → 409 Conflict."""
         # Act + Assert
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=None),
         ):
@@ -982,7 +982,7 @@ class TestGitProxyEndpoints:
 
         # Act + Assert
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=ctx),
         ):
@@ -1011,7 +1011,7 @@ class TestGitProxyEndpoints:
 
         # Act + Assert
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=ctx),
         ):
@@ -1044,7 +1044,7 @@ class TestGitProxyEndpoints:
 
         # Act + Assert
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=ctx),
         ):
@@ -1067,7 +1067,7 @@ class TestGitProxyEndpoints:
         a paused sandbox (helper ``None``) surfaces as 409 Conflict."""
         # Act + Assert
         with patch(
-            'openhands.app_server.app_conversation.app_conversation_router.'
+            'madagascar.app_server.app_conversation.app_conversation_router.'
             '_get_agent_server_context',
             new=AsyncMock(return_value=None),
         ):
@@ -1161,11 +1161,11 @@ class TestFinalizeSandboxDelete:
             db_session,
             httpx_client,
             conv,
-            workspace_path='/home/openhands/workspace/' + conv.hex,
+            workspace_path='/home/madagascar/workspace/' + conv.hex,
         )
         # The path pinned at creation is forwarded to the capture verbatim.
         sandbox_service.archive_conversation_workspace.assert_awaited_once_with(
             'sbx-1',
             conversation_id=conv.hex,
-            workspace_path='/home/openhands/workspace/' + conv.hex,
+            workspace_path='/home/madagascar/workspace/' + conv.hex,
         )

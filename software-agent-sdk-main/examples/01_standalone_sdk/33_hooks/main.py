@@ -1,6 +1,6 @@
-"""OpenHands Agent SDK — Hooks Example
+"""Madagascar Agent SDK — Hooks Example
 
-Demonstrates the OpenHands hooks system.
+Demonstrates the Madagascar hooks system.
 Hooks are shell scripts that run at key lifecycle events:
 
 - PreToolUse: Block dangerous commands before execution
@@ -18,9 +18,9 @@ from pathlib import Path
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Conversation
-from openhands.sdk.hooks import HookConfig, HookDefinition, HookMatcher
-from openhands.tools.preset.default import get_default_agent
+from madagascar.sdk import LLM, Conversation
+from madagascar.sdk.hooks import HookConfig, HookDefinition, HookMatcher
+from madagascar.tools.preset.default import get_default_agent
 
 
 signal.signal(signal.SIGINT, lambda *_: (_ for _ in ()).throw(KeyboardInterrupt()))

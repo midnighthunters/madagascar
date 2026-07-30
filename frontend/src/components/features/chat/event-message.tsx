@@ -1,15 +1,15 @@
-import { OpenHandsAction } from "#/types/core/actions";
+import { MadagascarAction } from "#/types/core/actions";
 import {
   isUserMessage,
   isErrorObservation,
   isAssistantMessage,
-  isOpenHandsAction,
+  isMadagascarAction,
   isFinishAction,
   isRejectObservation,
   isMcpObservation,
   isTaskTrackingObservation,
 } from "#/types/core/guards";
-import { OpenHandsObservation } from "#/types/core/observations";
+import { MadagascarObservation } from "#/types/core/observations";
 import {
   ErrorEventMessage,
   UserAssistantEventMessage,
@@ -22,7 +22,7 @@ import {
 } from "./event-message-components";
 
 interface EventMessageProps {
-  event: OpenHandsAction | OpenHandsObservation;
+  event: MadagascarAction | MadagascarObservation;
   hasObservationPair: boolean;
   isAwaitingUserConfirmation: boolean;
   isLastMessage: boolean;
@@ -43,8 +43,8 @@ export function EventMessage({
     return <ErrorEventMessage event={event} />;
   }
 
-  // Observation pairs with OpenHands actions
-  if (hasObservationPair && isOpenHandsAction(event)) {
+  // Observation pairs with Madagascar actions
+  if (hasObservationPair && isMadagascarAction(event)) {
     return <ObservationPairEventMessage event={event} />;
   }
 

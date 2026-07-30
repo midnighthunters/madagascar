@@ -8,14 +8,14 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from openhands.agent_server.conversation_router import conversation_router
-from openhands.agent_server.conversation_service import ConversationService
-from openhands.agent_server.dependencies import get_conversation_service
-from openhands.agent_server.event_service import EventService
-from openhands.sdk import Message
-from openhands.sdk.event import ActionEvent, MessageEvent
-from openhands.sdk.llm import MessageToolCall, TextContent
-from openhands.sdk.tool.builtins.finish import FinishAction
+from madagascar.agent_server.conversation_router import conversation_router
+from madagascar.agent_server.conversation_service import ConversationService
+from madagascar.agent_server.dependencies import get_conversation_service
+from madagascar.agent_server.event_service import EventService
+from madagascar.sdk import Message
+from madagascar.sdk.event import ActionEvent, MessageEvent
+from madagascar.sdk.llm import MessageToolCall, TextContent
+from madagascar.sdk.tool.builtins.finish import FinishAction
 
 
 @pytest.fixture

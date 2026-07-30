@@ -7,12 +7,12 @@ and validation of security risk parameters from tool arguments.
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.event import ActionEvent
-from openhands.sdk.llm import LLM
-from openhands.sdk.security.analyzer import SecurityAnalyzerBase
-from openhands.sdk.security.llm_analyzer import LLMSecurityAnalyzer
-from openhands.sdk.security.risk import SecurityRisk
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.event import ActionEvent
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.security.analyzer import SecurityAnalyzerBase
+from madagascar.sdk.security.llm_analyzer import LLMSecurityAnalyzer
+from madagascar.sdk.security.risk import SecurityRisk
 
 
 class MockNonLLMAnalyzer(SecurityAnalyzerBase):

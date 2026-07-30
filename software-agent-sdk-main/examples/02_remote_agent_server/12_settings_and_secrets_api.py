@@ -21,9 +21,9 @@ from uuid import UUID
 import httpx
 from scripts.utils import ManagedAPIServer
 
-from openhands.sdk import get_logger
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk import get_logger
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 
 
 logger = get_logger(__name__)

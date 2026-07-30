@@ -12,7 +12,7 @@ import type {
  *
  * Kind-aware: when the editor switched `agent_kind`, the stored variant's
  * fields must NOT be carried over — the server's `extra="forbid"` profile
- * union rejects a payload mixing openhands and acp fields — so a kind switch
+ * union rejects a payload mixing madagascar and acp fields — so a kind switch
  * stays a clean variant replacement built from the edited fields alone.
  *
  * Identity (`id` / `name` / `revision`) is stripped from the merge: the path

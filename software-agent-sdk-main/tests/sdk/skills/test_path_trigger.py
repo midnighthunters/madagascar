@@ -7,16 +7,16 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.context.agent_context import AgentContext
-from openhands.sdk.skills import (
+from madagascar.sdk.context.agent_context import AgentContext
+from madagascar.sdk.skills import (
     KeywordTrigger,
     PathTrigger,
     Skill,
     load_project_skills,
     utils as skills_utils,
 )
-from openhands.sdk.skills.exceptions import SkillValidationError
-from openhands.sdk.skills.skill import path_matches_glob
+from madagascar.sdk.skills.exceptions import SkillValidationError
+from madagascar.sdk.skills.skill import path_matches_glob
 
 
 _HAS_GIT = shutil.which("git") is not None
@@ -110,7 +110,7 @@ def test_path_trigger_is_inert_on_text_matching() -> None:
 
 
 def test_keyword_skill_does_not_match_paths() -> None:
-    from openhands.sdk.skills import KeywordTrigger
+    from madagascar.sdk.skills import KeywordTrigger
 
     skill = Skill(name="k", content="c", trigger=KeywordTrigger(keywords=["deploy"]))
     assert skill.match_path_trigger("src/api/x.ts") is None
@@ -119,7 +119,7 @@ def test_keyword_skill_does_not_match_paths() -> None:
 def test_path_rule_loads_from_skills_dir(tmp_path: Path) -> None:
     """A path rule is just a skill with ``paths:`` frontmatter in a skills dir."""
     _write_rule(
-        tmp_path / ".openhands" / "skills",
+        tmp_path / ".madagascar" / "skills",
         "api.md",
         'paths:\n  - "src/api/**/*.ts"',
         "API rule",
@@ -205,7 +205,7 @@ def test_path_rule_serialization_round_trip() -> None:
     skill = Skill(
         name="api",
         content="Use zod.",
-        source="/repo/.openhands/skills/api.md",
+        source="/repo/.madagascar/skills/api.md",
         trigger=PathTrigger(paths=["src/api/**/*.ts", "**/*.test.ts"]),
     )
     back = Skill.model_validate_json(skill.model_dump_json())

@@ -19,10 +19,10 @@ from server.sharing.shared_event_router import (
     search_shared_events,
 )
 
-from openhands.agent_server.models import EventPage
-from openhands.sdk.event.conversation_state import ConversationStateUpdateEvent
-from openhands.sdk.event.llm_convertible import MessageEvent
-from openhands.sdk.llm import Message, TextContent
+from madagascar.agent_server.models import EventPage
+from madagascar.sdk.event.conversation_state import ConversationStateUpdateEvent
+from madagascar.sdk.event.llm_convertible import MessageEvent
+from madagascar.sdk.llm import Message, TextContent
 
 # ---------------------------------------------------------------------------
 # Fixtures / helpers

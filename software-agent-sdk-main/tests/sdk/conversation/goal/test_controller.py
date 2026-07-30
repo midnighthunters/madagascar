@@ -2,13 +2,13 @@
 
 import pytest
 
-from openhands.sdk.conversation.goal import (
+from madagascar.sdk.conversation.goal import (
     GoalContinue,
     GoalController,
     GoalDone,
 )
-from openhands.sdk.llm import Message, TextContent
-from openhands.sdk.testing import TestLLM
+from madagascar.sdk.llm import Message, TextContent
+from madagascar.sdk.testing import TestLLM
 
 
 def _judge(*texts: str) -> TestLLM:

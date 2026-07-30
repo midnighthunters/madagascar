@@ -6,7 +6,7 @@ to access OpenAI's Codex models without consuming API credits.
 The subscription_login() method handles:
 - OAuth PKCE authentication flow
 - Device-code authentication for remote/headless environments
-- Credential caching (~/.openhands/auth/)
+- Credential caching (~/.madagascar/auth/)
 - Automatic token refresh
 
 Supported models:
@@ -21,19 +21,19 @@ Requirements:
   device-code login
 
 Environment variables:
-- OPENHANDS_SUBSCRIPTION_MODEL: Model to use (default: gpt-5.2-codex)
-- OPENHANDS_SUBSCRIPTION_AUTH_METHOD: "browser" or "device_code"
+- MADAGASCAR_SUBSCRIPTION_MODEL: Model to use (default: gpt-5.2-codex)
+- MADAGASCAR_SUBSCRIPTION_AUTH_METHOD: "browser" or "device_code"
   (default: browser)
-- OPENHANDS_SUBSCRIPTION_FORCE_LOGIN: Set to "1" to force fresh login
+- MADAGASCAR_SUBSCRIPTION_FORCE_LOGIN: Set to "1" to force fresh login
 - SUBSCRIPTION_LOGIN_ONLY: Set to "1" to verify login without running an agent
 """
 
 import os
 from typing import Literal
 
-from openhands.sdk import LLM, Agent, Conversation, Tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk import LLM, Agent, Conversation, Tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 
 
 AuthMethod = Literal["browser", "device_code"]
@@ -41,14 +41,14 @@ AuthMethod = Literal["browser", "device_code"]
 
 # First time: Opens browser for OAuth login
 # Subsequent calls: Reuses cached credentials (auto-refreshes if expired)
-model = os.getenv("OPENHANDS_SUBSCRIPTION_MODEL", "gpt-5.2-codex")
-auth_method_env = os.getenv("OPENHANDS_SUBSCRIPTION_AUTH_METHOD", "browser")
+model = os.getenv("MADAGASCAR_SUBSCRIPTION_MODEL", "gpt-5.2-codex")
+auth_method_env = os.getenv("MADAGASCAR_SUBSCRIPTION_AUTH_METHOD", "browser")
 if auth_method_env not in ("browser", "device_code"):
     raise ValueError(
-        "OPENHANDS_SUBSCRIPTION_AUTH_METHOD must be 'browser' or 'device_code'"
+        "MADAGASCAR_SUBSCRIPTION_AUTH_METHOD must be 'browser' or 'device_code'"
     )
 auth_method: AuthMethod = auth_method_env
-force_login = os.getenv("OPENHANDS_SUBSCRIPTION_FORCE_LOGIN") == "1"
+force_login = os.getenv("MADAGASCAR_SUBSCRIPTION_FORCE_LOGIN") == "1"
 
 llm = LLM.subscription_login(
     vendor="openai",

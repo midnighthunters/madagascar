@@ -2,12 +2,12 @@
 
 from typing import Literal, get_args
 
-from openhands.sdk.skills import (
+from madagascar.sdk.skills import (
     KeywordTrigger,
     Skill,
     TaskTrigger,
 )
-from openhands.sdk.skills.skill import SkillInfo
+from madagascar.sdk.skills.skill import SkillInfo
 
 
 SkillType = Literal["repo", "knowledge", "agentskills"]

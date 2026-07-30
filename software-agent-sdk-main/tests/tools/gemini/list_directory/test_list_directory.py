@@ -4,13 +4,13 @@ import threading
 
 import pytest
 
-from openhands.sdk.tool.tool import DeclaredResources
-from openhands.tools.gemini.list_directory.definition import (
+from madagascar.sdk.tool.tool import DeclaredResources
+from madagascar.tools.gemini.list_directory.definition import (
     ListDirectoryAction,
     ListDirectoryObservation,
     ListDirectoryTool,
 )
-from openhands.tools.gemini.list_directory.impl import ListDirectoryExecutor
+from madagascar.tools.gemini.list_directory.impl import ListDirectoryExecutor
 
 
 def test_list_directory_basic(tmp_path):

@@ -254,7 +254,7 @@ pub fn start_local_runtime(
     command
         .args(["run", "--offline", "--project"])
         .arg(&sdk_root)
-        .args(["--package", "openhands-agent-server", "agent-server", "--host", "127.0.0.1", "--port"])
+        .args(["--package", "madagascar-agent-server", "agent-server", "--host", "127.0.0.1", "--port"])
         .arg(port.to_string())
         .current_dir(&workspace)
         .env("PYTHONUTF8", "1")

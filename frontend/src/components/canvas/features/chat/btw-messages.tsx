@@ -9,7 +9,7 @@ export interface BtwMessagesProps {
 }
 
 export function BtwMessages({ conversationId }: BtwMessagesProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const entriesById = useBtwStore((s) => s.entriesByConversation);
   const dismiss = useBtwStore((s) => s.dismiss);
   const entries = conversationId ? (entriesById[conversationId] ?? []) : [];

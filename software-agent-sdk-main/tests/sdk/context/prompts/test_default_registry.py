@@ -20,18 +20,18 @@ from uuid import uuid4
 
 import pytest
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.context.agent_context import AgentContext
-from openhands.sdk.context.prompts.presets import create_registry
-from openhands.sdk.context.prompts.section import Platform, PromptContext
-from openhands.sdk.context.prompts.sections.dynamic import (
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.context.agent_context import AgentContext
+from madagascar.sdk.context.prompts.presets import create_registry
+from madagascar.sdk.context.prompts.section import Platform, PromptContext
+from madagascar.sdk.context.prompts.sections.dynamic import (
     AvailableSkillsSection,
     CustomSecretsSection,
     CustomSuffixSection,
     DateTimeSection,
     RepoContextSection,
 )
-from openhands.sdk.context.prompts.sections.static import (
+from madagascar.sdk.context.prompts.sections.static import (
     BrowserSection,
     EfficiencySection,
     ModelSpecificSection,
@@ -40,10 +40,10 @@ from openhands.sdk.context.prompts.sections.static import (
     SecuritySection,
     SoulSection,
 )
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.llm import LLM
-from openhands.sdk.skills import KeywordTrigger, Skill
-from openhands.sdk.workspace import LocalWorkspace
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.skills import KeywordTrigger, Skill
+from madagascar.sdk.workspace import LocalWorkspace
 
 from .test_prompt_snapshot import (
     DYNAMIC_CONTEXT,
@@ -90,7 +90,7 @@ def test_default_registry_is_all_static() -> None:
     )
     blocks = create_registry().build(ctx)
     assert blocks.dynamic is None
-    assert blocks.static.startswith("<SOUL>\nYou are OpenHands agent")
+    assert blocks.static.startswith("<SOUL>\nYou are Madagascar agent")
     assert "<IMPORTANT>" in blocks.static
 
 
@@ -117,7 +117,7 @@ def test_soul_section_renders_custom_and_defaults() -> None:
     assert section.guard(_ctx()) is True
     default = section.render(_ctx())
     assert default == (
-        "<SOUL>\nYou are OpenHands agent, a helpful AI assistant that can"
+        "<SOUL>\nYou are Madagascar agent, a helpful AI assistant that can"
         " interact with a computer to solve tasks.\n</SOUL>"
     )
     custom = section.render(_ctx(soul_content="You are a tiny cat agent."))

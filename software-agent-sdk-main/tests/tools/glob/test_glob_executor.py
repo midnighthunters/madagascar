@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from openhands.tools.glob import GlobAction
-from openhands.tools.glob.impl import GlobExecutor
+from madagascar.tools.glob import GlobAction
+from madagascar.tools.glob.impl import GlobExecutor
 
 
 def test_glob_executor_initialization():

@@ -9,7 +9,7 @@ import {
   UpdateOrganizationMemberParams,
 } from "#/types/org";
 import { Settings, MarketplaceRegistration } from "#/types/settings";
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 
 type OrganizationSettingsResponse = Pick<
   Settings,
@@ -36,7 +36,7 @@ export type OrganizationAppSettingsUpdate = {
 
 export const organizationService = {
   getMe: async ({ orgId }: { orgId: string }) => {
-    const { data } = await openHands.get<OrganizationMember>(
+    const { data } = await madagascar.get<OrganizationMember>(
       `/api/organizations/${orgId}/me`,
     );
 
@@ -44,7 +44,7 @@ export const organizationService = {
   },
 
   getOrganizations: async () => {
-    const { data } = await openHands.get<{
+    const { data } = await madagascar.get<{
       items: Organization[];
       current_org_id: string | null;
     }>("/api/organizations");
@@ -61,7 +61,7 @@ export const organizationService = {
     orgId: string;
     name: string;
   }) => {
-    const { data } = await openHands.patch<Organization>(
+    const { data } = await madagascar.patch<Organization>(
       `/api/organizations/${orgId}`,
       { name },
     );
@@ -69,7 +69,7 @@ export const organizationService = {
   },
 
   deleteOrganization: async ({ orgId }: { orgId: string }) => {
-    await openHands.delete(`/api/organizations/${orgId}`);
+    await madagascar.delete(`/api/organizations/${orgId}`);
   },
 
   getOrganizationMembers: async ({
@@ -94,7 +94,7 @@ export const organizationService = {
       params.set("email", email);
     }
 
-    const { data } = await openHands.get<OrganizationMembersPage>(
+    const { data } = await madagascar.get<OrganizationMembersPage>(
       `/api/organizations/${orgId}/members?${params.toString()}`,
     );
 
@@ -114,7 +114,7 @@ export const organizationService = {
       params.set("email", email);
     }
 
-    const { data } = await openHands.get<number>(
+    const { data } = await madagascar.get<number>(
       `/api/organizations/${orgId}/members/count?${params.toString()}`,
     );
 
@@ -122,7 +122,7 @@ export const organizationService = {
   },
 
   getOrganizationPaymentInfo: async ({ orgId }: { orgId: string }) => {
-    const { data } = await openHands.get<{
+    const { data } = await madagascar.get<{
       cardNumber: string;
     }>(`/api/organizations/${orgId}/payment`);
     return data;
@@ -136,7 +136,7 @@ export const organizationService = {
     orgId: string;
     userId: string;
   } & UpdateOrganizationMemberParams) => {
-    const { data } = await openHands.patch(
+    const { data } = await madagascar.patch(
       `/api/organizations/${orgId}/members/${userId}`,
       updateData,
     );
@@ -151,7 +151,7 @@ export const organizationService = {
     orgId: string;
     userId: string;
   }) => {
-    await openHands.delete(`/api/organizations/${orgId}/members/${userId}`);
+    await madagascar.delete(`/api/organizations/${orgId}/members/${userId}`);
   },
 
   inviteMembers: async ({
@@ -163,7 +163,7 @@ export const organizationService = {
     emails: string[];
     role?: OrganizationUserRole;
   }) => {
-    const { data } = await openHands.post<BatchInvitationResult>(
+    const { data } = await madagascar.post<BatchInvitationResult>(
       `/api/organizations/${orgId}/members/invite`,
       {
         emails,
@@ -175,7 +175,7 @@ export const organizationService = {
   },
 
   getPendingInvitations: async ({ orgId }: { orgId: string }) => {
-    const { data } = await openHands.get<PendingInvitationsPage>(
+    const { data } = await madagascar.get<PendingInvitationsPage>(
       `/api/organizations/${orgId}/members/invite`,
     );
 
@@ -189,20 +189,20 @@ export const organizationService = {
     orgId: string;
     invitationId: number;
   }) => {
-    await openHands.delete(
+    await madagascar.delete(
       `/api/organizations/${orgId}/members/invite/${invitationId}`,
     );
   },
 
   switchOrganization: async ({ orgId }: { orgId: string }) => {
-    const { data } = await openHands.post<Organization>(
+    const { data } = await madagascar.post<Organization>(
       `/api/organizations/${orgId}/switch`,
     );
     return data;
   },
 
   acceptInvitation: async ({ token }: { token: string }) => {
-    const { data } = await openHands.post<{
+    const { data } = await madagascar.post<{
       success: boolean;
       org_id: string;
       org_name: string;
@@ -213,7 +213,7 @@ export const organizationService = {
   },
 
   getOrganizationSettings: async ({ orgId }: { orgId: string }) => {
-    const { data } = await openHands.get<OrganizationSettingsResponse>(
+    const { data } = await madagascar.get<OrganizationSettingsResponse>(
       `/api/organizations/${orgId}/settings`,
     );
     return data;
@@ -226,7 +226,7 @@ export const organizationService = {
     orgId: string;
     settings: Partial<Settings> & Record<string, unknown>;
   }) => {
-    const { data } = await openHands.patch<OrganizationSettingsResponse>(
+    const { data } = await madagascar.patch<OrganizationSettingsResponse>(
       `/api/organizations/${orgId}/settings`,
       settings,
     );
@@ -234,7 +234,7 @@ export const organizationService = {
   },
 
   getGitClaims: async ({ orgId }: { orgId: string }) => {
-    const { data } = await openHands.get<GitOrgClaim[]>(
+    const { data } = await madagascar.get<GitOrgClaim[]>(
       `/api/organizations/${orgId}/git-claims`,
     );
     return data;
@@ -249,7 +249,7 @@ export const organizationService = {
     provider: string;
     gitOrganization: string;
   }) => {
-    const { data } = await openHands.post<GitOrgClaim>(
+    const { data } = await madagascar.post<GitOrgClaim>(
       `/api/organizations/${orgId}/git-claims`,
       { provider, git_organization: gitOrganization },
     );
@@ -263,11 +263,11 @@ export const organizationService = {
     orgId: string;
     claimId: string;
   }) => {
-    await openHands.delete(`/api/organizations/${orgId}/git-claims/${claimId}`);
+    await madagascar.delete(`/api/organizations/${orgId}/git-claims/${claimId}`);
   },
 
   getOrganizationAppSettings: async () => {
-    const { data } = await openHands.get<OrganizationAppSettingsResponse>(
+    const { data } = await madagascar.get<OrganizationAppSettingsResponse>(
       "/api/organizations/app",
     );
     return data;
@@ -276,7 +276,7 @@ export const organizationService = {
   saveOrganizationAppSettings: async (
     settings: OrganizationAppSettingsUpdate,
   ) => {
-    const { data } = await openHands.post<OrganizationAppSettingsResponse>(
+    const { data } = await madagascar.post<OrganizationAppSettingsResponse>(
       "/api/organizations/app",
       settings,
     );
@@ -285,7 +285,7 @@ export const organizationService = {
 
   // Organization Conversation APIs
   getConversationStats: async ({ orgId }: { orgId: string }) => {
-    const { data } = await openHands.get<OrgConversationStats>(
+    const { data } = await madagascar.get<OrgConversationStats>(
       `/api/organizations/${orgId}/conversations/stats`,
     );
     return data;
@@ -313,7 +313,7 @@ export const organizationService = {
     if (timeWindow) {
       params.time_window = timeWindow;
     }
-    const { data } = await openHands.get<OrgUsageStats>(
+    const { data } = await madagascar.get<OrgUsageStats>(
       `/api/organizations/${orgId}/conversations/usage-stats`,
       { params },
     );
@@ -336,7 +336,7 @@ export const organizationService = {
     if (typeof offset === "number") {
       params.offset = offset;
     }
-    const { data } = await openHands.get<OrgUserUsageStats>(
+    const { data } = await madagascar.get<OrgUserUsageStats>(
       `/api/organizations/${orgId}/conversations/user-usage`,
       { params },
     );
@@ -369,7 +369,7 @@ export const organizationService = {
     if (usersStatus) {
       params.users_status = usersStatus;
     }
-    const { data } = await openHands.get<OrgBudgetSettings>(
+    const { data } = await madagascar.get<OrgBudgetSettings>(
       `/api/organizations/${orgId}/budgets`,
       { params },
     );
@@ -383,7 +383,7 @@ export const organizationService = {
     orgId: string;
     payload: OrgBudgetSettingsUpdate;
   }) => {
-    const { data } = await openHands.patch<OrgBudgetSettings>(
+    const { data } = await madagascar.patch<OrgBudgetSettings>(
       `/api/organizations/${orgId}/budgets`,
       payload,
     );
@@ -399,7 +399,7 @@ export const organizationService = {
     userId: string;
     payload: OrgBudgetUserOverrideUpdate;
   }) => {
-    const { data } = await openHands.put<OrgBudgetUser>(
+    const { data } = await madagascar.put<OrgBudgetUser>(
       `/api/organizations/${orgId}/budgets/overrides/${userId}`,
       payload,
     );
@@ -413,7 +413,7 @@ export const organizationService = {
     orgId: string;
     userId: string;
   }) => {
-    await openHands.delete(
+    await madagascar.delete(
       `/api/organizations/${orgId}/budgets/overrides/${userId}`,
     );
   },
@@ -453,7 +453,7 @@ export const organizationService = {
     if (includeSubConversations)
       params.set("include_sub_conversations", "true");
 
-    const { data } = await openHands.get<OrgConversationPage>(
+    const { data } = await madagascar.get<OrgConversationPage>(
       `/api/organizations/${orgId}/conversations?${params.toString()}`,
     );
     return data;
@@ -466,7 +466,7 @@ export const organizationService = {
     orgId: string;
     conversationId: string;
   }) => {
-    const { data } = await openHands.get<OrgConversationResponse>(
+    const { data } = await madagascar.get<OrgConversationResponse>(
       `/api/organizations/${orgId}/conversations/${conversationId}`,
     );
     return data;
@@ -479,7 +479,7 @@ export const organizationService = {
     orgId: string;
     conversationId: string;
   }) => {
-    const { data } = await openHands.post<{
+    const { data } = await madagascar.post<{
       success: boolean;
       message: string;
       conversation_id: string;

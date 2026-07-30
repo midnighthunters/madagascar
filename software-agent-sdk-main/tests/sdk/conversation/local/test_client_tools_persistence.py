@@ -3,9 +3,9 @@
 import uuid
 from pathlib import Path
 
-from openhands.sdk import LLM, Agent, Conversation
-from openhands.sdk.tool import Tool, client_tool as ct, registry as reg
-from openhands.sdk.tool.client_tool import ClientToolSpec
+from madagascar.sdk import LLM, Agent, Conversation
+from madagascar.sdk.tool import Tool, client_tool as ct, registry as reg
+from madagascar.sdk.tool.client_tool import ClientToolSpec
 
 
 def _make_agent() -> Agent:

@@ -1,6 +1,6 @@
 import pytest
 
-from openhands.app_server.utils.chunk_localizer import (
+from madagascar.app_server.utils.chunk_localizer import (
     Chunk,
     _create_chunks_from_raw_string,
     create_chunks,

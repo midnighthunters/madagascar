@@ -84,7 +84,7 @@ export function shouldReapplyProfileAfterSave({
  */
 
 export function LlmSettingsLocalView() {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { setHideSectionHeader } = useSettingsSectionHeader();
   const saveProfile = useSaveLlmProfile();
   const activateProfile = useActivateLlmProfile();

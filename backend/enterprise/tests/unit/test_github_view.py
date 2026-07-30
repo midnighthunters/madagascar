@@ -11,54 +11,54 @@ from integrations.types import UserData
 class TestGithubLabels(TestCase):
     def test_labels_with_staging(self):
         oh_label, inline_oh_label = get_oh_labels('staging.all-hands.dev')
-        self.assertEqual(oh_label, 'openhands-exp')
-        self.assertEqual(inline_oh_label, '@openhands-exp')
+        self.assertEqual(oh_label, 'madagascar-exp')
+        self.assertEqual(inline_oh_label, '@madagascar-exp')
 
     def test_labels_with_staging_v2(self):
         oh_label, inline_oh_label = get_oh_labels('main.staging.all-hands.dev')
-        self.assertEqual(oh_label, 'openhands-exp')
-        self.assertEqual(inline_oh_label, '@openhands-exp')
+        self.assertEqual(oh_label, 'madagascar-exp')
+        self.assertEqual(inline_oh_label, '@madagascar-exp')
 
     def test_labels_with_local(self):
         oh_label, inline_oh_label = get_oh_labels('localhost:3000')
-        self.assertEqual(oh_label, 'openhands-exp')
-        self.assertEqual(inline_oh_label, '@openhands-exp')
+        self.assertEqual(oh_label, 'madagascar-exp')
+        self.assertEqual(inline_oh_label, '@madagascar-exp')
 
     def test_labels_with_prod(self):
         oh_label, inline_oh_label = get_oh_labels('app.all-hands.dev')
-        self.assertEqual(oh_label, 'openhands')
-        self.assertEqual(inline_oh_label, '@openhands')
+        self.assertEqual(oh_label, 'madagascar')
+        self.assertEqual(inline_oh_label, '@madagascar')
 
     def test_labels_with_spaces(self):
         """Test that spaces are properly stripped"""
         oh_label, inline_oh_label = get_oh_labels('  local  ')
-        self.assertEqual(oh_label, 'openhands-exp')
-        self.assertEqual(inline_oh_label, '@openhands-exp')
+        self.assertEqual(oh_label, 'madagascar-exp')
+        self.assertEqual(inline_oh_label, '@madagascar-exp')
 
-    @mock.patch.dict('os.environ', {'OH_RESOLVER_LABEL': 'openhands-dev'})
+    @mock.patch.dict('os.environ', {'OH_RESOLVER_LABEL': 'madagascar-dev'})
     def test_labels_with_override(self):
         """An explicit OH_RESOLVER_LABEL overrides host inference."""
         oh_label, inline_oh_label = get_oh_labels('app.all-hands.dev')
-        self.assertEqual(oh_label, 'openhands-dev')
-        self.assertEqual(inline_oh_label, '@openhands-dev')
+        self.assertEqual(oh_label, 'madagascar-dev')
+        self.assertEqual(inline_oh_label, '@madagascar-dev')
 
-    @mock.patch.dict('os.environ', {'OH_RESOLVER_LABEL': '  openhands-dev  '})
+    @mock.patch.dict('os.environ', {'OH_RESOLVER_LABEL': '  madagascar-dev  '})
     def test_labels_override_is_stripped(self):
         """The override is trimmed before use."""
         oh_label, inline_oh_label = get_oh_labels('staging.all-hands.dev')
-        self.assertEqual(oh_label, 'openhands-dev')
-        self.assertEqual(inline_oh_label, '@openhands-dev')
+        self.assertEqual(oh_label, 'madagascar-dev')
+        self.assertEqual(inline_oh_label, '@madagascar-dev')
 
     @mock.patch.dict('os.environ', {'OH_RESOLVER_LABEL': ''})
     def test_labels_empty_override_falls_back(self):
         """An empty override falls back to host inference."""
         oh_label, inline_oh_label = get_oh_labels('staging.all-hands.dev')
-        self.assertEqual(oh_label, 'openhands-exp')
-        self.assertEqual(inline_oh_label, '@openhands-exp')
+        self.assertEqual(oh_label, 'madagascar-exp')
+        self.assertEqual(inline_oh_label, '@madagascar-exp')
 
 
 class TestGithubCommentCaseInsensitivity(TestCase):
-    @mock.patch('integrations.github.github_view.INLINE_OH_LABEL', '@openhands')
+    @mock.patch('integrations.github.github_view.INLINE_OH_LABEL', '@madagascar')
     def test_issue_comment_case_insensitivity(self):
         # Test with lowercase mention
         message_lower = Message(
@@ -66,7 +66,7 @@ class TestGithubCommentCaseInsensitivity(TestCase):
             message={
                 'payload': {
                     'action': 'created',
-                    'comment': {'body': 'hello @openhands please help'},
+                    'comment': {'body': 'hello @madagascar please help'},
                     'issue': {'number': 1},
                 }
             },
@@ -78,7 +78,7 @@ class TestGithubCommentCaseInsensitivity(TestCase):
             message={
                 'payload': {
                     'action': 'created',
-                    'comment': {'body': 'hello @OPENHANDS please help'},
+                    'comment': {'body': 'hello @MADAGASCAR please help'},
                     'issue': {'number': 1},
                 }
             },
@@ -90,7 +90,7 @@ class TestGithubCommentCaseInsensitivity(TestCase):
             message={
                 'payload': {
                     'action': 'created',
-                    'comment': {'body': 'hello @OpenHands please help'},
+                    'comment': {'body': 'hello @Madagascar please help'},
                     'issue': {'number': 1},
                 }
             },

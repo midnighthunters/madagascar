@@ -50,7 +50,7 @@ export const taskVisualizer = defineVisualizer({
   actionKinds: ["TaskAction"],
   observationKinds: ["TaskObservation"],
   Body: function TaskBody({ action, observation }) {
-    const { t } = useTranslation("openhands");
+    const { t } = useTranslation("madagascar");
     const act = action?.action;
     const obs = observation?.observation;
 

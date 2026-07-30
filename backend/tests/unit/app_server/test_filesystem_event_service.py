@@ -12,9 +12,9 @@ from uuid import uuid4
 
 import pytest
 
-from openhands.agent_server.models import EventPage, EventSortOrder
-from openhands.app_server.event.filesystem_event_service import FilesystemEventService
-from openhands.sdk.event import PauseEvent, TokenEvent
+from madagascar.agent_server.models import EventPage, EventSortOrder
+from madagascar.app_server.event.filesystem_event_service import FilesystemEventService
+from madagascar.sdk.event import PauseEvent, TokenEvent
 
 
 @pytest.fixture

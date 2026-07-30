@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { formatTimeDelta } from "#/utils/format-time-delta";
 import { cn } from "#/utils/utils";
 import { I18nKey } from "#/i18n/declaration";
-import { RepositorySelection } from "#/api/open-hands.types";
+import { RepositorySelection } from "#/api/madagascar.types";
 import { ExecutionStatus } from "#/types/agent-server/core/base/common";
 import { isExecutionPaused } from "#/utils/status";
 import {
@@ -30,16 +30,16 @@ interface ConversationCardFooterProps {
   /**
    * Whether to render the agent/model chip. Wired to the conversation
    * panel's "LLM model" toggle; gates the chip uniformly
-   * for both ACP and OpenHands cards.
+   * for both ACP and Madagascar cards.
    */
   showAgentChip?: boolean;
   /**
    * High-level kind of the conversation's agent. Drives the chip's icon:
-   * the OpenHands logo for native conversations and the resolved ACP brand
+   * the Madagascar logo for native conversations and the resolved ACP brand
    * mark for ACP conversations. Defensive against stray ``acpServer``
-   * values reaching an OpenHands card.
+   * values reaching an Madagascar card.
    */
-  agentKind?: "openhands" | "acp" | null;
+  agentKind?: "madagascar" | "acp" | null;
   /**
    * Registry key of the ACP CLI server (``"claude-code"`` / ``"codex"`` /
    * ``"gemini-cli"`` / unknown / null). Resolved to a human display name
@@ -63,13 +63,13 @@ export function ConversationCardFooter({
   agentKind = null,
   acpServer = null,
 }: ConversationCardFooterProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const isPaused = isExecutionPaused(executionStatus);
 
   // Single inline chip per conversation: [brand mark] {model text}. Gated by
   // the conversation panel's "LLM model" toggle and applied
-  // uniformly to both kinds — OpenHands shows the logo + ``agent.llm.model``;
+  // uniformly to both kinds — Madagascar shows the logo + ``agent.llm.model``;
   // ACP shows the provider brand mark + model resolved through PR 730's
   // adapter chain, falling back to the provider display name when no model is
   // available so the chip never collapses to icon-only.
@@ -97,7 +97,7 @@ export function ConversationCardFooter({
       // Strip the routing prefix (e.g. "anthropic/claude-…" → "claude-…") for
       // the chip text; keep the full routing string in the tooltip.
       chip = {
-        kind: "openhands",
+        kind: "madagascar",
         text: formatNativeModelName(llmModel) ?? llmModel,
         tooltip: llmModel,
       };

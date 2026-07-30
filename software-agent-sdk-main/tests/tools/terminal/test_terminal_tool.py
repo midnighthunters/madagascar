@@ -7,11 +7,11 @@ from uuid import uuid4
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation.state import ConversationState
-from openhands.sdk.llm import LLM
-from openhands.sdk.workspace import LocalWorkspace
-from openhands.tools.terminal import (
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation.state import ConversationState
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.workspace import LocalWorkspace
+from madagascar.tools.terminal import (
     TerminalAction,
     TerminalObservation,
     TerminalTool,

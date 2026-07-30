@@ -1,6 +1,6 @@
 import pytest
 
-from openhands.sdk.extensions.installation.utils import validate_extension_name
+from madagascar.sdk.extensions.installation.utils import validate_extension_name
 
 
 @pytest.mark.parametrize(

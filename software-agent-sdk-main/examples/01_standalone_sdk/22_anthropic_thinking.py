@@ -4,7 +4,7 @@ import os
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
@@ -13,8 +13,8 @@ from openhands.sdk import (
     RedactedThinkingBlock,
     ThinkingBlock,
 )
-from openhands.sdk.tool import Tool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.tool import Tool
+from madagascar.tools.terminal import TerminalTool
 
 
 # Configure an Anthropic model with extended thinking.

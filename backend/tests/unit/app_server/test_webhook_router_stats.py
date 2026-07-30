@@ -15,19 +15,19 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.app_server.app_conversation.app_conversation_models import (
     AppConversationInfo,
 )
-from openhands.app_server.app_conversation.sql_app_conversation_info_service import (
+from madagascar.app_server.app_conversation.sql_app_conversation_info_service import (
     SQLAppConversationInfoService,
     StoredConversationCostEvent,
     StoredConversationMetadata,
 )
-from openhands.app_server.user.specifiy_user_context import SpecifyUserContext
-from openhands.app_server.utils.sql_utils import Base
-from openhands.sdk import ConversationStats
-from openhands.sdk.event import ConversationStateUpdateEvent
-from openhands.sdk.llm import Metrics, TokenUsage
+from madagascar.app_server.user.specifiy_user_context import SpecifyUserContext
+from madagascar.app_server.utils.sql_utils import Base
+from madagascar.sdk import ConversationStats
+from madagascar.sdk.event import ConversationStateUpdateEvent
+from madagascar.sdk.llm import Metrics, TokenUsage
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -446,7 +446,7 @@ class TestProcessStatsEvent:
                 side_effect=Exception('Database error'),
             ),
             patch(
-                'openhands.app_server.app_conversation.sql_app_conversation_info_service.logger'
+                'madagascar.app_server.app_conversation.sql_app_conversation_info_service.logger'
             ) as mock_logger,
         ):
             await service.process_stats_event(
@@ -489,7 +489,7 @@ class TestOnEventStatsProcessing:
         """Test that on_event processes stats events."""
         from unittest.mock import patch
 
-        from openhands.app_server.event_callback.webhook_router import on_event
+        from madagascar.app_server.event_callback.webhook_router import on_event
 
         conversation_id = uuid4()
         sandbox_id = 'sandbox_123'
@@ -528,7 +528,7 @@ class TestOnEventStatsProcessing:
         # Set up process_stats_event to call update_conversation_statistics
         async def process_stats_event_side_effect(event, conversation_id):
             # Simulate what process_stats_event does - call update_conversation_statistics
-            from openhands.sdk import ConversationStats
+            from madagascar.sdk import ConversationStats
 
             if isinstance(event.value, dict):
                 stats = ConversationStats.model_validate(event.value)
@@ -542,7 +542,7 @@ class TestOnEventStatsProcessing:
         )
 
         with patch(
-            'openhands.app_server.event_callback.webhook_router._run_callbacks_in_bg_and_close'
+            'madagascar.app_server.event_callback.webhook_router._run_callbacks_in_bg_and_close'
         ) as mock_callbacks:
             # on_event now takes a BackgroundTasks dependency. We pass a real
             # instance and verify it was scheduled rather than mocking it out.
@@ -572,7 +572,7 @@ class TestOnEventStatsProcessing:
         """Test that on_event skips non-stats events."""
         from unittest.mock import MagicMock, patch
 
-        from openhands.app_server.event_callback.webhook_router import on_event
+        from madagascar.app_server.event_callback.webhook_router import on_event
 
         conversation_id = uuid4()
         sandbox_id = 'sandbox_123'
@@ -595,7 +595,7 @@ class TestOnEventStatsProcessing:
         mock_app_conversation_info_service = AsyncMock()
 
         with patch(
-            'openhands.app_server.event_callback.webhook_router._run_callbacks_in_bg_and_close'
+            'madagascar.app_server.event_callback.webhook_router._run_callbacks_in_bg_and_close'
         ):
             # Call on_event directly with dependencies
             await on_event(

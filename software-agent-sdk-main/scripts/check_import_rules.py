@@ -1,30 +1,30 @@
 #!/usr/bin/env python3
 """
-Check import dependency rules across openhands packages.
+Check import dependency rules across madagascar packages.
 
 Rules:
-1. openhands.sdk should NOT import from:
-   - openhands.tools
-   - openhands.workspace
-   - openhands.agent_server
+1. madagascar.sdk should NOT import from:
+   - madagascar.tools
+   - madagascar.workspace
+   - madagascar.agent_server
 
-2. openhands.tools can import from:
-   - openhands.sdk
+2. madagascar.tools can import from:
+   - madagascar.sdk
    BUT NOT from:
-   - openhands.workspace
-   - openhands.agent_server
+   - madagascar.workspace
+   - madagascar.agent_server
 
-3. openhands.workspace can import from:
-   - openhands.sdk
-   - openhands.tools
+3. madagascar.workspace can import from:
+   - madagascar.sdk
+   - madagascar.tools
    BUT NOT from:
-   - openhands.agent_server
+   - madagascar.agent_server
 
-4. openhands.agent_server can import from:
-   - openhands.sdk
-   - openhands.tools
+4. madagascar.agent_server can import from:
+   - madagascar.sdk
+   - madagascar.tools
    BUT NOT from:
-   - openhands.workspace
+   - madagascar.workspace
 """
 
 import ast
@@ -66,9 +66,9 @@ def get_imports_from_file(file_path: Path) -> set[str]:
 
 
 def check_sdk_imports(sdk_path: Path) -> list[tuple[Path, str]]:
-    """Check that openhands.sdk doesn't import from tools/workspace/agent_server."""  # noqa: E501
+    """Check that madagascar.sdk doesn't import from tools/workspace/agent_server."""  # noqa: E501
     violations = []
-    forbidden = ["openhands.tools", "openhands.workspace", "openhands.agent_server"]
+    forbidden = ["madagascar.tools", "madagascar.workspace", "madagascar.agent_server"]
 
     for py_file in sdk_path.rglob("*.py"):
         imports = get_imports_from_file(py_file)
@@ -81,9 +81,9 @@ def check_sdk_imports(sdk_path: Path) -> list[tuple[Path, str]]:
 
 
 def check_tools_imports(tools_path: Path) -> list[tuple[Path, str]]:
-    """Check that openhands.tools doesn't import from workspace or agent_server."""
+    """Check that madagascar.tools doesn't import from workspace or agent_server."""
     violations = []
-    forbidden = ["openhands.workspace", "openhands.agent_server"]
+    forbidden = ["madagascar.workspace", "madagascar.agent_server"]
 
     for py_file in tools_path.rglob("*.py"):
         imports = get_imports_from_file(py_file)
@@ -96,9 +96,9 @@ def check_tools_imports(tools_path: Path) -> list[tuple[Path, str]]:
 
 
 def check_agent_server_imports(agent_server_path: Path) -> list[tuple[Path, str]]:
-    """Check that openhands.agent_server doesn't import from workspace."""
+    """Check that madagascar.agent_server doesn't import from workspace."""
     violations = []
-    forbidden = ["openhands.workspace"]
+    forbidden = ["madagascar.workspace"]
 
     for py_file in agent_server_path.rglob("*.py"):
         imports = get_imports_from_file(py_file)
@@ -121,10 +121,10 @@ def main(files: list[str] | None = None) -> int:
         0 if no violations found, 1 otherwise.
     """
     repo_root = Path(__file__).parent.parent
-    sdk_path = repo_root / "openhands-sdk" / "openhands" / "sdk"
-    tools_path = repo_root / "openhands-tools" / "openhands" / "tools"
+    sdk_path = repo_root / "madagascar-sdk" / "madagascar" / "sdk"
+    tools_path = repo_root / "madagascar-tools" / "madagascar" / "tools"
     agent_server_path = (
-        repo_root / "openhands-agent-server" / "openhands" / "agent_server"
+        repo_root / "madagascar-agent-server" / "madagascar" / "agent_server"
     )
 
     # If specific files are provided, filter checks to only those directories
@@ -146,7 +146,7 @@ def main(files: list[str] | None = None) -> int:
     if check_sdk and sdk_path.exists():
         violations = check_sdk_imports(sdk_path)
         if violations:
-            print("[ERROR] Violations in openhands.sdk:")
+            print("[ERROR] Violations in madagascar.sdk:")
             for file, imp in violations:
                 rel_path = file.relative_to(repo_root)
                 print(
@@ -159,7 +159,7 @@ def main(files: list[str] | None = None) -> int:
     if check_tools and tools_path.exists():
         violations = check_tools_imports(tools_path)
         if violations:
-            print("[ERROR] Violations in openhands.tools:")
+            print("[ERROR] Violations in madagascar.tools:")
             for file, imp in violations:
                 rel_path = file.relative_to(repo_root)
                 print(
@@ -172,7 +172,7 @@ def main(files: list[str] | None = None) -> int:
     if check_agent_server and agent_server_path.exists():
         violations = check_agent_server_imports(agent_server_path)
         if violations:
-            print("[ERROR] Violations in openhands.agent_server:")
+            print("[ERROR] Violations in madagascar.agent_server:")
             for file, imp in violations:
                 rel_path = file.relative_to(repo_root)
                 print(
@@ -184,12 +184,12 @@ def main(files: list[str] | None = None) -> int:
     if all_violations:
         print(
             "\nImport dependency rules:\n"
-            "  - openhands.sdk: Cannot import tools/workspace/agent_server\n"
-            "  - openhands.tools: Cannot import workspace/agent_server "
+            "  - madagascar.sdk: Cannot import tools/workspace/agent_server\n"
+            "  - madagascar.tools: Cannot import workspace/agent_server "
             "(can import sdk)\n"
-            "  - openhands.agent_server: Cannot import workspace "
+            "  - madagascar.agent_server: Cannot import workspace "
             "(can import sdk/tools)\n"
-            "  - openhands.workspace: Can import sdk/tools"
+            "  - madagascar.workspace: Can import sdk/tools"
         )
         return 1
 

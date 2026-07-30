@@ -26,14 +26,14 @@ export function ErrorMessageBanner({
   onRetry,
   onReauth,
 }: ErrorMessageBannerProps) {
-  const { t, i18n } = useTranslation("openhands");
+  const { t, i18n } = useTranslation("madagascar");
   const headerKey = getAcpErrorHeaderKey(code);
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [isMultiLine, setIsMultiLine] = React.useState(false);
   const [isCopied, setIsCopied] = React.useState(false);
   const contentRef = React.useRef<HTMLDivElement>(null);
 
-  const isI18nKey = i18n.exists(message, { ns: "openhands" });
+  const isI18nKey = i18n.exists(message, { ns: "madagascar" });
   const displayTextForLength = isI18nKey ? String(t(message)) : message;
   const shouldShowToggle =
     displayTextForLength.length > DEFAULT_MAX_COLLAPSED_CHARS;
@@ -121,7 +121,7 @@ export function ErrorMessageBanner({
           )}
           data-testid="error-message-banner-content"
         >
-          {isI18nKey ? <Trans ns="openhands" i18nKey={message} /> : message}
+          {isI18nKey ? <Trans ns="madagascar" i18nKey={message} /> : message}
         </div>
 
         {onReauth && (

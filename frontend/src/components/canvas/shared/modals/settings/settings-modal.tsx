@@ -16,7 +16,7 @@ interface SettingsModalProps {
 }
 
 export function SettingsModal({ onClose, settings }: SettingsModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <ModalBackdrop>

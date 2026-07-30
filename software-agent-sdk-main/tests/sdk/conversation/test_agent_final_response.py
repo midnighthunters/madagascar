@@ -1,9 +1,9 @@
 """Tests for the get_agent_final_response utility function."""
 
-from openhands.sdk.conversation.response_utils import get_agent_final_response
-from openhands.sdk.event import ActionEvent, MessageEvent
-from openhands.sdk.llm import Message, MessageToolCall, TextContent
-from openhands.sdk.tool.builtins.finish import FinishAction
+from madagascar.sdk.conversation.response_utils import get_agent_final_response
+from madagascar.sdk.event import ActionEvent, MessageEvent
+from madagascar.sdk.llm import Message, MessageToolCall, TextContent
+from madagascar.sdk.tool.builtins.finish import FinishAction
 
 
 def test_get_agent_final_response_with_finish_action():

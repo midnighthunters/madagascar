@@ -10,10 +10,10 @@ import pytest
 import websockets
 import websockets.frames
 
-from openhands.sdk.conversation.impl.remote_conversation import WebSocketCallbackClient
-from openhands.sdk.event.conversation_state import FULL_STATE_KEY
-from openhands.sdk.event.llm_convertible import MessageEvent
-from openhands.sdk.llm import Message, TextContent
+from madagascar.sdk.conversation.impl.remote_conversation import WebSocketCallbackClient
+from madagascar.sdk.event.conversation_state import FULL_STATE_KEY
+from madagascar.sdk.event.llm_convertible import MessageEvent
+from madagascar.sdk.llm import Message, TextContent
 
 
 @pytest.fixture
@@ -74,7 +74,7 @@ def test_websocket_client_error_resilience(mock_event):
     )
 
     with patch(
-        "openhands.sdk.conversation.impl.remote_conversation.logger"
+        "madagascar.sdk.conversation.impl.remote_conversation.logger"
     ) as mock_logger:
         try:
             client.callback(mock_event)
@@ -162,7 +162,7 @@ def test_websocket_client_url_encodes_api_key():
     )
 
     with patch(
-        "openhands.sdk.conversation.impl.remote_conversation.websockets.connect",
+        "madagascar.sdk.conversation.impl.remote_conversation.websockets.connect",
         _MockConnect(),
     ):
         asyncio.run(client._client_loop())
@@ -250,7 +250,7 @@ def test_websocket_client_retries_after_retryable_connection_closed():
     client._sleep_before_retry = no_sleep
 
     with patch(
-        "openhands.sdk.conversation.impl.remote_conversation.websockets.connect",
+        "madagascar.sdk.conversation.impl.remote_conversation.websockets.connect",
         _MockConnect(),
     ):
         asyncio.run(client._client_loop())
@@ -284,7 +284,7 @@ def test_websocket_client_stops_after_fatal_connection_closed(close_code):
     )
 
     with patch(
-        "openhands.sdk.conversation.impl.remote_conversation.websockets.connect",
+        "madagascar.sdk.conversation.impl.remote_conversation.websockets.connect",
         _MockConnect(),
     ):
         asyncio.run(client._client_loop())
@@ -328,7 +328,7 @@ def test_websocket_client_calls_on_reconnect_after_subscription_restored():
     client._sleep_before_retry = no_sleep
 
     with patch(
-        "openhands.sdk.conversation.impl.remote_conversation.websockets.connect",
+        "madagascar.sdk.conversation.impl.remote_conversation.websockets.connect",
         _MockConnect(),
     ):
         asyncio.run(client._client_loop())

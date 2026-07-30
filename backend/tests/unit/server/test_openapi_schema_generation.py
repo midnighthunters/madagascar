@@ -6,15 +6,15 @@ from fastapi import Request
 from fastapi.testclient import TestClient
 from pydantic import SecretStr
 
-from openhands.app_server.app import app
-from openhands.app_server.file_store.memory import InMemoryFileStore
-from openhands.app_server.integrations.provider import ProviderToken, ProviderType
-from openhands.app_server.integrations.service_types import UserGitInfo
-from openhands.app_server.secrets.secrets_models import Secrets
-from openhands.app_server.secrets.secrets_store import SecretsStore
-from openhands.app_server.settings.file_settings_store import FileSettingsStore
-from openhands.app_server.settings.settings_store import SettingsStore
-from openhands.app_server.user_auth.user_auth import UserAuth
+from madagascar.app_server.app import app
+from madagascar.app_server.file_store.memory import InMemoryFileStore
+from madagascar.app_server.integrations.provider import ProviderToken, ProviderType
+from madagascar.app_server.integrations.service_types import UserGitInfo
+from madagascar.app_server.secrets.secrets_models import Secrets
+from madagascar.app_server.secrets.secrets_store import SecretsStore
+from madagascar.app_server.settings.file_settings_store import FileSettingsStore
+from madagascar.app_server.settings.settings_store import SettingsStore
+from madagascar.app_server.user_auth.user_auth import UserAuth
 
 
 class MockUserAuth(UserAuth):
@@ -67,11 +67,11 @@ def test_client():
     # Create a test client
     with (
         patch(
-            'openhands.app_server.user_auth.user_auth.UserAuth.get_instance',
+            'madagascar.app_server.user_auth.user_auth.UserAuth.get_instance',
             return_value=MockUserAuth(),
         ),
         patch(
-            'openhands.app_server.settings.file_settings_store.FileSettingsStore.get_instance',
+            'madagascar.app_server.settings.file_settings_store.FileSettingsStore.get_instance',
             AsyncMock(return_value=FileSettingsStore(InMemoryFileStore())),
         ),
     ):

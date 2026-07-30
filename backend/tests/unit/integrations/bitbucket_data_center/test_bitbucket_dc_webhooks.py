@@ -10,10 +10,10 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from openhands.app_server.integrations.bitbucket_data_center.bitbucket_dc_service import (
+from madagascar.app_server.integrations.bitbucket_data_center.bitbucket_dc_service import (
     BitbucketDCService,
 )
-from openhands.app_server.integrations.service_types import RequestMethod
+from madagascar.app_server.integrations.service_types import RequestMethod
 
 WEBHOOK_EVENTS = ['repo:refs_changed', 'pr:opened', 'pr:comment:added']
 
@@ -27,13 +27,13 @@ def _make_service() -> BitbucketDCService:
 async def test_create_repository_webhook_posts_bbdc_payload():
     service = _make_service()
     service._make_request = AsyncMock(  # type: ignore[method-assign]
-        return_value=({'id': 42, 'name': 'OpenHands Resolver'}, {})
+        return_value=({'id': 42, 'name': 'Madagascar Resolver'}, {})
     )
 
     webhook_id = await service.create_repository_webhook(
         owner='PROJ',
         repo_slug='repo-1',
-        name='OpenHands Resolver',
+        name='Madagascar Resolver',
         webhook_url='https://app.example.com/integration/bitbucket-dc/events',
         webhook_secret='secret-123',
         events=WEBHOOK_EVENTS,
@@ -44,7 +44,7 @@ async def test_create_repository_webhook_posts_bbdc_payload():
     service._make_request.assert_awaited_once_with(
         url='https://bitbucket.example.com/rest/api/1.0/projects/PROJ/repos/repo-1/webhooks',
         params={
-            'name': 'OpenHands Resolver',
+            'name': 'Madagascar Resolver',
             'url': 'https://app.example.com/integration/bitbucket-dc/events',
             'active': True,
             'events': WEBHOOK_EVENTS,
@@ -67,7 +67,7 @@ async def test_update_repository_webhook_puts_full_payload():
         owner='PROJ',
         repo_slug='repo-1',
         webhook_id='7',
-        name='OpenHands Resolver',
+        name='Madagascar Resolver',
         webhook_url='https://app.example.com/integration/bitbucket-dc/events',
         webhook_secret='rotated',
         events=WEBHOOK_EVENTS,
@@ -77,7 +77,7 @@ async def test_update_repository_webhook_puts_full_payload():
     service._make_request.assert_awaited_once_with(
         url='https://bitbucket.example.com/rest/api/1.0/projects/PROJ/repos/repo-1/webhooks/7',
         params={
-            'name': 'OpenHands Resolver',
+            'name': 'Madagascar Resolver',
             'url': 'https://app.example.com/integration/bitbucket-dc/events',
             'active': True,
             'events': WEBHOOK_EVENTS,
@@ -100,7 +100,7 @@ async def test_update_repository_webhook_falls_back_to_input_id_when_response_la
         owner='PROJ',
         repo_slug='repo-1',
         webhook_id='9',
-        name='OpenHands Resolver',
+        name='Madagascar Resolver',
         webhook_url='https://app.example.com/integration/bitbucket-dc/events',
         webhook_secret='s',
         events=[],

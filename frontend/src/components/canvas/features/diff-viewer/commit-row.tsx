@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { GitCommit } from "#/api/open-hands.types";
+import { GitCommit } from "#/api/madagascar.types";
 import { I18nKey } from "#/i18n/declaration";
 import { cn } from "#/utils/utils";
 import { formatTimeDelta } from "#/utils/format-time-delta";
@@ -28,7 +28,7 @@ export function CommitRow({
   isExpanded,
   onToggle,
 }: CommitRowProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   // Only fetch a commit's file list once the row is expanded.
   const {

@@ -2,7 +2,7 @@ import os
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
@@ -10,10 +10,10 @@ from openhands.sdk import (
     LLMConvertibleEvent,
     get_logger,
 )
-from openhands.sdk.tool import Tool
-from openhands.tools.browser_use import BrowserToolSet
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.tool import Tool
+from madagascar.tools.browser_use import BrowserToolSet
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 
 
 logger = get_logger(__name__)
@@ -60,7 +60,7 @@ conversation = Conversation(
 )
 
 conversation.send_message(
-    "Could you go to https://openhands.dev/ blog page and summarize main "
+    "Could you go to https://madagascar.dev/ blog page and summarize main "
     "points of the latest blog?"
 )
 conversation.run()

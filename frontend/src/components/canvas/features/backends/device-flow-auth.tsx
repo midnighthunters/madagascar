@@ -43,7 +43,7 @@ interface DeviceFlowAuthProps {
 /**
  * Device Flow authentication UI component.
  *
- * Shows a "Login with OpenHands Cloud" button that initiates OAuth 2.0 Device Flow
+ * Shows a "Login with Madagascar Cloud" button that initiates OAuth 2.0 Device Flow
  * authentication. Displays status during the auth process and auto-opens
  * the browser for user authorization.
  */
@@ -73,7 +73,7 @@ export function DeviceFlowAuth({
   statusDisplay = "inline",
   analyticsSource,
 }: DeviceFlowAuthProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const deviceFlow = useDeviceFlow();
   const popupRef = React.useRef<Window | null>(null);
 
@@ -173,7 +173,7 @@ export function DeviceFlowAuth({
   );
   const showStatusModal =
     statusDisplay === "modal" && deviceFlow.status !== "idle";
-  const idleLabel = idleButtonLabel ?? t(I18nKey.BACKEND$LOGIN_WITH_OPENHANDS);
+  const idleLabel = idleButtonLabel ?? t(I18nKey.BACKEND$LOGIN_WITH_MADAGASCAR);
 
   return (
     <div
@@ -212,7 +212,7 @@ export function DeviceFlowAuth({
       {showStatusModal ? (
         <ModalBackdrop
           onClose={handleCancel}
-          aria-label={t(I18nKey.BACKEND$LOGIN_WITH_OPENHANDS)}
+          aria-label={t(I18nKey.BACKEND$LOGIN_WITH_MADAGASCAR)}
           closeOnBackdropClick={false}
         >
           <ModalBody
@@ -245,7 +245,7 @@ function DeviceFlowStatusContent({
   onCancel,
   onRetry,
 }: DeviceFlowStatusContentProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   if (status === "idle" || status === "success") return null;
 

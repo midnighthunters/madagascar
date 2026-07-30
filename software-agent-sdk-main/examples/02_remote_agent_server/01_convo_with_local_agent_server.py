@@ -6,10 +6,10 @@ from pathlib import Path
 from pydantic import SecretStr
 from scripts.utils import ManagedAPIServer
 
-from openhands.sdk import LLM, Conversation, RemoteConversation, Workspace, get_logger
-from openhands.sdk.event import ConversationStateUpdateEvent, HookExecutionEvent
-from openhands.sdk.hooks import HookConfig, HookDefinition, HookMatcher
-from openhands.tools.preset.default import get_default_agent
+from madagascar.sdk import LLM, Conversation, RemoteConversation, Workspace, get_logger
+from madagascar.sdk.event import ConversationStateUpdateEvent, HookExecutionEvent
+from madagascar.sdk.hooks import HookConfig, HookDefinition, HookMatcher
+from madagascar.tools.preset.default import get_default_agent
 
 
 logger = get_logger(__name__)
@@ -29,7 +29,7 @@ llm = LLM(
 )
 title_gen_llm = LLM(
     usage_id="title-gen-llm",
-    model=os.getenv("LLM_MODEL", "openhands/gpt-5-mini-2025-08-07"),
+    model=os.getenv("LLM_MODEL", "madagascar/gpt-5-mini-2025-08-07"),
     base_url=os.getenv("LLM_BASE_URL"),
     api_key=SecretStr(api_key),
 )

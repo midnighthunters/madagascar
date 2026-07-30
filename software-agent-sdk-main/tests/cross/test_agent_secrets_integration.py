@@ -7,16 +7,16 @@ from unittest.mock import patch
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.context.agent_context import AgentContext
-from openhands.sdk.conversation import Conversation
-from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-from openhands.sdk.llm import LLM
-from openhands.sdk.secret import LookupSecret, SecretSource, StaticSecret
-from openhands.sdk.tool import Tool, register_tool
-from openhands.tools.terminal import TerminalTool
-from openhands.tools.terminal.definition import TerminalAction
-from openhands.tools.terminal.impl import TerminalExecutor
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.context.agent_context import AgentContext
+from madagascar.sdk.conversation import Conversation
+from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.secret import LookupSecret, SecretSource, StaticSecret
+from madagascar.sdk.tool import Tool, register_tool
+from madagascar.tools.terminal import TerminalTool
+from madagascar.tools.terminal.definition import TerminalAction
+from madagascar.tools.terminal.impl import TerminalExecutor
 
 
 pytestmark = pytest.mark.skipif(

@@ -6,8 +6,8 @@ is incorrectly included in the MCP tool arguments, causing validation errors.
 
 import pytest
 
-from openhands.sdk.mcp import create_mcp_tools
-from openhands.sdk.mcp.config import coerce_mcp_config
+from madagascar.sdk.mcp import create_mcp_tools
+from madagascar.sdk.mcp.config import coerce_mcp_config
 
 
 @pytest.fixture
@@ -88,7 +88,7 @@ def test_real_mcp_tool_execution_without_kind_field(fetch_tool):
 
     # Verify we got a valid response (not an error about 'kind')
     # Check output if no error, otherwise check error message
-    from openhands.sdk.llm import TextContent
+    from madagascar.sdk.llm import TextContent
 
     assert observation.content is not None
     # Extract text from content blocks (content is always a list now)

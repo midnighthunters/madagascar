@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from openhands.sdk.conversation.types import (
+from madagascar.sdk.conversation.types import (
     TAG_VALUE_MAX_LENGTH,
     ConversationObservabilityMetadata,
     ConversationObservabilityTags,
@@ -91,7 +91,7 @@ def test_tags_in_pydantic_model():
 
 def test_validate_observability_metadata_valid():
     metadata = {
-        "repo_name": "OpenHands/software-agent-sdk",
+        "repo_name": "Madagascar/software-agent-sdk",
         "private": True,
         "retry_count": 3,
         "cost": 1.5,
@@ -111,7 +111,7 @@ def test_validate_observability_metadata_rejects_non_dict():
 
 def test_validate_observability_metadata_rejects_nested_values():
     with pytest.raises(ValueError, match="must be a scalar"):
-        _validate_observability_metadata({"repo": {"name": "openhands"}})  # type: ignore[dict-item]
+        _validate_observability_metadata({"repo": {"name": "madagascar"}})  # type: ignore[dict-item]
 
 
 def test_validate_observability_metadata_rejects_mixed_numeric_list():
@@ -125,8 +125,8 @@ def test_observability_metadata_in_pydantic_model():
     class TestModel(BaseModel):
         observability_metadata: ConversationObservabilityMetadata = {}
 
-    m = TestModel(observability_metadata={"repo_name": "OpenHands/OpenHands"})
-    assert m.observability_metadata == {"repo_name": "OpenHands/OpenHands"}
+    m = TestModel(observability_metadata={"repo_name": "Madagascar/Madagascar"})
+    assert m.observability_metadata == {"repo_name": "Madagascar/Madagascar"}
 
     m = TestModel.model_validate({"observability_metadata": None})
     assert m.observability_metadata == {}

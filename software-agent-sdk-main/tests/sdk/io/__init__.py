@@ -1,1 +1,1 @@
-# Tests for openhands.sdk.io module
+# Tests for madagascar.sdk.io module

@@ -8,15 +8,15 @@ import pytest
 from fastapi import FastAPI, status
 from fastapi.testclient import TestClient
 
-from openhands.app_server.config_api.config_models import LLMModel, Provider
-from openhands.app_server.config_api.config_router import router
-from openhands.app_server.config_api.default_llm_model_service import (
+from madagascar.app_server.config_api.config_models import LLMModel, Provider
+from madagascar.app_server.config_api.config_router import router
+from madagascar.app_server.config_api.default_llm_model_service import (
     _to_llm_models,
     _to_providers,
 )
-from openhands.app_server.utils.dependencies import check_session_api_key
-from openhands.app_server.utils.llm import get_supported_llm_models
-from openhands.app_server.utils.paging_utils import encode_page_id, paginate_results
+from madagascar.app_server.utils.dependencies import check_session_api_key
+from madagascar.app_server.utils.llm import get_supported_llm_models
+from madagascar.app_server.utils.paging_utils import encode_page_id, paginate_results
 
 
 class TestLLMModel:
@@ -125,12 +125,12 @@ class TestToProviders:
             if found_unverified and p.verified:
                 pytest.fail('Verified provider found after unverified provider')
 
-    def test_openhands_provider_appears_first(self):
-        """The ``openhands`` managed provider must always be first in the list."""
+    def test_madagascar_provider_appears_first(self):
+        """The ``madagascar`` managed provider must always be first in the list."""
         providers = _to_providers(get_supported_llm_models())
 
         assert providers, 'expected at least one provider'
-        assert providers[0].name == 'openhands'
+        assert providers[0].name == 'madagascar'
         assert providers[0].verified is True
 
     def test_contains_verified_and_unverified(self):

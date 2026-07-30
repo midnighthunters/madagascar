@@ -20,7 +20,7 @@ def jinja_env() -> Environment:
         loader=FileSystemLoader(
             str(
                 repo_root
-                / 'openhands/app_server/integrations/templates/resolver/bitbucket'
+                / 'madagascar/app_server/integrations/templates/resolver/bitbucket'
             )
         )
     )
@@ -70,7 +70,7 @@ def _make_message(
 
 @pytest.mark.asyncio
 async def test_factory_creates_pr_comment_view_for_pr_comment_added_with_mention():
-    msg = _make_message(body='Hey @openhands please fix typo', parent_id=42)
+    msg = _make_message(body='Hey @madagascar please fix typo', parent_id=42)
 
     view = await BitbucketDCFactory.create_bitbucket_dc_view_from_payload(
         msg, keycloak_user_id='kc-installer'
@@ -87,7 +87,7 @@ async def test_factory_creates_pr_comment_view_for_pr_comment_added_with_mention
 @pytest.mark.asyncio
 async def test_factory_creates_inline_view_when_anchor_present():
     msg = _make_message(
-        body='@openhands rename this',
+        body='@madagascar rename this',
         anchor={
             'path': 'src/x.py',
             'line': 12,
@@ -114,24 +114,24 @@ def test_is_pr_comment_returns_false_when_mention_absent():
 
 
 def test_is_pr_comment_returns_false_for_unknown_event_key():
-    msg = _make_message(body='@openhands fix', event_key='repo:refs_changed')
+    msg = _make_message(body='@madagascar fix', event_key='repo:refs_changed')
     assert BitbucketDCFactory.is_pr_comment(msg) is False
 
 
 def test_is_pr_comment_returns_false_for_edited_event():
-    # Created-only: editing an @openhands comment must not re-trigger a job.
-    msg = _make_message(body='@openhands fix', event_key='pr:comment:edited')
+    # Created-only: editing an @madagascar comment must not re-trigger a job.
+    msg = _make_message(body='@madagascar fix', event_key='pr:comment:edited')
     assert BitbucketDCFactory.is_pr_comment(msg) is False
 
 
 def test_is_pr_comment_returns_true_for_added_event_with_mention():
-    msg = _make_message(body='@openhands fix', event_key='pr:comment:added')
+    msg = _make_message(body='@madagascar fix', event_key='pr:comment:added')
     assert BitbucketDCFactory.is_pr_comment(msg) is True
 
 
 @pytest.mark.asyncio
 async def test_factory_records_actor_slug_and_assigns_keycloak_user_id():
-    msg = _make_message(body='@openhands fix')
+    msg = _make_message(body='@madagascar fix')
 
     view = await BitbucketDCFactory.create_bitbucket_dc_view_from_payload(
         msg, keycloak_user_id='kc-installer'
@@ -152,7 +152,7 @@ async def test_factory_keeps_mentioner_and_installer_distinct_when_passed():
     The mentioner runs the job; the installer's id is carried alongside on
     ``installer_keycloak_user_id`` for the bits that need elevated permissions.
     """
-    msg = _make_message(body='@openhands fix')
+    msg = _make_message(body='@madagascar fix')
 
     view = await BitbucketDCFactory.create_bitbucket_dc_view_from_payload(
         msg,
@@ -168,7 +168,7 @@ async def test_factory_keeps_mentioner_and_installer_distinct_when_passed():
 async def test_pr_comment_instructions_include_context_and_actionable_comment(
     jinja_env,
 ):
-    msg = _make_message(body='@openhands please update the tests')
+    msg = _make_message(body='@madagascar please update the tests')
     view = await BitbucketDCFactory.create_bitbucket_dc_view_from_payload(
         msg, keycloak_user_id='kc-alice'
     )
@@ -189,6 +189,6 @@ async def test_pr_comment_instructions_include_context_and_actionable_comment(
     assert conversation_instructions == ''
     assert 'PR title' in user_instructions
     assert 'PR body' in user_instructions
-    assert '@openhands please update the tests' in user_instructions
+    assert '@madagascar please update the tests' in user_instructions
     assert 'old thread' in user_instructions
     assert 'The comment above is the actionable request' in user_instructions

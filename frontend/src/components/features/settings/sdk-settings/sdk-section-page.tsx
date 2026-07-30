@@ -98,7 +98,7 @@ export interface SettingsSourceConfig {
   excludeKeys?: Set<string>;
   // The agent variant this page targets. SDK agent-settings is a
   // discriminated union, so a key like "llm" exists under both the
-  // "openhands" and "acp" variants. When set, only sections matching this
+  // "madagascar" and "acp" variants. When set, only sections matching this
   // variant (plus shared, untagged ones) render — dropping the duplicate.
   variant?: string;
 }

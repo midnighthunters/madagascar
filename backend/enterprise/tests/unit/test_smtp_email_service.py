@@ -141,7 +141,7 @@ class TestSMTPEmailServiceSendInvitationEmail:
             assert 'Acme Corp' in message
             assert 'John Doe' in message
             assert 'admin' in message
-            assert "You're invited to join Acme Corp on OpenHands" in message
+            assert "You're invited to join Acme Corp on Madagascar" in message
 
 
 class TestSMTPEmailServiceBudgetAlerts:

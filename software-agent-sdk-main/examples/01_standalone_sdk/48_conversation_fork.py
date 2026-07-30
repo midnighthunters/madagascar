@@ -14,9 +14,9 @@ A/B-testing prompts, fork-on-tool-change, edit-a-past-turn-and-re-run.
 
 import os
 
-from openhands.sdk import LLM, Agent, Conversation, Tool
-from openhands.sdk.event import MessageEvent
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk import LLM, Agent, Conversation, Tool
+from madagascar.sdk.event import MessageEvent
+from madagascar.tools.terminal import TerminalTool
 
 
 # -----------------------------------------------------------------

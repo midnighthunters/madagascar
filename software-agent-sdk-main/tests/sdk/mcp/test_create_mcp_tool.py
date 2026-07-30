@@ -17,8 +17,8 @@ from fastmcp.mcp_config import MCPConfig as FastMCPConfig, RemoteMCPServer
 from key_value.aio.stores.memory import MemoryStore
 from pydantic import SecretStr
 
-from openhands.sdk.mcp import create_mcp_tools
-from openhands.sdk.mcp.config import (
+from madagascar.sdk.mcp import create_mcp_tools
+from madagascar.sdk.mcp.config import (
     MCPApiKeyAuthCredential,
     MCPBasicAuthCredential,
     MCPBearerAuthCredential,
@@ -27,8 +27,8 @@ from openhands.sdk.mcp.config import (
     MCPOAuthAuthCredential,
     coerce_mcp_config,
 )
-from openhands.sdk.mcp.exceptions import MCPError, MCPTimeoutError
-from openhands.sdk.mcp.utils import _prepare_mcp_config
+from madagascar.sdk.mcp.exceptions import MCPError, MCPTimeoutError
+from madagascar.sdk.mcp.utils import _prepare_mcp_config
 
 
 logger = logging.getLogger(__name__)
@@ -264,9 +264,9 @@ def test_prepare_mcp_config_applies_explicit_oauth_authentication():
                             "application_type": "native",
                         },
                         "scopes": ["email", "offline_access"],
-                        "client_name": "OpenHands",
-                        "client_id": "openhands-client",
-                        "client_secret": "openhands-secret",
+                        "client_name": "Madagascar",
+                        "client_id": "madagascar-client",
+                        "client_secret": "madagascar-secret",
                     },
                 },
             }
@@ -284,9 +284,9 @@ def test_prepare_mcp_config_applies_explicit_oauth_authentication():
         "token_endpoint_auth_method": "private_key_jwt",
     }
     assert auth._scopes == ["email", "offline_access"]
-    assert auth._client_name == "OpenHands"
-    assert auth._client_id == "openhands-client"
-    assert auth._client_secret == "openhands-secret"
+    assert auth._client_name == "Madagascar"
+    assert auth._client_id == "madagascar-client"
+    assert auth._client_secret == "madagascar-secret"
 
 
 def test_prepare_mcp_config_applies_oauth_token_storage_to_explicit_auth():
@@ -659,7 +659,7 @@ def test_create_mcp_tools_timeout_error_message():
         }
     }
 
-    with patch("openhands.sdk.mcp.utils.MCPClient") as mock_client_class:
+    with patch("madagascar.sdk.mcp.utils.MCPClient") as mock_client_class:
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
         mock_client.call_async_from_sync.side_effect = TimeoutError()

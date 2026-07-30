@@ -2,7 +2,7 @@
 
 import json
 
-from openhands.sdk.event import (
+from madagascar.sdk.event import (
     ActionEvent,
     AgentErrorEvent,
     MessageEvent,
@@ -10,9 +10,9 @@ from openhands.sdk.event import (
     SystemPromptEvent,
     UserRejectObservation,
 )
-from openhands.sdk.llm import Message, MessageToolCall, TextContent
-from openhands.sdk.security.grayswan.utils import convert_events_to_openai_messages
-from openhands.sdk.tool import Action, Observation
+from madagascar.sdk.llm import Message, MessageToolCall, TextContent
+from madagascar.sdk.security.grayswan.utils import convert_events_to_openai_messages
+from madagascar.sdk.tool import Action, Observation
 
 
 class GraySwanUtilsTestAction(Action):

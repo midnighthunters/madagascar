@@ -10,8 +10,8 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from openhands.app_server.user.auth_user_context import AuthUserContext
-from openhands.app_server.user.specifiy_user_context import (
+from madagascar.app_server.user.auth_user_context import AuthUserContext
+from madagascar.app_server.user.specifiy_user_context import (
     ADMIN,
     SpecifyUserContext,
 )

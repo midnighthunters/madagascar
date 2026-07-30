@@ -1,19 +1,19 @@
 # Automated TODO Management with GitHub Actions
 
-This example demonstrates how to use the OpenHands SDK to automatically scan a codebase for configurable TODO comments and create pull requests to implement them. This showcases practical automation and self-improving codebase capabilities.
+This example demonstrates how to use the Madagascar SDK to automatically scan a codebase for configurable TODO comments and create pull requests to implement them. This showcases practical automation and self-improving codebase capabilities.
 
 ## Overview
 
 The workflow consists of three main components:
 
 1. **Scanner** (`scanner.py`) - Scans the codebase for configurable TODO comments
-2. **Agent** (`agent.py`) - Uses OpenHands to implement individual TODOs
+2. **Agent** (`agent.py`) - Uses Madagascar to implement individual TODOs
 3. **GitHub Actions Workflow** - Orchestrates the automation (see `.github/workflows/todo-management.yml`)
 
 ## Features
 
 - 🔍 **Smart Scanning**: Finds legitimate TODO comments with configurable identifiers while filtering out false positives
-- 🤖 **AI Implementation**: Uses OpenHands agent to automatically implement TODOs
+- 🤖 **AI Implementation**: Uses Madagascar agent to automatically implement TODOs
 - 🔄 **PR Management**: Creates feature branches and pull requests automatically
 - 📝 **Progress Tracking**: Tracks TODO processing status and PR creation
 - 📊 **Comprehensive Reporting**: Detailed GitHub Actions summary with processing status
@@ -22,14 +22,14 @@ The workflow consists of three main components:
 ## How It Works
 
 1. **Scan Phase**: The workflow scans your codebase for configurable TODO comments
-   - Default identifier: `TODO(openhands)` (customizable via workflow input)
+   - Default identifier: `TODO(madagascar)` (customizable via workflow input)
    - Filters out false positives (documentation, test files, quoted strings)
    - Supports Python, TypeScript, Java, and Rust files
    - Provides detailed logging of found TODOs
 
 2. **Process Phase**: For each TODO found:
    - Creates a feature branch
-   - Uses OpenHands agent to implement the TODO
+   - Uses Madagascar agent to implement the TODO
    - Creates a pull request with the implementation
    - Tracks processing status and PR information
 
@@ -41,7 +41,7 @@ The workflow consists of three main components:
 ## Files
 
 - **`scanner.py`**: Smart TODO scanner with false positive filtering
-- **`agent.py`**: OpenHands agent for TODO implementation
+- **`agent.py`**: Madagascar agent for TODO implementation
 - **`prompt.py`**: Contains the prompt template for TODO implementation
 - **`README.md`**: This comprehensive documentation
 
@@ -52,7 +52,7 @@ The workflow consists of three main components:
 Add these secrets to your GitHub repository:
 
 - **`LLM_API_KEY`** (required): Your LLM API key
-  - Get one from the [OpenHands LLM Provider](https://docs.all-hands.dev/openhands/usage/llms/openhands-llms)
+  - Get one from the [Madagascar LLM Provider](https://docs.all-hands.dev/madagascar/usage/llms/madagascar-llms)
 - `GITHUB_TOKEN` - GitHub token with repo permissions (automatically provided)
 -  Make sure Github Actions are allowed to create and review PRs (in the repo settings)
 
@@ -71,11 +71,11 @@ Ensure your `GITHUB_TOKEN` has these permissions:
 Add TODO comments in the following format anywhere in your codebase:
 
 ```python
-# TODO(openhands): Add input validation for user email
+# TODO(madagascar): Add input validation for user email
 def process_user_email(email):
     return email.lower()
 
-# TODO(openhands): Implement caching mechanism for API responses
+# TODO(madagascar): Implement caching mechanism for API responses
 def fetch_api_data(endpoint):
     # Current implementation without caching
     return requests.get(endpoint).json()
@@ -88,8 +88,8 @@ def fetch_api_data(endpoint):
 - Rust (`.rs`)
 
 **Supported Comment Styles:**
-- `# TODO(openhands): description` (Python, Shell, etc.)
-- `// TODO(openhands): description` (TypeScript, Java, Rust, etc.)
+- `# TODO(madagascar): description` (Python, Shell, etc.)
+- `// TODO(madagascar): description` (TypeScript, Java, Rust, etc.)
 
 **Custom Identifiers:**
 You can use custom TODO identifiers like `TODO(myteam)`, `TODO[urgent]`, etc. Configure this in the workflow parameters.
@@ -102,7 +102,7 @@ You can use custom TODO identifiers like `TODO(myteam)`, `TODO[urgent]`, etc. Co
 2. Click "Run workflow"
 3. (Optional) Configure parameters:
    - **Max TODOs**: Maximum number of TODOs to process (default: 3)
-   - **TODO Identifier**: Custom identifier to search for (default: `TODO(openhands)`)
+   - **TODO Identifier**: Custom identifier to search for (default: `TODO(madagascar)`)
 4. Click "Run workflow"
 
 ### Scanner CLI Usage
@@ -125,5 +125,5 @@ python scanner.py --help
 
 **Scanner Options:**
 - `directory`: Directory or file to scan (default: current directory)
-- `--identifier, -i`: TODO identifier to search for (default: `TODO(openhands)`)
+- `--identifier, -i`: TODO identifier to search for (default: `TODO(madagascar)`)
 - `--output, -o`: Output file for results (default: stdout)

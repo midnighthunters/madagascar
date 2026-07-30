@@ -1,6 +1,6 @@
 {
   "__expected__": {
-    "agent_kind": "openhands",
+    "agent_kind": "madagascar",
     "llm.model": "fixture-legacy-llm",
     "tools": [
       {

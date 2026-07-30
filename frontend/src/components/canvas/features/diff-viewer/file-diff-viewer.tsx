@@ -11,7 +11,7 @@ import {
   LuFileCheck,
 } from "react-icons/lu";
 import { IconType } from "react-icons/lib";
-import { GitChangeStatus } from "#/api/open-hands.types";
+import { GitChangeStatus } from "#/api/madagascar.types";
 import { I18nKey } from "#/i18n/declaration";
 import { getLanguageFromPath } from "#/utils/get-language-from-path";
 import { cn } from "#/utils/utils";
@@ -81,7 +81,7 @@ export interface FileDiffViewerProps {
 }
 
 export function FileDiffViewer({ path, type, commit }: FileDiffViewerProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const [isCollapsed, setIsCollapsed] = React.useState(true);
   const [editorHeight, setEditorHeight] = React.useState(400);
   const [viewMode, setViewMode] = React.useState<ViewMode>("diff");

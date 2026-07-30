@@ -6,10 +6,10 @@ from unittest.mock import patch
 import pytest
 from pydantic import SecretStr
 
-from openhands.app_server.integrations.bitbucket_data_center.bitbucket_dc_service import (
+from madagascar.app_server.integrations.bitbucket_data_center.bitbucket_dc_service import (
     BitbucketDCService,
 )
-from openhands.app_server.integrations.service_types import Comment, RequestMethod
+from madagascar.app_server.integrations.service_types import Comment, RequestMethod
 
 
 @pytest.fixture
@@ -133,7 +133,7 @@ async def test_get_pr_comments_excludes_triggering_comment(svc):
                 'action': 'COMMENTED',
                 'comment': {
                     'id': 11,
-                    'text': '@openhands do this',
+                    'text': '@madagascar do this',
                     'author': {'slug': 'bob'},
                     'createdDate': 1_700_000_001_000,
                     'updatedDate': 1_700_000_001_000,
@@ -279,10 +279,10 @@ async def test_user_has_write_access_for_does_not_call_admin_endpoint(svc):
 
 
 def test_mro_includes_resolver_mixin_and_base_git_service():
-    from openhands.app_server.integrations.bitbucket_data_center.service.resolver import (
+    from madagascar.app_server.integrations.bitbucket_data_center.service.resolver import (
         BitbucketDCResolverMixin,
     )
-    from openhands.app_server.integrations.service_types import BaseGitService
+    from madagascar.app_server.integrations.service_types import BaseGitService
 
     mro_names = [cls.__name__ for cls in BitbucketDCService.__mro__]
     assert 'BitbucketDCResolverMixin' in mro_names

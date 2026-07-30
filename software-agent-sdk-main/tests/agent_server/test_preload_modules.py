@@ -9,7 +9,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from openhands.agent_server.__main__ import (
+from madagascar.agent_server.__main__ import (
     _EXTRA_PYTHON_PATH_ENV,
     _get_internal_server_url,
     extend_python_path,
@@ -20,28 +20,28 @@ from openhands.agent_server.__main__ import (
 class TestPreloadModules:
     def test_none_is_noop(self):
         with patch(
-            "openhands.agent_server.__main__.importlib.import_module"
+            "madagascar.agent_server.__main__.importlib.import_module"
         ) as mock_import:
             preload_modules(None)
         mock_import.assert_not_called()
 
     def test_empty_string_is_noop(self):
         with patch(
-            "openhands.agent_server.__main__.importlib.import_module"
+            "madagascar.agent_server.__main__.importlib.import_module"
         ) as mock_import:
             preload_modules("")
         mock_import.assert_not_called()
 
     def test_single_module(self):
         with patch(
-            "openhands.agent_server.__main__.importlib.import_module"
+            "madagascar.agent_server.__main__.importlib.import_module"
         ) as mock_import:
             preload_modules("myapp.tools")
         mock_import.assert_called_once_with("myapp.tools")
 
     def test_comma_separated_strips_whitespace(self):
         with patch(
-            "openhands.agent_server.__main__.importlib.import_module"
+            "madagascar.agent_server.__main__.importlib.import_module"
         ) as mock_import:
             preload_modules(" myapp.tools , myapp.plugins ")
         assert [c.args[0] for c in mock_import.call_args_list] == [
@@ -51,7 +51,7 @@ class TestPreloadModules:
 
     def test_empty_segments_skipped(self):
         with patch(
-            "openhands.agent_server.__main__.importlib.import_module"
+            "madagascar.agent_server.__main__.importlib.import_module"
         ) as mock_import:
             preload_modules("myapp.tools,,myapp.plugins, ")
         assert [c.args[0] for c in mock_import.call_args_list] == [
@@ -273,14 +273,14 @@ class TestMainCheckBrowserOrdering:
 
         with (
             patch("sys.argv", ["prog", "--check-browser", "--import-modules", "boom"]),
-            patch("openhands.tools.preset.default.register_default_tools"),
+            patch("madagascar.tools.preset.default.register_default_tools"),
             patch(
-                "openhands.tools.browser_use.impl.BrowserToolExecutor",
+                "madagascar.tools.browser_use.impl.BrowserToolExecutor",
                 return_value=mock_executor,
             ),
-            patch("openhands.agent_server.__main__.preload_modules") as mock_preload,
+            patch("madagascar.agent_server.__main__.preload_modules") as mock_preload,
         ):
-            from openhands.agent_server.__main__ import main
+            from madagascar.agent_server.__main__ import main
 
             with pytest.raises(SystemExit) as exc_info:
                 main()
@@ -295,12 +295,12 @@ class TestMainCheckBrowserOrdering:
 
         with (
             patch("sys.argv", ["prog", "--host", "0.0.0.0", "--port", "4321"]),
-            patch("openhands.agent_server.__main__.preload_modules"),
-            patch("openhands.agent_server.__main__.LoggingServer") as mock_server_cls,
+            patch("madagascar.agent_server.__main__.preload_modules"),
+            patch("madagascar.agent_server.__main__.LoggingServer") as mock_server_cls,
         ):
             mock_server_cls.return_value.run.side_effect = SystemExit(0)
 
-            from openhands.agent_server.__main__ import main
+            from madagascar.agent_server.__main__ import main
 
             with pytest.raises(SystemExit) as exc_info:
                 main()

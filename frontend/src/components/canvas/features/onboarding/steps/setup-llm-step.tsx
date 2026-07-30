@@ -42,7 +42,7 @@ export const ONBOARDING_DEFAULT_LLM_MODEL = "openai/gpt-5.5";
  * who want the OpenAI/GPT-5.5 default pre-filled.
  */
 export function SetupLlmStep({ onBack, onNext }: SetupLlmStepProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { backend } = useActiveBackend();
   const isLocalBackend = backend.kind === "local";
   const saveProfile = useSaveLlmProfile();
@@ -111,7 +111,7 @@ export function SetupLlmStep({ onBack, onNext }: SetupLlmStepProps) {
       // persist their kind/model locally regardless of backend.
       if (llmProfileName) {
         await applyAgentProfile({
-          agent_kind: "openhands",
+          agent_kind: "madagascar",
           llm_profile_ref: llmProfileName,
         });
       }

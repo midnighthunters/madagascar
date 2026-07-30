@@ -6,19 +6,19 @@ from typing import TYPE_CHECKING, Any
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM
-from openhands.sdk.llm import Message
+from madagascar.sdk import LLM
+from madagascar.sdk.llm import Message
 from tests.integration.api_compliance.result import APIResponse, ComplianceTestResult
 
 
 if TYPE_CHECKING:
-    from openhands.sdk.tool import ToolDefinition
+    from madagascar.sdk.tool import ToolDefinition
 
 
 def get_minimal_tool_definitions() -> "Sequence[ToolDefinition[Any, Any]]":
     """Create minimal tool definitions for tests that need tool calling."""
-    from openhands.sdk.llm import TextContent
-    from openhands.sdk.tool import Action, Observation, ToolDefinition
+    from madagascar.sdk.llm import TextContent
+    from madagascar.sdk.tool import Action, Observation, ToolDefinition
 
     class ComplianceTestAction(Action):
         """Minimal action for compliance testing."""

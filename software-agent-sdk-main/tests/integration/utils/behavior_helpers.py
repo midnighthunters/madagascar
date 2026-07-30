@@ -7,8 +7,8 @@ from pathlib import Path
 from textwrap import dedent
 from typing import Any
 
-from openhands.sdk import get_logger
-from openhands.sdk.tool import Tool
+from madagascar.sdk import get_logger
+from madagascar.sdk.tool import Tool
 from tests.integration.base import (
     BaseIntegrationTest,
     SkipTest,
@@ -33,7 +33,7 @@ def clone_pinned_software_agent_repo(workspace: str) -> Path:
                 "git",
                 "clone",
                 "--filter=blob:none",
-                "https://github.com/OpenHands/software-agent-sdk.git",
+                "https://github.com/Madagascar/software-agent-sdk.git",
                 str(repo_dir),
             ],
             check=True,

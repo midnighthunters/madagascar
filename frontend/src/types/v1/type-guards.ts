@@ -1,5 +1,5 @@
 import {
-  OpenHandsEvent,
+  MadagascarEvent,
   ObservationEvent,
   BaseEvent,
   ExecuteBashAction,
@@ -26,7 +26,7 @@ import { HookExecutionEvent } from "./core/events/hook-execution-event";
 import { ACPToolCallEvent } from "./core/events/acp-tool-call-event";
 import { StreamingDeltaEvent } from "./core/events/streaming-delta-event";
 import { SystemPromptEvent } from "./core/events/system-event";
-import type { OpenHandsParsedEvent } from "../core/index";
+import type { MadagascarParsedEvent } from "../core/index";
 
 /**
  * Type guard to check if an unknown value is a valid BaseEvent
@@ -56,7 +56,7 @@ export function isBaseEvent(value: unknown): value is BaseEvent {
  * Type guard function to check if an event is an observation event
  */
 export const isObservationEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is ObservationEvent =>
   event.source === "environment" &&
   "action_id" in event &&
@@ -69,7 +69,7 @@ export const isObservationEvent = (
  * Type guard function to check if an event is an agent error event
  */
 export const isAgentErrorEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is AgentErrorEvent =>
   event.source === "agent" &&
   "tool_name" in event &&
@@ -82,7 +82,7 @@ export const isAgentErrorEvent = (
 /**
  * Type guard function to check if an event is a message event (user or assistant)
  */
-export const isMessageEvent = (event: OpenHandsEvent): event is MessageEvent =>
+export const isMessageEvent = (event: MadagascarEvent): event is MessageEvent =>
   "llm_message" in event &&
   typeof event.llm_message === "object" &&
   event.llm_message !== null &&
@@ -93,14 +93,14 @@ export const isMessageEvent = (event: OpenHandsEvent): event is MessageEvent =>
  * Type guard function to check if an event is a user message event
  */
 export const isUserMessageEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is MessageEvent =>
   isMessageEvent(event) && event.llm_message.role === "user";
 
 /**
  * Type guard function to check if an event is an action event
  */
-export const isActionEvent = (event: OpenHandsEvent): event is ActionEvent =>
+export const isActionEvent = (event: MadagascarEvent): event is ActionEvent =>
   event.source === "agent" &&
   "action" in event &&
   event.action !== null &&
@@ -115,7 +115,7 @@ export const isActionEvent = (event: OpenHandsEvent): event is ActionEvent =>
  * Type guard function to check if an action event is an ExecuteBashAction
  */
 export const isExecuteBashActionEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is ActionEvent<ExecuteBashAction | TerminalAction> =>
   isActionEvent(event) &&
   (event.action.kind === "ExecuteBashAction" ||
@@ -125,7 +125,7 @@ export const isExecuteBashActionEvent = (
  * Type guard function to check if an observation event contains terminal output
  */
 export const isExecuteBashObservationEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is ObservationEvent<ExecuteBashObservation | TerminalObservation> =>
   isObservationEvent(event) &&
   (event.observation.kind === "ExecuteBashObservation" ||
@@ -135,7 +135,7 @@ export const isExecuteBashObservationEvent = (
  * Type guard function to check if an observation event is a PlanningFileEditorObservation
  */
 export const isPlanningFileEditorObservationEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is ObservationEvent<PlanningFileEditorObservation> =>
   isObservationEvent(event) &&
   event.observation.kind === "PlanningFileEditorObservation";
@@ -144,7 +144,7 @@ export const isPlanningFileEditorObservationEvent = (
  * Type guard function to check if an observation event is a BrowserObservation
  */
 export const isBrowserObservationEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is ObservationEvent<BrowserObservation> =>
   isObservationEvent(event) && event.observation.kind === "BrowserObservation";
 
@@ -152,7 +152,7 @@ export const isBrowserObservationEvent = (
  * Type guard function to check if an action event is a BrowserNavigateAction
  */
 export const isBrowserNavigateActionEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is ActionEvent<BrowserNavigateAction> =>
   isActionEvent(event) && event.action.kind === "BrowserNavigateAction";
 
@@ -160,7 +160,7 @@ export const isBrowserNavigateActionEvent = (
  * Type guard function to check if an event is a system prompt event
  */
 export const isSystemPromptEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is SystemPromptEvent =>
   event.source === "agent" &&
   "system_prompt" in event &&
@@ -172,7 +172,7 @@ export const isSystemPromptEvent = (
  * Type guard function to check if an event is a conversation state update event
  */
 export const isConversationStateUpdateEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is ConversationStateUpdateEvent =>
   "kind" in event && event.kind === "ConversationStateUpdateEvent";
 
@@ -194,7 +194,7 @@ export const isStatsConversationStateUpdateEvent = (
  * (emitted when the agent switches its LLM via the built-in switch_llm tool).
  */
 export const isSwitchLLMObservationEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is ObservationEvent<SwitchLLMObservation> =>
   isObservationEvent(event) &&
   event.observation.kind === "SwitchLLMObservation";
@@ -203,7 +203,7 @@ export const isSwitchLLMObservationEvent = (
  * Type guard function to check if an event is a conversation error event
  */
 export const isConversationErrorEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is ConversationErrorEvent =>
   "kind" in event && event.kind === "ConversationErrorEvent";
 
@@ -211,7 +211,7 @@ export const isConversationErrorEvent = (
  * Type guard function to check if an event is a server error event
  */
 export const isServerErrorEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is ServerErrorEvent =>
   "kind" in event && event.kind === "ServerErrorEvent";
 
@@ -219,14 +219,14 @@ export const isServerErrorEvent = (
  * Type guard function to check if an event is a displayable error event
  * (ConversationErrorEvent or ServerErrorEvent) - both should show as error banners
  */
-export const isDisplayableErrorEvent = (event: OpenHandsEvent): boolean =>
+export const isDisplayableErrorEvent = (event: MadagascarEvent): boolean =>
   isConversationErrorEvent(event) || isServerErrorEvent(event);
 
 /**
  * Type guard function to check if an event is a hook execution event
  */
 export const isHookExecutionEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is HookExecutionEvent =>
   "kind" in event && event.kind === "HookExecutionEvent";
 
@@ -234,7 +234,7 @@ export const isHookExecutionEvent = (
  * Type guard function to check if an event is an ACP tool call event
  */
 export const isACPToolCallEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is ACPToolCallEvent =>
   "kind" in event && event.kind === "ACPToolCallEvent";
 
@@ -243,7 +243,7 @@ export const isACPToolCallEvent = (
  * (a transient LLM token chunk emitted while the response streams).
  */
 export const isStreamingDeltaEvent = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
 ): event is StreamingDeltaEvent =>
   "kind" in event && event.kind === "StreamingDeltaEvent";
 
@@ -253,27 +253,27 @@ export const isStreamingDeltaEvent = (
 // =============================================================================
 
 /**
- * TEMPORARY: Type guard to check if an event is a V1 OpenHandsEvent
+ * TEMPORARY: Type guard to check if an event is a V1 MadagascarEvent
  * Uses isBaseEvent to validate the complete event structure
  *
  * @deprecated This is temporary until full V1 migration is complete
  */
 export function isV1Event(
-  event: OpenHandsEvent | OpenHandsParsedEvent,
-): event is OpenHandsEvent {
+  event: MadagascarEvent | MadagascarParsedEvent,
+): event is MadagascarEvent {
   // Use isBaseEvent to validate the complete BaseEvent structure
   // This ensures the event has all required properties with correct types
   return isBaseEvent(event);
 }
 
 /**
- * TEMPORARY: Type guard to check if an event is a V0 OpenHandsParsedEvent
+ * TEMPORARY: Type guard to check if an event is a V0 MadagascarParsedEvent
  *
  * @deprecated This is temporary until full V1 migration is complete
  */
 export function isV0Event(
-  event: OpenHandsEvent | OpenHandsParsedEvent,
-): event is OpenHandsParsedEvent {
+  event: MadagascarEvent | MadagascarParsedEvent,
+): event is MadagascarParsedEvent {
   // Handle null/undefined cases
   if (!event || typeof event !== "object") {
     return false;

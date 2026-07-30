@@ -12,7 +12,7 @@ from pathlib import Path
 import pytest
 
 
-os.environ.setdefault("OPENHANDS_SUPPRESS_BANNER", "1")
+os.environ.setdefault("MADAGASCAR_SUPPRESS_BANNER", "1")
 
 
 def _load_script_module(name: str):
@@ -188,8 +188,8 @@ def test_get_pypi_baseline_version_prefers_current_or_previous(monkeypatch) -> N
         },
     )
 
-    assert get_pypi_baseline_version("openhands-sdk", "1.1.0") == "1.1.0"
-    assert get_pypi_baseline_version("openhands-sdk", "1.2.0") == "1.1.0"
+    assert get_pypi_baseline_version("madagascar-sdk", "1.1.0") == "1.1.0"
+    assert get_pypi_baseline_version("madagascar-sdk", "1.2.0") == "1.1.0"
 
 
 def test_get_pypi_baseline_version_raises_on_metadata_failure(monkeypatch) -> None:
@@ -200,9 +200,9 @@ def test_get_pypi_baseline_version_raises_on_metadata_failure(monkeypatch) -> No
 
     with pytest.raises(
         PersistedSettingsCompatError,
-        match="Failed to fetch PyPI metadata for openhands-sdk",
+        match="Failed to fetch PyPI metadata for madagascar-sdk",
     ):
-        get_pypi_baseline_version("openhands-sdk", "1.2.0")
+        get_pypi_baseline_version("madagascar-sdk", "1.2.0")
 
 
 def test_generate_baseline_payloads_uses_uv_with_release_cutoff(monkeypatch) -> None:
@@ -254,8 +254,8 @@ def test_generate_baseline_payloads_uses_uv_with_release_cutoff(monkeypatch) -> 
         "--quiet",
         "--exclude-newer",
         "2026-01-02T00:00:00Z",
-        "openhands-sdk==1.2.3",
-        "openhands-agent-server==1.2.3",
+        "madagascar-sdk==1.2.3",
+        "madagascar-agent-server==1.2.3",
     ]
 
 

@@ -1,11 +1,11 @@
 ---
-title: OpenHands Agent SDK Tests
-description: Test suite structure and execution strategy for the OpenHands Agent SDK. Includes unit tests, integration tests, and CI configuration.
+title: Madagascar Agent SDK Tests
+description: Test suite structure and execution strategy for the Madagascar Agent SDK. Includes unit tests, integration tests, and CI configuration.
 ---
 
-# OpenHands Agent SDK Tests
+# Madagascar Agent SDK Tests
 
-This directory contains the test suite for the OpenHands Agent SDK.
+This directory contains the test suite for the Madagascar Agent SDK.
 
 ## Test Structure
 
@@ -29,6 +29,6 @@ End-to-end tests that cover large parts of the code base and are generally slowe
 Component-specific tests that prevent regressions in core functionality.
 
 **CI Execution:** The CI runs these tests intelligently based on code changes:
-- **SDK Tests** (`sdk/`): Run when changes are detected in `openhands-sdk/**` or `tests/sdk/**`
-- **Tools Tests** (`tools/`): Run when changes are detected in `openhands-tools/**` or `tests/tools/**`
+- **SDK Tests** (`sdk/`): Run when changes are detected in `madagascar-sdk/**` or `tests/sdk/**`
+- **Tools Tests** (`tools/`): Run when changes are detected in `madagascar-tools/**` or `tests/tools/**`
 - **Cross Tests** (`cross/`): Run when changes are detected in any source code or test files

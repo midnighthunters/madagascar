@@ -80,7 +80,7 @@ export function ConversationPanelFilterMenu({
   totalConversationsCount,
   onRequestDeleteAll,
 }: ConversationPanelFilterMenuProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const groupedLabel =
     backendKind === "local"

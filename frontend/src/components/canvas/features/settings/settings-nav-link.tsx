@@ -21,7 +21,7 @@ export function SettingsNavLink({
   disabled,
   disabledAgentName,
 }: SettingsNavLinkProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { to, icon, text } = item;
 
   if (disabled) {

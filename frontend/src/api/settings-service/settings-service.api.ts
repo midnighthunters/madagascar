@@ -1,4 +1,4 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 import { Settings, SettingsSchema } from "#/types/settings";
 
 /**
@@ -9,7 +9,7 @@ class SettingsService {
    * Get the settings from the server or use the default settings if not found
    */
   static async getSettings(): Promise<Settings> {
-    const { data } = await openHands.get<Settings>("/api/v1/settings");
+    const { data } = await madagascar.get<Settings>("/api/v1/settings");
     return data;
   }
 
@@ -17,14 +17,14 @@ class SettingsService {
    * Get the AgentSettings schema used to render schema-driven settings pages.
    */
   static async getSettingsSchema(): Promise<SettingsSchema> {
-    const { data } = await openHands.get<SettingsSchema>(
+    const { data } = await madagascar.get<SettingsSchema>(
       "/api/v1/settings/agent-schema",
     );
     return data;
   }
 
   static async getConversationSettingsSchema(): Promise<SettingsSchema> {
-    const { data } = await openHands.get<SettingsSchema>(
+    const { data } = await madagascar.get<SettingsSchema>(
       "/api/v1/settings/conversation-schema",
     );
     return data;
@@ -37,7 +37,7 @@ class SettingsService {
   static async saveSettings(
     settings: Partial<Settings> & Record<string, unknown>,
   ): Promise<boolean> {
-    const response = await openHands.post("/api/v1/settings", settings);
+    const response = await madagascar.post("/api/v1/settings", settings);
     return response.status === 200;
   }
 }

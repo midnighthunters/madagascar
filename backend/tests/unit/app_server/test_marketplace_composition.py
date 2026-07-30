@@ -1,6 +1,6 @@
 """Tests for marketplace composition.
 
-Covers :mod:`openhands.app_server.settings.marketplace_composition`: instance
+Covers :mod:`madagascar.app_server.settings.marketplace_composition`: instance
 env parsing, name-keyed additive composition across scopes, duplicate detection,
 and the loading feature flag.
 """
@@ -9,14 +9,14 @@ from __future__ import annotations
 
 import pytest
 
-from openhands.app_server.settings.marketplace_composition import (
+from madagascar.app_server.settings.marketplace_composition import (
     compose_marketplaces,
     duplicate_marketplace_names,
     get_instance_default_marketplaces,
     load_composed_marketplaces,
     marketplace_plugin_loading_enabled,
 )
-from openhands.app_server.settings.settings_models import MarketplaceScope
+from madagascar.app_server.settings.settings_models import MarketplaceScope
 
 ENV = 'INSTANCE_DEFAULT_MARKETPLACES'
 FLAG = 'ENABLE_MARKETPLACE_PLUGIN_LOADING'

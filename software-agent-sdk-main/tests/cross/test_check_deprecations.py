@@ -43,7 +43,7 @@ def test_gather_rest_route_deprecations_collects_deprecated_route(tmp_path):
         _gather_rest_route_deprecations(
             tree,
             path,
-            package="openhands-agent-server",
+            package="madagascar-agent-server",
         )
     )
 
@@ -69,7 +69,7 @@ def test_gather_rest_route_deprecations_supports_api_route_methods(tmp_path):
         _gather_rest_route_deprecations(
             tree,
             path,
-            package="openhands-agent-server",
+            package="madagascar-agent-server",
         )
     )
 
@@ -85,7 +85,7 @@ def test_gather_rest_route_deprecations_ignores_non_deprecated_routes(tmp_path):
             _gather_rest_route_deprecations(
                 tree,
                 path,
-                package="openhands-agent-server",
+                package="madagascar-agent-server",
             )
         )
         == []
@@ -106,7 +106,7 @@ def test_gather_rest_route_deprecations_requires_parseable_docstring(tmp_path):
             _gather_rest_route_deprecations(
                 tree,
                 path,
-                package="openhands-agent-server",
+                package="madagascar-agent-server",
             )
         )
 
@@ -119,7 +119,7 @@ def test_should_fail_for_overdue_rest_route_record():
         path=Path("router.py"),
         line=10,
         kind="rest_route",
-        package="openhands-agent-server",
+        package="madagascar-agent-server",
     )
 
     assert _should_fail("1.14.0", record) is True
@@ -134,7 +134,7 @@ def test_runway_error_rejects_less_than_five_minor_releases():
         path=Path("settings.py"),
         line=42,
         kind="warn_call",
-        package="openhands-sdk",
+        package="madagascar-sdk",
     )
 
     error = _runway_error(record)
@@ -149,7 +149,7 @@ def test_main_fails_for_invalid_runway(monkeypatch, tmp_path, capsys):
     source_root = tmp_path / "pkg"
     source_root.mkdir()
     (source_root / "module.py").write_text(
-        "from openhands.sdk.utils.deprecation import warn_deprecated\n\n"
+        "from madagascar.sdk.utils.deprecation import warn_deprecated\n\n"
         "def trigger():\n"
         "    warn_deprecated(\n"
         "        'BadFeature',\n"
@@ -184,7 +184,7 @@ def test_runway_error_accepts_five_minor_releases():
         path=Path("settings.py"),
         line=42,
         kind="warn_call",
-        package="openhands-sdk",
+        package="madagascar-sdk",
     )
 
     assert _runway_error(record) is None
@@ -198,7 +198,7 @@ def test_runway_error_skips_cleanup_and_date_based_removals():
         path=Path("module.py"),
         line=12,
         kind="cleanup_call",
-        package="openhands-sdk",
+        package="madagascar-sdk",
     )
     date_record = DeprecationRecord(
         identifier="OldFeature",
@@ -207,7 +207,7 @@ def test_runway_error_skips_cleanup_and_date_based_removals():
         path=Path("module.py"),
         line=18,
         kind="decorator",
-        package="openhands-sdk",
+        package="madagascar-sdk",
     )
 
     assert _runway_error(cleanup_record) is None

@@ -5,12 +5,12 @@ from unittest.mock import Mock
 
 from pydantic import SecretStr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation import Conversation
-from openhands.sdk.llm import LLM
-from openhands.sdk.tool.schema import TextContent
-from openhands.tools.terminal import TerminalAction, TerminalObservation
-from openhands.tools.terminal.impl import TerminalExecutor
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation import Conversation
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.tool.schema import TextContent
+from madagascar.tools.terminal import TerminalAction, TerminalObservation
+from madagascar.tools.terminal.impl import TerminalExecutor
 
 
 def test_terminal_executor_without_conversation():

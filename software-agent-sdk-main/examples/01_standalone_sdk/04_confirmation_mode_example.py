@@ -1,4 +1,4 @@
-"""OpenHands Agent SDK — Confirmation Mode Example"""
+"""Madagascar Agent SDK — Confirmation Mode Example"""
 
 import os
 import signal
@@ -6,14 +6,14 @@ from collections.abc import Callable
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, BaseConversation, Conversation
-from openhands.sdk.conversation.state import (
+from madagascar.sdk import LLM, BaseConversation, Conversation
+from madagascar.sdk.conversation.state import (
     ConversationExecutionStatus,
     ConversationState,
 )
-from openhands.sdk.security.confirmation_policy import AlwaysConfirm, NeverConfirm
-from openhands.sdk.security.llm_analyzer import LLMSecurityAnalyzer
-from openhands.tools.preset.default import get_default_agent
+from madagascar.sdk.security.confirmation_policy import AlwaysConfirm, NeverConfirm
+from madagascar.sdk.security.llm_analyzer import LLMSecurityAnalyzer
+from madagascar.tools.preset.default import get_default_agent
 
 
 # Make ^C a clean exit instead of a stack trace

@@ -36,7 +36,7 @@ export function ImportAutomationModal({
   onClose,
   onImport,
 }: ImportAutomationModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   if (!isOpen || !spec) return null;
 

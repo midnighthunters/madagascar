@@ -376,7 +376,7 @@ class TestProvisionUserHandler:
         Every user is the owner of their personal org (Org.id ==
         User.id == UUID(keycloak.sub)), so a bare permission check
         on ``PROVISION_USER`` would otherwise let any normal user
-        provision additional Keycloak/OpenHands accounts inside
+        provision additional Keycloak/Madagascar accounts inside
         their own personal workspace and walk away with the
         credentials. Mirrors the personal-workspace rejection in
         ``server.services.org_invitation_service`` (403 Forbidden)
@@ -430,14 +430,14 @@ class TestProvisionUserHandler:
         """Failure before ``UserStore.create_user`` only undoes Keycloak.
 
         The offline-token step runs *before* ``UserStore.create_user``,
-        so when it blows up there are no OpenHands DB rows to
+        so when it blows up there are no Madagascar DB rows to
         compensate. The rollback must touch only the Keycloak user
         — exercising ``delete_org_cascade`` on a never-created
         personal org would log a misleading "not found".
         """
         patches, handles = self._patch_dependencies(new_user_id, target_org_id)
         # Make the offline-token step blow up after Keycloak succeeded
-        # but before any OpenHands DB row was created.
+        # but before any Madagascar DB row was created.
         handles['token_manager'].request_offline_token.side_effect = RuntimeError(
             'boom'
         )

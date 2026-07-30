@@ -14,20 +14,20 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 
-from openhands.app_server.event_callback.event_callback_models import (
+from madagascar.app_server.event_callback.event_callback_models import (
     CreateEventCallbackRequest,
     EventCallback,
     EventCallbackProcessor,
     EventCallbackStatus,
     LoggingCallbackProcessor,
 )
-from openhands.app_server.event_callback.sql_event_callback_service import (
+from madagascar.app_server.event_callback.sql_event_callback_service import (
     SQLEventCallbackService,
     StoredEventCallback,
     StoredEventCallbackResult,
 )
-from openhands.app_server.utils.sql_utils import Base
-from openhands.sdk import Message, MessageEvent, TextContent
+from madagascar.app_server.utils.sql_utils import Base
+from madagascar.sdk import Message, MessageEvent, TextContent
 
 
 @pytest.fixture
@@ -524,7 +524,7 @@ class TestSQLEventCallbackService:
 
         # Modify the callback
         created_callback.event_kind = 'ObservationEvent'
-        from openhands.app_server.event_callback.event_callback_models import (
+        from madagascar.app_server.event_callback.event_callback_models import (
             EventCallbackStatus,
         )
 
@@ -651,7 +651,7 @@ class TestSQLEventCallbackService:
         sample_processor: EventCallbackProcessor,
     ):
         """Test saving callbacks with different status values."""
-        from openhands.app_server.event_callback.event_callback_models import (
+        from madagascar.app_server.event_callback.event_callback_models import (
             EventCallbackStatus,
         )
 

@@ -9,11 +9,11 @@ from unittest.mock import Mock
 
 import mcp.types
 
-from openhands.sdk.mcp.client import MCPClient
-from openhands.sdk.mcp.definition import MCPToolAction, MCPToolObservation
-from openhands.sdk.mcp.tool import MCPToolDefinition
-from openhands.sdk.tool.schema import Action
-from openhands.sdk.tool.tool import ToolDefinition
+from madagascar.sdk.mcp.client import MCPClient
+from madagascar.sdk.mcp.definition import MCPToolAction, MCPToolObservation
+from madagascar.sdk.mcp.tool import MCPToolDefinition
+from madagascar.sdk.tool.schema import Action
+from madagascar.sdk.tool.tool import ToolDefinition
 
 
 def create_mock_mcp_tool(name: str) -> mcp.types.Tool:

@@ -18,7 +18,7 @@ from integrations.types import ResolverViewInterface
 from integrations.utils import (
     CONVERSATION_URL,
     HOST_URL,
-    OPENHANDS_RESOLVER_TEMPLATES_DIR,
+    MADAGASCAR_RESOLVER_TEMPLATES_DIR,
     get_session_expired_message,
     get_user_not_found_message,
 )
@@ -32,14 +32,14 @@ from server.auth.constants import (
 from server.auth.token_manager import TokenManager
 from storage.bitbucket_dc_webhook_store import BitbucketDCWebhookStore
 
-from openhands.app_server.integrations.provider import ProviderToken, ProviderType
-from openhands.app_server.secrets.secrets_models import Secrets
-from openhands.app_server.types import (
+from madagascar.app_server.integrations.provider import ProviderToken, ProviderType
+from madagascar.app_server.secrets.secrets_models import Secrets
+from madagascar.app_server.types import (
     LLMAuthenticationError,
     MissingSettingsError,
     SessionExpiredError,
 )
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 
 class BitbucketDCManager(Manager[BitbucketDCViewType]):
@@ -56,7 +56,7 @@ class BitbucketDCManager(Manager[BitbucketDCViewType]):
         # agnostic and the variables (pr_number, branch_name, comments,
         # file_location, line_number) match.
         self.jinja_env = Environment(
-            loader=FileSystemLoader(OPENHANDS_RESOLVER_TEMPLATES_DIR + 'bitbucket')
+            loader=FileSystemLoader(MADAGASCAR_RESOLVER_TEMPLATES_DIR + 'bitbucket')
         )
 
     def _confirm_incoming_source_type(self, message: Message) -> None:
@@ -106,7 +106,7 @@ class BitbucketDCManager(Manager[BitbucketDCViewType]):
         """Build the Bitbucket DC service used to POST comments/reactions.
 
         Always posts as the configured bot account -- mirroring the GitHub
-        App's ``openhands[bot]`` identity. ``receive_message`` gates on the bot
+        App's ``madagascar[bot]`` identity. ``receive_message`` gates on the bot
         token, so this never falls back to a user token.
 
         This affects only who *posts*. The resolver job itself always runs with
@@ -188,7 +188,7 @@ class BitbucketDCManager(Manager[BitbucketDCViewType]):
 
         # The bot account is required as one unit: the token to post results, and
         # the username to skip the bot's own replies (below). With either missing
-        # we'd risk re-firing the webhook on our own "@openhands" comment, so skip
+        # we'd risk re-firing the webhook on our own "@madagascar" comment, so skip
         # the event -- like the Jira DC service-account gate.
         if not (BITBUCKET_DATA_CENTER_BOT_TOKEN and BITBUCKET_DATA_CENTER_BOT_USERNAME):
             logger.error(
@@ -198,7 +198,7 @@ class BitbucketDCManager(Manager[BitbucketDCViewType]):
             return
 
         # Skip events the bot account authored. The agent's reply is posted via
-        # the bot PAT and can contain "@openhands"; without this guard it would
+        # the bot PAT and can contain "@madagascar"; without this guard it would
         # re-trigger a second job. Mirrors the Jira DC service-account guard;
         # BBDC's stable author id is the (lowercased) slug.
         actor = (message.message.get('payload') or {}).get('actor') or {}
@@ -422,7 +422,7 @@ class BitbucketDCManager(Manager[BitbucketDCViewType]):
                 )
                 msg_info = (
                     f'@{user_info.username} please re-login into '
-                    f'[OpenHands Cloud]({HOST_URL}) before starting a job.'
+                    f'[Madagascar Cloud]({HOST_URL}) before starting a job.'
                 )
 
             except LLMAuthenticationError as e:
@@ -432,7 +432,7 @@ class BitbucketDCManager(Manager[BitbucketDCViewType]):
                 )
                 msg_info = (
                     f'@{user_info.username} please set a valid LLM API key in '
-                    f'[OpenHands Cloud]({HOST_URL}) before starting a job.'
+                    f'[Madagascar Cloud]({HOST_URL}) before starting a job.'
                 )
 
             except SessionExpiredError as e:

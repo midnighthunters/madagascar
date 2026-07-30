@@ -10,17 +10,17 @@ import json
 
 import pytest
 
-from openhands.sdk.event import ActionEvent
-from openhands.sdk.llm import MessageToolCall, TextContent
-from openhands.sdk.security.confirmation_policy import ConfirmRisky
-from openhands.sdk.security.defense_in_depth.pattern import PatternSecurityAnalyzer
-from openhands.sdk.security.defense_in_depth.utils import (
+from madagascar.sdk.event import ActionEvent
+from madagascar.sdk.llm import MessageToolCall, TextContent
+from madagascar.sdk.security.confirmation_policy import ConfirmRisky
+from madagascar.sdk.security.defense_in_depth.pattern import PatternSecurityAnalyzer
+from madagascar.sdk.security.defense_in_depth.utils import (
     _EXTRACT_HARD_CAP,
     _extract_content,
     _extract_exec_content,
     _normalize,
 )
-from openhands.sdk.security.risk import SecurityRisk
+from madagascar.sdk.security.risk import SecurityRisk
 
 
 # ---------------------------------------------------------------------------

@@ -45,4 +45,4 @@ async def test_post_summary_resolves_service_account_at_callback_time(
     client.post.assert_awaited_once()
     _, kwargs = client.post.call_args
     assert kwargs['headers'] == {'Authorization': 'Bearer runtime-pat'}
-    assert kwargs['json']['body'].startswith('OpenHands resolved this issue:')
+    assert kwargs['json']['body'].startswith('Madagascar resolved this issue:')

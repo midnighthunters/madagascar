@@ -22,7 +22,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session, sessionmaker
 
 # Configuration
-DEFAULT_DB_URL = 'postgresql://postgres:postgres@localhost:5432/openhands'
+DEFAULT_DB_URL = 'postgresql://postgres:postgres@localhost:5432/madagascar'
 
 
 # Sample data
@@ -275,7 +275,7 @@ def seed_data(
 ) -> None:
     """Seed the database with conversation data.
 
-    Uses the correct OpenHands schema: org, user, org_member tables.
+    Uses the correct Madagascar schema: org, user, org_member tables.
     """
 
     engine = create_engine(db_url)

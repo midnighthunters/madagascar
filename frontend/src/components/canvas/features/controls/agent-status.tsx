@@ -33,7 +33,7 @@ export function AgentStatus({
   disabled = false,
   isPausing = false,
 }: AgentStatusProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { setShouldShownAgentLoading } = useConversationStore();
   const { curAgentState, executionStatus } = useAgentState();
 

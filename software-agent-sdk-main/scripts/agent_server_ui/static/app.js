@@ -1,4 +1,4 @@
-class OpenHandsWebChat {
+class MadagascarWebChat {
     constructor() {
         // In Docker setup, API calls go through nginx proxy
         this.apiBaseUrl = window.location.origin + '/api';
@@ -570,12 +570,12 @@ class OpenHandsWebChat {
             initialMessage: this.initialMessageInput.value,
             jsonParameters: this.jsonParametersInput.value
         };
-        localStorage.setItem('openhandsDialogSettings', JSON.stringify(settings));
+        localStorage.setItem('madagascarDialogSettings', JSON.stringify(settings));
     }
 
     loadDialogSettings() {
         try {
-            const saved = localStorage.getItem('openhandsDialogSettings');
+            const saved = localStorage.getItem('madagascarDialogSettings');
             if (saved) {
                 const settings = JSON.parse(saved);
                 this.initialMessageInput.value = settings.initialMessage || '';
@@ -761,5 +761,5 @@ class OpenHandsWebChat {
 
 // Initialize the application when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new OpenHandsWebChat();
+    new MadagascarWebChat();
 });

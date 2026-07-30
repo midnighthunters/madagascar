@@ -1,4 +1,4 @@
-from openhands.sdk.context.view.manipulation_indices import ManipulationIndices
+from madagascar.sdk.context.view.manipulation_indices import ManipulationIndices
 from tests.sdk.context.view.conftest import message_event  # noqa: F401
 
 

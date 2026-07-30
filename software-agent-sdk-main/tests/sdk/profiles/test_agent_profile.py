@@ -12,16 +12,16 @@ from uuid import UUID, uuid4
 import pytest
 from pydantic import TypeAdapter, ValidationError
 
-from openhands.sdk.profiles import (
+from madagascar.sdk.profiles import (
     AGENT_PROFILE_SCHEMA_VERSION,
     ACPAgentProfile,
     AgentProfile,
-    OpenHandsAgentProfile,
+    MadagascarAgentProfile,
     validate_agent_profile,
 )
 
 
-_ADAPTER: TypeAdapter[OpenHandsAgentProfile | ACPAgentProfile] = TypeAdapter(
+_ADAPTER: TypeAdapter[MadagascarAgentProfile | ACPAgentProfile] = TypeAdapter(
     AgentProfile
 )
 
@@ -31,9 +31,9 @@ _ADAPTER: TypeAdapter[OpenHandsAgentProfile | ACPAgentProfile] = TypeAdapter(
 # ---------------------------------------------------------------------------
 
 
-def test_openhands_profile_round_trips() -> None:
-    profile = OpenHandsAgentProfile(
-        name="my-openhands",
+def test_madagascar_profile_round_trips() -> None:
+    profile = MadagascarAgentProfile(
+        name="my-madagascar",
         llm_profile_ref="default",
         revision=3,
         mcp_server_refs=["fetch"],
@@ -45,9 +45,9 @@ def test_openhands_profile_round_trips() -> None:
     )
     reloaded = validate_agent_profile(profile.model_dump(mode="json"))
 
-    assert isinstance(reloaded, OpenHandsAgentProfile)
+    assert isinstance(reloaded, MadagascarAgentProfile)
     assert reloaded == profile
-    assert reloaded.agent_kind == "openhands"
+    assert reloaded.agent_kind == "madagascar"
     assert reloaded.agent == "CodeActAgent"
     assert reloaded.llm_profile_ref == "default"
     assert reloaded.revision == 3
@@ -57,24 +57,24 @@ def test_openhands_profile_round_trips() -> None:
     assert reloaded.tool_concurrency_limit == 4
 
 
-def test_openhands_profile_new_field_defaults() -> None:
+def test_madagascar_profile_new_field_defaults() -> None:
     """``enable_switch_llm_tool`` defaults True (global parity); ``disabled_skills``
     defaults ``[]`` — the deny-list starts empty, so an unset field means "all
     discovered skills" (#4017). Skills are selected by exclusion, never an
     allow-list of names that could dangle."""
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="default")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="default")
     assert profile.enable_switch_llm_tool is True
     assert profile.disabled_skills == []
     reloaded = validate_agent_profile(
-        {"agent_kind": "openhands", "name": "oh", "llm_profile_ref": "default"}
+        {"agent_kind": "madagascar", "name": "oh", "llm_profile_ref": "default"}
     )
-    assert isinstance(reloaded, OpenHandsAgentProfile)
+    assert isinstance(reloaded, MadagascarAgentProfile)
     assert reloaded.enable_switch_llm_tool is True
     assert reloaded.disabled_skills == []
 
 
 def test_default_profile_preserves_explicit_empty_tools() -> None:
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name="default", llm_profile_ref="default", revision=0, tools=[]
     )
 
@@ -84,11 +84,11 @@ def test_default_profile_preserves_explicit_empty_tools() -> None:
 def test_disabled_skills_round_trips() -> None:
     """A non-empty deny-list survives the JSON round-trip verbatim."""
     profile = validate_agent_profile(
-        OpenHandsAgentProfile(
+        MadagascarAgentProfile(
             name="oh", llm_profile_ref="default", disabled_skills=["a", "b"]
         ).model_dump(mode="json")
     )
-    assert isinstance(profile, OpenHandsAgentProfile)
+    assert isinstance(profile, MadagascarAgentProfile)
     assert profile.disabled_skills == ["a", "b"]
 
 
@@ -96,7 +96,7 @@ def test_acp_profile_has_no_skill_field() -> None:
     """ACP profiles carry no skill-selection field at all — the subprocess owns
     its tooling and prompt context (#4017). ``extra="forbid"`` rejects a stray
     ``skill_refs``/``disabled_skills`` on an ACP payload."""
-    from openhands.sdk.profiles import ACPAgentProfile
+    from madagascar.sdk.profiles import ACPAgentProfile
 
     profile = ACPAgentProfile(name="acp", acp_server="claude-code")
     assert not hasattr(profile, "skill_refs")
@@ -153,11 +153,11 @@ def test_acp_profile_minimal_defaults() -> None:
 
 
 def test_validate_dispatches_on_agent_kind() -> None:
-    openhands = validate_agent_profile(
-        {"agent_kind": "openhands", "name": "oh", "llm_profile_ref": "default"}
+    madagascar = validate_agent_profile(
+        {"agent_kind": "madagascar", "name": "oh", "llm_profile_ref": "default"}
     )
-    assert isinstance(openhands, OpenHandsAgentProfile)
-    assert openhands.agent_kind == "openhands"
+    assert isinstance(madagascar, MadagascarAgentProfile)
+    assert madagascar.agent_kind == "madagascar"
 
     acp = validate_agent_profile(
         {"agent_kind": "acp", "name": "acp", "acp_model": "claude-opus-4-8"}
@@ -166,10 +166,10 @@ def test_validate_dispatches_on_agent_kind() -> None:
     assert acp.agent_kind == "acp"
 
 
-def test_missing_discriminator_defaults_to_openhands() -> None:
+def test_missing_discriminator_defaults_to_madagascar() -> None:
     profile = validate_agent_profile({"name": "oh", "llm_profile_ref": "default"})
-    assert isinstance(profile, OpenHandsAgentProfile)
-    assert profile.agent_kind == "openhands"
+    assert isinstance(profile, MadagascarAgentProfile)
+    assert profile.agent_kind == "madagascar"
 
 
 def test_type_adapter_narrows_directly() -> None:
@@ -179,7 +179,7 @@ def test_type_adapter_narrows_directly() -> None:
 
 
 def test_validate_passes_through_instances() -> None:
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="default")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="default")
     assert validate_agent_profile(profile) is profile
 
 
@@ -200,7 +200,7 @@ def test_acp_rejects_llm_profile_ref() -> None:
         )
 
 
-def test_openhands_rejects_acp_fields() -> None:
+def test_madagascar_rejects_acp_fields() -> None:
     for acp_field, value in (
         ("acp_server", "codex"),
         ("acp_model", "gpt-5.5/medium"),
@@ -212,7 +212,7 @@ def test_openhands_rejects_acp_fields() -> None:
         with pytest.raises(ValidationError):
             validate_agent_profile(
                 {
-                    "agent_kind": "openhands",
+                    "agent_kind": "madagascar",
                     "name": "oh",
                     "llm_profile_ref": "default",
                     acp_field: value,
@@ -220,9 +220,9 @@ def test_openhands_rejects_acp_fields() -> None:
             )
 
 
-def test_openhands_requires_llm_profile_ref() -> None:
+def test_madagascar_requires_llm_profile_ref() -> None:
     with pytest.raises(ValidationError):
-        validate_agent_profile({"agent_kind": "openhands", "name": "oh"})
+        validate_agent_profile({"agent_kind": "madagascar", "name": "oh"})
 
 
 def test_acp_rejects_unknown_acp_server() -> None:
@@ -262,7 +262,7 @@ def test_mcp_server_refs_null_vs_empty_are_distinct() -> None:
 
 
 def test_mcp_server_refs_default_is_null() -> None:
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="d")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="d")
     assert profile.mcp_server_refs is None
 
 
@@ -272,7 +272,7 @@ def test_mcp_server_refs_default_is_null() -> None:
 
 
 def test_schema_version_defaults_to_current() -> None:
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="d")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="d")
     assert profile.schema_version == AGENT_PROFILE_SCHEMA_VERSION
 
 
@@ -292,7 +292,7 @@ def test_schemaless_default_preserves_explicit_empty_tools() -> None:
             "tools": [],
         }
     )
-    assert isinstance(profile, OpenHandsAgentProfile)
+    assert isinstance(profile, MadagascarAgentProfile)
     assert profile.tools == []
 
 
@@ -306,7 +306,7 @@ def test_v1_untouched_default_migrates_empty_tools_to_null() -> None:
             "tools": [],
         }
     )
-    assert isinstance(profile, OpenHandsAgentProfile)
+    assert isinstance(profile, MadagascarAgentProfile)
     assert profile.schema_version == AGENT_PROFILE_SCHEMA_VERSION
     assert profile.tools is None
 
@@ -327,7 +327,7 @@ def test_v1_explicit_empty_tools_remain_empty(payload: dict[str, object]) -> Non
             **payload,
         }
     )
-    assert isinstance(profile, OpenHandsAgentProfile)
+    assert isinstance(profile, MadagascarAgentProfile)
     assert profile.tools == []
 
 
@@ -362,9 +362,9 @@ def test_rejects_negative_schema_version() -> None:
 
 
 def test_id_is_uuid_and_autogenerated() -> None:
-    profile = OpenHandsAgentProfile(name="oh", llm_profile_ref="d")
+    profile = MadagascarAgentProfile(name="oh", llm_profile_ref="d")
     assert isinstance(profile.id, UUID)
-    other = OpenHandsAgentProfile(name="oh", llm_profile_ref="d")
+    other = MadagascarAgentProfile(name="oh", llm_profile_ref="d")
     assert profile.id != other.id
 
 
@@ -387,8 +387,8 @@ def test_name_is_required() -> None:
 # ---------------------------------------------------------------------------
 
 
-def test_openhands_profile_persists_no_secret_fields() -> None:
-    dumped = OpenHandsAgentProfile(name="oh", llm_profile_ref="default").model_dump(
+def test_madagascar_profile_persists_no_secret_fields() -> None:
+    dumped = MadagascarAgentProfile(name="oh", llm_profile_ref="default").model_dump(
         mode="json"
     )
     # The profile carries a *reference*, never the credential itself.
@@ -420,7 +420,7 @@ def test_verification_field_cannot_carry_a_secret() -> None:
             },
         }
     )
-    assert isinstance(profile, OpenHandsAgentProfile)
+    assert isinstance(profile, MadagascarAgentProfile)
     assert not hasattr(profile.verification, "critic_api_key")
     assert profile.verification.critic_enabled is True
     assert profile.verification.critic_model_name == "gpt-5.5"
@@ -431,7 +431,7 @@ def test_verification_field_cannot_carry_a_secret() -> None:
     assert "sk-real-secret-value" not in json.dumps(exposed)
 
 
-def test_openhands_profile_has_no_embedded_skills_field() -> None:
+def test_madagascar_profile_has_no_embedded_skills_field() -> None:
     """Profiles no longer carry embedded ``skills`` (#4017): the field is gone,
     and ``extra="forbid"`` rejects a stray one rather than silently accepting
     or dropping it. This is what makes the profile genuinely secret-free at
@@ -440,7 +440,7 @@ def test_openhands_profile_has_no_embedded_skills_field() -> None:
     with pytest.raises(ValidationError):
         validate_agent_profile(
             {
-                "agent_kind": "openhands",
+                "agent_kind": "madagascar",
                 "name": "oh",
                 "llm_profile_ref": "default",
                 "schema_version": AGENT_PROFILE_SCHEMA_VERSION,
@@ -461,7 +461,7 @@ def test_removed_skills_field_is_rejected() -> None:
         validate_agent_profile(
             {
                 "schema_version": 1,
-                "agent_kind": "openhands",
+                "agent_kind": "madagascar",
                 "name": "oh",
                 "llm_profile_ref": "default",
                 "skills": [{"name": "old-skill", "content": "do stuff"}],
@@ -476,7 +476,7 @@ def test_removed_skill_refs_field_is_rejected() -> None:
         validate_agent_profile(
             {
                 "schema_version": 1,
-                "agent_kind": "openhands",
+                "agent_kind": "madagascar",
                 "name": "oh",
                 "llm_profile_ref": "default",
                 "skill_refs": ["pdf-tools"],
@@ -490,11 +490,11 @@ def test_payload_without_disabled_skills_adopts_empty_default() -> None:
     profile = validate_agent_profile(
         {
             "schema_version": 1,
-            "agent_kind": "openhands",
+            "agent_kind": "madagascar",
             "name": "oh",
             "llm_profile_ref": "default",
         }
     )
-    assert isinstance(profile, OpenHandsAgentProfile)
+    assert isinstance(profile, MadagascarAgentProfile)
     assert profile.disabled_skills == []
     assert profile.disabled_skills == []

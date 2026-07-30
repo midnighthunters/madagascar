@@ -34,7 +34,7 @@ export function AgentProfilesBody({
   onDelete,
   isActivating,
 }: AgentProfilesBodyProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   if (isLoading) {
     return (

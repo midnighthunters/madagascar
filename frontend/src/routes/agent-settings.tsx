@@ -96,7 +96,7 @@ export default function AgentSettingsScreen() {
   const isAcpEnabled = !!config?.feature_flags?.enable_acp;
   const acpProviders = config?.acp_providers ?? EMPTY_ACP_PROVIDERS;
 
-  // ── Sub-agents (OpenHands mode) ──────────────────────────────────────────
+  // ── Sub-agents (Madagascar mode) ──────────────────────────────────────────
   const fields = useMemo(
     () => schema?.sections.flatMap((section) => section.fields),
     [schema],
@@ -117,7 +117,7 @@ export default function AgentSettingsScreen() {
     setIsSubAgentsEnabled(initialSubAgentsEnabled);
   }, [initialSubAgentsEnabled]);
 
-  // ── Parallel tool calls (OpenHands mode) ─────────────────────────────────
+  // ── Parallel tool calls (Madagascar mode) ─────────────────────────────────
   // Surfaced only when the backend schema exposes the field, so older
   // agent-servers that predate ``tool_concurrency_limit`` hide it cleanly.
   const toolConcurrencyField = fields?.find(
@@ -138,7 +138,7 @@ export default function AgentSettingsScreen() {
   }, [initialToolConcurrency]);
 
   // ── ACP (ACP mode) ───────────────────────────────────────────────────────
-  const [agentType, setAgentType] = useState<"openhands" | "acp">("openhands");
+  const [agentType, setAgentType] = useState<"madagascar" | "acp">("madagascar");
   const [commandText, setCommandText] = useState("");
   const [acpModel, setAcpModel] = useState("");
   const [isDirty, setIsDirty] = useState(false);
@@ -169,7 +169,7 @@ export default function AgentSettingsScreen() {
         typeof savedModel === "string" ? savedModel.trim() : "";
       setAcpModel(normalizedModel || provider?.default_model || "");
     } else {
-      setAgentType("openhands");
+      setAgentType("madagascar");
       setCommandText("");
       setAcpModel("");
     }
@@ -242,7 +242,7 @@ export default function AgentSettingsScreen() {
       };
     } else if (isDirty) {
       // Agent-kind flip: backend resets to defaults, send kind alone.
-      agentSettingsDiff = { agent_kind: "openhands" };
+      agentSettingsDiff = { agent_kind: "madagascar" };
     } else {
       // Sub-agents toggle and/or parallel tool calls.
       agentSettingsDiff = { enable_sub_agents: isSubAgentsEnabled };
@@ -300,15 +300,15 @@ export default function AgentSettingsScreen() {
               label={t(I18nKey.SETTINGS$AGENT)}
               items={[
                 {
-                  key: "openhands",
-                  label: t(I18nKey.SETTINGS$AGENT_TYPE_OPENHANDS),
+                  key: "madagascar",
+                  label: t(I18nKey.SETTINGS$AGENT_TYPE_MADAGASCAR),
                 },
                 { key: "acp", label: t(I18nKey.SETTINGS$AGENT_TYPE_ACP) },
               ]}
               selectedKey={agentType}
               onSelectionChange={(key) => {
                 if (!key) return;
-                const newType = key as "openhands" | "acp";
+                const newType = key as "madagascar" | "acp";
                 setAgentType(newType);
                 if (newType === "acp" && !commandText) {
                   const preferred = acpProviders[0];
@@ -323,7 +323,7 @@ export default function AgentSettingsScreen() {
           </section>
         )}
 
-        {/* OpenHands: sub-agents toggle */}
+        {/* Madagascar: sub-agents toggle */}
         {!isAcp && (
           <section className="grid gap-4 xl:grid-cols-2">
             {subAgentsField ? (
@@ -361,7 +361,7 @@ export default function AgentSettingsScreen() {
           </section>
         )}
 
-        {/* OpenHands: parallel tool calls — only when the schema exposes it */}
+        {/* Madagascar: parallel tool calls — only when the schema exposes it */}
         {!isAcp && toolConcurrencyField ? (
           <section className="grid gap-4 xl:grid-cols-2">
             <SchemaField

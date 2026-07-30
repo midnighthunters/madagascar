@@ -7,19 +7,19 @@ the rule content is appended to the resulting ObservationEvent's
 
 from pathlib import Path
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.context.agent_context import AgentContext
-from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-from openhands.sdk.event import ActionEvent, ObservationEvent
-from openhands.sdk.llm import Message, MessageToolCall, TextContent
-from openhands.sdk.skills import PathTrigger, Skill
-from openhands.sdk.testing import TestLLM
-from openhands.sdk.tool.builtins.finish import FinishObservation
-from openhands.sdk.tool.builtins.invoke_skill import (
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.context.agent_context import AgentContext
+from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+from madagascar.sdk.event import ActionEvent, ObservationEvent
+from madagascar.sdk.llm import Message, MessageToolCall, TextContent
+from madagascar.sdk.skills import PathTrigger, Skill
+from madagascar.sdk.testing import TestLLM
+from madagascar.sdk.tool.builtins.finish import FinishObservation
+from madagascar.sdk.tool.builtins.invoke_skill import (
     InvokeSkillAction,
     InvokeSkillExecutor,
 )
-from openhands.sdk.tool.schema import Action
+from madagascar.sdk.tool.schema import Action
 
 
 class _FileAction(Action):

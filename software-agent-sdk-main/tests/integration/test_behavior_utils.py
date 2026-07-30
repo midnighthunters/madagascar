@@ -2,9 +2,9 @@
 
 from collections.abc import Sequence
 
-from openhands.sdk.event import ActionEvent
-from openhands.sdk.event.base import Event
-from openhands.sdk.llm.message import MessageToolCall, TextContent
+from madagascar.sdk.event import ActionEvent
+from madagascar.sdk.event.base import Event
+from madagascar.sdk.llm.message import MessageToolCall, TextContent
 from tests.integration.behavior_utils import verify_all_actions_have_summary
 
 

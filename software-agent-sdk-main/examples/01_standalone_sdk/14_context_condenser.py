@@ -9,7 +9,7 @@ import os
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
@@ -17,11 +17,11 @@ from openhands.sdk import (
     LLMConvertibleEvent,
     get_logger,
 )
-from openhands.sdk.context.condenser import LLMSummarizingCondenser
-from openhands.sdk.tool import Tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.task_tracker import TaskTrackerTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.context.condenser import LLMSummarizingCondenser
+from madagascar.sdk.tool import Tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.task_tracker import TaskTrackerTool
+from madagascar.tools.terminal import TerminalTool
 
 
 logger = get_logger(__name__)

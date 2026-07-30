@@ -463,7 +463,7 @@ class TestVerifyJiraSignature:
         return {
             'webhookEvent': 'comment_created',
             'comment': {
-                'body': 'Test comment @openhands',
+                'body': 'Test comment @madagascar',
                 'author': {
                     'emailAddress': 'user@test.com',
                     'displayName': 'Test User',

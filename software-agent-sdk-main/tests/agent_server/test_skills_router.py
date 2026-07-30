@@ -6,12 +6,12 @@ from unittest.mock import patch
 import pytest
 from fastapi.testclient import TestClient
 
-from openhands.agent_server.api import create_app
-from openhands.agent_server.config import Config
-from openhands.agent_server.skills_service import MarketplaceSkillInfo, SkillLoadResult
-from openhands.sdk.extensions.fetch import ExtensionFetchError
-from openhands.sdk.marketplace.registration import MarketplaceRegistration
-from openhands.sdk.skills import (
+from madagascar.agent_server.api import create_app
+from madagascar.agent_server.config import Config
+from madagascar.agent_server.skills_service import MarketplaceSkillInfo, SkillLoadResult
+from madagascar.sdk.extensions.fetch import ExtensionFetchError
+from madagascar.sdk.marketplace.registration import MarketplaceRegistration
+from madagascar.sdk.skills import (
     InstalledSkillInfo,
     KeywordTrigger,
     Skill,
@@ -39,7 +39,7 @@ def mock_installed_skill_info():
         resolved_ref="abc123",
         repo_path=None,
         installed_at="2024-01-01T00:00:00Z",
-        install_path=Path("/home/user/.openhands/skills/installed/test-skill"),
+        install_path=Path("/home/user/.madagascar/skills/installed/test-skill"),
     )
 
 
@@ -48,7 +48,7 @@ class TestGetSkillsEndpoint:
 
     def test_get_skills_default_request(self, client):
         """Test default skills request with all sources enabled."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(
                 skills=[
                     Skill(name="test-skill", content="content", trigger=None),
@@ -67,7 +67,7 @@ class TestGetSkillsEndpoint:
 
     def test_get_skills_with_project_dir(self, client):
         """Test skills request with project directory."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(skills=[], sources={})
 
             response = client.post(
@@ -86,7 +86,7 @@ class TestGetSkillsEndpoint:
 
     def test_get_skills_legacy_org_config_supported(self, client):
         """A deprecated single org_config is normalized to a one-entry org_repos."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(skills=[], sources={})
 
             response = client.post(
@@ -96,7 +96,7 @@ class TestGetSkillsEndpoint:
                     "org_config": {
                         "repository": "myorg/myrepo",
                         "provider": "github",
-                        "org_repo_url": "https://github.com/myorg/.openhands",
+                        "org_repo_url": "https://github.com/myorg/.madagascar",
                         "org_name": "myorg",
                     },
                 },
@@ -105,12 +105,12 @@ class TestGetSkillsEndpoint:
             assert response.status_code == 200
             mock_load.assert_called_once()
             assert mock_load.call_args[1]["org_repos"] == [
-                ("https://github.com/myorg/.openhands", "myorg")
+                ("https://github.com/myorg/.madagascar", "myorg")
             ]
 
     def test_get_skills_with_org_configs_list(self, client):
         """Multiple org_configs are forwarded as an ordered list of (url, name)."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(skills=[], sources={})
 
             response = client.post(
@@ -119,9 +119,9 @@ class TestGetSkillsEndpoint:
                     "load_org": True,
                     "org_configs": [
                         {
-                            "repository": "hieptl/.openhands",
+                            "repository": "hieptl/.madagascar",
                             "provider": "github",
-                            "org_repo_url": "https://github.com/hieptl/.openhands",
+                            "org_repo_url": "https://github.com/hieptl/.madagascar",
                             "org_name": "hieptl",
                         },
                         {
@@ -137,13 +137,13 @@ class TestGetSkillsEndpoint:
             assert response.status_code == 200
             mock_load.assert_called_once()
             assert mock_load.call_args[1]["org_repos"] == [
-                ("https://github.com/hieptl/.openhands", "hieptl"),
+                ("https://github.com/hieptl/.madagascar", "hieptl"),
                 ("https://github.com/hieptl/.agents", "hieptl"),
             ]
 
     def test_get_skills_with_registered_marketplaces(self, client):
         """Registered marketplaces are forwarded to the skills service."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(skills=[], sources={})
 
             response = client.post(
@@ -172,7 +172,7 @@ class TestGetSkillsEndpoint:
 
     def test_get_skills_with_selective_auto_load_marketplace(self, client):
         """Registered marketplaces accept selective auto_load plugin lists."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(skills=[], sources={})
 
             response = client.post(
@@ -206,7 +206,7 @@ class TestGetSkillsEndpoint:
             ],
         )
         client = TestClient(create_app(config), raise_server_exceptions=False)
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(skills=[], sources={})
 
             response = client.post(
@@ -242,7 +242,7 @@ class TestGetSkillsEndpoint:
         public_skill = Skill(name="public-skill", content="public", trigger=None)
 
         with patch(
-            "openhands.agent_server.skills_service.load_available_skills",
+            "madagascar.agent_server.skills_service.load_available_skills",
             side_effect=[{"public-skill": public_skill}, {}],
         ) as mock_load_available:
             response = client.post(
@@ -273,7 +273,7 @@ class TestGetSkillsEndpoint:
             ],
         )
         client = TestClient(create_app(config), raise_server_exceptions=False)
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(skills=[], sources={})
 
             response = client.post(
@@ -295,7 +295,7 @@ class TestGetSkillsEndpoint:
 
     def test_get_skills_with_sandbox_config(self, client):
         """Test skills request with sandbox configuration."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(
                 skills=[Skill(name="work_hosts", content="host info", trigger=None)],
                 sources={"sandbox": 1},
@@ -325,7 +325,7 @@ class TestGetSkillsEndpoint:
 
     def test_get_skills_disabled_sources(self, client):
         """Test skills request with sources disabled."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(skills=[], sources={})
 
             response = client.post(
@@ -348,7 +348,7 @@ class TestGetSkillsEndpoint:
 
     def test_get_skills_converts_skill_to_skill_info(self, client):
         """Test that Skill objects are properly converted to SkillInfo format."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(
                 skills=[
                     Skill(
@@ -377,7 +377,7 @@ class TestGetSkillsEndpoint:
 
     def test_get_skills_agent_skill_format(self, client):
         """Test that AgentSkills format is correctly represented."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(
                 skills=[
                     Skill(
@@ -402,7 +402,7 @@ class TestGetSkillsEndpoint:
 
     def test_get_skills_response_sources(self, client):
         """Test that source counts are included in response."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(
                 skills=[],
                 sources={
@@ -431,7 +431,7 @@ class TestSyncSkillsEndpoint:
     def test_sync_skills_success(self, client):
         """Test successful skills sync."""
         with patch(
-            "openhands.agent_server.skills_router.sync_public_skills"
+            "madagascar.agent_server.skills_router.sync_public_skills"
         ) as mock_sync:
             mock_sync.return_value = (True, "Skills synced successfully")
 
@@ -445,7 +445,7 @@ class TestSyncSkillsEndpoint:
     def test_sync_skills_failure(self, client):
         """Test failed skills sync."""
         with patch(
-            "openhands.agent_server.skills_router.sync_public_skills"
+            "madagascar.agent_server.skills_router.sync_public_skills"
         ) as mock_sync:
             mock_sync.return_value = (False, "Network error occurred")
 
@@ -463,7 +463,7 @@ class TestPydanticModels:
 
     def test_exposed_url_validation(self, client):
         """Test ExposedUrl model validation."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(skills=[], sources={})
 
             # Valid exposed URL
@@ -485,7 +485,7 @@ class TestPydanticModels:
 
     def test_org_config_validation(self, client):
         """Test OrgConfig model validation."""
-        with patch("openhands.agent_server.skills_router.load_all_skills") as mock_load:
+        with patch("madagascar.agent_server.skills_router.load_all_skills") as mock_load:
             mock_load.return_value = SkillLoadResult(skills=[], sources={})
 
             # Valid org config
@@ -495,7 +495,7 @@ class TestPydanticModels:
                     "org_config": {
                         "repository": "org/repo",
                         "provider": "github",
-                        "org_repo_url": "https://github.com/org/.openhands",
+                        "org_repo_url": "https://github.com/org/.madagascar",
                         "org_name": "org",
                     }
                 },
@@ -532,7 +532,7 @@ class TestInstallSkillEndpoint:
     def test_install_skill_success(self, client, mock_installed_skill_info):
         """Test successful skill installation."""
         with patch(
-            "openhands.agent_server.skills_router.service_install_skill"
+            "madagascar.agent_server.skills_router.service_install_skill"
         ) as mock_install:
             mock_install.return_value = mock_installed_skill_info
 
@@ -550,7 +550,7 @@ class TestInstallSkillEndpoint:
     def test_install_skill_with_force(self, client, mock_installed_skill_info):
         """Test skill installation with force option."""
         with patch(
-            "openhands.agent_server.skills_router.service_install_skill"
+            "madagascar.agent_server.skills_router.service_install_skill"
         ) as mock_install:
             mock_install.return_value = mock_installed_skill_info
 
@@ -570,7 +570,7 @@ class TestInstallSkillEndpoint:
     def test_install_skill_with_ref(self, client, mock_installed_skill_info):
         """Test skill installation with specific ref."""
         with patch(
-            "openhands.agent_server.skills_router.service_install_skill"
+            "madagascar.agent_server.skills_router.service_install_skill"
         ) as mock_install:
             mock_install.return_value = mock_installed_skill_info
 
@@ -592,7 +592,7 @@ class TestInstallSkillEndpoint:
     def test_install_skill_already_exists(self, client):
         """Test skill installation when skill already exists."""
         with patch(
-            "openhands.agent_server.skills_router.service_install_skill"
+            "madagascar.agent_server.skills_router.service_install_skill"
         ) as mock_install:
             mock_install.side_effect = FileExistsError("Skill already exists")
 
@@ -607,7 +607,7 @@ class TestInstallSkillEndpoint:
     def test_install_skill_fetch_error(self, client):
         """Test skill installation with fetch error."""
         with patch(
-            "openhands.agent_server.skills_router.service_install_skill"
+            "madagascar.agent_server.skills_router.service_install_skill"
         ) as mock_install:
             mock_install.side_effect = SkillFetchError("Network error")
 
@@ -623,7 +623,7 @@ class TestInstallSkillEndpoint:
         """ExtensionFetchError (raised by the SDK for GitHub URL/shorthand failures)
         must map to 400, not 500."""
         with patch(
-            "openhands.agent_server.skills_router.service_install_skill"
+            "madagascar.agent_server.skills_router.service_install_skill"
         ) as mock_install:
             mock_install.side_effect = ExtensionFetchError(
                 "Could not fetch from GitHub"
@@ -640,7 +640,7 @@ class TestInstallSkillEndpoint:
     def test_install_skill_validation_error(self, client):
         """Test skill installation with validation error."""
         with patch(
-            "openhands.agent_server.skills_router.service_install_skill"
+            "madagascar.agent_server.skills_router.service_install_skill"
         ) as mock_install:
             mock_install.side_effect = SkillValidationError("Missing SKILL.md")
 
@@ -659,7 +659,7 @@ class TestListInstalledSkillsEndpoint:
     def test_list_installed_skills_empty(self, client):
         """Test listing when no skills are installed."""
         with patch(
-            "openhands.agent_server.skills_router.service_list_installed_skills"
+            "madagascar.agent_server.skills_router.service_list_installed_skills"
         ) as mock_list:
             mock_list.return_value = []
 
@@ -672,7 +672,7 @@ class TestListInstalledSkillsEndpoint:
     def test_list_installed_skills_with_skills(self, client, mock_installed_skill_info):
         """Test listing installed skills."""
         with patch(
-            "openhands.agent_server.skills_router.service_list_installed_skills"
+            "madagascar.agent_server.skills_router.service_list_installed_skills"
         ) as mock_list:
             mock_list.return_value = [mock_installed_skill_info]
 
@@ -690,7 +690,7 @@ class TestGetInstalledSkillEndpoint:
     def test_get_installed_skill_found(self, client, mock_installed_skill_info):
         """Test getting an installed skill that exists."""
         with patch(
-            "openhands.agent_server.skills_router.service_get_installed_skill"
+            "madagascar.agent_server.skills_router.service_get_installed_skill"
         ) as mock_get:
             mock_get.return_value = mock_installed_skill_info
 
@@ -703,7 +703,7 @@ class TestGetInstalledSkillEndpoint:
     def test_get_installed_skill_not_found(self, client):
         """Test getting a skill that is not installed."""
         with patch(
-            "openhands.agent_server.skills_router.service_get_installed_skill"
+            "madagascar.agent_server.skills_router.service_get_installed_skill"
         ) as mock_get:
             mock_get.return_value = None
 
@@ -719,7 +719,7 @@ class TestUpdateSkillStateEndpoint:
     def test_enable_skill_success(self, client):
         """Test enabling a skill."""
         with patch(
-            "openhands.agent_server.skills_router.service_enable_skill"
+            "madagascar.agent_server.skills_router.service_enable_skill"
         ) as mock_enable:
             mock_enable.return_value = True
 
@@ -736,7 +736,7 @@ class TestUpdateSkillStateEndpoint:
     def test_disable_skill_success(self, client):
         """Test disabling a skill."""
         with patch(
-            "openhands.agent_server.skills_router.service_disable_skill"
+            "madagascar.agent_server.skills_router.service_disable_skill"
         ) as mock_disable:
             mock_disable.return_value = True
 
@@ -752,7 +752,7 @@ class TestUpdateSkillStateEndpoint:
     def test_update_skill_state_not_found(self, client):
         """Test updating state of non-existent skill."""
         with patch(
-            "openhands.agent_server.skills_router.service_enable_skill"
+            "madagascar.agent_server.skills_router.service_enable_skill"
         ) as mock_enable:
             mock_enable.return_value = False
 
@@ -770,7 +770,7 @@ class TestUninstallSkillEndpoint:
     def test_uninstall_skill_success(self, client):
         """Test successful skill uninstallation."""
         with patch(
-            "openhands.agent_server.skills_router.service_uninstall_skill"
+            "madagascar.agent_server.skills_router.service_uninstall_skill"
         ) as mock_uninstall:
             mock_uninstall.return_value = True
 
@@ -783,7 +783,7 @@ class TestUninstallSkillEndpoint:
     def test_uninstall_skill_not_found(self, client):
         """Test uninstalling a non-existent skill."""
         with patch(
-            "openhands.agent_server.skills_router.service_uninstall_skill"
+            "madagascar.agent_server.skills_router.service_uninstall_skill"
         ) as mock_uninstall:
             mock_uninstall.return_value = False
 
@@ -798,7 +798,7 @@ class TestRefreshSkillEndpoint:
     def test_refresh_skill_success(self, client, mock_installed_skill_info):
         """Test successful skill refresh."""
         with patch(
-            "openhands.agent_server.skills_router.service_update_skill"
+            "madagascar.agent_server.skills_router.service_update_skill"
         ) as mock_update:
             mock_update.return_value = mock_installed_skill_info
 
@@ -811,7 +811,7 @@ class TestRefreshSkillEndpoint:
     def test_refresh_skill_not_found(self, client):
         """Test refreshing a non-existent skill."""
         with patch(
-            "openhands.agent_server.skills_router.service_update_skill"
+            "madagascar.agent_server.skills_router.service_update_skill"
         ) as mock_update:
             mock_update.return_value = None
 
@@ -826,7 +826,7 @@ class TestMarketplaceCatalogEndpoint:
     def test_get_marketplace_catalog_empty(self, client):
         """Test getting marketplace when no skills are available."""
         with patch(
-            "openhands.agent_server.skills_router.service_get_marketplace_catalog"
+            "madagascar.agent_server.skills_router.service_get_marketplace_catalog"
         ) as mock_catalog:
             mock_catalog.return_value = []
 
@@ -839,19 +839,19 @@ class TestMarketplaceCatalogEndpoint:
     def test_get_marketplace_catalog_with_skills(self, client):
         """Test getting marketplace with available skills."""
         with patch(
-            "openhands.agent_server.skills_router.service_get_marketplace_catalog"
+            "madagascar.agent_server.skills_router.service_get_marketplace_catalog"
         ) as mock_catalog:
             mock_catalog.return_value = [
                 MarketplaceSkillInfo(
                     name="github",
                     description="GitHub integration skill",
-                    source="github:OpenHands/extensions/skills/github",
+                    source="github:Madagascar/extensions/skills/github",
                     installed=True,
                 ),
                 MarketplaceSkillInfo(
                     name="docker",
                     description="Docker management skill",
-                    source="github:OpenHands/extensions/skills/docker",
+                    source="github:Madagascar/extensions/skills/docker",
                     installed=False,
                 ),
             ]
@@ -874,7 +874,7 @@ class TestMarketplaceCatalogEndpoint:
     def test_get_marketplace_catalog_skill_without_description(self, client):
         """Test marketplace skill with no description."""
         with patch(
-            "openhands.agent_server.skills_router.service_get_marketplace_catalog"
+            "madagascar.agent_server.skills_router.service_get_marketplace_catalog"
         ) as mock_catalog:
             mock_catalog.return_value = [
                 MarketplaceSkillInfo(

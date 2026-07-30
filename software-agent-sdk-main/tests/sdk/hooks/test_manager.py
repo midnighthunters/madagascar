@@ -2,8 +2,8 @@
 
 import pytest
 
-from openhands.sdk.hooks.config import HookConfig
-from openhands.sdk.hooks.manager import HookManager
+from madagascar.sdk.hooks.config import HookConfig
+from madagascar.sdk.hooks.manager import HookManager
 from tests.command_utils import python_command, sleep_command, touch_command
 
 
@@ -142,7 +142,7 @@ class TestHookManager:
 
     def test_get_blocking_reason(self, tmp_working_dir):
         """Test get_blocking_reason extracts reason from results."""
-        from openhands.sdk.hooks.executor import HookResult
+        from madagascar.sdk.hooks.executor import HookResult
 
         manager = HookManager(config=HookConfig(), working_dir=tmp_working_dir)
 

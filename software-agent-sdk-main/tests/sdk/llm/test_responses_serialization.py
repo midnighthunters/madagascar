@@ -1,5 +1,5 @@
-from openhands.sdk.llm.llm import LLM
-from openhands.sdk.llm.message import (
+from madagascar.sdk.llm.llm import LLM
+from madagascar.sdk.llm.message import (
     ImageContent,
     Message,
     MessageToolCall,
@@ -59,7 +59,7 @@ def test_subscription_codex_transport_does_not_use_top_level_instructions_and_pr
     instr, inputs = llm.format_messages_for_responses([m_sys, m_user])
 
     assert instr is not None
-    assert "OpenHands agent" in instr
+    assert "Madagascar agent" in instr
     assert len(inputs) >= 1
     first_user = next(it for it in inputs if it.get("role") == "user")
     content = first_user.get("content")
@@ -77,7 +77,7 @@ def test_subscription_codex_transport_injects_synthetic_user_message_when_none_e
     instr, inputs = llm.format_messages_for_responses([m_sys, m_asst])
 
     assert instr is not None
-    assert "OpenHands agent" in instr
+    assert "Madagascar agent" in instr
     assert len(inputs) >= 1
     first = inputs[0]
     assert first.get("role") == "user"
@@ -159,7 +159,7 @@ def test_tool_to_responses_emits_function_call_output_with_verbatim_call_id():
 def test_tool_to_responses_truncates_output_over_limit():
     from unittest.mock import patch
 
-    from openhands.sdk.utils import DEFAULT_TEXT_CONTENT_LIMIT
+    from madagascar.sdk.utils import DEFAULT_TEXT_CONTENT_LIMIT
 
     long_text = "A" * (DEFAULT_TEXT_CONTENT_LIMIT + 1000)
     m = Message(
@@ -169,7 +169,7 @@ def test_tool_to_responses_truncates_output_over_limit():
         content=[TextContent(text=long_text)],
     )
 
-    with patch("openhands.sdk.llm.message.logger") as mock_logger:
+    with patch("madagascar.sdk.llm.message.logger") as mock_logger:
         out = m.to_responses_dict(vision_enabled=False)
 
         mock_logger.warning.assert_called_once()

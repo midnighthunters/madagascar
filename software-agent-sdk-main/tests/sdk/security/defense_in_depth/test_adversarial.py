@@ -36,16 +36,16 @@ import json
 
 import pytest
 
-from openhands.sdk.event import ActionEvent
-from openhands.sdk.llm import MessageToolCall, TextContent, ThinkingBlock
-from openhands.sdk.security.analyzer import SecurityAnalyzerBase
-from openhands.sdk.security.defense_in_depth.pattern import PatternSecurityAnalyzer
-from openhands.sdk.security.defense_in_depth.utils import (
+from madagascar.sdk.event import ActionEvent
+from madagascar.sdk.llm import MessageToolCall, TextContent, ThinkingBlock
+from madagascar.sdk.security.analyzer import SecurityAnalyzerBase
+from madagascar.sdk.security.defense_in_depth.pattern import PatternSecurityAnalyzer
+from madagascar.sdk.security.defense_in_depth.utils import (
     _EXTRACT_HARD_CAP,
     _extract_content,
 )
-from openhands.sdk.security.ensemble import EnsembleSecurityAnalyzer
-from openhands.sdk.security.risk import SecurityRisk
+from madagascar.sdk.security.ensemble import EnsembleSecurityAnalyzer
+from madagascar.sdk.security.risk import SecurityRisk
 
 
 # Build test payload strings via concatenation to avoid triggering

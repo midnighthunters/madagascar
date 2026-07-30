@@ -1,6 +1,6 @@
 """Tests for jsonpatch_compat utilities."""
 
-from openhands.app_server.utils.jsonpatch_compat import (
+from madagascar.app_server.utils.jsonpatch_compat import (
     WHOLESALE_REPLACEMENT_KEYS,
     deep_merge,
     deep_merge_with_wholesale_keys,

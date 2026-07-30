@@ -6,11 +6,11 @@ import httpx
 import pytest
 from starlette.datastructures import State
 
-from openhands.app_server.sandbox.dynamic_remote_sandbox_spec_service import (
+from madagascar.app_server.sandbox.dynamic_remote_sandbox_spec_service import (
     DynamicRemoteSandboxSpecService,
     DynamicRemoteSandboxSpecServiceInjector,
 )
-from openhands.app_server.sandbox.sandbox_spec_models import SandboxSpecInfo
+from madagascar.app_server.sandbox.sandbox_spec_models import SandboxSpecInfo
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -20,21 +20,21 @@ _CONFIGS_RESPONSE = {
     'configs': [
         {
             'name': 'v1_current',
-            'image': 'ghcr.io/openhands/agent-server:1.0.0',
+            'image': 'ghcr.io/madagascar/agent-server:1.0.0',
             'command': ['--port', '8000'],
             'environment': {'FOO': 'bar'},
             'working_dir': '/workspace',
         },
         {
             'name': 'v1_legacy',
-            'image': 'ghcr.io/openhands/agent-server:0.9.0',
+            'image': 'ghcr.io/madagascar/agent-server:0.9.0',
             'command': ['--port', '9000'],
             'environment': {},
             'working_dir': '/home/user',
         },
         {
             'name': 'nightly',
-            'image': 'ghcr.io/openhands/agent-server:nightly',
+            'image': 'ghcr.io/madagascar/agent-server:nightly',
             'command': None,
             'environment': {'DEBUG': '1'},
             'working_dir': '/workspace',
@@ -117,7 +117,7 @@ class TestFetchSpecs:
 
         assert len(specs) == 3
         first = specs[0]
-        assert first.id == 'ghcr.io/openhands/agent-server:1.0.0'
+        assert first.id == 'ghcr.io/madagascar/agent-server:1.0.0'
         assert first.command == ['--port', '8000']
         assert first.initial_env == {'FOO': 'bar'}
         assert first.working_dir == '/workspace'
@@ -133,7 +133,7 @@ class TestFetchSpecs:
         assert set(service._name_to_spec) == {'v1_current', 'v1_legacy', 'nightly'}
         assert (
             service._name_to_spec['nightly'].id
-            == 'ghcr.io/openhands/agent-server:nightly'
+            == 'ghcr.io/madagascar/agent-server:nightly'
         )
 
     async def test_caches_results_within_ttl(self):
@@ -170,7 +170,7 @@ class TestFetchSpecs:
         Without a warm runtime we still want the service to be usable, so we
         hand back the same default specs the static RemoteSandboxSpecService uses.
         """
-        from openhands.app_server.sandbox.remote_sandbox_spec_service import (
+        from madagascar.app_server.sandbox.remote_sandbox_spec_service import (
             get_default_sandbox_specs,
         )
 
@@ -209,13 +209,13 @@ class TestFetchSpecs:
         # Patch via the module attribute (not patch.object on the function
         # itself) because the @cache decorator wraps __call__ and intercepts
         # the standard mock hook.
-        expected_image = 'ghcr.io/openhands/agent-server:9.9.9-python'
+        expected_image = 'ghcr.io/madagascar/agent-server:9.9.9-python'
 
         ctx, _ = _make_async_client_mock(_make_http_response({'configs': []}))
         service = _make_service()
 
         with patch(
-            'openhands.app_server.sandbox.remote_sandbox_spec_service.get_agent_server_image',
+            'madagascar.app_server.sandbox.remote_sandbox_spec_service.get_agent_server_image',
             return_value=expected_image,
         ):
             with patch('httpx.AsyncClient', return_value=ctx):
@@ -226,7 +226,7 @@ class TestFetchSpecs:
 
     async def test_fallback_specs_are_cached(self):
         """Default fallback specs must be cached like normal results."""
-        from openhands.app_server.sandbox.remote_sandbox_spec_service import (
+        from madagascar.app_server.sandbox.remote_sandbox_spec_service import (
             get_default_sandbox_specs,
         )
 
@@ -283,8 +283,8 @@ class TestSearchSandboxSpecs:
             page = await service.search_sandbox_specs(limit=2)
 
         assert len(page.items) == 2
-        assert page.items[0].id == 'ghcr.io/openhands/agent-server:1.0.0'
-        assert page.items[1].id == 'ghcr.io/openhands/agent-server:0.9.0'
+        assert page.items[0].id == 'ghcr.io/madagascar/agent-server:1.0.0'
+        assert page.items[1].id == 'ghcr.io/madagascar/agent-server:0.9.0'
         assert page.next_page_id == '2'
 
     async def test_page_id_offsets_start_index(self):
@@ -296,7 +296,7 @@ class TestSearchSandboxSpecs:
             page = await service.search_sandbox_specs(page_id='2', limit=100)
 
         assert len(page.items) == 1
-        assert page.items[0].id == 'ghcr.io/openhands/agent-server:nightly'
+        assert page.items[0].id == 'ghcr.io/madagascar/agent-server:nightly'
         assert page.next_page_id is None
 
     async def test_no_next_page_id_when_results_fit_exactly(self):
@@ -325,11 +325,11 @@ class TestGetSandboxSpec:
 
         with patch('httpx.AsyncClient', return_value=ctx):
             spec = await service.get_sandbox_spec(
-                'ghcr.io/openhands/agent-server:0.9.0'
+                'ghcr.io/madagascar/agent-server:0.9.0'
             )
 
         assert spec is not None
-        assert spec.id == 'ghcr.io/openhands/agent-server:0.9.0'
+        assert spec.id == 'ghcr.io/madagascar/agent-server:0.9.0'
         assert spec.working_dir == '/home/user'
 
     async def test_returns_none_for_unknown_id(self):
@@ -357,7 +357,7 @@ class TestGetDefaultSandboxSpec:
         with patch('httpx.AsyncClient', return_value=ctx):
             spec = await service.get_default_sandbox_spec()
 
-        assert spec.id == 'ghcr.io/openhands/agent-server:0.9.0'
+        assert spec.id == 'ghcr.io/madagascar/agent-server:0.9.0'
 
     async def test_falls_back_to_first_spec_when_name_not_found(self):
         """When default_spec_name is set but absent from results, use the first spec."""
@@ -367,7 +367,7 @@ class TestGetDefaultSandboxSpec:
         with patch('httpx.AsyncClient', return_value=ctx):
             spec = await service.get_default_sandbox_spec()
 
-        assert spec.id == 'ghcr.io/openhands/agent-server:1.0.0'
+        assert spec.id == 'ghcr.io/madagascar/agent-server:1.0.0'
 
     async def test_falls_back_to_first_spec_when_no_default_name(self):
         """When default_spec_name is empty, the first spec is returned."""
@@ -377,12 +377,12 @@ class TestGetDefaultSandboxSpec:
         with patch('httpx.AsyncClient', return_value=ctx):
             spec = await service.get_default_sandbox_spec()
 
-        assert spec.id == 'ghcr.io/openhands/agent-server:1.0.0'
+        assert spec.id == 'ghcr.io/madagascar/agent-server:1.0.0'
 
     async def test_falls_back_to_default_spec_when_no_warm_runtimes(self):
         """get_default_sandbox_spec must return a default spec (not raise) when
         the runtime-api endpoint returns no warm runtimes."""
-        from openhands.app_server.sandbox.remote_sandbox_spec_service import (
+        from madagascar.app_server.sandbox.remote_sandbox_spec_service import (
             get_default_sandbox_specs,
         )
 

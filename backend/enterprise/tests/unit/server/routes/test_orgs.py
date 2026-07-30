@@ -43,8 +43,8 @@ from server.routes.orgs import (
 )
 from storage.org import Org
 
-from openhands.app_server.user_auth import get_user_id
-from openhands.sdk.settings import ConversationSettings, OpenHandsAgentSettings
+from madagascar.app_server.user_auth import get_user_id
+from madagascar.sdk.settings import ConversationSettings, MadagascarAgentSettings
 
 # Test user ID constant (must be a valid UUID string)
 TEST_USER_ID = str(uuid.uuid4())
@@ -751,19 +751,19 @@ async def test_list_user_orgs_success(mock_app_list):
     'persisted_agent_settings',
     [
         {
-            'agent_kind': 'openhands',
+            'agent_kind': 'madagascar',
             'llm': {'model': 'anthropic/claude-3-haiku-20240307'},
         },
         {'agent_kind': 'llm', 'llm': {'model': 'anthropic/claude-3-haiku-20240307'}},
         {'llm': {'model': 'anthropic/claude-3-haiku-20240307'}},
     ],
-    ids=['agent_kind_openhands', 'agent_kind_llm_legacy', 'no_agent_kind'],
+    ids=['agent_kind_madagascar', 'agent_kind_llm_legacy', 'no_agent_kind'],
 )
 async def test_list_user_orgs_handles_persisted_agent_kind_variants(
     mock_app_list, persisted_agent_settings
 ):
     """GIVEN: An org row whose persisted ``agent_settings`` carries any of the
-        three discriminator shapes seen in production (current ``'openhands'``,
+        three discriminator shapes seen in production (current ``'madagascar'``,
         legacy ``'llm'``, or no ``agent_kind`` at all)
     WHEN: GET /api/organizations is called
     THEN: The endpoint returns 200 and serializes the org without raising
@@ -1361,9 +1361,9 @@ async def test_get_org_defaults_settings_success():
     """
     org_id = uuid.uuid4()
     mock_org = MagicMock(spec=Org)
-    mock_org.agent_settings = OpenHandsAgentSettings(
+    mock_org.agent_settings = MadagascarAgentSettings(
         agent='CodeActAgent',
-        llm={'model': 'openhands/claude-3', 'base_url': 'https://proxy.example'},
+        llm={'model': 'madagascar/claude-3', 'base_url': 'https://proxy.example'},
     )
     mock_org.conversation_settings = ConversationSettings(security_analyzer='llm')
     mock_org.llm_api_key = None
@@ -1375,7 +1375,7 @@ async def test_get_org_defaults_settings_success():
     ) as mock_get_org:
         response = await get_org_defaults_settings(org_id=org_id, user_id=TEST_USER_ID)
 
-    assert response.agent_settings.llm.model == 'openhands/claude-3'
+    assert response.agent_settings.llm.model == 'madagascar/claude-3'
     assert response.agent_settings.llm.base_url == 'https://proxy.example'
     assert response.conversation_settings.security_analyzer == 'llm'
     mock_get_org.assert_awaited_once_with(org_id=org_id, user_id=TEST_USER_ID)
@@ -1389,9 +1389,9 @@ async def test_update_org_defaults_settings_forwards_through_org_service():
     """
     org_id = uuid.uuid4()
     updated_org = MagicMock(spec=Org)
-    updated_org.agent_settings = OpenHandsAgentSettings(
+    updated_org.agent_settings = MadagascarAgentSettings(
         llm={
-            'model': 'openhands/claude-3.5-sonnet',
+            'model': 'madagascar/claude-3.5-sonnet',
             'base_url': 'https://proxy.example',
         }
     )
@@ -1401,7 +1401,7 @@ async def test_update_org_defaults_settings_forwards_through_org_service():
 
     update_data = OrgUpdate(
         agent_settings_diff={
-            'llm': {'model': 'openhands/claude-3.5-sonnet'},
+            'llm': {'model': 'madagascar/claude-3.5-sonnet'},
         },
         conversation_settings_diff={'confirmation_mode': False},
     )
@@ -1421,7 +1421,7 @@ async def test_update_org_defaults_settings_forwards_through_org_service():
         update_data=update_data,
         user_id=TEST_USER_ID,
     )
-    assert response.agent_settings.llm.model == 'openhands/claude-3.5-sonnet'
+    assert response.agent_settings.llm.model == 'madagascar/claude-3.5-sonnet'
 
 
 @pytest.mark.asyncio

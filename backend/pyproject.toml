@@ -5,11 +5,11 @@ build-backend = "poetry.core.masonry.api"
 requires = [ "poetry-core" ]
 
 [project]
-name = "openhands-ai"
-description = "OpenHands: Code Less, Make More"
+name = "madagascar-ai"
+description = "Madagascar: Code Less, Make More"
 readme = "README.md"
 license = "MIT"
-authors = [ { name = "OpenHands", email = "contact@all-hands.dev" } ]
+authors = [ { name = "Madagascar", email = "contact@all-hands.dev" } ]
 requires-python = ">=3.12,<3.14"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
@@ -58,9 +58,9 @@ dependencies = [
   "memory-profiler==0.61.0",
   "numpy==2.4.4",
   "openai==2.33.0",
-  "openhands-agent-server==1.36.0",
-  "openhands-sdk==1.36.0",
-  "openhands-tools==1.36.0",
+  "madagascar-agent-server==1.36.0",
+  "madagascar-sdk==1.36.0",
+  "madagascar-tools==1.36.0",
   "opentelemetry-api==1.39.1",
   "opentelemetry-exporter-otlp-proto-grpc==1.39.1",
   "orjson==3.11.8",
@@ -108,8 +108,8 @@ dependencies = [
   "zope-interface==7.2",
 ]
 
-urls.Homepage = "https://github.com/OpenHands/OpenHands"
-urls.Repository = "https://github.com/OpenHands/OpenHands"
+urls.Homepage = "https://github.com/Madagascar/Madagascar"
+urls.Repository = "https://github.com/Madagascar/Madagascar"
 
 [dependency-groups]
 dev = [
@@ -140,17 +140,17 @@ runtime = [
 ]
 
 [tool.poetry]
-name = "openhands-ai"
+name = "madagascar-ai"
 version = "1.11.0"
-description = "OpenHands: Code Less, Make More"
-authors = [ "OpenHands" ]
+description = "Madagascar: Code Less, Make More"
+authors = [ "Madagascar" ]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/OpenHands/OpenHands"
+repository = "https://github.com/Madagascar/Madagascar"
 packages = [
-  { include = "openhands/**/*" },
-  { include = "pyproject.toml", to = "openhands" },
-  { include = "poetry.lock", to = "openhands" },
+  { include = "madagascar/**/*" },
+  { include = "pyproject.toml", to = "madagascar" },
+  { include = "poetry.lock", to = "madagascar" },
 ]
 include = [
   "skills/**/*",
@@ -248,9 +248,9 @@ e2b-code-interpreter = { version = "^2.0.0", optional = true }
 pybase62 = "1.0.0"
 
 # V1 dependencies
-openhands-sdk = "==1.36.0"
-openhands-agent-server = "==1.36.0"
-openhands-tools = "==1.36.0"
+madagascar-sdk = "==1.36.0"
+madagascar-agent-server = "==1.36.0"
+madagascar-tools = "==1.36.0"
 joserfc = ">=1.0.0"
 sqlalchemy = { extras = [ "asyncio" ], version = "^2.0.40" }
 pg8000 = "1.31.5"
@@ -350,4 +350,4 @@ omit = [ "enterprise/tests/*", "**/test_*" ]
 
 [tool.uv]
 exclude-newer = "7 days"
-exclude-newer-package = { openhands-agent-server = false, openhands-sdk = false, openhands-tools = false }
+exclude-newer-package = { madagascar-agent-server = false, madagascar-sdk = false, madagascar-tools = false }

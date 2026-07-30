@@ -2,8 +2,8 @@ import os
 
 import pytest
 
-from openhands.tools.terminal.definition import TerminalAction
-from openhands.tools.terminal.terminal import create_terminal_session
+from madagascar.tools.terminal.definition import TerminalAction
+from madagascar.tools.terminal.terminal import create_terminal_session
 
 
 @pytest.mark.parametrize("terminal_type", ["tmux", "subprocess"])

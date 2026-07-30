@@ -30,7 +30,7 @@ export function PluginCard({
   onInstall,
   onToggle,
 }: PluginCardProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" || event.key === " ") {

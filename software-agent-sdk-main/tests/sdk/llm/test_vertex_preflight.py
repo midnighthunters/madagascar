@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from openhands.sdk.llm.exceptions import LLMBadRequestError
-from openhands.sdk.llm.utils import vertex_preflight
-from openhands.sdk.llm.utils.vertex_preflight import assert_vertex_sdk_available
+from madagascar.sdk.llm.exceptions import LLMBadRequestError
+from madagascar.sdk.llm.utils import vertex_preflight
+from madagascar.sdk.llm.utils.vertex_preflight import assert_vertex_sdk_available
 
 
 def test_noop_for_non_vertex_providers(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -28,4 +28,4 @@ def test_raises_with_install_hint_when_sdk_missing(
     monkeypatch.setattr(vertex_preflight, "_vertex_sdk_available", lambda: False)
     with pytest.raises(LLMBadRequestError) as excinfo:
         assert_vertex_sdk_available("vertex_ai")
-    assert "openhands-sdk[vertex]" in str(excinfo.value)
+    assert "madagascar-sdk[vertex]" in str(excinfo.value)

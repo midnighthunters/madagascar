@@ -47,10 +47,10 @@ from server.services.automation_event_service import AutomationEventService
 from storage.jira_dc_integration_store import workspace_visible_to_org
 from storage.redis import get_redis_client
 
-from openhands.app_server.config import depends_jwt_service
-from openhands.app_server.services.jwt_service import JwtService
-from openhands.app_server.user_auth.user_auth import get_user_auth
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.config import depends_jwt_service
+from madagascar.app_server.services.jwt_service import JwtService
+from madagascar.app_server.user_auth.user_auth import get_user_auth
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 # Environment variable to disable Jira DC webhooks
 JIRA_DC_WEBHOOKS_ENABLED = os.environ.get('JIRA_DC_WEBHOOKS_ENABLED', '0') in (
@@ -491,7 +491,7 @@ async def _maybe_register_webhook(
     webhook_secret: str,
     workspace_id: int,
 ) -> bool:
-    """Best-effort auto-enrollment of the OpenHands webhook in Jira.
+    """Best-effort auto-enrollment of the Madagascar webhook in Jira.
 
     When an admin PAT is supplied, register (or update) the webhook via
     JiraDcManager.register_webhook. The PAT is used only for this call and never
@@ -517,7 +517,7 @@ async def _maybe_register_webhook(
 async def _maybe_delete_webhook(
     admin_api_key: str | None, base_api_url: str, workspace_id: int
 ) -> bool:
-    """Best-effort removal of the OpenHands webhook from Jira during teardown.
+    """Best-effort removal of the Madagascar webhook from Jira during teardown.
 
     Symmetric with :func:`_maybe_register_webhook`. When an admin PAT is
     supplied, delete the webhook via JiraDcManager.delete_webhook. The PAT is
@@ -567,7 +567,7 @@ def _resolve_submitted_service_account(
     if not svc_acc_email:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail='A service account email is required when configuring Jira DC in OpenHands.',
+            detail='A service account email is required when configuring Jira DC in Madagascar.',
         )
 
     return svc_acc_email, (workspace_data.svc_acc_api_key or '').strip()
@@ -940,7 +940,7 @@ async def jira_dc_callback(request: Request, code: str, state: str):
             detail=(
                 f'Could not reach the Jira Data Center token endpoint '
                 f'({JIRA_DC_TOKEN_URL}): {type(e).__name__}. Check that the Jira '
-                f'Base URL uses the correct https scheme and that OpenHands can '
+                f'Base URL uses the correct https scheme and that Madagascar can '
                 f'reach the Jira server.'
             ),
         ) from e

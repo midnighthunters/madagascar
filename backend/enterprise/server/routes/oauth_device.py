@@ -10,9 +10,9 @@ from server.utils.url_utils import get_web_url
 from storage.api_key_store import ApiKeyStore
 from storage.device_code_store import DeviceCodeStore
 
-from openhands.analytics import get_analytics_service, resolve_analytics_context
-from openhands.app_server.user_auth import get_user_id
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.analytics import get_analytics_service, resolve_analytics_context
+from madagascar.app_server.user_auth import get_user_id
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 # ---------------------------------------------------------------------------
 # Constants

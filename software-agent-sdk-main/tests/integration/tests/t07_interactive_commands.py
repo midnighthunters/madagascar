@@ -3,7 +3,7 @@
 import hashlib
 import os
 
-from openhands.sdk import get_logger
+from madagascar.sdk import get_logger
 from tests.integration.base import BaseIntegrationTest, TestResult
 
 

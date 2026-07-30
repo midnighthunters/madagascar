@@ -29,7 +29,7 @@ export function SkillCard({
   onOpen,
   onToggle,
 }: SkillCardProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const [sourceCopied, setSourceCopied] = React.useState(false);
 
   const description = getSkillCardDescription(skill);

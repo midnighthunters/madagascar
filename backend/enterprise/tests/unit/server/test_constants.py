@@ -21,16 +21,16 @@ class TestDeploymentMode:
             ('staging.all-hands.dev', 'cloud'),
             ('feature-123.staging.all-hands.dev', 'cloud'),
             ('pr-456.staging.all-hands.dev', 'cloud'),
-            ('app.openhands.ai', 'cloud'),
-            # openhands.dev is also an All-Hands managed domain
-            ('app.openhands.dev', 'cloud'),
-            ('staging.openhands.dev', 'cloud'),
-            ('pr-456.staging.openhands.dev', 'cloud'),
+            ('app.madagascar.ai', 'cloud'),
+            # madagascar.dev is also an All-Hands managed domain
+            ('app.madagascar.dev', 'cloud'),
+            ('staging.madagascar.dev', 'cloud'),
+            ('pr-456.staging.madagascar.dev', 'cloud'),
             # Customer domains should return 'self_hosted'
-            ('openhands.acme.com', 'self_hosted'),
+            ('madagascar.acme.com', 'self_hosted'),
             ('internal.company.io', 'self_hosted'),
             ('dev.mycompany.net', 'self_hosted'),
-            ('openhands.example.org', 'self_hosted'),
+            ('madagascar.example.org', 'self_hosted'),
             ('localhost', 'self_hosted'),  # localhost is not a managed domain
             # Edge cases
             ('all-hands.dev', 'self_hosted'),  # Not a subdomain, so not managed
@@ -55,12 +55,12 @@ class TestDeploymentMode:
         [
             # Explicit flag wins over the host heuristic
             ('self_hosted', 'app.all-hands.dev', 'self_hosted'),
-            ('cloud', 'openhands.acme.com', 'cloud'),
+            ('cloud', 'madagascar.acme.com', 'cloud'),
             # Case/whitespace tolerant
             ('  Self_Hosted ', 'app.all-hands.dev', 'self_hosted'),
             # Invalid/empty values fall back to the host heuristic
             ('bogus', 'app.all-hands.dev', 'cloud'),
-            ('', 'openhands.acme.com', 'self_hosted'),
+            ('', 'madagascar.acme.com', 'self_hosted'),
         ],
     )
     def test_explicit_deployment_mode_overrides_host(
@@ -84,14 +84,14 @@ class TestDeploymentMode:
             ('app.all-hands.dev', True),
             ('staging.all-hands.dev', True),
             ('feature.staging.all-hands.dev', True),
-            ('app.openhands.ai', True),
-            ('app.openhands.dev', True),
-            ('staging.openhands.dev', True),
-            ('pr-1.staging.openhands.dev', True),
+            ('app.madagascar.ai', True),
+            ('app.madagascar.dev', True),
+            ('staging.madagascar.dev', True),
+            ('pr-1.staging.madagascar.dev', True),
             ('localhost', False),  # localhost is not a managed domain
             ('customer.example.com', False),
             ('all-hands.dev', False),
-            ('openhands.dev', False),  # apex is not a subdomain, so not managed
+            ('madagascar.dev', False),  # apex is not a subdomain, so not managed
         ],
     )
     def test_is_all_hands_managed_domain(self, host: str, expected: bool):
@@ -120,25 +120,25 @@ class TestDeploymentMode:
 
 class TestStagingAndFeatureEnvDetection:
     """IS_STAGING_ENV / IS_FEATURE_ENV must recognize both the legacy
-    all-hands.dev and the new openhands.dev staging/feature hosts."""
+    all-hands.dev and the new madagascar.dev staging/feature hosts."""
 
     @pytest.mark.parametrize(
         'web_host,is_staging,is_feature',
         [
             # Bare staging hosts: a staging env, but NOT a feature env
             ('staging.all-hands.dev', True, False),
-            ('staging.openhands.dev', True, False),
+            ('staging.madagascar.dev', True, False),
             # Feature / preview hosts on both domains
             ('feature-123.staging.all-hands.dev', True, True),
             ('pr-279.staging.all-hands.dev', True, True),
-            ('pr-279.staging.openhands.dev', True, True),
-            ('feature-123.staging.openhands.dev', True, True),
+            ('pr-279.staging.madagascar.dev', True, True),
+            ('feature-123.staging.madagascar.dev', True, True),
             # Platform-team sandbox
             ('pr-279.ohe-staging.platform-team.all-hands.dev', True, True),
             # Production / customer / local hosts are neither
             ('app.all-hands.dev', False, False),
-            ('app.openhands.dev', False, False),
-            ('openhands.acme.com', False, False),
+            ('app.madagascar.dev', False, False),
+            ('madagascar.acme.com', False, False),
             ('localhost', False, False),
         ],
     )

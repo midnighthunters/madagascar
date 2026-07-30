@@ -4,20 +4,20 @@ from unittest.mock import patch
 import pytest
 from pydantic import PrivateAttr
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.context.condenser.base import CondenserBase
-from openhands.sdk.context.view import View
-from openhands.sdk.conversation import Conversation
-from openhands.sdk.event.condenser import CondensationRequest
-from openhands.sdk.llm import LLM
-from openhands.sdk.llm.exceptions import (
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.context.condenser.base import CondenserBase
+from madagascar.sdk.context.view import View
+from madagascar.sdk.conversation import Conversation
+from madagascar.sdk.event.condenser import CondensationRequest
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.llm.exceptions import (
     LLMContextWindowExceedError,
     LLMMalformedConversationHistoryError,
 )
 
 
 if TYPE_CHECKING:
-    from openhands.sdk.event.condenser import Condensation
+    from madagascar.sdk.event.condenser import Condensation
 
 
 class RaisingLLM(LLM):

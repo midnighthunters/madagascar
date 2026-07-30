@@ -1,7 +1,7 @@
 """Tests for get_planning_tools() plan_path parameter forwarding."""
 
-from openhands.tools.planning_file_editor import PlanningFileEditorTool
-from openhands.tools.preset.planning import get_planning_tools
+from madagascar.tools.planning_file_editor import PlanningFileEditorTool
+from madagascar.tools.preset.planning import get_planning_tools
 
 
 def test_get_planning_tools_without_plan_path_has_empty_params():
@@ -17,7 +17,7 @@ def test_get_planning_tools_without_plan_path_has_empty_params():
 def test_get_planning_tools_with_plan_path_passes_params():
     """When plan_path is provided, it is passed in PlanningFileEditorTool params."""
     # Arrange
-    expected_path = "/workspace/project/.openhands/PLAN.md"
+    expected_path = "/workspace/project/.madagascar/PLAN.md"
 
     # Act
     tools = get_planning_tools(plan_path=expected_path)

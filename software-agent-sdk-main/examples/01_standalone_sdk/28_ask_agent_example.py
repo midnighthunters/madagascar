@@ -13,17 +13,17 @@ from datetime import datetime
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
 )
-from openhands.sdk.conversation import ConversationVisualizerBase
-from openhands.sdk.event import Event
-from openhands.sdk.tool import Tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.task_tracker import TaskTrackerTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.conversation import ConversationVisualizerBase
+from madagascar.sdk.event import Event
+from madagascar.sdk.tool import Tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.task_tracker import TaskTrackerTool
+from madagascar.tools.terminal import TerminalTool
 
 
 # Configure LLM

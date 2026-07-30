@@ -11,7 +11,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from storage.base import Base
 from storage.encrypt_utils import EncryptedJSON, decrypt_value, encrypt_value
 
-from openhands.app_server.settings.settings_models import MarketplaceRegistration
+from madagascar.app_server.settings.settings_models import MarketplaceRegistration
 
 if TYPE_CHECKING:
     from storage.api_key import ApiKey
@@ -65,7 +65,7 @@ class Org(Base):
     max_budget_per_task: Mapped[float | None] = mapped_column(nullable=True)
     v1_enabled: Mapped[bool | None] = mapped_column(nullable=True)
     conversation_expiration: Mapped[int | None] = mapped_column(nullable=True)
-    # Source of truth for BYOR/OpenHands LLM key export entitlement.
+    # Source of truth for BYOR/Madagascar LLM key export entitlement.
     # Set by completed billing sessions or when positive org credits are detected.
     byor_export_enabled: Mapped[bool] = mapped_column(nullable=False, default=False)
     sandbox_grouping_strategy: Mapped[str | None] = mapped_column(String, nullable=True)

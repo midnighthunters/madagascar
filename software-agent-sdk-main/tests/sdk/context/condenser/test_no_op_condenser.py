@@ -1,10 +1,10 @@
 from unittest.mock import MagicMock
 
-from openhands.sdk.context.condenser.no_op_condenser import NoOpCondenser
-from openhands.sdk.context.view import View
-from openhands.sdk.event.base import Event
-from openhands.sdk.event.llm_convertible import MessageEvent
-from openhands.sdk.llm import LLM, Message, TextContent
+from madagascar.sdk.context.condenser.no_op_condenser import NoOpCondenser
+from madagascar.sdk.context.view import View
+from madagascar.sdk.event.base import Event
+from madagascar.sdk.event.llm_convertible import MessageEvent
+from madagascar.sdk.llm import LLM, Message, TextContent
 
 
 def message_event(content: str) -> MessageEvent:

@@ -1,61 +1,61 @@
 """Tests for GitHub utility functions."""
 
-from openhands.sdk.utils.github import ZWJ, sanitize_openhands_mentions
+from madagascar.sdk.utils.github import ZWJ, sanitize_madagascar_mentions
 
 
 def test_sanitize_basic_mention():
-    """Test basic @OpenHands mention is sanitized."""
-    text = "Thanks @OpenHands for the help!"
-    expected = f"Thanks @{ZWJ}OpenHands for the help!"
-    assert sanitize_openhands_mentions(text) == expected
+    """Test basic @Madagascar mention is sanitized."""
+    text = "Thanks @Madagascar for the help!"
+    expected = f"Thanks @{ZWJ}Madagascar for the help!"
+    assert sanitize_madagascar_mentions(text) == expected
 
 
 def test_sanitize_case_insensitive():
     """Test that mentions are sanitized regardless of case."""
     test_cases = [
-        ("Check @OpenHands here", f"Check @{ZWJ}OpenHands here"),
-        ("Check @openhands here", f"Check @{ZWJ}openhands here"),
-        ("Check @OPENHANDS here", f"Check @{ZWJ}OPENHANDS here"),
-        ("Check @oPeNhAnDs here", f"Check @{ZWJ}oPeNhAnDs here"),
+        ("Check @Madagascar here", f"Check @{ZWJ}Madagascar here"),
+        ("Check @madagascar here", f"Check @{ZWJ}madagascar here"),
+        ("Check @MADAGASCAR here", f"Check @{ZWJ}MADAGASCAR here"),
+        ("Check @mAdAgAsCaR here", f"Check @{ZWJ}mAdAgAsCaR here"),
     ]
     for input_text, expected in test_cases:
-        assert sanitize_openhands_mentions(input_text) == expected
+        assert sanitize_madagascar_mentions(input_text) == expected
 
 
 def test_sanitize_multiple_mentions():
     """Test multiple mentions in the same text."""
-    text = "Both @OpenHands and @openhands should be sanitized"
-    expected = f"Both @{ZWJ}OpenHands and @{ZWJ}openhands should be sanitized"
-    assert sanitize_openhands_mentions(text) == expected
+    text = "Both @Madagascar and @madagascar should be sanitized"
+    expected = f"Both @{ZWJ}Madagascar and @{ZWJ}madagascar should be sanitized"
+    assert sanitize_madagascar_mentions(text) == expected
 
 
 def test_sanitize_with_punctuation():
     """Test mentions followed by punctuation."""
     test_cases = [
-        ("Thanks @OpenHands!", f"Thanks @{ZWJ}OpenHands!"),
-        ("Hello @OpenHands.", f"Hello @{ZWJ}OpenHands."),
-        ("See @OpenHands,", f"See @{ZWJ}OpenHands,"),
-        ("By @OpenHands:", f"By @{ZWJ}OpenHands:"),
-        ("From @OpenHands;", f"From @{ZWJ}OpenHands;"),
-        ("Hi @OpenHands?", f"Hi @{ZWJ}OpenHands?"),
-        ("Use @OpenHands)", f"Use @{ZWJ}OpenHands)"),
-        ("Try (@OpenHands)", f"Try (@{ZWJ}OpenHands)"),
+        ("Thanks @Madagascar!", f"Thanks @{ZWJ}Madagascar!"),
+        ("Hello @Madagascar.", f"Hello @{ZWJ}Madagascar."),
+        ("See @Madagascar,", f"See @{ZWJ}Madagascar,"),
+        ("By @Madagascar:", f"By @{ZWJ}Madagascar:"),
+        ("From @Madagascar;", f"From @{ZWJ}Madagascar;"),
+        ("Hi @Madagascar?", f"Hi @{ZWJ}Madagascar?"),
+        ("Use @Madagascar)", f"Use @{ZWJ}Madagascar)"),
+        ("Try (@Madagascar)", f"Try (@{ZWJ}Madagascar)"),
     ]
     for input_text, expected in test_cases:
-        assert sanitize_openhands_mentions(input_text) == expected
+        assert sanitize_madagascar_mentions(input_text) == expected
 
 
 def test_no_sanitize_partial_words():
     """Test that partial word matches are NOT sanitized."""
     test_cases = [
-        "OpenHandsTeam",
-        "MyOpenHands",
-        "OpenHandsBot",
-        "#OpenHands",
+        "MadagascarTeam",
+        "MyMadagascar",
+        "MadagascarBot",
+        "#Madagascar",
     ]
     for text in test_cases:
         # Partial words without @ should remain unchanged
-        assert sanitize_openhands_mentions(text) == text
+        assert sanitize_madagascar_mentions(text) == text
 
 
 def test_no_op_cases():
@@ -66,60 +66,60 @@ def test_no_op_cases():
         "Just some text",
         "@GitHub",
         "@Other",
-        "OpenHands without @",
+        "Madagascar without @",
     ]
     for text in test_cases:
-        assert sanitize_openhands_mentions(text) == text
+        assert sanitize_madagascar_mentions(text) == text
 
 
 def test_sanitize_at_line_boundaries():
     """Test mentions at the start and end of lines."""
     test_cases = [
-        ("@OpenHands at start", f"@{ZWJ}OpenHands at start"),
-        ("at end @OpenHands", f"at end @{ZWJ}OpenHands"),
-        ("@OpenHands", f"@{ZWJ}OpenHands"),
+        ("@Madagascar at start", f"@{ZWJ}Madagascar at start"),
+        ("at end @Madagascar", f"at end @{ZWJ}Madagascar"),
+        ("@Madagascar", f"@{ZWJ}Madagascar"),
     ]
     for input_text, expected in test_cases:
-        assert sanitize_openhands_mentions(input_text) == expected
+        assert sanitize_madagascar_mentions(input_text) == expected
 
 
 def test_sanitize_multiline_text():
     """Test sanitization in multiline text."""
-    text = """Hello @OpenHands!
+    text = """Hello @Madagascar!
 
-This is a test with @openhands mentioned.
+This is a test with @madagascar mentioned.
 
-Thanks @OPENHANDS for everything!"""
+Thanks @MADAGASCAR for everything!"""
 
-    expected = f"""Hello @{ZWJ}OpenHands!
+    expected = f"""Hello @{ZWJ}Madagascar!
 
-This is a test with @{ZWJ}openhands mentioned.
+This is a test with @{ZWJ}madagascar mentioned.
 
-Thanks @{ZWJ}OPENHANDS for everything!"""
+Thanks @{ZWJ}MADAGASCAR for everything!"""
 
-    assert sanitize_openhands_mentions(text) == expected
+    assert sanitize_madagascar_mentions(text) == expected
 
 
 def test_sanitize_with_urls():
-    """Test that URLs containing OpenHands are handled correctly."""
+    """Test that URLs containing Madagascar are handled correctly."""
     test_cases = [
         # URL should not be sanitized
-        ("Visit https://github.com/OpenHands", "Visit https://github.com/OpenHands"),
+        ("Visit https://github.com/Madagascar", "Visit https://github.com/Madagascar"),
         # But mention should be sanitized
         (
-            "See @OpenHands at https://github.com/OpenHands",
-            f"See @{ZWJ}OpenHands at https://github.com/OpenHands",
+            "See @Madagascar at https://github.com/Madagascar",
+            f"See @{ZWJ}Madagascar at https://github.com/Madagascar",
         ),
     ]
     for input_text, expected in test_cases:
-        assert sanitize_openhands_mentions(input_text) == expected
+        assert sanitize_madagascar_mentions(input_text) == expected
 
 
 def test_sanitize_preserves_whitespace():
     """Test that whitespace is preserved correctly."""
-    text = "  @OpenHands  \n  @openhands  "
-    expected = f"  @{ZWJ}OpenHands  \n  @{ZWJ}openhands  "
-    assert sanitize_openhands_mentions(text) == expected
+    text = "  @Madagascar  \n  @madagascar  "
+    expected = f"  @{ZWJ}Madagascar  \n  @{ZWJ}madagascar  "
+    assert sanitize_madagascar_mentions(text) == expected
 
 
 def test_zwj_constant():

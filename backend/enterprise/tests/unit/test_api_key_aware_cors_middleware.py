@@ -21,7 +21,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from server.middleware import ApiKeyAwareCORSMiddleware
 
-from openhands.app_server.middleware import LocalhostCORSMiddleware
+from madagascar.app_server.middleware import LocalhostCORSMiddleware
 
 ALLOWED_ORIGIN = 'https://app.all-hands.dev'
 FOREIGN_ORIGIN = 'https://client.example.com'
@@ -119,7 +119,7 @@ class TestApiKeyAwareCORSMiddleware:
     ):
         client = _build_client(with_inner_cors=True)
 
-        with caplog.at_level(logging.WARNING, logger='openhands.app_server.middleware'):
+        with caplog.at_level(logging.WARNING, logger='madagascar.app_server.middleware'):
             response = client.get(
                 '/api/v1/settings',
                 headers={

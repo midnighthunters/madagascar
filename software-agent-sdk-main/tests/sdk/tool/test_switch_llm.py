@@ -2,12 +2,12 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk import LLM, LocalConversation, OpenHandsAgentSettings
-from openhands.sdk.agent import Agent
-from openhands.sdk.llm import llm_profile_store
-from openhands.sdk.llm.llm_profile_store import LLMProfileStore
-from openhands.sdk.testing import TestLLM
-from openhands.sdk.tool.builtins import (
+from madagascar.sdk import LLM, LocalConversation, MadagascarAgentSettings
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.llm import llm_profile_store
+from madagascar.sdk.llm.llm_profile_store import LLMProfileStore
+from madagascar.sdk.testing import TestLLM
+from madagascar.sdk.tool.builtins import (
     SwitchLLMAction,
     SwitchLLMObservation,
     SwitchLLMTool,
@@ -57,7 +57,7 @@ def test_switch_llm_tool_description_lists_available_profiles(profile_store):
 def test_agent_settings_includes_switch_llm_tool_when_profiles_exist(profile_store):
     # tools=[] (not the None default): these tests resolve tools for real via
     # _ensure_agent_ready and tests/sdk registers no exec tools.
-    agent = OpenHandsAgentSettings(
+    agent = MadagascarAgentSettings(
         llm=_make_llm("default-model", "default"), tools=[]
     ).create_agent()
 
@@ -69,7 +69,7 @@ def test_agent_settings_includes_switch_llm_tool_when_profiles_exist(profile_sto
 
 
 def test_agent_settings_omits_switch_llm_tool_when_disabled(profile_store):
-    agent = OpenHandsAgentSettings(
+    agent = MadagascarAgentSettings(
         llm=_make_llm("default-model", "default"),
         tools=[],
         enable_switch_llm_tool=False,
@@ -83,7 +83,7 @@ def test_agent_settings_omits_switch_llm_tool_when_disabled(profile_store):
 
 
 def test_agent_settings_includes_switch_llm_tool_without_profiles(empty_profile_store):
-    agent = OpenHandsAgentSettings(
+    agent = MadagascarAgentSettings(
         llm=_make_llm("default-model", "default"), tools=[]
     ).create_agent()
 

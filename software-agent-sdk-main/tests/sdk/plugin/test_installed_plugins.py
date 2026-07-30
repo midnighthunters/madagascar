@@ -1,6 +1,6 @@
 """Tests for installed plugins management.
 
-These tests verify the public API in ``openhands.sdk.plugin.installed``
+These tests verify the public API in ``madagascar.sdk.plugin.installed``
 delegates correctly to ``InstallationManager``.  Internal metadata and
 sync logic is already covered by ``tests/sdk/extensions/installation/``.
 
@@ -13,8 +13,8 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.extensions.fetch import get_cache_path, parse_extension_source
-from openhands.sdk.plugin import (
+from madagascar.sdk.extensions.fetch import get_cache_path, parse_extension_source
+from madagascar.sdk.plugin import (
     Plugin,
     PluginFetchError,
     disable_plugin,
@@ -27,7 +27,7 @@ from openhands.sdk.plugin import (
     uninstall_plugin,
     update_plugin,
 )
-from openhands.sdk.plugin.fetch import DEFAULT_CACHE_DIR as DEFAULT_PLUGIN_CACHE_DIR
+from madagascar.sdk.plugin.fetch import DEFAULT_CACHE_DIR as DEFAULT_PLUGIN_CACHE_DIR
 
 
 # ============================================================================
@@ -73,7 +73,7 @@ def sample_plugin_dir(tmp_path: Path) -> Path:
 
 def test_get_installed_plugins_dir_returns_default_path():
     path = get_installed_plugins_dir()
-    assert ".openhands" in str(path)
+    assert ".madagascar" in str(path)
     assert "plugins" in str(path)
     assert "installed" in str(path)
 
@@ -204,7 +204,7 @@ def test_update_nonexistent_plugin(installed_dir: Path) -> None:
 def test_install_from_github_with_repo_path(installed_dir: Path) -> None:
     try:
         info = install_plugin(
-            source="github:OpenHands/agent-sdk",
+            source="github:Madagascar/agent-sdk",
             repo_path=(
                 "examples/05_skills_and_plugins/"
                 "02_loading_plugins/example_plugins/code-quality"
@@ -213,7 +213,7 @@ def test_install_from_github_with_repo_path(installed_dir: Path) -> None:
         )
 
         assert info.name == "code-quality"
-        assert info.source == "github:OpenHands/agent-sdk"
+        assert info.source == "github:Madagascar/agent-sdk"
         assert info.resolved_ref is not None
         assert info.repo_path is not None
 
@@ -230,7 +230,7 @@ def test_install_from_github_with_repo_path(installed_dir: Path) -> None:
 def test_install_from_github_with_ref(installed_dir: Path) -> None:
     try:
         info = install_plugin(
-            source="github:OpenHands/agent-sdk",
+            source="github:Madagascar/agent-sdk",
             ref="main",
             repo_path=(
                 "examples/05_skills_and_plugins/"

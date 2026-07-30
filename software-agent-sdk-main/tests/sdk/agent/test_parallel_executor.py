@@ -5,8 +5,8 @@ import time
 from typing import Any
 from unittest.mock import MagicMock
 
-from openhands.sdk.agent.parallel_executor import ParallelToolExecutor
-from openhands.sdk.event.llm_convertible import AgentErrorEvent
+from madagascar.sdk.agent.parallel_executor import ParallelToolExecutor
+from madagascar.sdk.event.llm_convertible import AgentErrorEvent
 
 
 def test_default_max_workers():

@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { OpenHandsEvent, MessageEvent, ActionEvent } from "#/types/v1/core";
+import { MadagascarEvent, MessageEvent, ActionEvent } from "#/types/v1/core";
 import { FinishAction, ThinkAction } from "#/types/v1/core/base/action";
 import { I18nKey } from "#/i18n/declaration";
 import {
@@ -32,8 +32,8 @@ import { createSkillReadyEvent } from "./event-content-helpers/create-skill-read
 import { shouldShowPlanPreview } from "./hooks/use-plan-preview-events";
 
 interface EventMessageProps {
-  event: OpenHandsEvent & { isFromPlanningAgent?: boolean };
-  messages: OpenHandsEvent[];
+  event: MadagascarEvent & { isFromPlanningAgent?: boolean };
+  messages: MadagascarEvent[];
   isLastMessage: boolean;
   isInLast10Actions: boolean;
   /** Set of event IDs that should render PlanPreview (one per user message phase) */

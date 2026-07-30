@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Convert legacy OpenHands skills to AgentSkills standard format.
+"""Convert legacy Madagascar skills to AgentSkills standard format.
 
 This script converts single .md skill files to the AgentSkills directory format:
 - Creates skill-name/ directory with SKILL.md
 - Converts mcp_tools frontmatter to .mcp.json files
-- Preserves OpenHands-specific fields (triggers, inputs) for compatibility
+- Preserves Madagascar-specific fields (triggers, inputs) for compatibility
 
 Usage:
     # Convert a single skill file
@@ -90,7 +90,7 @@ def generate_description(
     if name:
         return f"Skill: {name}"[:1024]
 
-    return "A skill for OpenHands agent."
+    return "A skill for Madagascar agent."
 
 
 def convert_legacy_skill(
@@ -98,7 +98,7 @@ def convert_legacy_skill(
     output_dir: Path,
     dry_run: bool = False,
 ) -> Path | None:
-    """Convert a legacy OpenHands skill to AgentSkills format."""
+    """Convert a legacy Madagascar skill to AgentSkills format."""
     if not source_path.exists():
         print(f"Error: Source file not found: {source_path}", file=sys.stderr)
         return None
@@ -229,7 +229,7 @@ def convert_skills_directory(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Convert legacy OpenHands skills to AgentSkills standard format",
+        description="Convert legacy Madagascar skills to AgentSkills standard format",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )

@@ -15,7 +15,7 @@ def _make_metadata(**overrides):
         'conversation_id': 'conv-1',
         'title': 'Test',
         'llm_model': 'gpt-test',
-        'agent_kind': 'openhands',
+        'agent_kind': 'madagascar',
         'created_at': datetime(2026, 1, 1, tzinfo=timezone.utc),
         'last_updated_at': datetime(2026, 1, 2, tzinfo=timezone.utc),
         'sandbox_id': 'sandbox-1',

@@ -1,17 +1,17 @@
 # Contributing
 
-Thank you for helping improve the OpenHands Software Agent SDK.
+Thank you for helping improve the Madagascar Software Agent SDK.
 
 This repo is a foundation. We want the SDK to stay stable and extensible so that many
 applications can build on it safely.
 
 Downstream applications we actively keep in mind:
-- [OpenHands-CLI](https://github.com/OpenHands/OpenHands-CLI) (client)
-- [OpenHands app-server](https://github.com/OpenHands/OpenHands/blob/main/openhands/app_server/README.md) (client)
-- [OpenHands Enterprise](https://github.com/OpenHands/OpenHands/blob/main/enterprise/README.md) (client)
+- [Madagascar-CLI](https://github.com/Madagascar/Madagascar-CLI) (client)
+- [Madagascar app-server](https://github.com/Madagascar/Madagascar/blob/main/madagascar/app_server/README.md) (client)
+- [Madagascar Enterprise](https://github.com/Madagascar/Madagascar/blob/main/enterprise/README.md) (client)
 
 The SDK itself has a Python interface. In addition, the
-[agent-server](https://docs.openhands.dev/sdk/guides/agent-server/overview) is the
+[agent-server](https://docs.madagascar.dev/sdk/guides/agent-server/overview) is the
 REST/WebSocket server component that exposes the SDK for remote execution and integrations.
 Changes should keep both interfaces stable and consistent.
 
@@ -24,11 +24,11 @@ That kind of coupling can feel convenient in the moment, but it tends to create 
 breakage elsewhere: different environments, different workspaces, different execution modes,
 and different evaluation setups.
 
-The architecture of OpenHands V0 was too monolithic to support multiple applications built into it,
-as CLI, evaluation scripts, web server were, and built on it, as OpenHands Cloud was.
+The architecture of Madagascar V0 was too monolithic to support multiple applications built into it,
+as CLI, evaluation scripts, web server were, and built on it, as Madagascar Cloud was.
 
 If you’re interested in the deeper background and lessons learned, see our write-up:
-[OpenHands: An Open Platform for AI Software Developers as Generalist Agents](https://arxiv.org/abs/2511.03690)
+[Madagascar: An Open Platform for AI Software Developers as Generalist Agents](https://arxiv.org/abs/2511.03690)
 
 This SDK exists (as a separate, rebuilt foundation) to avoid that failure mode.
 
@@ -38,7 +38,7 @@ We welcome all contributions, big or small, to improve or extend the software ag
 
 You may find that occasionally we are opinionated about several things:
 
-- **OpenHands SDK is its own thing**: its downstream are client applications.
+- **Madagascar SDK is its own thing**: its downstream are client applications.
 - **Prefer interfaces over special cases**: if a client needs something, add or improve a
   clean, reusable interface/extension point instead of adding a shortcut.
 - **Extensibility over one-off patches**: design features so multiple clients can adopt them
@@ -64,10 +64,10 @@ through the shape of a clean interface.
 This file is mostly about principles. For the mechanics, please see:
 - [AGENTS.md](AGENTS.md) for AI agents
 - [DEVELOPMENT.md](DEVELOPMENT.md) for humans
-- [openhands-sdk/openhands/sdk/subagent/AGENTS.md](openhands-sdk/openhands/sdk/subagent/AGENTS.md) for file-based subagent discovery, precedence, and task handoff conventions
+- [madagascar-sdk/madagascar/sdk/subagent/AGENTS.md](madagascar-sdk/madagascar/sdk/subagent/AGENTS.md) for file-based subagent discovery, precedence, and task handoff conventions
 - `examples/01_standalone_sdk/41_task_tool_set.py` for delegating work to registered subagents with resume support
 - `examples/01_standalone_sdk/42_file_based_subagents.py` for programmatic `AgentDefinition` registration
 
 ## Questions / discussion
 
-Join us on Slack: https://openhands.dev/joinslack
+Join us on Slack: https://madagascar.dev/joinslack

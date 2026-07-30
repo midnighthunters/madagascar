@@ -15,7 +15,7 @@ interface AddPluginModalProps {
 }
 
 export function AddPluginModal({ onClose, onInstalled }: AddPluginModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const installPlugin = useInstallPlugin();
 
   const [source, setSource] = React.useState("");

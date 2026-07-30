@@ -6,11 +6,11 @@ from unittest.mock import patch
 import pytest
 from pydantic import SecretStr
 
-from openhands.app_server.integrations.bitbucket_data_center.bitbucket_dc_service import (
+from madagascar.app_server.integrations.bitbucket_data_center.bitbucket_dc_service import (
     BitbucketDCService,
 )
-from openhands.app_server.integrations.service_types import AuthenticationError, User
-from openhands.app_server.types import AppMode
+from madagascar.app_server.integrations.service_types import AuthenticationError, User
+from madagascar.app_server.types import AppMode
 
 # ── init / BASE_URL ───────────────────────────────────────────────────────────
 
@@ -325,7 +325,7 @@ async def test_get_user_raises_when_not_found():
 
 
 def test_resolve_primary_email_selects_primary_confirmed():
-    from openhands.app_server.integrations.bitbucket_data_center.service.base import (
+    from madagascar.app_server.integrations.bitbucket_data_center.service.base import (
         BitbucketDCMixinBase,
     )
 
@@ -343,7 +343,7 @@ def test_resolve_primary_email_selects_primary_confirmed():
 
 
 def test_resolve_primary_email_returns_none_when_no_primary():
-    from openhands.app_server.integrations.bitbucket_data_center.service.base import (
+    from madagascar.app_server.integrations.bitbucket_data_center.service.base import (
         BitbucketDCMixinBase,
     )
 
@@ -356,7 +356,7 @@ def test_resolve_primary_email_returns_none_when_no_primary():
 
 
 def test_resolve_primary_email_returns_none_when_primary_not_confirmed():
-    from openhands.app_server.integrations.bitbucket_data_center.service.base import (
+    from madagascar.app_server.integrations.bitbucket_data_center.service.base import (
         BitbucketDCMixinBase,
     )
 
@@ -369,7 +369,7 @@ def test_resolve_primary_email_returns_none_when_primary_not_confirmed():
 
 
 def test_resolve_primary_email_returns_none_for_empty_list():
-    from openhands.app_server.integrations.bitbucket_data_center.service.base import (
+    from madagascar.app_server.integrations.bitbucket_data_center.service.base import (
         BitbucketDCMixinBase,
     )
 

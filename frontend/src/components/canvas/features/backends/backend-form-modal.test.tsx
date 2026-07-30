@@ -13,7 +13,7 @@ afterEach(() => {
 });
 
 describe("BackendConnectionOptions — manual backend type", () => {
-  it("defaults the Type selector to Cloud for an OpenHands Cloud host", () => {
+  it("defaults the Type selector to Cloud for an Madagascar Cloud host", () => {
     render(
       <BackendConnectionOptions
         onConnected={vi.fn()}

@@ -7,8 +7,8 @@ from unittest.mock import patch
 
 import pytest
 
-from openhands.tools.file_editor.editor import FileEditor
-from openhands.tools.file_editor.impl import file_editor
+from madagascar.tools.file_editor.editor import FileEditor
+from madagascar.tools.file_editor.impl import file_editor
 
 from .conftest import assert_error_result
 

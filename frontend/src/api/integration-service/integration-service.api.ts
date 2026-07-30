@@ -1,4 +1,4 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 import {
   AzureDevOpsWebhookStatus,
   AzureDevOpsWebhookInstallationResult,
@@ -20,7 +20,7 @@ export const integrationService = {
    * @returns Promise with list of resources and their webhook status
    */
   getGitLabResources: async (): Promise<GitLabResourcesResponse> => {
-    const { data } = await openHands.get<GitLabResourcesResponse>(
+    const { data } = await madagascar.get<GitLabResourcesResponse>(
       "/integration/gitlab/resources",
     );
     return data;
@@ -37,7 +37,7 @@ export const integrationService = {
     resource: ResourceIdentifier;
   }): Promise<ResourceInstallationResult> => {
     const requestBody: ReinstallWebhookRequest = { resource };
-    const { data } = await openHands.post<ResourceInstallationResult>(
+    const { data } = await madagascar.post<ResourceInstallationResult>(
       "/integration/gitlab/reinstall-webhook",
       requestBody,
     );
@@ -49,14 +49,14 @@ export const integrationService = {
    * @returns Promise with list of repositories and their webhook status
    */
   getBitbucketDCResources: async (): Promise<BitbucketDCResourcesResponse> => {
-    const { data } = await openHands.get<BitbucketDCResourcesResponse>(
+    const { data } = await madagascar.get<BitbucketDCResourcesResponse>(
       "/integration/bitbucket-dc/resources",
     );
     return data;
   },
 
   /**
-   * Enroll a Bitbucket Data Center repository webhook in OpenHands.
+   * Enroll a Bitbucket Data Center repository webhook in Madagascar.
    * The returned secret and URL must be copied into Bitbucket Data Center manually.
    */
   enrollBitbucketDCWebhook: async ({
@@ -64,7 +64,7 @@ export const integrationService = {
   }: {
     resource: BitbucketDCResourceIdentifier;
   }): Promise<BitbucketDCWebhookEnrollmentResult> => {
-    const { data } = await openHands.post<BitbucketDCWebhookEnrollmentResult>(
+    const { data } = await madagascar.post<BitbucketDCWebhookEnrollmentResult>(
       "/integration/bitbucket-dc/enroll-webhook",
       { resource },
     );
@@ -88,7 +88,7 @@ export const integrationService = {
       resource,
       webhook_id: webhookId,
     };
-    const { data } = await openHands.patch<BitbucketDCWebhookIdUpdateResult>(
+    const { data } = await madagascar.patch<BitbucketDCWebhookIdUpdateResult>(
       "/integration/bitbucket-dc/webhook-id",
       requestBody,
     );
@@ -106,7 +106,7 @@ export const integrationService = {
   }: {
     resource: BitbucketDCResourceIdentifier;
   }): Promise<BitbucketDCWebhookInstallationResult> => {
-    const { data } = await openHands.post<BitbucketDCWebhookInstallationResult>(
+    const { data } = await madagascar.post<BitbucketDCWebhookInstallationResult>(
       "/integration/bitbucket-dc/reinstall-webhook",
       { resource },
     );
@@ -121,7 +121,7 @@ export const integrationService = {
   }: {
     resource: BitbucketDCResourceIdentifier;
   }): Promise<BitbucketDCWebhookInstallationResult> => {
-    const { data } = await openHands.post<BitbucketDCWebhookInstallationResult>(
+    const { data } = await madagascar.post<BitbucketDCWebhookInstallationResult>(
       "/integration/bitbucket-dc/uninstall-webhook",
       { resource },
     );
@@ -132,7 +132,7 @@ export const integrationService = {
    * Get the org-wide Azure DevOps resolver hook installation status.
    */
   getAzureDevOpsResources: async (): Promise<AzureDevOpsWebhookStatus> => {
-    const { data } = await openHands.get<AzureDevOpsWebhookStatus>(
+    const { data } = await madagascar.get<AzureDevOpsWebhookStatus>(
       "/integration/azure-devops/resources",
     );
     return data;
@@ -144,7 +144,7 @@ export const integrationService = {
   reinstallAzureDevOpsWebhook:
     async (): Promise<AzureDevOpsWebhookInstallationResult> => {
       const { data } =
-        await openHands.post<AzureDevOpsWebhookInstallationResult>(
+        await madagascar.post<AzureDevOpsWebhookInstallationResult>(
           "/integration/azure-devops/reinstall-webhook",
         );
       return data;
@@ -156,7 +156,7 @@ export const integrationService = {
   uninstallAzureDevOpsWebhook:
     async (): Promise<AzureDevOpsWebhookInstallationResult> => {
       const { data } =
-        await openHands.post<AzureDevOpsWebhookInstallationResult>(
+        await madagascar.post<AzureDevOpsWebhookInstallationResult>(
           "/integration/azure-devops/uninstall-webhook",
         );
       return data;

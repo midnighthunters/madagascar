@@ -15,7 +15,7 @@ interface ResponderDeploymentModalProps {
   onClose: () => void;
   /** Fired for the "Continue with local setup" action. */
   onContinueLocal: () => void;
-  /** Fired for an external-URL action (e.g. OpenHands Cloud integrations). */
+  /** Fired for an external-URL action (e.g. Madagascar Cloud integrations). */
   onOpenUrl: (url: string) => void;
 }
 
@@ -25,7 +25,7 @@ export function ResponderDeploymentModal({
   onContinueLocal,
   onOpenUrl,
 }: ResponderDeploymentModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   if (!isOpen) return null;
 

@@ -1,11 +1,11 @@
-import { OpenHandsAction } from "./actions";
-import { OpenHandsObservation } from "./observations";
-import { OpenHandsVariance } from "./variances";
+import { MadagascarAction } from "./actions";
+import { MadagascarObservation } from "./observations";
+import { MadagascarVariance } from "./variances";
 
 /**
  * @deprecated Will be removed once we fully transition to v1 events
  */
-export type OpenHandsParsedEvent =
-  | OpenHandsAction
-  | OpenHandsObservation
-  | OpenHandsVariance;
+export type MadagascarParsedEvent =
+  | MadagascarAction
+  | MadagascarObservation
+  | MadagascarVariance;

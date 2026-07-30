@@ -9,13 +9,13 @@ from openai.types.responses.response_output_message import ResponseOutputMessage
 from openai.types.responses.response_output_text import ResponseOutputText
 from pydantic import SecretStr
 
-from openhands.sdk import ConversationStats, RegistryEvent
-from openhands.sdk.llm import LLM, LLMResponse, Message, MessageToolCall, TextContent
-from openhands.sdk.llm.exceptions import LLMNoResponseError
-from openhands.sdk.llm.options.responses_options import select_responses_options
-from openhands.sdk.llm.utils.metrics import Metrics, TokenUsage
-from openhands.sdk.llm.utils.telemetry import Telemetry
-from openhands.sdk.tool.builtins.finish import FinishTool
+from madagascar.sdk import ConversationStats, RegistryEvent
+from madagascar.sdk.llm import LLM, LLMResponse, Message, MessageToolCall, TextContent
+from madagascar.sdk.llm.exceptions import LLMNoResponseError
+from madagascar.sdk.llm.options.responses_options import select_responses_options
+from madagascar.sdk.llm.utils.metrics import Metrics, TokenUsage
+from madagascar.sdk.llm.utils.telemetry import Telemetry
+from madagascar.sdk.tool.builtins.finish import FinishTool
 
 # Import common test utilities
 from tests.conftest import create_mock_litellm_response
@@ -44,18 +44,18 @@ def test_llm_init_with_default_config(default_llm):
     assert default_llm.metrics.model_name == "gpt-4o"
 
 
-@patch("openhands.sdk.llm.utils.model_info.httpx.get")
-def test_base_url_for_openhands_provider(mock_get):
-    """Test that openhands/ remains public while transport uses the proxy."""
+@patch("madagascar.sdk.llm.utils.model_info.httpx.get")
+def test_base_url_for_madagascar_provider(mock_get):
+    """Test that madagascar/ remains public while transport uses the proxy."""
     # Mock the model info fetch to avoid actual HTTP calls to production
     mock_get.return_value = Mock(json=lambda: {"data": []})
 
     llm = LLM(
-        model="openhands/claude-sonnet-4-20250514",
+        model="madagascar/claude-sonnet-4-20250514",
         api_key=SecretStr("test-key"),
-        usage_id="test-openhands-llm",
+        usage_id="test-madagascar-llm",
     )
-    assert llm.model == "openhands/claude-sonnet-4-20250514"
+    assert llm.model == "madagascar/claude-sonnet-4-20250514"
     assert llm.base_url is None
     mock_get.assert_called_once_with(
         "https://llm-proxy.app.all-hands.dev/v1/model/info",
@@ -63,49 +63,49 @@ def test_base_url_for_openhands_provider(mock_get):
     )
 
 
-@patch("openhands.sdk.llm.utils.model_info.httpx.get")
-def test_base_url_for_openhands_provider_with_explicit_none(mock_get):
+@patch("madagascar.sdk.llm.utils.model_info.httpx.get")
+def test_base_url_for_madagascar_provider_with_explicit_none(mock_get):
     """Test that explicit None remains public config, not persisted transport config."""
     # Mock the model info fetch to avoid actual HTTP calls to production
     mock_get.return_value = Mock(json=lambda: {"data": []})
 
     llm = LLM(
-        model="openhands/claude-sonnet-4-20250514",
+        model="madagascar/claude-sonnet-4-20250514",
         api_key=SecretStr("test-key"),
-        usage_id="test-openhands-llm",
+        usage_id="test-madagascar-llm",
         base_url=None,
     )
-    assert llm.model == "openhands/claude-sonnet-4-20250514"
+    assert llm.model == "madagascar/claude-sonnet-4-20250514"
     assert llm.base_url is None
 
 
-@patch("openhands.sdk.llm.utils.model_info.httpx.get")
-@patch("openhands.sdk.llm.llm.litellm_completion")
-def test_openhands_provider_translates_only_for_litellm(mock_completion, mock_get):
+@patch("madagascar.sdk.llm.utils.model_info.httpx.get")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
+def test_madagascar_provider_translates_only_for_litellm(mock_completion, mock_get):
     mock_get.return_value = Mock(json=lambda: {"data": []})
     mock_completion.return_value = create_mock_litellm_response("ok")
 
     llm = LLM(
-        model="openhands/claude-haiku-4-5-20251001",
+        model="madagascar/claude-haiku-4-5-20251001",
         api_key=SecretStr("test-key"),
-        usage_id="test-openhands-transport",
+        usage_id="test-madagascar-transport",
         num_retries=0,
     )
 
     messages = [Message(role="user", content=[TextContent(text="Hello")])]
     llm.completion(messages=messages)
 
-    assert llm.model == "openhands/claude-haiku-4-5-20251001"
+    assert llm.model == "madagascar/claude-haiku-4-5-20251001"
     assert llm.base_url is None
     _, kwargs = mock_completion.call_args
     assert kwargs["model"] == "litellm_proxy/claude-haiku-4-5-20251001"
     assert kwargs["api_base"] == "https://llm-proxy.app.all-hands.dev"
     persisted = llm.to_persisted()
-    assert persisted["model"] == "openhands/claude-haiku-4-5-20251001"
+    assert persisted["model"] == "madagascar/claude-haiku-4-5-20251001"
     assert "base_url" not in persisted
 
 
-@patch("openhands.sdk.llm.utils.model_info.httpx.get")
+@patch("madagascar.sdk.llm.utils.model_info.httpx.get")
 def test_kimi_k2_5_uses_provider_defaults(mock_get):
     """Test that kimi-k2.5 uses provider defaults (None) for temperature and top_p."""
     mock_get.return_value = Mock(json=lambda: {"data": []})
@@ -131,17 +131,17 @@ def test_kimi_k2_5_uses_provider_defaults(mock_get):
     assert llm_explicit.temperature == 0.5
 
 
-@patch("openhands.sdk.llm.utils.model_info.httpx.get")
-def test_base_url_for_openhands_provider_with_custom_url(mock_get):
-    """Test that openhands/ provider respects custom base_url when provided."""
+@patch("madagascar.sdk.llm.utils.model_info.httpx.get")
+def test_base_url_for_madagascar_provider_with_custom_url(mock_get):
+    """Test that madagascar/ provider respects custom base_url when provided."""
     # Mock the model info fetch to avoid actual HTTP calls
     mock_get.return_value = Mock(json=lambda: {"data": []})
 
     custom_url = "https://custom-proxy.example.com/"
     llm = LLM(
-        model="openhands/claude-sonnet-4-20250514",
+        model="madagascar/claude-sonnet-4-20250514",
         api_key=SecretStr("test-key"),
-        usage_id="test-openhands-llm",
+        usage_id="test-madagascar-llm",
         base_url=custom_url,
     )
     assert llm.base_url == custom_url
@@ -257,7 +257,7 @@ def test_metrics_diff():
     assert accumulated_diff["cache_write_tokens"] == 2
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_llm_completion_with_mock(mock_completion):
     """Test LLM completion with mocked litellm."""
     mock_response = create_mock_litellm_response("Test response")
@@ -282,7 +282,7 @@ def test_llm_completion_with_mock(mock_completion):
     mock_completion.assert_called_once()
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_llm_retry_on_rate_limit(mock_completion):
     """Test that LLM retries on rate limit errors."""
     mock_response = create_mock_litellm_response("Success after retry")
@@ -345,7 +345,7 @@ def test_llm_token_counting(default_llm):
     assert token_count >= 0
 
 
-@patch("openhands.sdk.llm.llm.token_counter")
+@patch("madagascar.sdk.llm.llm.token_counter")
 def test_llm_token_counting_includes_tools(mock_token_counter, default_llm):
     """Test LLM token counting forwards tool schemas to LiteLLM."""
     mock_token_counter.return_value = 123
@@ -391,7 +391,7 @@ def test_llm_load_chat_template_tokenizer_prefers_transformers(monkeypatch):
         raise ModuleNotFoundError(name)
 
     monkeypatch.setattr(
-        "openhands.sdk.llm.llm.importlib.import_module", fake_import_module
+        "madagascar.sdk.llm.llm.importlib.import_module", fake_import_module
     )
 
     tokenizer = LLM._load_chat_template_tokenizer("model-with-template")
@@ -400,7 +400,7 @@ def test_llm_load_chat_template_tokenizer_prefers_transformers(monkeypatch):
     assert FakeAutoTokenizer.loaded_identifier == "model-with-template"
 
 
-@patch("openhands.sdk.llm.llm.create_pretrained_tokenizer")
+@patch("madagascar.sdk.llm.llm.create_pretrained_tokenizer")
 def test_llm_custom_tokenizer_falls_back_without_transformers(
     mock_create_pretrained_tokenizer, monkeypatch
 ):
@@ -416,7 +416,7 @@ def test_llm_custom_tokenizer_falls_back_without_transformers(
         raise ModuleNotFoundError(name)
 
     monkeypatch.setattr(
-        "openhands.sdk.llm.llm.importlib.import_module", fake_import_module
+        "madagascar.sdk.llm.llm.importlib.import_module", fake_import_module
     )
 
     llm = LLM(
@@ -429,7 +429,7 @@ def test_llm_custom_tokenizer_falls_back_without_transformers(
     assert llm._tokenizer == fallback_tokenizer
 
 
-@patch("openhands.sdk.llm.llm.create_pretrained_tokenizer")
+@patch("madagascar.sdk.llm.llm.create_pretrained_tokenizer")
 def test_llm_custom_tokenizer_falls_back_without_apply_chat_template(
     mock_create_pretrained_tokenizer, monkeypatch
 ):
@@ -453,7 +453,7 @@ def test_llm_custom_tokenizer_falls_back_without_apply_chat_template(
         raise ModuleNotFoundError(name)
 
     monkeypatch.setattr(
-        "openhands.sdk.llm.llm.importlib.import_module", fake_import_module
+        "madagascar.sdk.llm.llm.importlib.import_module", fake_import_module
     )
 
     llm = LLM(
@@ -466,7 +466,7 @@ def test_llm_custom_tokenizer_falls_back_without_apply_chat_template(
     assert llm._tokenizer == fallback_tokenizer
 
 
-@patch("openhands.sdk.llm.llm.create_pretrained_tokenizer")
+@patch("madagascar.sdk.llm.llm.create_pretrained_tokenizer")
 def test_llm_custom_tokenizer_allows_apply_chat_template_without_declared_template(
     mock_create_pretrained_tokenizer, monkeypatch
 ):
@@ -495,7 +495,7 @@ def test_llm_custom_tokenizer_allows_apply_chat_template_without_declared_templa
         raise ModuleNotFoundError(name)
 
     monkeypatch.setattr(
-        "openhands.sdk.llm.llm.importlib.import_module", fake_import_module
+        "madagascar.sdk.llm.llm.importlib.import_module", fake_import_module
     )
 
     llm = LLM(
@@ -508,7 +508,7 @@ def test_llm_custom_tokenizer_allows_apply_chat_template_without_declared_templa
     mock_create_pretrained_tokenizer.assert_not_called()
 
 
-@patch("openhands.sdk.llm.llm.token_counter")
+@patch("madagascar.sdk.llm.llm.token_counter")
 def test_llm_token_counting_prefers_chat_template_tokenizer(
     mock_token_counter, default_llm
 ):
@@ -544,7 +544,7 @@ def test_llm_token_counting_prefers_chat_template_tokenizer(
     assert "message" in kwargs["tools"][0]["function"]["parameters"]["properties"]
 
 
-@patch("openhands.sdk.llm.llm.token_counter")
+@patch("madagascar.sdk.llm.llm.token_counter")
 def test_llm_chat_template_token_counting_parses_tool_call_arguments(
     mock_token_counter, default_llm
 ):
@@ -609,7 +609,7 @@ def test_llm_count_tokenized_output_handles_encoding_objects(default_llm):
     assert default_llm.get_token_count(messages) == 321
 
 
-@patch("openhands.sdk.llm.llm.token_counter")
+@patch("madagascar.sdk.llm.llm.token_counter")
 def test_llm_token_counting_falls_back_when_chat_template_fails(
     mock_token_counter, default_llm
 ):
@@ -629,7 +629,7 @@ def test_llm_token_counting_falls_back_when_chat_template_fails(
     mock_token_counter.assert_called_once()
 
 
-@patch("openhands.sdk.llm.llm.token_counter")
+@patch("madagascar.sdk.llm.llm.token_counter")
 def test_llm_token_counting_mocks_tools_for_non_native_models(mock_token_counter):
     """Test token counting prompt-mocks tools when native tool calling is disabled."""
     mock_token_counter.return_value = 456
@@ -661,7 +661,7 @@ def test_llm_token_counting_mocks_tools_for_non_native_models(mock_token_counter
     assert "<parameter=security_risk>LOW</parameter>" in system_text
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_llm_forwards_extra_headers_to_litellm(mock_completion):
     mock_response = create_mock_litellm_response("ok")
     mock_completion.return_value = mock_response
@@ -687,7 +687,7 @@ def test_llm_forwards_extra_headers_to_litellm(mock_completion):
     assert headers.items() <= forwarded.items()
 
 
-@patch("openhands.sdk.llm.llm.litellm_responses")
+@patch("madagascar.sdk.llm.llm.litellm_responses")
 def test_llm_responses_forwards_extra_headers_to_litellm(mock_responses):
     # Build a minimal, but valid, ResponsesAPIResponse instance per litellm types
     # Build typed message output using OpenAI types to satisfy litellm schema
@@ -736,7 +736,7 @@ def test_llm_responses_forwards_extra_headers_to_litellm(mock_responses):
     assert headers.items() <= forwarded.items()
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_completion_merges_llm_extra_headers_with_extended_thinking_default(
     mock_completion,
 ):
@@ -767,7 +767,7 @@ def test_completion_merges_llm_extra_headers_with_extended_thinking_default(
     assert headers.get("X-Trace") == "1"
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_completion_call_time_extra_headers_override_config_and_defaults(
     mock_completion,
 ):
@@ -802,7 +802,7 @@ def test_completion_call_time_extra_headers_override_config_and_defaults(
     assert "X-Trace" not in headers
 
 
-@patch("openhands.sdk.llm.llm.litellm_responses")
+@patch("madagascar.sdk.llm.llm.litellm_responses")
 def test_responses_call_time_extra_headers_override_config(mock_responses):
     # Build a minimal valid Responses response
     msg = ResponseOutputMessage.model_construct(
@@ -1043,7 +1043,7 @@ def test_llm_local_detection_based_on_base_url():
     assert remote_llm.base_url == "https://api.openai.com/v1"
 
 
-def test_llm_openhands_provider_rewrite(default_llm):
+def test_llm_madagascar_provider_rewrite(default_llm):
     """Test LLM message formatting for different message types."""
     llm = default_llm
 
@@ -1125,7 +1125,7 @@ def test_llm_config_validation():
     assert full_llm.max_output_tokens == 1000
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_llm_no_response_error(mock_completion):
     """Test handling of LLMNoResponseError."""
     from litellm.types.utils import ModelResponse, Usage
@@ -1218,10 +1218,10 @@ def test_telemetry_cost_calculation_header_exception():
     telemetry = Telemetry(model_name="test-model", metrics=metrics)
 
     # Mock the logger to capture debug messages
-    with patch("openhands.sdk.llm.utils.telemetry.logger") as mock_logger:
+    with patch("madagascar.sdk.llm.utils.telemetry.logger") as mock_logger:
         # Mock litellm_completion_cost to return a valid cost
         with patch(
-            "openhands.sdk.llm.utils.telemetry.litellm_completion_cost",
+            "madagascar.sdk.llm.utils.telemetry.litellm_completion_cost",
             return_value=0.001,
         ):
             cost = telemetry._compute_cost(mock_response)
@@ -1277,7 +1277,7 @@ def test_enable_encrypted_reasoning_respects_flag_and_defaults_true():
     assert "reasoning.encrypted_content" not in normalized_stateful.get("include", [])
 
 
-@patch("openhands.sdk.llm.llm.LLM._transport_call")
+@patch("madagascar.sdk.llm.llm.LLM._transport_call")
 def test_unmapped_model_with_logging_enabled(mock_transport):
     """Test that unmapped models with logging enabled don't cause validation errors.
 
@@ -1327,11 +1327,11 @@ def test_unmapped_model_with_logging_enabled(mock_transport):
 # Context Window Validation Tests
 
 
-@patch("openhands.sdk.llm.llm.get_litellm_model_info")
+@patch("madagascar.sdk.llm.llm.get_litellm_model_info")
 def test_llm_raises_error_on_small_context_window(mock_get_model_info):
     """Test that LLM raises error when context window is too small."""
-    from openhands.sdk.llm.exceptions import LLMContextWindowTooSmallError
-    from openhands.sdk.llm.llm import MIN_CONTEXT_WINDOW_TOKENS
+    from madagascar.sdk.llm.exceptions import LLMContextWindowTooSmallError
+    from madagascar.sdk.llm.llm import MIN_CONTEXT_WINDOW_TOKENS
 
     mock_get_model_info.return_value = {"max_input_tokens": 2048}
 
@@ -1344,15 +1344,15 @@ def test_llm_raises_error_on_small_context_window(mock_get_model_info):
 
     assert exc_info.value.context_window == 2048
     assert exc_info.value.min_required == MIN_CONTEXT_WINDOW_TOKENS
-    assert "docs.openhands.dev" in str(exc_info.value)
+    assert "docs.madagascar.dev" in str(exc_info.value)
 
 
-@patch("openhands.sdk.llm.llm.get_litellm_model_info")
+@patch("madagascar.sdk.llm.llm.get_litellm_model_info")
 def test_llm_respects_allow_short_context_windows_env_var(mock_get_model_info):
     """Test that ALLOW_SHORT_CONTEXT_WINDOWS env var bypasses validation."""
     import os
 
-    from openhands.sdk.llm.llm import ENV_ALLOW_SHORT_CONTEXT_WINDOWS
+    from madagascar.sdk.llm.llm import ENV_ALLOW_SHORT_CONTEXT_WINDOWS
 
     mock_get_model_info.return_value = {"max_input_tokens": 2048}
 
@@ -1428,7 +1428,7 @@ def test_issue_2459_restore_metrics_syncs_telemetry():
     object as llm.metrics. Otherwise post-resume LLM calls record
     tokens/cost into a stale metrics object and accounting data is lost.
 
-    See: https://github.com/OpenHands/software-agent-sdk/issues/2459
+    See: https://github.com/Madagascar/software-agent-sdk/issues/2459
     """
     llm = LLM(
         model="gpt-4o-mini",
@@ -1506,7 +1506,7 @@ def test_conversation_stats_restore_then_track():
 
     stats = ConversationStats(usage_to_metrics={"agent": saved_metrics})
 
-    with patch("openhands.sdk.llm.llm.litellm_completion"):
+    with patch("madagascar.sdk.llm.llm.litellm_completion"):
         llm = LLM(
             model="openai/gpt-4o",
             api_key=SecretStr("test-key"),
@@ -1554,7 +1554,7 @@ def test_telemetry_callback_preserved_across_revalidation():
 # max_output_tokens Capping Tests
 
 
-@patch("openhands.sdk.llm.llm.get_litellm_model_info")
+@patch("madagascar.sdk.llm.llm.get_litellm_model_info")
 def test_max_output_tokens_capped_when_using_max_tokens_fallback(mock_get_model_info):
     """Test that max_output_tokens is capped when falling back to max_tokens.
 
@@ -1562,9 +1562,9 @@ def test_max_output_tokens_capped_when_using_max_tokens_fallback(mock_get_model_
     rather than the output limit. Without capping, this could request output
     that exceeds the context window.
 
-    See: https://github.com/OpenHands/software-agent-sdk/pull/2264
+    See: https://github.com/Madagascar/software-agent-sdk/pull/2264
     """
-    from openhands.sdk.llm.llm import DEFAULT_MAX_OUTPUT_TOKENS_CAP
+    from madagascar.sdk.llm.llm import DEFAULT_MAX_OUTPUT_TOKENS_CAP
 
     # Simulate a model where max_tokens = context window (200k) but
     # max_output_tokens is not set
@@ -1588,7 +1588,7 @@ def test_max_output_tokens_capped_when_using_max_tokens_fallback(mock_get_model_
     assert effective_max_output_tokens < 200000
 
 
-@patch("openhands.sdk.llm.llm.get_litellm_model_info")
+@patch("madagascar.sdk.llm.llm.get_litellm_model_info")
 def test_max_output_tokens_uses_actual_value_when_available(mock_get_model_info):
     """Test that actual max_output_tokens is used when available."""
     # Simulate a model with proper max_output_tokens
@@ -1609,12 +1609,12 @@ def test_max_output_tokens_uses_actual_value_when_available(mock_get_model_info)
     assert llm.effective_max_output_tokens == 8192
 
 
-@patch("openhands.sdk.llm.llm.get_litellm_model_info")
+@patch("madagascar.sdk.llm.llm.get_litellm_model_info")
 def test_max_output_tokens_capped_when_model_info_exceeds_default_cap(
     mock_get_model_info,
 ):
     """High LiteLLM max_output_tokens metadata is capped for custom gateways."""
-    from openhands.sdk.llm.llm import DEFAULT_MAX_OUTPUT_TOKENS_CAP
+    from madagascar.sdk.llm.llm import DEFAULT_MAX_OUTPUT_TOKENS_CAP
 
     mock_get_model_info.return_value = {
         "max_tokens": 262144,
@@ -1633,7 +1633,7 @@ def test_max_output_tokens_capped_when_model_info_exceeds_default_cap(
     assert llm.effective_max_output_tokens == DEFAULT_MAX_OUTPUT_TOKENS_CAP
 
 
-@patch("openhands.sdk.llm.llm.get_litellm_model_info")
+@patch("madagascar.sdk.llm.llm.get_litellm_model_info")
 def test_max_output_tokens_not_capped_without_custom_base_url(mock_get_model_info):
     """Direct API (no base_url) keeps litellm's real max_output_tokens."""
     mock_get_model_info.return_value = {
@@ -1649,10 +1649,10 @@ def test_max_output_tokens_not_capped_without_custom_base_url(mock_get_model_inf
     assert llm.effective_max_output_tokens == 64000
 
 
-@patch("openhands.sdk.llm.llm.get_litellm_model_info")
+@patch("madagascar.sdk.llm.llm.get_litellm_model_info")
 def test_max_output_tokens_small_max_tokens_not_capped(mock_get_model_info):
     """Test that small max_tokens fallback is not unnecessarily capped."""
-    from openhands.sdk.llm.llm import DEFAULT_MAX_OUTPUT_TOKENS_CAP
+    from madagascar.sdk.llm.llm import DEFAULT_MAX_OUTPUT_TOKENS_CAP
 
     # Simulate a model where max_tokens is small (actual output limit)
     mock_get_model_info.return_value = {
@@ -1673,7 +1673,7 @@ def test_max_output_tokens_small_max_tokens_not_capped(mock_get_model_info):
     assert llm.effective_max_output_tokens < DEFAULT_MAX_OUTPUT_TOKENS_CAP
 
 
-@patch("openhands.sdk.llm.llm.get_litellm_model_info")
+@patch("madagascar.sdk.llm.llm.get_litellm_model_info")
 def test_explicit_max_output_tokens_not_overridden(mock_get_model_info):
     """Test that explicitly set max_output_tokens is respected."""
     mock_get_model_info.return_value = {
@@ -1694,7 +1694,7 @@ def test_explicit_max_output_tokens_not_overridden(mock_get_model_info):
     assert llm.effective_max_output_tokens == 32768
 
 
-@patch("openhands.sdk.llm.llm.get_litellm_model_info")
+@patch("madagascar.sdk.llm.llm.get_litellm_model_info")
 def test_max_output_tokens_capped_when_equal_to_context_window(
     mock_get_model_info,
 ):
@@ -1720,7 +1720,7 @@ def test_max_output_tokens_capped_when_equal_to_context_window(
     assert llm.effective_max_input_tokens == 262144
 
 
-@patch("openhands.sdk.llm.llm.get_litellm_model_info")
+@patch("madagascar.sdk.llm.llm.get_litellm_model_info")
 def test_max_output_tokens_capped_when_equal_to_max_tokens(
     mock_get_model_info,
 ):
@@ -1745,7 +1745,7 @@ def test_max_output_tokens_capped_when_equal_to_max_tokens(
     assert llm.effective_max_output_tokens == 131072 // 2
 
 
-@patch("openhands.sdk.llm.llm.get_litellm_model_info")
+@patch("madagascar.sdk.llm.llm.get_litellm_model_info")
 def test_max_output_tokens_not_capped_when_below_context_window(
     mock_get_model_info,
 ):

@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.git.exceptions import GitCommandError, GitRepositoryError
-from openhands.sdk.git.git_changes import get_changes_in_repo, get_git_changes
-from openhands.sdk.git.models import GitChange, GitChangeStatus
+from madagascar.sdk.git.exceptions import GitCommandError, GitRepositoryError
+from madagascar.sdk.git.git_changes import get_changes_in_repo, get_git_changes
+from madagascar.sdk.git.models import GitChange, GitChangeStatus
 
 
 def run_bash_command(command: str, cwd: str) -> subprocess.CompletedProcess:
@@ -356,7 +356,7 @@ def test_get_git_changes_skips_vanished_nested_repo():
     """
     from unittest.mock import patch
 
-    from openhands.sdk.git.exceptions import GitRepositoryError
+    from madagascar.sdk.git.exceptions import GitRepositoryError
 
     with tempfile.TemporaryDirectory() as temp_dir:
         setup_git_repo(temp_dir)
@@ -384,7 +384,7 @@ def test_get_git_changes_skips_vanished_nested_repo():
             return original_fn(repo_dir, ref=ref)
 
         with patch(
-            "openhands.sdk.git.git_changes.get_changes_in_repo",
+            "madagascar.sdk.git.git_changes.get_changes_in_repo",
             side_effect=patched_get_changes,
         ):
             changes = get_git_changes(temp_dir)
@@ -603,13 +603,13 @@ def setup_cloned_repo(root: str) -> Path:
 
 
 def push_agent_branch(repo: Path) -> None:
-    """Create ``openhands/pr-branch`` with one committed file and push it,
+    """Create ``madagascar/pr-branch`` with one committed file and push it,
     leaving the branch in sync with its upstream (the post-PR state)."""
-    run_bash_command("git checkout -b openhands/pr-branch", str(repo))
+    run_bash_command("git checkout -b madagascar/pr-branch", str(repo))
     (repo / "new.txt").write_text("pr change")
     run_bash_command("git add .", str(repo))
     run_bash_command("git commit -m 'agent pr work'", str(repo))
-    run_bash_command("git push -u origin openhands/pr-branch", str(repo))
+    run_bash_command("git push -u origin madagascar/pr-branch", str(repo))
 
 
 def test_get_changes_in_repo_committed_changes_stay_visible():
@@ -706,7 +706,7 @@ def test_get_changes_in_repo_no_remote_worktree_shows_committed_changes():
 
         worktree = Path(temp_dir) / "worktree"
         run_bash_command(
-            f"git worktree add -b openhands/conv1 {worktree} main", str(repo)
+            f"git worktree add -b madagascar/conv1 {worktree} main", str(repo)
         )
         (worktree / "app.txt").write_text("changed by agent")
         run_bash_command("git commit -am 'agent work'", str(worktree))

@@ -1,4 +1,4 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 import { AuthenticateResponse, GitHubAccessTokenResponse } from "./auth.types";
 import { WebClientConfig } from "../option-service/option.types";
 
@@ -17,7 +17,7 @@ class AuthService {
     if (appMode === "oss") return true;
 
     // Just make the request, if it succeeds (no exception thrown), return true
-    await openHands.post<AuthenticateResponse>("/api/authenticate");
+    await madagascar.post<AuthenticateResponse>("/api/authenticate");
     return true;
   }
 
@@ -29,7 +29,7 @@ class AuthService {
   static async getGitHubAccessToken(
     code: string,
   ): Promise<GitHubAccessTokenResponse> {
-    const { data } = await openHands.post<GitHubAccessTokenResponse>(
+    const { data } = await madagascar.post<GitHubAccessTokenResponse>(
       "/api/keycloak/callback",
       {
         code,
@@ -45,7 +45,7 @@ class AuthService {
   static async logout(appMode: WebClientConfig["app_mode"]): Promise<void> {
     const endpoint =
       appMode === "saas" ? "/api/logout" : "/api/unset-provider-tokens";
-    await openHands.post(endpoint);
+    await madagascar.post(endpoint);
   }
 }
 

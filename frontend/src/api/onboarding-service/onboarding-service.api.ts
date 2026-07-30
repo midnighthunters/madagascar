@@ -1,4 +1,4 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 
 export type OnboardingStatusResponse = {
   should_complete_onboarding: boolean;
@@ -6,7 +6,7 @@ export type OnboardingStatusResponse = {
 
 export const onboardingService = {
   getStatus: async (): Promise<OnboardingStatusResponse> => {
-    const { data } = await openHands.get<OnboardingStatusResponse>(
+    const { data } = await madagascar.get<OnboardingStatusResponse>(
       "/api/onboarding_status",
     );
     return data;

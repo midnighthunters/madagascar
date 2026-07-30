@@ -216,7 +216,7 @@ function buildSettingsWithAdvancedToggle(
   return buildSettings({ ...overrides, agent_settings_schema: schema });
 }
 
-async function selectProvider(providerLabel: "OpenHands" | "OpenAI") {
+async function selectProvider(providerLabel: "Madagascar" | "OpenAI") {
   const providerInput = screen.getByTestId("llm-provider-input");
   await userEvent.click(providerInput);
   await userEvent.click(await screen.findByText(providerLabel));
@@ -428,14 +428,14 @@ describe("LlmSettingsScreen", () => {
     expect(screen.getByTestId("base-url-input")).toBeInTheDocument();
   });
 
-  it("defaults to basic view when an OpenHands managed model has no base URL", async () => {
+  it("defaults to basic view when an Madagascar managed model has no base URL", async () => {
     vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
       buildSettingsWithAdvancedToggle({
-        llm_model: "openhands/claude-opus-4-5-20251101",
+        llm_model: "madagascar/claude-opus-4-5-20251101",
         llm_base_url: "",
         agent_settings: {
           llm: {
-            model: "openhands/claude-opus-4-5-20251101",
+            model: "madagascar/claude-opus-4-5-20251101",
           },
         },
       }),
@@ -449,18 +449,18 @@ describe("LlmSettingsScreen", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("opens basic view when an OpenHands managed model has a server-filled base URL", async () => {
-    // Managed openhands/* profiles always come back with a base_url — the
+  it("opens basic view when an Madagascar managed model has a server-filled base URL", async () => {
+    // Managed madagascar/* profiles always come back with a base_url — the
     // backend fills it with the managed LiteLLM endpoint on save. That must
     // not be mistaken for a user customization that opens advanced/all.
     vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
       buildSettingsWithAdvancedToggle({
-        llm_model: "openhands/claude-opus-4-5-20251101",
-        llm_base_url: "http://openhands-litellm:4000",
+        llm_model: "madagascar/claude-opus-4-5-20251101",
+        llm_base_url: "http://madagascar-litellm:4000",
         agent_settings: {
           llm: {
-            model: "openhands/claude-opus-4-5-20251101",
-            base_url: "http://openhands-litellm:4000",
+            model: "madagascar/claude-opus-4-5-20251101",
+            base_url: "http://madagascar-litellm:4000",
           },
         },
       }),
@@ -474,17 +474,17 @@ describe("LlmSettingsScreen", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("opens basic view when editing an org-scope OpenHands managed profile with a server-filled base URL", async () => {
+  it("opens basic view when editing an org-scope Madagascar managed profile with a server-filled base URL", async () => {
     // Org scope is not covered by the personal-SaaS first-mount-basic rule,
     // so this exercises the base-URL inference path directly.
     vi.spyOn(organizationService, "getOrganizationSettings").mockResolvedValue(
       buildSettingsWithAdvancedToggle({
-        llm_model: "openhands/claude-opus-4-5-20251101",
-        llm_base_url: "http://openhands-litellm:4000",
+        llm_model: "madagascar/claude-opus-4-5-20251101",
+        llm_base_url: "http://madagascar-litellm:4000",
         agent_settings: {
           llm: {
-            model: "openhands/claude-opus-4-5-20251101",
-            base_url: "http://openhands-litellm:4000",
+            model: "madagascar/claude-opus-4-5-20251101",
+            base_url: "http://madagascar-litellm:4000",
           },
         },
       }),
@@ -498,18 +498,18 @@ describe("LlmSettingsScreen", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("opens basic view even when an OpenHands model has a non-managed base URL", async () => {
-    // Accepted edge case: the server owns base_url for openhands/* models,
+  it("opens basic view even when an Madagascar model has a non-managed base URL", async () => {
+    // Accepted edge case: the server owns base_url for madagascar/* models,
     // so editing always starts on basic — even if the stored URL was set
     // deliberately in advanced mode. The value is preserved and the
     // advanced view remains one click away.
     vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
       buildSettingsWithAdvancedToggle({
-        llm_model: "openhands/claude-opus-4-5-20251101",
+        llm_model: "madagascar/claude-opus-4-5-20251101",
         llm_base_url: "https://custom.example/v1",
         agent_settings: {
           llm: {
-            model: "openhands/claude-opus-4-5-20251101",
+            model: "madagascar/claude-opus-4-5-20251101",
             base_url: "https://custom.example/v1",
           },
         },
@@ -545,7 +545,7 @@ describe("LlmSettingsScreen", () => {
       "litellm_proxy/claude-opus-4-5-20251101",
     );
     expect(
-      screen.queryByTestId("openhands-api-key-help-2"),
+      screen.queryByTestId("madagascar-api-key-help-2"),
     ).not.toBeInTheDocument();
   });
 
@@ -688,7 +688,7 @@ describe("LlmSettingsScreen", () => {
     expect(screen.queryByTestId("agent-input")).not.toBeInTheDocument();
   });
 
-  it("uses the docs.openhands.dev domain for the API key help link", async () => {
+  it("uses the docs.madagascar.dev domain for the API key help link", async () => {
     vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
       buildSettings({
         llm_model: "openai/gpt-4o",
@@ -710,7 +710,7 @@ describe("LlmSettingsScreen", () => {
 
     expect(helpLink.querySelector("a")).toHaveAttribute(
       "href",
-      "https://docs.openhands.dev/usage/local-setup#getting-an-api-key",
+      "https://docs.madagascar.dev/usage/local-setup#getting-an-api-key",
     );
   });
 
@@ -835,7 +835,7 @@ describe("LlmSettingsScreen", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("hides the API key input for OpenHands provider on enterprise cloud", async () => {
+  it("hides the API key input for Madagascar provider on enterprise cloud", async () => {
     vi.spyOn(SettingsService, "getSettings").mockResolvedValue(buildSettings());
 
     await renderLlmSettingsScreen({
@@ -845,10 +845,10 @@ describe("LlmSettingsScreen", () => {
 
     await screen.findByTestId("llm-settings-screen");
     expect(screen.queryByTestId("llm-api-key-input")).not.toBeInTheDocument();
-    expect(screen.getByTestId("openhands-api-key-help")).toBeInTheDocument();
+    expect(screen.getByTestId("madagascar-api-key-help")).toBeInTheDocument();
   });
 
-  it("hides the OpenHands API key help on self-hosted OHE", async () => {
+  it("hides the Madagascar API key help on self-hosted OHE", async () => {
     vi.spyOn(SettingsService, "getSettings").mockResolvedValue(buildSettings());
 
     await renderLlmSettingsScreen({
@@ -858,11 +858,11 @@ describe("LlmSettingsScreen", () => {
 
     await screen.findByTestId("llm-settings-screen");
     expect(
-      screen.queryByTestId("openhands-api-key-help"),
+      screen.queryByTestId("madagascar-api-key-help"),
     ).not.toBeInTheDocument();
   });
 
-  it("shows the API key input for non-OpenHands providers in SaaS mode", async () => {
+  it("shows the API key input for non-Madagascar providers in SaaS mode", async () => {
     vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
       buildSettings({
         llm_model: "openai/gpt-4o",
@@ -1487,7 +1487,7 @@ describe("LlmSettingsScreen", () => {
   });
 
   it("keeps an existing custom base URL when saving basic view without a model change", async () => {
-    // Use a non-managed model: openhands/* models treat any base_url as
+    // Use a non-managed model: madagascar/* models treat any base_url as
     // server-owned, which would keep this scenario from opening advanced.
     let persistedSettings = buildSettingsWithAdvancedToggle({
       llm_model: "openai/gpt-4o",
@@ -1755,7 +1755,7 @@ describe("LlmSettingsScreen", () => {
       search_api_key_set: false,
       agent_settings: {
         llm: {
-          model: "openhands/claude-opus-4-5-20251101",
+          model: "madagascar/claude-opus-4-5-20251101",
         },
       },
     });
@@ -1771,7 +1771,7 @@ describe("LlmSettingsScreen", () => {
           search_api_key_set: true,
           agent_settings: {
             llm: {
-              model: "openhands/claude-opus-4-5-20251101",
+              model: "madagascar/claude-opus-4-5-20251101",
             },
           },
         });
@@ -1802,7 +1802,7 @@ describe("LlmSettingsScreen", () => {
     });
   });
 
-  it("does not reveal all-only fields after save when refetch returns an OpenHands managed model", async () => {
+  it("does not reveal all-only fields after save when refetch returns an Madagascar managed model", async () => {
     const schema = structuredClone(
       MOCK_DEFAULT_USER_SETTINGS.agent_settings_schema!,
     );
@@ -1830,7 +1830,7 @@ describe("LlmSettingsScreen", () => {
       agent_settings_schema: schema,
       agent_settings: {
         llm: {
-          model: "openhands/claude-opus-4-5-20251101",
+          model: "madagascar/claude-opus-4-5-20251101",
         },
       },
     });
@@ -1843,7 +1843,7 @@ describe("LlmSettingsScreen", () => {
         agent_settings_schema: schema,
         agent_settings: {
           llm: {
-            model: "openhands/claude-opus-4-5-20251101",
+            model: "madagascar/claude-opus-4-5-20251101",
           },
         },
       });
@@ -1917,7 +1917,7 @@ describe("LlmSettingsScreen", () => {
   });
 
   describe("API key visibility in Basic Settings", () => {
-    it("should hide API key input when SaaS mode is enabled and OpenHands provider is selected", async () => {
+    it("should hide API key input when SaaS mode is enabled and Madagascar provider is selected", async () => {
       vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
         buildSettings(),
       );
@@ -1929,7 +1929,7 @@ describe("LlmSettingsScreen", () => {
       const providerInput = within(basicForm).getByTestId("llm-provider-input");
 
       await waitFor(() => {
-        expect(providerInput).toHaveValue("OpenHands");
+        expect(providerInput).toHaveValue("Madagascar");
       });
 
       expect(
@@ -1940,7 +1940,7 @@ describe("LlmSettingsScreen", () => {
       ).not.toBeInTheDocument();
     });
 
-    it("should show API key input when SaaS mode is enabled and non-OpenHands provider is selected", async () => {
+    it("should show API key input when SaaS mode is enabled and non-Madagascar provider is selected", async () => {
       vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
         buildSettings({
           llm_model: "openai/gpt-4o",
@@ -1966,7 +1966,7 @@ describe("LlmSettingsScreen", () => {
       ).toBeInTheDocument();
     });
 
-    it("should show API key input when OSS mode is enabled and OpenHands provider is selected", async () => {
+    it("should show API key input when OSS mode is enabled and Madagascar provider is selected", async () => {
       vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
         buildSettings(),
       );
@@ -1978,7 +1978,7 @@ describe("LlmSettingsScreen", () => {
       const providerInput = within(basicForm).getByTestId("llm-provider-input");
 
       await waitFor(() => {
-        expect(providerInput).toHaveValue("OpenHands");
+        expect(providerInput).toHaveValue("Madagascar");
       });
 
       expect(
@@ -1989,7 +1989,7 @@ describe("LlmSettingsScreen", () => {
       ).toBeInTheDocument();
     });
 
-    it("should show API key input when OSS mode is enabled and non-OpenHands provider is selected", async () => {
+    it("should show API key input when OSS mode is enabled and non-Madagascar provider is selected", async () => {
       vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
         buildSettings({
           llm_model: "openai/gpt-4o",
@@ -2015,7 +2015,7 @@ describe("LlmSettingsScreen", () => {
       ).toBeInTheDocument();
     });
 
-    it("should hide API key input when switching from non-OpenHands to OpenHands provider in SaaS mode", async () => {
+    it("should hide API key input when switching from non-Madagascar to Madagascar provider in SaaS mode", async () => {
       vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
         buildSettings({
           llm_model: "openai/gpt-4o",
@@ -2033,7 +2033,7 @@ describe("LlmSettingsScreen", () => {
         ).toBeInTheDocument();
       });
 
-      await selectProvider("OpenHands");
+      await selectProvider("Madagascar");
 
       expect(
         within(basicForm).queryByTestId("llm-api-key-input"),
@@ -2043,7 +2043,7 @@ describe("LlmSettingsScreen", () => {
       ).not.toBeInTheDocument();
     });
 
-    it("should show API key input when switching from OpenHands to non-OpenHands provider in SaaS mode", async () => {
+    it("should show API key input when switching from Madagascar to non-Madagascar provider in SaaS mode", async () => {
       vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
         buildSettings(),
       );
@@ -2074,7 +2074,7 @@ describe("LlmSettingsScreen", () => {
           profiles: [
             {
               name: "sonnet",
-              model: "openhands/claude-sonnet-4-5-20250929",
+              model: "madagascar/claude-sonnet-4-5-20250929",
               base_url: null,
               api_key_set: true,
             },
@@ -2100,7 +2100,7 @@ describe("LlmSettingsScreen", () => {
           profiles: [
             {
               name: "sonnet",
-              model: "openhands/claude-sonnet-4-5-20250929",
+              model: "madagascar/claude-sonnet-4-5-20250929",
               base_url: null,
               api_key_set: true,
             },
@@ -2791,7 +2791,7 @@ describe("LlmSettingsScreen", () => {
     });
 
     it("does not preselect the active provider when creating a profile in SaaS mode", async () => {
-      // Default settings use an OpenHands model; previously the create form
+      // Default settings use an Madagascar model; previously the create form
       // inherited the provider selection.
       vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
         buildSettings(),
@@ -2820,9 +2820,9 @@ describe("LlmSettingsScreen", () => {
       await selectProvider("OpenAI");
       expect(screen.getByTestId("llm-api-key-input")).toBeInTheDocument();
 
-      // The managed OpenHands provider keeps it hidden in SaaS mode (keys
+      // The managed Madagascar provider keeps it hidden in SaaS mode (keys
       // are auto-provisioned).
-      await selectProvider("OpenHands");
+      await selectProvider("Madagascar");
       expect(screen.queryByTestId("llm-api-key-input")).not.toBeInTheDocument();
     });
 
@@ -2852,9 +2852,9 @@ describe("LlmSettingsScreen", () => {
     it("saves and activates a profile built from the blank create form", async () => {
       vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
         buildSettings({
-          llm_model: "openhands/claude-opus-4-5-20251101",
+          llm_model: "madagascar/claude-opus-4-5-20251101",
           agent_settings: {
-            llm: { model: "openhands/claude-opus-4-5-20251101" },
+            llm: { model: "madagascar/claude-opus-4-5-20251101" },
           },
         }),
       );
@@ -2926,9 +2926,9 @@ describe("LlmSettingsScreen", () => {
     it("hydrates the edit form from a non-active profile instead of the active settings", async () => {
       vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
         buildSettings({
-          llm_model: "openhands/claude-opus-4-5-20251101",
+          llm_model: "madagascar/claude-opus-4-5-20251101",
           agent_settings: {
-            llm: { model: "openhands/claude-opus-4-5-20251101" },
+            llm: { model: "madagascar/claude-opus-4-5-20251101" },
           },
         }),
       );
@@ -2939,7 +2939,7 @@ describe("LlmSettingsScreen", () => {
         profiles: [
           {
             name: "active-profile",
-            model: "openhands/claude-opus-4-5-20251101",
+            model: "madagascar/claude-opus-4-5-20251101",
             base_url: null,
             api_key_set: false,
           },
@@ -2990,19 +2990,19 @@ describe("LlmSettingsScreen", () => {
     });
 
     it("hydrates the edit form with the canonical model when the profile stores a hidden alias", async () => {
-      // Legacy profile model "openhands/custom-llm" is a hidden alias that
+      // Legacy profile model "madagascar/custom-llm" is a hidden alias that
       // the catalog maps to the visible claude-sonnet model.
       server.use(
         http.get("/api/v1/config/models/search", () =>
           HttpResponse.json({
             items: [
               {
-                provider: "openhands",
+                provider: "madagascar",
                 name: "claude-sonnet-4-5-20250929",
                 verified: true,
               },
               {
-                provider: "openhands",
+                provider: "madagascar",
                 name: "custom-llm",
                 verified: false,
                 hidden: true,
@@ -3021,7 +3021,7 @@ describe("LlmSettingsScreen", () => {
         appMode: "oss",
         profile: {
           name: "legacy-profile",
-          model: "openhands/custom-llm",
+          model: "madagascar/custom-llm",
           base_url: null,
         },
       });
@@ -3029,7 +3029,7 @@ describe("LlmSettingsScreen", () => {
       await screen.findByTestId("llm-settings-form-basic");
       await waitFor(() => {
         expect(screen.getByTestId("llm-provider-input")).toHaveValue(
-          "OpenHands",
+          "Madagascar",
         );
         expect(screen.getByTestId("llm-model-input")).toHaveValue(
           "claude-sonnet-4-5-20250929",
@@ -3047,7 +3047,7 @@ describe("LlmSettingsScreen", () => {
           expect.objectContaining({
             agent_settings_diff: expect.objectContaining({
               llm: expect.objectContaining({
-                model: "openhands/claude-sonnet-4-5-20250929",
+                model: "madagascar/claude-sonnet-4-5-20250929",
               }),
             }),
           }),
@@ -3061,13 +3061,13 @@ describe("LlmSettingsScreen", () => {
           HttpResponse.json({
             items: [
               {
-                provider: "openhands",
+                provider: "madagascar",
                 name: "claude-sonnet-4-5-20250929",
                 verified: true,
               },
               // Hidden but with no canonical mapping — nothing to translate.
               {
-                provider: "openhands",
+                provider: "madagascar",
                 name: "orphan-alias",
                 verified: false,
                 hidden: true,
@@ -3082,7 +3082,7 @@ describe("LlmSettingsScreen", () => {
         appMode: "oss",
         profile: {
           name: "orphan-profile",
-          model: "openhands/orphan-alias",
+          model: "madagascar/orphan-alias",
           base_url: null,
         },
       });
@@ -3090,7 +3090,7 @@ describe("LlmSettingsScreen", () => {
       await screen.findByTestId("llm-settings-form-basic");
       await waitFor(() => {
         expect(screen.getByTestId("llm-provider-input")).toHaveValue(
-          "OpenHands",
+          "Madagascar",
         );
       });
       // Unchanged today-behavior: hidden aliases are never dropdown options,
@@ -3105,9 +3105,9 @@ describe("LlmSettingsScreen", () => {
     it("opens edit on advanced with the profile's custom base URL while the active settings are plain", async () => {
       vi.spyOn(SettingsService, "getSettings").mockResolvedValue(
         buildSettings({
-          llm_model: "openhands/claude-opus-4-5-20251101",
+          llm_model: "madagascar/claude-opus-4-5-20251101",
           agent_settings: {
-            llm: { model: "openhands/claude-opus-4-5-20251101" },
+            llm: { model: "madagascar/claude-opus-4-5-20251101" },
           },
         }),
       );
@@ -3167,9 +3167,9 @@ describe("LlmSettingsScreen", () => {
         "getOrganizationSettings",
       ).mockResolvedValue(
         buildSettings({
-          llm_model: "openhands/claude-opus-4-5-20251101",
+          llm_model: "madagascar/claude-opus-4-5-20251101",
           agent_settings: {
-            llm: { model: "openhands/claude-opus-4-5-20251101" },
+            llm: { model: "madagascar/claude-opus-4-5-20251101" },
           },
         }),
       );
@@ -3177,7 +3177,7 @@ describe("LlmSettingsScreen", () => {
         profiles: [
           {
             name: "org-active",
-            model: "openhands/claude-opus-4-5-20251101",
+            model: "madagascar/claude-opus-4-5-20251101",
             base_url: null,
             api_key_set: false,
           },

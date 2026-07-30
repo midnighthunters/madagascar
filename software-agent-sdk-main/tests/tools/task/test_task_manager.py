@@ -6,17 +6,17 @@ from unittest.mock import MagicMock, patch
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Agent
-from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.hooks.config import HookConfig, HookDefinition, HookMatcher
-from openhands.sdk.subagent.registry import (
+from madagascar.sdk import LLM, Agent
+from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.hooks.config import HookConfig, HookDefinition, HookMatcher
+from madagascar.sdk.subagent.registry import (
     _reset_registry_for_tests,
     register_agent,
 )
-from openhands.sdk.subagent.schema import AgentDefinition
-from openhands.tools.preset import register_builtins_agents
-from openhands.tools.task.manager import (
+from madagascar.sdk.subagent.schema import AgentDefinition
+from madagascar.tools.preset import register_builtins_agents
+from madagascar.tools.task.manager import (
     Task,
     TaskManager,
     TaskStatus,
@@ -212,7 +212,7 @@ class TestTaskManager:
 
     def test_create_task_prefers_factory_max_iteration_over_parent(self, tmp_path):
         """Factory definition max_iteration_per_run takes precedence over parent."""
-        from openhands.sdk.subagent.registry import agent_definition_to_factory
+        from madagascar.sdk.subagent.registry import agent_definition_to_factory
 
         agent_def = AgentDefinition(
             name="limited_agent",
@@ -433,7 +433,7 @@ class TestRunTask:
             manager._run_task(task=task, prompt="do something")
 
     @patch(
-        "openhands.tools.task.manager.get_agent_final_response",
+        "madagascar.tools.task.manager.get_agent_final_response",
         return_value="task result",
     )
     def test_successful_run_sets_result(self, mock_get_response, tmp_path):
@@ -456,7 +456,7 @@ class TestRunTask:
         conversation.run.assert_called_once()  # type: ignore[attr-defined]
 
     @patch(
-        "openhands.tools.task.manager.get_agent_final_response",
+        "madagascar.tools.task.manager.get_agent_final_response",
         return_value="task result",
     )
     def test_run_evicts_conversation_after_success(self, mock_get_response, tmp_path):
@@ -527,7 +527,7 @@ class TestRunTask:
         mock_conv.close.assert_called_once()  # type: ignore[attr-defined]
 
     @patch(
-        "openhands.tools.task.manager.get_agent_final_response",
+        "madagascar.tools.task.manager.get_agent_final_response",
         return_value="done",
     )
     def test_run_passes_parent_visualizer_name_as_sender(
@@ -690,7 +690,7 @@ class TestTaskMetrics:
             patch.object(sub_conv, "send_message"),
             patch.object(sub_conv, "run"),
             patch(
-                "openhands.tools.task.manager.get_agent_final_response",
+                "madagascar.tools.task.manager.get_agent_final_response",
                 return_value="done",
             ),
         ):
@@ -727,7 +727,7 @@ class TestTaskMetrics:
                 patch.object(sub_conv, "send_message"),
                 patch.object(sub_conv, "run"),
                 patch(
-                    "openhands.tools.task.manager.get_agent_final_response",
+                    "madagascar.tools.task.manager.get_agent_final_response",
                     return_value="done",
                 ),
             ):
@@ -744,7 +744,7 @@ class TestTaskMetrics:
 
 def _register_hooked_agent(name: str, hook_config: HookConfig) -> None:
     """Register an agent with hooks via AgentDefinition."""
-    from openhands.sdk.subagent.registry import agent_definition_to_factory
+    from madagascar.sdk.subagent.registry import agent_definition_to_factory
 
     agent_def = AgentDefinition(
         name=name,
@@ -901,7 +901,7 @@ class TestTaskManagerPersistence:
         assert parent.state.persistence_dir is None
         assert manager._persistence_dir is not None
         assert manager._persistence_dir.exists()
-        assert "openhands_tasks_" in str(manager._persistence_dir)
+        assert "madagascar_tasks_" in str(manager._persistence_dir)
 
     def test_no_persistence_close_deletes_tmp_dir(self, tmp_path):
         """When the parent has no persistence_dir, close() deletes the temp dir."""
@@ -972,7 +972,7 @@ class TestTaskManagerBudget:
     into the spawned sub-conversation."""
 
     def test_budget_from_agent_definition(self, tmp_path):
-        from openhands.sdk.subagent.registry import agent_definition_to_factory
+        from madagascar.sdk.subagent.registry import agent_definition_to_factory
 
         agent_def = AgentDefinition(
             name="budgeted", model="inherit", tools=[], max_budget_per_run=4.0
@@ -1011,7 +1011,7 @@ class TestRunErrorSurfacing:
     def test_run_stop_detail_returns_last_error(self):
         from types import SimpleNamespace
 
-        from openhands.sdk.event.conversation_error import ConversationErrorEvent
+        from madagascar.sdk.event.conversation_error import ConversationErrorEvent
 
         err = ConversationErrorEvent(
             source="environment",

@@ -16,7 +16,7 @@ import json
 import tempfile
 from pathlib import Path
 
-from openhands.sdk.skills import (
+from madagascar.sdk.skills import (
     disable_skill,
     enable_skill,
     install_skill,

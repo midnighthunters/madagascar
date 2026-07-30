@@ -11,7 +11,7 @@ from server.verified_models.litellm_proxy_model_router import (
     _derive_default_model,
 )
 
-from openhands.app_server.utils.llm import ModelsResponse
+from madagascar.app_server.utils.llm import ModelsResponse
 
 LOGGER_NAME = 'server.verified_models.litellm_proxy_model_router'
 
@@ -20,14 +20,14 @@ HAPPY_PAYLOAD = {
         {
             'model_name': 'claude-sonnet-4-5',
             'litellm_params': {'model': 'anthropic/claude-sonnet-4-5'},
-            'model_info': {'openhands_default': True},
+            'model_info': {'madagascar_default': True},
         },
         {
             'model_name': 'hidden-model',
             'litellm_params': {'model': 'openai/gpt-5'},
             'model_info': {
-                'openhands_hidden': True,
-                'openhands_canonical': 'claude-sonnet-4-5',
+                'madagascar_hidden': True,
+                'madagascar_canonical': 'claude-sonnet-4-5',
             },
         },
         {
@@ -123,14 +123,14 @@ def byok_off(monkeypatch):
 
 # A deterministic stand-in for the SDK catalogue. Two bare names collide with
 # the proxy's (``gpt-5``, ``claude-sonnet-4-5``) to exercise the verified-flag
-# guard; an ``openhands/``-prefixed entry must be dropped from the union.
+# guard; an ``madagascar/``-prefixed entry must be dropped from the union.
 STUB_CATALOGUE = ModelsResponse(
     models=[
         'anthropic/claude-sonnet-4-5',
         'openai/gpt-5',
         'openai/gpt-4o',
         'gemini/gemini-2.0-flash',
-        'openhands/should-be-dropped',
+        'madagascar/should-be-dropped',
     ],
     verified_models=['anthropic/claude-sonnet-4-5'],
     verified_providers=['anthropic'],
@@ -177,19 +177,19 @@ class TestHappyPath:
 
         # Hidden models kept out of the visible list, duplicates removed,
         # proxy order preserved, every model exposed under the public
-        # openhands/ prefix.
-        assert response.models == ['openhands/claude-sonnet-4-5', 'openhands/gpt-5']
+        # madagascar/ prefix.
+        assert response.models == ['madagascar/claude-sonnet-4-5', 'madagascar/gpt-5']
         assert response.verified_models == ['claude-sonnet-4-5', 'gpt-5']
-        assert response.verified_providers == ['openhands']
+        assert response.verified_providers == ['madagascar']
         # Hidden alias routes are still reported so saved settings that
         # reference them count as available.
-        assert response.hidden_models == ['openhands/hidden-model']
+        assert response.hidden_models == ['madagascar/hidden-model']
         # The alias carries its canonical mapping (canonical is visible).
         assert response.hidden_model_canonicals == {
-            'openhands/hidden-model': 'openhands/claude-sonnet-4-5'
+            'madagascar/hidden-model': 'madagascar/claude-sonnet-4-5'
         }
-        # litellm_proxy/ prefix translated to openhands/.
-        assert response.default_model == 'openhands/claude-sonnet-4-5'
+        # litellm_proxy/ prefix translated to madagascar/.
+        assert response.default_model == 'madagascar/claude-sonnet-4-5'
 
         assert len(calls) == 1
         assert calls[0]['url'] == 'http://litellm.test/model/info'
@@ -203,13 +203,13 @@ class TestHappyPath:
 
         names = [(m.provider, m.name, m.hidden, m.canonical) for m in page.items]
         assert names == [
-            ('openhands', 'claude-sonnet-4-5', False, None),
-            ('openhands', 'gpt-5', False, None),
+            ('madagascar', 'claude-sonnet-4-5', False, None),
+            ('madagascar', 'gpt-5', False, None),
             # Hidden alias routes ride along flagged hidden=True so the
             # frontend can exclude them from dropdown options while still
             # treating saved settings that reference them as available;
             # canonical names the visible model the alias routes to.
-            ('openhands', 'hidden-model', True, 'claude-sonnet-4-5'),
+            ('madagascar', 'hidden-model', True, 'claude-sonnet-4-5'),
         ]
 
     async def test_hidden_only_when_all_duplicate_entries_hidden(self, monkeypatch):
@@ -219,17 +219,17 @@ class TestHappyPath:
             'data': [
                 {
                     'model_name': 'mixed-model',
-                    'model_info': {'openhands_hidden': True},
+                    'model_info': {'madagascar_hidden': True},
                 },
                 {'model_name': 'mixed-model', 'model_info': {}},
                 {
                     'model_name': 'legacy-alias',
-                    'model_info': {'openhands_hidden': True},
+                    'model_info': {'madagascar_hidden': True},
                 },
                 {
                     # Duplicate hidden entry — reported once.
                     'model_name': 'legacy-alias',
-                    'model_info': {'openhands_hidden': True},
+                    'model_info': {'madagascar_hidden': True},
                 },
             ]
         }
@@ -238,9 +238,9 @@ class TestHappyPath:
 
         response = await service._get_models_response()
 
-        assert response.models == ['openhands/mixed-model']
-        assert response.hidden_models == ['openhands/legacy-alias']
-        # No openhands_canonical tags anywhere -> no mappings.
+        assert response.models == ['madagascar/mixed-model']
+        assert response.hidden_models == ['madagascar/legacy-alias']
+        # No madagascar_canonical tags anywhere -> no mappings.
         assert response.hidden_model_canonicals == {}
 
     async def test_canonical_skipped_when_not_visible(self, monkeypatch):
@@ -252,20 +252,20 @@ class TestHappyPath:
                 {
                     'model_name': 'alias-to-missing',
                     'model_info': {
-                        'openhands_hidden': True,
-                        'openhands_canonical': 'removed-model',
+                        'madagascar_hidden': True,
+                        'madagascar_canonical': 'removed-model',
                     },
                 },
                 {
                     'model_name': 'alias-to-hidden',
                     'model_info': {
-                        'openhands_hidden': True,
-                        'openhands_canonical': 'other-alias',
+                        'madagascar_hidden': True,
+                        'madagascar_canonical': 'other-alias',
                     },
                 },
                 {
                     'model_name': 'other-alias',
-                    'model_info': {'openhands_hidden': True},
+                    'model_info': {'madagascar_hidden': True},
                 },
             ]
         }
@@ -274,11 +274,11 @@ class TestHappyPath:
 
         response = await service._get_models_response()
 
-        assert response.models == ['openhands/real-model']
+        assert response.models == ['madagascar/real-model']
         assert response.hidden_models == [
-            'openhands/alias-to-missing',
-            'openhands/alias-to-hidden',
-            'openhands/other-alias',
+            'madagascar/alias-to-missing',
+            'madagascar/alias-to-hidden',
+            'madagascar/other-alias',
         ]
         assert response.hidden_model_canonicals == {}
 
@@ -292,14 +292,14 @@ class TestHappyPath:
                 {
                     'model_name': 'legacy-alias',
                     'model_info': {
-                        'openhands_hidden': True,
-                        'openhands_canonical': 'real-model',
+                        'madagascar_hidden': True,
+                        'madagascar_canonical': 'real-model',
                     },
                 },
                 {
                     # Hidden alias without a canonical tag -> no mapping.
                     'model_name': 'untagged-alias',
-                    'model_info': {'openhands_hidden': True},
+                    'model_info': {'madagascar_hidden': True},
                 },
             ]
         }
@@ -309,16 +309,16 @@ class TestHappyPath:
         response = await service._get_models_response()
 
         assert response.hidden_model_canonicals == {
-            'openhands/legacy-alias': 'openhands/real-model'
+            'madagascar/legacy-alias': 'madagascar/real-model'
         }
 
-    async def test_search_providers_only_openhands(self, monkeypatch):
+    async def test_search_providers_only_madagascar(self, monkeypatch):
         install_client(monkeypatch, response=FakeResponse(HAPPY_PAYLOAD))
         service = LiteLLMProxyModelService()
 
         page = await service.search_providers()
 
-        assert [(p.name, p.verified) for p in page.items] == [('openhands', True)]
+        assert [(p.name, p.verified) for p in page.items] == [('madagascar', True)]
 
     async def test_no_auth_header_without_key(self, monkeypatch):
         monkeypatch.setattr(router_module, 'LITE_LLM_API_KEY', None)
@@ -335,17 +335,17 @@ class TestDefaultModelTranslation:
         monkeypatch.setattr(
             router_module, 'get_default_litellm_model', lambda: 'litellm_proxy/gpt-5'
         )
-        assert _derive_default_model() == 'openhands/gpt-5'
+        assert _derive_default_model() == 'madagascar/gpt-5'
 
-    def test_openhands_prefix_preserved(self, monkeypatch):
+    def test_madagascar_prefix_preserved(self, monkeypatch):
         monkeypatch.setattr(
-            router_module, 'get_default_litellm_model', lambda: 'openhands/gpt-5'
+            router_module, 'get_default_litellm_model', lambda: 'madagascar/gpt-5'
         )
-        assert _derive_default_model() == 'openhands/gpt-5'
+        assert _derive_default_model() == 'madagascar/gpt-5'
 
     def test_bare_name_prefixed(self, monkeypatch):
         monkeypatch.setattr(router_module, 'get_default_litellm_model', lambda: 'gpt-5')
-        assert _derive_default_model() == 'openhands/gpt-5'
+        assert _derive_default_model() == 'madagascar/gpt-5'
 
 
 class TestFailurePaths:
@@ -363,7 +363,7 @@ class TestFailurePaths:
         assert response.hidden_models == []
         assert response.hidden_model_canonicals == {}
         # The env-derived default is still communicated.
-        assert response.default_model == 'openhands/claude-sonnet-4-5'
+        assert response.default_model == 'madagascar/claude-sonnet-4-5'
         assert any(
             'no previous result is cached' in record.message
             for record in caplog.records
@@ -378,7 +378,7 @@ class TestFailurePaths:
         # result was not cached).
         install_client(monkeypatch, response=FakeResponse(HAPPY_PAYLOAD))
         response = await LiteLLMProxyModelService()._get_models_response()
-        assert response.models == ['openhands/claude-sonnet-4-5', 'openhands/gpt-5']
+        assert response.models == ['madagascar/claude-sonnet-4-5', 'madagascar/gpt-5']
 
     async def test_http_error_status_returns_empty(self, monkeypatch):
         install_client(monkeypatch, response=FakeResponse({}, status_code=500))
@@ -391,7 +391,7 @@ class TestFailurePaths:
     async def test_stale_cache_served_on_failure(self, monkeypatch, fake_clock, caplog):
         install_client(monkeypatch, response=FakeResponse(HAPPY_PAYLOAD))
         first = await LiteLLMProxyModelService()._get_models_response()
-        assert first.models == ['openhands/claude-sonnet-4-5', 'openhands/gpt-5']
+        assert first.models == ['madagascar/claude-sonnet-4-5', 'madagascar/gpt-5']
 
         # Far beyond the TTL the proxy starts failing — the last-good result
         # is served regardless of age.
@@ -429,7 +429,7 @@ class TestCacheTtl:
 
         assert len(calls) == 1
         assert len(calls2) == 1
-        assert response.models == ['openhands/new-model']
+        assert response.models == ['madagascar/new-model']
 
 
 class TestByokUnion:
@@ -445,7 +445,7 @@ class TestByokUnion:
 
         response = await LiteLLMProxyModelService()._get_models_response()
 
-        assert response.models == ['openhands/claude-sonnet-4-5', 'openhands/gpt-5']
+        assert response.models == ['madagascar/claude-sonnet-4-5', 'madagascar/gpt-5']
 
     async def test_byok_on_unions_catalogue(self, monkeypatch):
         byok_on(monkeypatch)
@@ -454,10 +454,10 @@ class TestByokUnion:
         response = await LiteLLMProxyModelService()._get_models_response()
 
         # Managed proxy models first (order preserved), then catalogue extras;
-        # the openhands/-prefixed catalogue entry is dropped.
+        # the madagascar/-prefixed catalogue entry is dropped.
         assert response.models == [
-            'openhands/claude-sonnet-4-5',
-            'openhands/gpt-5',
+            'madagascar/claude-sonnet-4-5',
+            'madagascar/gpt-5',
             'anthropic/claude-sonnet-4-5',
             'openai/gpt-5',
             'openai/gpt-4o',
@@ -466,8 +466,8 @@ class TestByokUnion:
         assert len(response.models) == len(set(response.models))
         # Proxy stays the verified/default authority; catalogue opinions ignored.
         assert response.verified_models == ['claude-sonnet-4-5', 'gpt-5']
-        assert response.verified_providers == ['openhands']
-        assert response.default_model == 'openhands/claude-sonnet-4-5'
+        assert response.verified_providers == ['madagascar']
+        assert response.default_model == 'madagascar/claude-sonnet-4-5'
 
     async def test_byok_on_only_managed_models_verified(self, monkeypatch):
         # Regression: a catalogue model whose bare name collides with a proxy
@@ -481,7 +481,7 @@ class TestByokUnion:
             (m.provider, m.name) for m in page.items if m.verified and not m.hidden
         }
 
-        assert verified == {('openhands', 'claude-sonnet-4-5'), ('openhands', 'gpt-5')}
+        assert verified == {('madagascar', 'claude-sonnet-4-5'), ('madagascar', 'gpt-5')}
 
     async def test_byok_on_exposes_catalogue_providers(self, monkeypatch):
         byok_on(monkeypatch)
@@ -489,10 +489,10 @@ class TestByokUnion:
 
         page = await LiteLLMProxyModelService().search_providers()
 
-        # openhands stays the verified managed provider, listed first; catalogue
+        # madagascar stays the verified managed provider, listed first; catalogue
         # providers ride along unverified so the picker shows for BYOK users.
         assert [(p.name, p.verified) for p in page.items] == [
-            ('openhands', True),
+            ('madagascar', True),
             ('anthropic', False),
             ('gemini', False),
             ('openai', False),

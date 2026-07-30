@@ -52,7 +52,7 @@ export function ConversationGroupFolderList({
   onLaunchFromGroup,
   renderConversationCard,
 }: ConversationGroupFolderListProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const [draggedGroupId, setDraggedGroupId] = useState<string | null>(null);
   const [dropTargetGroupId, setDropTargetGroupId] = useState<string | null>(
     null,

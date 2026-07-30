@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from openhands.sdk.mcp import MCPToolAction
+from madagascar.sdk.mcp import MCPToolAction
 
 
 class _ChildMCPToolActionForSerialization(MCPToolAction):

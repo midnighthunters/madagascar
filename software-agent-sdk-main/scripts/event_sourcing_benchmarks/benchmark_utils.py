@@ -46,6 +46,6 @@ def register_tool_types() -> None:
     ToolDefinition discriminated union, enabling deserialization
     of real evaluation events that reference these tools.
     """
-    import openhands.tools.file_editor  # noqa: F401
-    import openhands.tools.task_tracker  # noqa: F401
-    import openhands.tools.terminal  # noqa: F401
+    import madagascar.tools.file_editor  # noqa: F401
+    import madagascar.tools.task_tracker  # noqa: F401
+    import madagascar.tools.terminal  # noqa: F401

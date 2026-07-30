@@ -13,7 +13,7 @@ import tempfile
 from collections import defaultdict
 from pathlib import Path
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     AgentContext,
@@ -21,11 +21,11 @@ from openhands.sdk import (
     Tool,
     register_agent,
 )
-from openhands.sdk.context import Skill
-from openhands.tools.delegate import DelegationVisualizer
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.task import TaskToolSet
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.context import Skill
+from madagascar.tools.delegate import DelegationVisualizer
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.task import TaskToolSet
+from madagascar.tools.terminal import TerminalTool
 
 
 llm = LLM(

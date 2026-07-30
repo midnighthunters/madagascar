@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.context import (
+from madagascar.sdk.context import (
     KeywordTrigger,
     Skill,
     SkillValidationError,
@@ -13,13 +13,13 @@ from openhands.sdk.context import (
     load_project_skills,
     load_skills_from_dir,
 )
-from openhands.sdk.skills.utils import (
+from madagascar.sdk.skills.utils import (
     find_regular_md_files,
     find_skill_md,
     find_skill_md_directories,
     find_third_party_files,
 )
-from openhands.sdk.utils.path import to_posix_path
+from madagascar.sdk.utils.path import to_posix_path
 from tests.platform_utils import require_case_sensitive_fs, symlink_or_skip
 
 
@@ -28,13 +28,13 @@ CONTENT = "# dummy header\ndummy content\n## dummy subheader\ndummy subcontent\n
 
 def test_legacy_micro_agent_load(tmp_path):
     """Test loading of legacy skills."""
-    legacy_file = tmp_path / ".openhands_instructions"
+    legacy_file = tmp_path / ".madagascar_instructions"
     legacy_file.write_text(CONTENT)
 
     # Pass skill_dir (tmp_path in this case) to load
     skill = Skill.load(legacy_file, tmp_path)
     assert skill.trigger is None
-    assert skill.name == ".openhands_instructions"  # Name derived from filename
+    assert skill.name == ".madagascar_instructions"  # Name derived from filename
     # frontmatter.load() strips trailing newline
     assert skill.content == CONTENT.rstrip("\n")
 
@@ -425,8 +425,8 @@ def temp_skills_dir_with_cursorrules():
     with tempfile.TemporaryDirectory() as temp_dir:
         root = Path(temp_dir)
 
-        # Create .openhands/skills directory structure
-        skills_dir = root / ".openhands" / "skills"
+        # Create .madagascar/skills directory structure
+        skills_dir = root / ".madagascar" / "skills"
         skills_dir.mkdir(parents=True, exist_ok=True)
 
         # Create .cursorrules file in repository root
@@ -475,8 +475,8 @@ def temp_skills_dir_with_context_files():
     with tempfile.TemporaryDirectory() as temp_dir:
         root = Path(temp_dir)
 
-        # Create .openhands/skills directory structure
-        skills_dir = root / ".openhands" / "skills"
+        # Create .madagascar/skills directory structure
+        skills_dir = root / ".madagascar" / "skills"
         skills_dir.mkdir(parents=True, exist_ok=True)
 
         # Create claude.md file in repository root (lowercase to match pattern)
@@ -540,8 +540,8 @@ def temp_skills_dir_with_uppercase_context_files():
     with tempfile.TemporaryDirectory() as temp_dir:
         root = Path(temp_dir)
 
-        # Create .openhands/skills directory structure
-        skills_dir = root / ".openhands" / "skills"
+        # Create .madagascar/skills directory structure
+        skills_dir = root / ".madagascar" / "skills"
         skills_dir.mkdir(parents=True, exist_ok=True)
 
         # Create CLAUDE.MD file in repository root (all uppercase)
@@ -606,8 +606,8 @@ def temp_skills_dir_with_large_context_file():
     with tempfile.TemporaryDirectory() as temp_dir:
         root = Path(temp_dir)
 
-        # Create .openhands/skills directory structure
-        skills_dir = root / ".openhands" / "skills"
+        # Create .madagascar/skills directory structure
+        skills_dir = root / ".madagascar" / "skills"
         skills_dir.mkdir(parents=True, exist_ok=True)
 
         # Create a very large CLAUDE.md file (15,000 chars, exceeds 10,000 limit)

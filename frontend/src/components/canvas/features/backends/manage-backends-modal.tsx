@@ -62,7 +62,7 @@ export function ManageBackendsModal({
   onClose,
   recoveryMode = false,
 }: ManageBackendsModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { backends, active, removeBackend, setActive, updateBackend } =
     useActiveBackendContext();
   const healthByBackendId = useBackendsHealth(backends, {

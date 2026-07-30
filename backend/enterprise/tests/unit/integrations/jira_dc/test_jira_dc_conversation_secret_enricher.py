@@ -13,10 +13,10 @@ from integrations.jira_dc.jira_dc_user_token import (
 )
 from pydantic import SecretStr
 
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.app_server.app_conversation.app_conversation_models import (
     ConversationTrigger,
 )
-from openhands.sdk.secret import LookupSecret, StaticSecret
+from madagascar.sdk.secret import LookupSecret, StaticSecret
 
 ORG_ID = UUID('00000000-0000-0000-0000-000000000123')
 OTHER_ORG_ID = UUID('00000000-0000-0000-0000-000000000456')
@@ -74,7 +74,7 @@ async def test_enricher_adds_jira_dc_lookup_secret_for_linked_user():
             user=MagicMock(id='kc-user'),
             trigger=ConversationTrigger.SLACK,
             system_message_suffix='Existing instructions.',
-            web_url='https://openhands.example.com',
+            web_url='https://madagascar.example.com',
             jwt_service=jwt_service,
             access_token_hard_timeout=timedelta(minutes=5),
         )
@@ -88,7 +88,7 @@ async def test_enricher_adds_jira_dc_lookup_secret_for_linked_user():
     assert isinstance(token_secret, LookupSecret)
     assert (
         token_secret.url
-        == 'https://openhands.example.com/integration/jira-dc/secrets/token'
+        == 'https://madagascar.example.com/integration/jira-dc/secrets/token'
     )
     assert token_secret.headers == {'X-Access-Token': 'signed-token'}
     assert 'JIRA_DC_TOKEN' in (enrichment.system_message_suffix or '')
@@ -117,7 +117,7 @@ async def test_enricher_skips_org_scoped_workspace_when_context_org_differs():
             user=MagicMock(id='kc-user'),
             trigger=ConversationTrigger.SLACK,
             system_message_suffix='Existing instructions.',
-            web_url='https://openhands.example.com',
+            web_url='https://madagascar.example.com',
             jwt_service=MagicMock(),
             access_token_hard_timeout=timedelta(minutes=5),
         )
@@ -158,7 +158,7 @@ async def test_enricher_validates_token_before_jira_triggered_start():
             user=MagicMock(id='kc-user'),
             trigger=ConversationTrigger.JIRA,
             system_message_suffix=None,
-            web_url='https://openhands.example.com',
+            web_url='https://madagascar.example.com',
             jwt_service=jwt_service,
             access_token_hard_timeout=timedelta(minutes=5),
         )
@@ -194,7 +194,7 @@ async def test_enricher_propagates_token_error_for_jira_triggered_start():
                 user=MagicMock(id='kc-user'),
                 trigger=ConversationTrigger.JIRA,
                 system_message_suffix=None,
-                web_url='https://openhands.example.com',
+                web_url='https://madagascar.example.com',
                 jwt_service=MagicMock(),
                 access_token_hard_timeout=timedelta(minutes=5),
             )
@@ -233,7 +233,7 @@ async def test_enricher_allows_personal_workspace_org_for_non_creator():
             user=MagicMock(id='other-user'),
             trigger=ConversationTrigger.SLACK,
             system_message_suffix=None,
-            web_url='https://openhands.example.com',
+            web_url='https://madagascar.example.com',
             jwt_service=jwt_service,
             access_token_hard_timeout=timedelta(minutes=5),
         )
@@ -267,7 +267,7 @@ async def test_enricher_still_blocks_real_cross_org_workspace():
             user=MagicMock(id='kc-user'),
             trigger=ConversationTrigger.SLACK,
             system_message_suffix='Existing instructions.',
-            web_url='https://openhands.example.com',
+            web_url='https://madagascar.example.com',
             jwt_service=MagicMock(),
             access_token_hard_timeout=timedelta(minutes=5),
         )
@@ -302,7 +302,7 @@ async def test_enricher_injects_for_null_org_workspace():
             user=MagicMock(id='anyone'),
             trigger=ConversationTrigger.SLACK,
             system_message_suffix=None,
-            web_url='https://openhands.example.com',
+            web_url='https://madagascar.example.com',
             jwt_service=jwt_service,
             access_token_hard_timeout=timedelta(minutes=5),
         )

@@ -21,7 +21,7 @@ on:
             repo_list:
                 description: Comma-separated list of repositories to clone (owner/repo)
                 required: true
-                default: OpenHands/OpenHands,All-Hands-AI/infra
+                default: Madagascar/Madagascar,All-Hands-AI/infra
             issue_repo:
                 description: Repository to create/update issues in (owner/repo)
                 required: true
@@ -46,9 +46,9 @@ jobs:
         env:
             # URLs to download script and template from the SDK repository
             SCRIPT_URL: 
-                https://raw.githubusercontent.com/OpenHands/software-agent-sdk/main/examples/03_github_workflows/04_datadog_debugging/datadog_debugging.py
+                https://raw.githubusercontent.com/Madagascar/software-agent-sdk/main/examples/03_github_workflows/04_datadog_debugging/datadog_debugging.py
             TEMPLATE_URL: 
-                https://raw.githubusercontent.com/OpenHands/software-agent-sdk/main/examples/03_github_workflows/04_datadog_debugging/debug_prompt.jinja
+                https://raw.githubusercontent.com/Madagascar/software-agent-sdk/main/examples/03_github_workflows/04_datadog_debugging/debug_prompt.jinja
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -63,11 +63,11 @@ jobs:
               with:
                   enable-cache: true
 
-            - name: Install OpenHands dependencies
+            - name: Install Madagascar dependencies
               run: |
-                  # Install OpenHands SDK and tools from git repository
-                  uv pip install --system "openhands-sdk @ git+https://github.com/OpenHands/software-agent-sdk.git@main#subdirectory=openhands-sdk"
-                  uv pip install --system "openhands-tools @ git+https://github.com/OpenHands/software-agent-sdk.git@main#subdirectory=openhands-tools"
+                  # Install Madagascar SDK and tools from git repository
+                  uv pip install --system "madagascar-sdk @ git+https://github.com/Madagascar/software-agent-sdk.git@main#subdirectory=madagascar-sdk"
+                  uv pip install --system "madagascar-tools @ git+https://github.com/Madagascar/software-agent-sdk.git@main#subdirectory=madagascar-tools"
                   # Install additional dependencies for the datadog script
                   uv pip install --system requests jinja2
 

@@ -1597,7 +1597,7 @@
     "uk": "Почнімо будувати!",
     "ca": "Comencem a construir!"
   },
-  "HOME$OPENHANDS_DESCRIPTION": {
+  "HOME$MADAGASCAR_DESCRIPTION": {
     "en": "Madagascar makes it easy to build and maintain software using AI-driven development.",
     "ja": "MadagascarはAI駆動の開発を使用してソフトウェアの開発と維持を容易にします。",
     "zh-CN": "Madagascar使用AI驱动的开发方式，轻松构建和维护软件。",
@@ -7173,7 +7173,7 @@
     "uk": "аватар користувача",
     "ca": "avatar d'usuari"
   },
-  "BRANDING$OPENHANDS": {
+  "BRANDING$MADAGASCAR": {
     "en": "Madagascar",
     "ja": "Madagascar",
     "zh-CN": "Madagascar",
@@ -7190,7 +7190,7 @@
     "uk": "Madagascar",
     "ca": "Madagascar"
   },
-  "BRANDING$OPENHANDS_LOGO": {
+  "BRANDING$MADAGASCAR_LOGO": {
     "en": "Madagascar Logo",
     "ja": "Madagascarロゴ",
     "zh-CN": "Madagascar标志",
@@ -7462,7 +7462,7 @@
     "uk": "Почистити залкжності",
     "ca": "Neteja les dependències"
   },
-  "CONFIGURATION$OPENHANDS_WORKSPACE_DIRECTORY_INPUT_LABEL": {
+  "CONFIGURATION$MADAGASCAR_WORKSPACE_DIRECTORY_INPUT_LABEL": {
     "en": "Madagascar Workspace directory",
     "zh-CN": "Madagascar工作区目录",
     "de": "Madagascar Arbeitsverzeichnis",
@@ -8023,7 +8023,7 @@
     "uk": "LLM модель",
     "ca": "Model de LLM"
   },
-  "CONFIGURATION$OPENHANDS_WORKSPACE_DIRECTORY_INPUT_PLACEHOLDER": {
+  "CONFIGURATION$MADAGASCAR_WORKSPACE_DIRECTORY_INPUT_PLACEHOLDER": {
     "en": "Default: ./workspace",
     "zh-CN": "输入工作区目录路径",
     "de": "Standard: ./workspace",
@@ -11168,7 +11168,7 @@
     "uk": "Натисніть тут, щоб отримати інструкції",
     "ca": "Feu clic aquí per obtenir instruccions"
   },
-  "SETTINGS$NEED_OPENHANDS_ACCOUNT": {
+  "SETTINGS$NEED_MADAGASCAR_ACCOUNT": {
     "en": "Need an Madagascar Account?",
     "ja": "Madagascarアカウントが必要ですか？",
     "zh-CN": "需要Madagascar账户？",
@@ -11287,7 +11287,7 @@
     "uk": "Ключі API дозволяють вам програмно автентифікуватися за допомогою API Madagascar. Зберігайте свої ключі API в безпеці; будь-хто, хто має ваш ключ API, може отримати доступ до вашого облікового запису. Для отримання додаткової інформації про використання API, перегляньте нашу <a>документацію API</a>.",
     "ca": "Les claus d'API us permeten autenticar-vos amb l'API d'Madagascar de manera programàtica. Manteniu les vostres claus d'API segures; qualsevol persona amb la vostra clau d'API pot accedir al vostre compte. Per obtenir més informació sobre com fer servir l'API, consulteu la nostra <a>documentació de l'API</a>."
   },
-  "SETTINGS$OPENHANDS_API_KEY_HELP": {
+  "SETTINGS$MADAGASCAR_API_KEY_HELP": {
     "en": "You can find your Madagascar API Key in the <a>API Keys</a> tab of Madagascar Cloud.",
     "ja": "Madagascar APIキーはMadagascar Cloudの<a>APIキー</a>タブで確認できます。",
     "zh-CN": "您可以在Madagascar Cloud的<a>API密钥</a>标签页中找到您的Madagascar API密钥。",
@@ -11304,7 +11304,7 @@
     "uk": "Ви можете знайти свій ключ API Madagascar у вкладці <a>Ключі API</a> Madagascar Cloud.",
     "ca": "Podeu trobar la vostra clau d'API d'Madagascar a la pestanya <a>Claus d'API</a> d'Madagascar Cloud."
   },
-  "SETTINGS$OPENHANDS_API_KEY_HELP_TEXT": {
+  "SETTINGS$MADAGASCAR_API_KEY_HELP_TEXT": {
     "en": "You can find your Madagascar API Key in the",
     "ja": "Madagascar APIキーは",
     "zh-CN": "您可以在",
@@ -11321,7 +11321,7 @@
     "uk": "Ви можете знайти свій ключ API Madagascar у",
     "ca": "Podeu trobar la vostra clau d'API d'Madagascar a la"
   },
-  "SETTINGS$OPENHANDS_API_KEY_HELP_SUFFIX": {
+  "SETTINGS$MADAGASCAR_API_KEY_HELP_SUFFIX": {
     "en": "tab of Madagascar Cloud.",
     "ja": "タブで確認できます。",
     "zh-CN": "标签页中找到您的Madagascar API密钥。",
@@ -15826,7 +15826,7 @@
     "uk": "Клас агента:",
     "ca": "Classe de l'agent:"
   },
-  "SYSTEM_MESSAGE_MODAL$OPENHANDS_VERSION": {
+  "SYSTEM_MESSAGE_MODAL$MADAGASCAR_VERSION": {
     "en": "Madagascar Version:",
     "zh-CN": "Madagascar 版本：",
     "zh-TW": "Madagascar 版本：",
@@ -15980,21 +15980,21 @@
     "ca": "Error en acceptar les condicions del servei"
   },
   "TIPS$CUSTOMIZE_MICROAGENT": {
-    "en": "You can customize Madagascar for your repo using an available microagent. Ask Madagascar to put a description of the repo, including how to run the code, into .openhands/microagents/repo.md.",
-    "ja": "利用可能なマイクロエージェントを使用して、リポジトリ用にMadagascarをカスタマイズできます。Madagascarに、コードの実行方法を含むリポジトリの説明を.openhands/microagents/repo.mdに入れるよう依頼してください。",
-    "zh-CN": "您可以使用可用微代理为您的仓库自定义Madagascar。请Madagascar将仓库的描述（包括如何运行代码）放入.openhands/microagents/repo.md。",
-    "zh-TW": "您可以使用可用微代理為您的倉庫自定義Madagascar。請Madagascar將倉庫的描述（包括如何運行代碼）放入.openhands/microagents/repo.md。",
-    "ko-KR": "사용 가능한 마이크로에이전트를 사용하여 저장소에 맞게 Madagascar를 사용자 정의할 수 있습니다. Madagascar에게 코드 실행 방법을 포함한 저장소 설명을 .openhands/microagents/repo.md에 넣도록 요청하세요.",
-    "no": "Du kan tilpasse Madagascar for ditt repo ved å bruke en tilgjengelig mikroagent. Be Madagascar om å legge en beskrivelse av repoet, inkludert hvordan du kjører koden, i .openhands/microagents/repo.md.",
-    "it": "Puoi personalizzare Madagascar per il tuo repository utilizzando un microagente disponibile. Chiedi a Madagascar di inserire una descrizione del repository, incluso come eseguire il codice, in .openhands/microagents/repo.md.",
-    "pt": "Você pode personalizar o Madagascar para seu repositório usando um microagente disponível. Peça ao Madagascar para colocar uma descrição do repositório, incluindo como executar o código, em .openhands/microagents/repo.md.",
-    "es": "Puede personalizar Madagascar para su repositorio utilizando un microagente disponible. Pídale a Madagascar que ponga una descripción del repositorio, incluido cómo ejecutar el código, en .openhands/microagents/repo.md.",
-    "ar": "يمكنك تخصيص Madagascar لمستودعك باستخدام وكيل مصغر متاح. اطلب من Madagascar وضع وصف للمستودع، بما في ذلك كيفية تشغيل الكود، في .openhands/microagents/repo.md.",
-    "de": "Sie können Madagascar für Ihr Repository mit einem verfügbaren Mikroagenten anpassen. Bitten Sie Madagascar, eine Beschreibung des Repositorys, einschließlich der Ausführung des Codes, in .openhands/microagents/repo.md zu platzieren.",
-    "fr": "Vous pouvez personnaliser Madagascar pour votre dépôt en utilisant un micro-agent disponible. Demandez à Madagascar de mettre une description du dépôt, y compris comment exécuter le code, dans .openhands/microagents/repo.md.",
-    "tr": "Kullanılabilir bir mikro ajan kullanarak Madagascar'i deponuz için özelleştirebilirsiniz. Madagascar'ten deponun açıklamasını, kodun nasıl çalıştırılacağı dahil, .openhands/microagents/repo.md dosyasına koymasını isteyin.",
-    "uk": "Ви можете налаштувати Madagascar для свого репозиторію за допомогою доступного мікроагента. Попросіть Madagascar розмістити опис репозиторію, включаючи інформацію про те, як запустити код, у файлі .openhands/microagents/repo.md.",
-    "ca": "Podeu personalitzar Madagascar per al vostre repositori fent servir un microagent disponible. Demaneu a Madagascar que posi una descripció del repositori, incloent com executar el codi, a .openhands/microagents/repo.md."
+    "en": "You can customize Madagascar for your repo using an available microagent. Ask Madagascar to put a description of the repo, including how to run the code, into .madagascar/microagents/repo.md.",
+    "ja": "利用可能なマイクロエージェントを使用して、リポジトリ用にMadagascarをカスタマイズできます。Madagascarに、コードの実行方法を含むリポジトリの説明を.madagascar/microagents/repo.mdに入れるよう依頼してください。",
+    "zh-CN": "您可以使用可用微代理为您的仓库自定义Madagascar。请Madagascar将仓库的描述（包括如何运行代码）放入.madagascar/microagents/repo.md。",
+    "zh-TW": "您可以使用可用微代理為您的倉庫自定義Madagascar。請Madagascar將倉庫的描述（包括如何運行代碼）放入.madagascar/microagents/repo.md。",
+    "ko-KR": "사용 가능한 마이크로에이전트를 사용하여 저장소에 맞게 Madagascar를 사용자 정의할 수 있습니다. Madagascar에게 코드 실행 방법을 포함한 저장소 설명을 .madagascar/microagents/repo.md에 넣도록 요청하세요.",
+    "no": "Du kan tilpasse Madagascar for ditt repo ved å bruke en tilgjengelig mikroagent. Be Madagascar om å legge en beskrivelse av repoet, inkludert hvordan du kjører koden, i .madagascar/microagents/repo.md.",
+    "it": "Puoi personalizzare Madagascar per il tuo repository utilizzando un microagente disponibile. Chiedi a Madagascar di inserire una descrizione del repository, incluso come eseguire il codice, in .madagascar/microagents/repo.md.",
+    "pt": "Você pode personalizar o Madagascar para seu repositório usando um microagente disponível. Peça ao Madagascar para colocar uma descrição do repositório, incluindo como executar o código, em .madagascar/microagents/repo.md.",
+    "es": "Puede personalizar Madagascar para su repositorio utilizando un microagente disponible. Pídale a Madagascar que ponga una descripción del repositorio, incluido cómo ejecutar el código, en .madagascar/microagents/repo.md.",
+    "ar": "يمكنك تخصيص Madagascar لمستودعك باستخدام وكيل مصغر متاح. اطلب من Madagascar وضع وصف للمستودع، بما في ذلك كيفية تشغيل الكود، في .madagascar/microagents/repo.md.",
+    "de": "Sie können Madagascar für Ihr Repository mit einem verfügbaren Mikroagenten anpassen. Bitten Sie Madagascar, eine Beschreibung des Repositorys, einschließlich der Ausführung des Codes, in .madagascar/microagents/repo.md zu platzieren.",
+    "fr": "Vous pouvez personnaliser Madagascar pour votre dépôt en utilisant un micro-agent disponible. Demandez à Madagascar de mettre une description du dépôt, y compris comment exécuter le code, dans .madagascar/microagents/repo.md.",
+    "tr": "Kullanılabilir bir mikro ajan kullanarak Madagascar'i deponuz için özelleştirebilirsiniz. Madagascar'ten deponun açıklamasını, kodun nasıl çalıştırılacağı dahil, .madagascar/microagents/repo.md dosyasına koymasını isteyin.",
+    "uk": "Ви можете налаштувати Madagascar для свого репозиторію за допомогою доступного мікроагента. Попросіть Madagascar розмістити опис репозиторію, включаючи інформацію про те, як запустити код, у файлі .madagascar/microagents/repo.md.",
+    "ca": "Podeu personalitzar Madagascar per al vostre repositori fent servir un microagent disponible. Demaneu a Madagascar que posi una descripció del repositori, incloent com executar el codi, a .madagascar/microagents/repo.md."
   },
   "CONVERSATION$NO_SKILLS": {
     "en": "No available skills found for this conversation.",
@@ -16235,21 +16235,21 @@
     "ca": "No s'han pogut obtenir les habilitats. Torneu-ho a intentar més tard."
   },
   "TIPS$SETUP_SCRIPT": {
-    "en": "You can add .openhands/setup.sh to your repository to automatically run a setup script every time you start an Madagascar conversation.",
-    "ja": "Madagascarの会話を開始するたびに自動的にセットアップスクリプトを実行するために、.openhands/setup.shをリポジトリに追加できます。",
-    "zh-CN": "您可以将.openhands/setup.sh添加到您的仓库中，以便在每次启动Madagascar对话时自动运行设置脚本。",
-    "zh-TW": "您可以將.openhands/setup.sh添加到您的倉庫中，以便在每次啟動Madagascar對話時自動運行設置腳本。",
-    "ko-KR": "Madagascar 대화를 시작할 때마다 자동으로 설정 스크립트를 실행하도록 .openhands/setup.sh를 저장소에 추가할 수 있습니다.",
-    "no": "Du kan legge til .openhands/setup.sh i ditt repository for å automatisk kjøre et oppsettskript hver gang du starter en Madagascar-samtale.",
-    "it": "Puoi aggiungere .openhands/setup.sh al tuo repository per eseguire automaticamente uno script di configurazione ogni volta che avvii una conversazione Madagascar.",
-    "pt": "Você pode adicionar .openhands/setup.sh ao seu repositório para executar automaticamente um script de configuração toda vez que iniciar uma conversa Madagascar.",
-    "es": "Puede agregar .openhands/setup.sh a su repositorio para ejecutar automáticamente un script de configuración cada vez que inicie una conversación de Madagascar.",
-    "ar": "يمكنك إضافة .openhands/setup.sh إلى مستودعك لتشغيل نص إعداد تلقائيًا في كل مرة تبدأ فيها محادثة Madagascar.",
-    "fr": "Vous pouvez ajouter .openhands/setup.sh à votre dépôt pour exécuter automatiquement un script de configuration chaque fois que vous démarrez une conversation Madagascar.",
-    "tr": "Madagascar konuşması başlattığınız her seferinde otomatik olarak bir kurulum betiği çalıştırmak için deponuza .openhands/setup.sh ekleyebilirsiniz.",
-    "de": "Sie können .openhands/setup.sh zu Ihrem Repository hinzufügen, um jedes Mal, wenn Sie ein Madagascar-Gespräch starten, automatisch ein Setup-Skript auszuführen.",
-    "uk": "Ви можете додати .openhands/setup.sh до свого репозиторію, щоб автоматично запускати скрипт налаштування щоразу, коли ви починаєте розмову Madagascar.",
-    "ca": "Podeu afegir .openhands/setup.sh al vostre repositori per executar automàticament un script de configuració cada vegada que inicieu una conversa d'Madagascar."
+    "en": "You can add .madagascar/setup.sh to your repository to automatically run a setup script every time you start an Madagascar conversation.",
+    "ja": "Madagascarの会話を開始するたびに自動的にセットアップスクリプトを実行するために、.madagascar/setup.shをリポジトリに追加できます。",
+    "zh-CN": "您可以将.madagascar/setup.sh添加到您的仓库中，以便在每次启动Madagascar对话时自动运行设置脚本。",
+    "zh-TW": "您可以將.madagascar/setup.sh添加到您的倉庫中，以便在每次啟動Madagascar對話時自動運行設置腳本。",
+    "ko-KR": "Madagascar 대화를 시작할 때마다 자동으로 설정 스크립트를 실행하도록 .madagascar/setup.sh를 저장소에 추가할 수 있습니다.",
+    "no": "Du kan legge til .madagascar/setup.sh i ditt repository for å automatisk kjøre et oppsettskript hver gang du starter en Madagascar-samtale.",
+    "it": "Puoi aggiungere .madagascar/setup.sh al tuo repository per eseguire automaticamente uno script di configurazione ogni volta che avvii una conversazione Madagascar.",
+    "pt": "Você pode adicionar .madagascar/setup.sh ao seu repositório para executar automaticamente um script de configuração toda vez que iniciar uma conversa Madagascar.",
+    "es": "Puede agregar .madagascar/setup.sh a su repositorio para ejecutar automáticamente un script de configuración cada vez que inicie una conversación de Madagascar.",
+    "ar": "يمكنك إضافة .madagascar/setup.sh إلى مستودعك لتشغيل نص إعداد تلقائيًا في كل مرة تبدأ فيها محادثة Madagascar.",
+    "fr": "Vous pouvez ajouter .madagascar/setup.sh à votre dépôt pour exécuter automatiquement un script de configuration chaque fois que vous démarrez une conversation Madagascar.",
+    "tr": "Madagascar konuşması başlattığınız her seferinde otomatik olarak bir kurulum betiği çalıştırmak için deponuza .madagascar/setup.sh ekleyebilirsiniz.",
+    "de": "Sie können .madagascar/setup.sh zu Ihrem Repository hinzufügen, um jedes Mal, wenn Sie ein Madagascar-Gespräch starten, automatisch ein Setup-Skript auszuführen.",
+    "uk": "Ви можете додати .madagascar/setup.sh до свого репозиторію, щоб автоматично запускати скрипт налаштування щоразу, коли ви починаєте розмову Madagascar.",
+    "ca": "Podeu afegir .madagascar/setup.sh al vostre repositori per executar automàticament un script de configuració cada vegada que inicieu una conversa d'Madagascar."
   },
   "TIPS$VSCODE_INSTANCE": {
     "en": "Every Madagascar conversation comes with a VS Code instance, where you can interact with the development environment.",
@@ -16337,21 +16337,21 @@
     "ca": "Podeu executar Madagascar com a CLI, similar a Claude Code."
   },
   "TIPS$GITHUB_HOOK": {
-    "en": "Madagascar Cloud offers a GitHub hook, so you can say \"@openhands fix the merge conflicts\" or \"@openhands fix the feedback on this PR\" right inside the GitHub UI.",
-    "ja": "Madagascar CloudはGitHubフックを提供しているため、GitHub UI内で「@openhands マージの競合を修正して」や「@openhands このPRのフィードバックを修正して」と言うことができます。",
-    "zh-CN": "Madagascar Cloud提供GitHub钩子，因此您可以在GitHub UI中直接说\"@openhands 修复合并冲突\"或\"@openhands 修复此PR上的反馈\"。",
-    "zh-TW": "Madagascar Cloud提供GitHub鉤子，因此您可以在GitHub UI中直接說\"@openhands 修復合併衝突\"或\"@openhands 修復此PR上的反饋\"。",
-    "ko-KR": "Madagascar Cloud는 GitHub 훅을 제공하므로 GitHub UI 내에서 \"@openhands 병합 충돌 수정\" 또는 \"@openhands 이 PR의 피드백 수정\"이라고 말할 수 있습니다.",
-    "no": "Madagascar Cloud tilbyr en GitHub-hook, så du kan si \"@openhands fix the merge conflicts\" eller \"@openhands fix the feedback on this PR\" direkte i GitHub-grensesnittet.",
-    "it": "Madagascar Cloud offre un hook GitHub, così puoi dire \"@openhands fix the merge conflicts\" o \"@openhands fix the feedback on this PR\" direttamente nell'interfaccia di GitHub.",
-    "pt": "O Madagascar Cloud oferece um hook do GitHub, para que você possa dizer \"@openhands fix the merge conflicts\" ou \"@openhands fix the feedback on this PR\" diretamente na interface do GitHub.",
-    "es": "Madagascar Cloud ofrece un hook de GitHub, por lo que puede decir \"@openhands fix the merge conflicts\" o \"@openhands fix the feedback on this PR\" directamente en la interfaz de GitHub.",
-    "ar": "يوفر Madagascar Cloud خطافًا لـ GitHub، لذلك يمكنك قول \"@openhands أصلح تعارضات الدمج\" أو \"@openhands أصلح التعليقات على طلب السحب هذا\" مباشرة داخل واجهة GitHub.",
-    "fr": "Madagascar Cloud propose un hook GitHub, vous pouvez donc dire \"@openhands fix the merge conflicts\" ou \"@openhands fix the feedback on this PR\" directement dans l'interface GitHub.",
-    "tr": "Madagascar Cloud, GitHub kancası sunar, böylece GitHub arayüzünde doğrudan \"@openhands birleştirme çakışmalarını düzelt\" veya \"@openhands bu PR'daki geri bildirimi düzelt\" diyebilirsiniz.",
-    "de": "Madagascar Cloud bietet einen GitHub-Hook, sodass Sie \"@openhands fix the merge conflicts\" oder \"@openhands fix the feedback on this PR\" direkt in der GitHub-Benutzeroberfläche sagen können.",
-    "uk": "Madagascar Cloud пропонує хук GitHub, тож ви можете сказати «@openhands виправити конфлікти злиття» або «@openhands виправити відгук про цей PR» прямо в інтерфейсі GitHub.",
-    "ca": "Madagascar Cloud ofereix un hook de GitHub, de manera que podeu dir \"@openhands corregeix els conflictes de fusió\" o \"@openhands corregeix els comentaris d'aquesta PR\" directament dins de la interfície de GitHub."
+    "en": "Madagascar Cloud offers a GitHub hook, so you can say \"@madagascar fix the merge conflicts\" or \"@madagascar fix the feedback on this PR\" right inside the GitHub UI.",
+    "ja": "Madagascar CloudはGitHubフックを提供しているため、GitHub UI内で「@madagascar マージの競合を修正して」や「@madagascar このPRのフィードバックを修正して」と言うことができます。",
+    "zh-CN": "Madagascar Cloud提供GitHub钩子，因此您可以在GitHub UI中直接说\"@madagascar 修复合并冲突\"或\"@madagascar 修复此PR上的反馈\"。",
+    "zh-TW": "Madagascar Cloud提供GitHub鉤子，因此您可以在GitHub UI中直接說\"@madagascar 修復合併衝突\"或\"@madagascar 修復此PR上的反饋\"。",
+    "ko-KR": "Madagascar Cloud는 GitHub 훅을 제공하므로 GitHub UI 내에서 \"@madagascar 병합 충돌 수정\" 또는 \"@madagascar 이 PR의 피드백 수정\"이라고 말할 수 있습니다.",
+    "no": "Madagascar Cloud tilbyr en GitHub-hook, så du kan si \"@madagascar fix the merge conflicts\" eller \"@madagascar fix the feedback on this PR\" direkte i GitHub-grensesnittet.",
+    "it": "Madagascar Cloud offre un hook GitHub, così puoi dire \"@madagascar fix the merge conflicts\" o \"@madagascar fix the feedback on this PR\" direttamente nell'interfaccia di GitHub.",
+    "pt": "O Madagascar Cloud oferece um hook do GitHub, para que você possa dizer \"@madagascar fix the merge conflicts\" ou \"@madagascar fix the feedback on this PR\" diretamente na interface do GitHub.",
+    "es": "Madagascar Cloud ofrece un hook de GitHub, por lo que puede decir \"@madagascar fix the merge conflicts\" o \"@madagascar fix the feedback on this PR\" directamente en la interfaz de GitHub.",
+    "ar": "يوفر Madagascar Cloud خطافًا لـ GitHub، لذلك يمكنك قول \"@madagascar أصلح تعارضات الدمج\" أو \"@madagascar أصلح التعليقات على طلب السحب هذا\" مباشرة داخل واجهة GitHub.",
+    "fr": "Madagascar Cloud propose un hook GitHub, vous pouvez donc dire \"@madagascar fix the merge conflicts\" ou \"@madagascar fix the feedback on this PR\" directement dans l'interface GitHub.",
+    "tr": "Madagascar Cloud, GitHub kancası sunar, böylece GitHub arayüzünde doğrudan \"@madagascar birleştirme çakışmalarını düzelt\" veya \"@madagascar bu PR'daki geri bildirimi düzelt\" diyebilirsiniz.",
+    "de": "Madagascar Cloud bietet einen GitHub-Hook, sodass Sie \"@madagascar fix the merge conflicts\" oder \"@madagascar fix the feedback on this PR\" direkt in der GitHub-Benutzeroberfläche sagen können.",
+    "uk": "Madagascar Cloud пропонує хук GitHub, тож ви можете сказати «@madagascar виправити конфлікти злиття» або «@madagascar виправити відгук про цей PR» прямо в інтерфейсі GitHub.",
+    "ca": "Madagascar Cloud ofereix un hook de GitHub, de manera que podeu dir \"@madagascar corregeix els conflictes de fusió\" o \"@madagascar corregeix els comentaris d'aquesta PR\" directament dins de la interfície de GitHub."
   },
   "TIPS$BLOG_SIGNUP": {
     "en": "Sign up for the Madagascar Blog to hear about new features and the latest releases.",
@@ -17594,7 +17594,7 @@
     "uk": "Підключити провайдера Git для управління секретами",
     "ca": "Connecteu un proveïdor de Git per gestionar els secrets"
   },
-  "SETTINGS$OPENHANDS_API_KEYS": {
+  "SETTINGS$MADAGASCAR_API_KEYS": {
     "en": "Madagascar API Keys",
     "ja": "Madagascar APIキー",
     "zh-CN": "Madagascar API密钥",
@@ -17867,21 +17867,21 @@
     "ca": "Ja existeix un compte amb aquesta adreça de correu electrònic."
   },
   "AUTH$RECAPTCHA_BLOCKED": {
-    "en": "Access blocked due to suspicious activity. If you believe this is an error, please contact contact@openhands.dev for assistance.",
-    "ja": "不審なアクティビティのためアクセスがブロックされました。これが誤りだと思われる場合は、contact@openhands.dev までお問い合わせください。",
-    "zh-CN": "由于可疑活动，访问已被阻止。如果您认为这是错误的，请联系 contact@openhands.dev 寻求帮助。",
-    "zh-TW": "由於可疑活動，存取已被封鎖。如果您認為這是錯誤的，請聯繫 contact@openhands.dev 尋求協助。",
-    "ko-KR": "의심스러운 활동으로 인해 접근이 차단되었습니다. 오류라고 생각되시면 contact@openhands.dev로 문의해 주세요.",
-    "no": "Tilgang blokkert på grunn av mistenkelig aktivitet. Hvis du mener dette er en feil, vennligst kontakt contact@openhands.dev for hjelp.",
-    "it": "Accesso bloccato a causa di attività sospetta. Se ritieni che si tratti di un errore, contatta contact@openhands.dev per assistenza.",
-    "pt": "Acesso bloqueado devido a atividade suspeita. Se você acredita que isso é um erro, entre em contato com contact@openhands.dev para obter ajuda.",
-    "es": "Acceso bloqueado debido a actividad sospechosa. Si cree que esto es un error, comuníquese con contact@openhands.dev para obtener ayuda.",
-    "ar": "تم حظر الوصول بسبب نشاط مشبوه. إذا كنت تعتقد أن هذا خطأ، يرجى الاتصال بـ contact@openhands.dev للحصول على المساعدة.",
-    "fr": "Accès bloqué en raison d'une activité suspecte. Si vous pensez qu'il s'agit d'une erreur, veuillez contacter contact@openhands.dev pour obtenir de l'aide.",
-    "tr": "Şüpheli aktivite nedeniyle erişim engellendi. Bunun bir hata olduğunu düşünüyorsanız, yardım için lütfen contact@openhands.dev ile iletişime geçin.",
-    "de": "Zugriff aufgrund verdächtiger Aktivitäten blockiert. Wenn Sie glauben, dass dies ein Fehler ist, wenden Sie sich bitte an contact@openhands.dev.",
-    "uk": "Доступ заблоковано через підозрілу активність. Якщо ви вважаєте, що це помилка, зверніться до contact@openhands.dev за допомогою.",
-    "ca": "Accés bloquejat a causa d'activitat sospitosa. Si creieu que és un error, contacteu amb contact@openhands.dev per obtenir ajuda."
+    "en": "Access blocked due to suspicious activity. If you believe this is an error, please contact contact@madagascar.dev for assistance.",
+    "ja": "不審なアクティビティのためアクセスがブロックされました。これが誤りだと思われる場合は、contact@madagascar.dev までお問い合わせください。",
+    "zh-CN": "由于可疑活动，访问已被阻止。如果您认为这是错误的，请联系 contact@madagascar.dev 寻求帮助。",
+    "zh-TW": "由於可疑活動，存取已被封鎖。如果您認為這是錯誤的，請聯繫 contact@madagascar.dev 尋求協助。",
+    "ko-KR": "의심스러운 활동으로 인해 접근이 차단되었습니다. 오류라고 생각되시면 contact@madagascar.dev로 문의해 주세요.",
+    "no": "Tilgang blokkert på grunn av mistenkelig aktivitet. Hvis du mener dette er en feil, vennligst kontakt contact@madagascar.dev for hjelp.",
+    "it": "Accesso bloccato a causa di attività sospetta. Se ritieni che si tratti di un errore, contatta contact@madagascar.dev per assistenza.",
+    "pt": "Acesso bloqueado devido a atividade suspeita. Se você acredita que isso é um erro, entre em contato com contact@madagascar.dev para obter ajuda.",
+    "es": "Acceso bloqueado debido a actividad sospechosa. Si cree que esto es un error, comuníquese con contact@madagascar.dev para obtener ayuda.",
+    "ar": "تم حظر الوصول بسبب نشاط مشبوه. إذا كنت تعتقد أن هذا خطأ، يرجى الاتصال بـ contact@madagascar.dev للحصول على المساعدة.",
+    "fr": "Accès bloqué en raison d'une activité suspecte. Si vous pensez qu'il s'agit d'une erreur, veuillez contacter contact@madagascar.dev pour obtenir de l'aide.",
+    "tr": "Şüpheli aktivite nedeniyle erişim engellendi. Bunun bir hata olduğunu düşünüyorsanız, yardım için lütfen contact@madagascar.dev ile iletişime geçin.",
+    "de": "Zugriff aufgrund verdächtiger Aktivitäten blockiert. Wenn Sie glauben, dass dies ein Fehler ist, wenden Sie sich bitte an contact@madagascar.dev.",
+    "uk": "Доступ заблоковано через підозрілу активність. Якщо ви вважаєте, що це помилка, зверніться до contact@madagascar.dev за допомогою.",
+    "ca": "Accés bloquejat a causa d'activitat sospitosa. Si creieu que és un error, contacteu amb contact@madagascar.dev per obtenir ajuda."
   },
   "AUTH$LETS_GET_STARTED": {
     "en": "Let's get started",
@@ -25329,7 +25329,7 @@
     "uk": "Дізнатися більше",
     "ca": "Més informació"
   },
-  "ENTERPRISE$GET_OPENHANDS_TITLE": {
+  "ENTERPRISE$GET_MADAGASCAR_TITLE": {
     "en": "Get Madagascar for Enterprise",
     "ja": "Madagascar Enterpriseを入手",
     "zh-CN": "获取 Madagascar 企业版",
@@ -25346,7 +25346,7 @@
     "tr": "Kurumsal Madagascar Edinin",
     "uk": "Отримайте Madagascar для підприємств"
   },
-  "ENTERPRISE$GET_OPENHANDS_SUBTITLE": {
+  "ENTERPRISE$GET_MADAGASCAR_SUBTITLE": {
     "en": "Cloud allows you to access Madagascar anywhere and coordinate with your team like never before.",
     "ja": "クラウドを使用すると、どこからでもMadagascarにアクセスし、チームとこれまでにない方法で連携できます。",
     "zh-CN": "云端让您可以随时随地访问 Madagascar，并以前所未有的方式与团队协作。",
@@ -26111,7 +26111,7 @@
     "tr": "Konuşmalarınızı hangi ajanın yöneteceğini seçin. ACP, burada yapılandırdığınız harici bir ajan alt sürecini çalıştırır.",
     "uk": "Виберіть агента, який обробляє ваші розмови. ACP запускає зовнішній підпроцес агента, який ви налаштовуєте тут."
   },
-  "SETTINGS$AGENT_TYPE_OPENHANDS": {
+  "SETTINGS$AGENT_TYPE_MADAGASCAR": {
     "en": "Madagascar",
     "ja": "Madagascar",
     "zh-CN": "Madagascar",
@@ -27234,55 +27234,55 @@
     "uk": "Вимкніть, щоб зберегти конфігурацію, але зупинити відповіді Madagascar."
   },
   "PROJECT_MANAGEMENT$JIRA_DC_PANEL_SUBTITLE": {
-    "en": "Let Madagascar respond to @openhands mentions on your Jira Data Center issues.",
-    "ja": "Jira Data Center課題の@openhandsメンションにMadagascarが応答できるようにします。",
-    "zh-CN": "允许 Madagascar 响应 Jira Data Center 问题中的 @openhands 提及。",
-    "zh-TW": "允許 Madagascar 回應 Jira Data Center 議題中的 @openhands 提及。",
-    "ko-KR": "Madagascar가 Jira Data Center 이슈의 @openhands 멘션에 응답할 수 있도록 합니다.",
-    "no": "La Madagascar svare på @openhands-omtaler i Jira Data Center-saker.",
-    "ar": "اسمح لـ Madagascar بالرد على إشارات @openhands في مشكلات Jira Data Center.",
-    "de": "Erlauben Sie Madagascar, auf @openhands-Erwähnungen in Jira Data Center-Issues zu antworten.",
-    "fr": "Permettez à Madagascar de répondre aux mentions @openhands dans vos tickets Jira Data Center.",
-    "it": "Consenti a Madagascar di rispondere alle menzioni @openhands nei ticket Jira Data Center.",
-    "pt": "Permita que o Madagascar responda a menções @openhands em issues do Jira Data Center.",
-    "es": "Permite que Madagascar responda a menciones @openhands en incidencias de Jira Data Center.",
-    "ca": "Permet que Madagascar respongui a mencions @openhands en incidències de Jira Data Center.",
-    "tr": "Madagascar'in Jira Data Center sorunlarınızdaki @openhands bahsetmelerine yanıt vermesine izin verin.",
-    "uk": "Дозвольте Madagascar відповідати на згадки @openhands у задачах Jira Data Center."
+    "en": "Let Madagascar respond to @madagascar mentions on your Jira Data Center issues.",
+    "ja": "Jira Data Center課題の@madagascarメンションにMadagascarが応答できるようにします。",
+    "zh-CN": "允许 Madagascar 响应 Jira Data Center 问题中的 @madagascar 提及。",
+    "zh-TW": "允許 Madagascar 回應 Jira Data Center 議題中的 @madagascar 提及。",
+    "ko-KR": "Madagascar가 Jira Data Center 이슈의 @madagascar 멘션에 응답할 수 있도록 합니다.",
+    "no": "La Madagascar svare på @madagascar-omtaler i Jira Data Center-saker.",
+    "ar": "اسمح لـ Madagascar بالرد على إشارات @madagascar في مشكلات Jira Data Center.",
+    "de": "Erlauben Sie Madagascar, auf @madagascar-Erwähnungen in Jira Data Center-Issues zu antworten.",
+    "fr": "Permettez à Madagascar de répondre aux mentions @madagascar dans vos tickets Jira Data Center.",
+    "it": "Consenti a Madagascar di rispondere alle menzioni @madagascar nei ticket Jira Data Center.",
+    "pt": "Permita que o Madagascar responda a menções @madagascar em issues do Jira Data Center.",
+    "es": "Permite que Madagascar responda a menciones @madagascar en incidencias de Jira Data Center.",
+    "ca": "Permet que Madagascar respongui a mencions @madagascar en incidències de Jira Data Center.",
+    "tr": "Madagascar'in Jira Data Center sorunlarınızdaki @madagascar bahsetmelerine yanıt vermesine izin verin.",
+    "uk": "Дозвольте Madagascar відповідати на згадки @madagascar у задачах Jira Data Center."
   },
   "PROJECT_MANAGEMENT$JIRA_DC_ADMIN_SUBTITLE": {
-    "en": "Let Madagascar respond to @openhands mentions on your Jira Data Center issues. NOTE: To let agents read and query Jira mid-conversation, enable OAuth mode in the OHE Admin Config and redeploy or have users add a Jira token as a Secret.",
-    "ja": "Madagascar が Jira Data Center の課題での @openhands メンションに応答できるようにします。注意: 会話中にエージェントが Jira を読み取り・照会できるようにするには、OHE Admin Config で OAuth mode を有効にして再デプロイするか、ユーザーに Jira トークンを Secret として追加してもらってください。",
-    "zh-CN": "让 Madagascar 响应您 Jira Data Center 问题中的 @openhands 提及。注意：如需让智能体在对话过程中读取和查询 Jira，请在 OHE Admin Config 中启用 OAuth mode 并重新部署，或让用户将 Jira 令牌添加为 Secret。",
-    "zh-TW": "讓 Madagascar 回應您 Jira Data Center 問題中的 @openhands 提及。注意：若要讓代理程式在對話進行中讀取及查詢 Jira，請在 OHE Admin Config 中啟用 OAuth mode 並重新部署，或讓使用者將 Jira 權杖新增為 Secret。",
-    "ko-KR": "Madagascar가 Jira Data Center 이슈의 @openhands 멘션에 응답하도록 합니다. 참고: 에이전트가 대화 중에 Jira를 읽고 조회할 수 있도록 하려면 OHE Admin Config에서 OAuth mode를 활성화하고 다시 배포하거나, 사용자가 Jira 토큰을 Secret으로 추가하도록 하세요.",
-    "no": "La Madagascar svare på @openhands-omtaler i Jira Data Center-sakene dine. Merk: For at agenter skal kunne lese og spørre Jira underveis i en samtale, aktiver OAuth mode i OHE Admin Config og distribuer på nytt, eller la brukere legge til et Jira-token som en Secret.",
-    "ar": "اسمح لـ Madagascar بالرد على إشارات @openhands في مشكلات Jira Data Center الخاصة بك. ملاحظة: للسماح للوكلاء بقراءة Jira والاستعلام عنها أثناء المحادثة، فعّل OAuth mode في OHE Admin Config وأعد النشر، أو اطلب من المستخدمين إضافة رمز Jira كـ Secret.",
-    "de": "Lass Madagascar auf @openhands-Erwähnungen in deinen Jira Data Center-Vorgängen reagieren. Hinweis: Damit Agenten Jira mitten in einer Unterhaltung lesen und abfragen können, aktiviere OAuth mode in der OHE Admin Config und deploye neu, oder lass Nutzer ein Jira-Token als Secret hinzufügen.",
-    "fr": "Permettez à Madagascar de répondre aux mentions @openhands sur vos tickets Jira Data Center. Remarque : pour permettre aux agents de lire et d'interroger Jira en cours de conversation, activez le OAuth mode dans OHE Admin Config et redéployez, ou demandez aux utilisateurs d'ajouter un jeton Jira en tant que Secret.",
-    "it": "Consenti a Madagascar di rispondere alle menzioni @openhands negli issue di Jira Data Center. Nota: per consentire agli agenti di leggere e interrogare Jira durante una conversazione, abilita OAuth mode in OHE Admin Config ed esegui nuovamente il deploy, oppure chiedi agli utenti di aggiungere un token Jira come Secret.",
-    "pt": "Permita que o Madagascar responda a menções @openhands nas suas issues do Jira Data Center. Observação: para permitir que os agentes leiam e consultem o Jira durante a conversa, ative o OAuth mode na OHE Admin Config e reimplante, ou peça aos usuários que adicionem um token do Jira como um Secret.",
-    "es": "Permite que Madagascar responda a las menciones de @openhands en tus incidencias de Jira Data Center. Nota: Para que los agentes puedan leer y consultar Jira durante una conversación, habilita OAuth mode en OHE Admin Config y vuelve a desplegar, o pide a los usuarios que añadan un token de Jira como Secret.",
-    "ca": "Permet que Madagascar respongui a les mencions de @openhands a les teves incidències de Jira Data Center. Nota: perquè els agents puguin llegir i consultar Jira durant una conversa, activa OAuth mode a l'OHE Admin Config i torna a desplegar, o fes que els usuaris afegeixin un token de Jira com a Secret.",
-    "tr": "Madagascar'in Jira Data Center sorunlarınızda @openhands'ten bahsedildiğinde yanıt vermesini sağlayın. Not: Aracıların konuşma sırasında Jira'yı okuyup sorgulayabilmesi için OHE Admin Config içinde OAuth mode'u etkinleştirip yeniden dağıtın ya da kullanıcıların bir Jira token'ını Secret olarak eklemesini sağlayın.",
-    "uk": "Дозвольте Madagascar відповідати на згадки @openhands у ваших задачах Jira Data Center. Примітка: щоб агенти могли читати та запитувати дані Jira під час розмови, увімкніть OAuth mode в OHE Admin Config і повторно розгорніть застосунок або попросіть користувачів додати токен Jira як Secret."
+    "en": "Let Madagascar respond to @madagascar mentions on your Jira Data Center issues. NOTE: To let agents read and query Jira mid-conversation, enable OAuth mode in the OHE Admin Config and redeploy or have users add a Jira token as a Secret.",
+    "ja": "Madagascar が Jira Data Center の課題での @madagascar メンションに応答できるようにします。注意: 会話中にエージェントが Jira を読み取り・照会できるようにするには、OHE Admin Config で OAuth mode を有効にして再デプロイするか、ユーザーに Jira トークンを Secret として追加してもらってください。",
+    "zh-CN": "让 Madagascar 响应您 Jira Data Center 问题中的 @madagascar 提及。注意：如需让智能体在对话过程中读取和查询 Jira，请在 OHE Admin Config 中启用 OAuth mode 并重新部署，或让用户将 Jira 令牌添加为 Secret。",
+    "zh-TW": "讓 Madagascar 回應您 Jira Data Center 問題中的 @madagascar 提及。注意：若要讓代理程式在對話進行中讀取及查詢 Jira，請在 OHE Admin Config 中啟用 OAuth mode 並重新部署，或讓使用者將 Jira 權杖新增為 Secret。",
+    "ko-KR": "Madagascar가 Jira Data Center 이슈의 @madagascar 멘션에 응답하도록 합니다. 참고: 에이전트가 대화 중에 Jira를 읽고 조회할 수 있도록 하려면 OHE Admin Config에서 OAuth mode를 활성화하고 다시 배포하거나, 사용자가 Jira 토큰을 Secret으로 추가하도록 하세요.",
+    "no": "La Madagascar svare på @madagascar-omtaler i Jira Data Center-sakene dine. Merk: For at agenter skal kunne lese og spørre Jira underveis i en samtale, aktiver OAuth mode i OHE Admin Config og distribuer på nytt, eller la brukere legge til et Jira-token som en Secret.",
+    "ar": "اسمح لـ Madagascar بالرد على إشارات @madagascar في مشكلات Jira Data Center الخاصة بك. ملاحظة: للسماح للوكلاء بقراءة Jira والاستعلام عنها أثناء المحادثة، فعّل OAuth mode في OHE Admin Config وأعد النشر، أو اطلب من المستخدمين إضافة رمز Jira كـ Secret.",
+    "de": "Lass Madagascar auf @madagascar-Erwähnungen in deinen Jira Data Center-Vorgängen reagieren. Hinweis: Damit Agenten Jira mitten in einer Unterhaltung lesen und abfragen können, aktiviere OAuth mode in der OHE Admin Config und deploye neu, oder lass Nutzer ein Jira-Token als Secret hinzufügen.",
+    "fr": "Permettez à Madagascar de répondre aux mentions @madagascar sur vos tickets Jira Data Center. Remarque : pour permettre aux agents de lire et d'interroger Jira en cours de conversation, activez le OAuth mode dans OHE Admin Config et redéployez, ou demandez aux utilisateurs d'ajouter un jeton Jira en tant que Secret.",
+    "it": "Consenti a Madagascar di rispondere alle menzioni @madagascar negli issue di Jira Data Center. Nota: per consentire agli agenti di leggere e interrogare Jira durante una conversazione, abilita OAuth mode in OHE Admin Config ed esegui nuovamente il deploy, oppure chiedi agli utenti di aggiungere un token Jira come Secret.",
+    "pt": "Permita que o Madagascar responda a menções @madagascar nas suas issues do Jira Data Center. Observação: para permitir que os agentes leiam e consultem o Jira durante a conversa, ative o OAuth mode na OHE Admin Config e reimplante, ou peça aos usuários que adicionem um token do Jira como um Secret.",
+    "es": "Permite que Madagascar responda a las menciones de @madagascar en tus incidencias de Jira Data Center. Nota: Para que los agentes puedan leer y consultar Jira durante una conversación, habilita OAuth mode en OHE Admin Config y vuelve a desplegar, o pide a los usuarios que añadan un token de Jira como Secret.",
+    "ca": "Permet que Madagascar respongui a les mencions de @madagascar a les teves incidències de Jira Data Center. Nota: perquè els agents puguin llegir i consultar Jira durant una conversa, activa OAuth mode a l'OHE Admin Config i torna a desplegar, o fes que els usuaris afegeixin un token de Jira com a Secret.",
+    "tr": "Madagascar'in Jira Data Center sorunlarınızda @madagascar'ten bahsedildiğinde yanıt vermesini sağlayın. Not: Aracıların konuşma sırasında Jira'yı okuyup sorgulayabilmesi için OHE Admin Config içinde OAuth mode'u etkinleştirip yeniden dağıtın ya da kullanıcıların bir Jira token'ını Secret olarak eklemesini sağlayın.",
+    "uk": "Дозвольте Madagascar відповідати на згадки @madagascar у ваших задачах Jira Data Center. Примітка: щоб агенти могли читати та запитувати дані Jira під час розмови, увімкніть OAuth mode в OHE Admin Config і повторно розгорніть застосунок або попросіть користувачів додати токен Jira як Secret."
   },
   "PROJECT_MANAGEMENT$JIRA_DC_MEMBER_LINK_PROMPT": {
-    "en": "To connect, mention @openhands on any Jira Data Center issue, or link your account now.",
-    "ja": "接続するには、Jira Data Center の任意の課題で @openhands にメンションするか、今すぐアカウントをリンクしてください。",
-    "zh-CN": "如需连接，请在任意 Jira Data Center 问题中提及 @openhands，或立即关联您的账户。",
-    "zh-TW": "若要連接，請在任何 Jira Data Center 問題上提及 @openhands，或立即連結您的帳戶。",
-    "ko-KR": "연결하려면 Jira Data Center 이슈에서 @openhands를 멘션하거나 지금 계정을 연결하세요.",
-    "no": "For å koble til, nevn @openhands i en hvilken som helst Jira Data Center-sak, eller koble til kontoen din nå.",
-    "ar": "للربط، اذكر @openhands في أي مشكلة على Jira Data Center، أو اربط حسابك الآن.",
-    "de": "Erwähne zum Verbinden @openhands in einem beliebigen Jira Data Center-Vorgang oder verknüpfe jetzt dein Konto.",
-    "fr": "Pour vous connecter, mentionnez @openhands sur n'importe quel ticket Jira Data Center, ou liez votre compte maintenant.",
-    "it": "Per connetterti, menziona @openhands in qualsiasi issue di Jira Data Center oppure collega subito il tuo account.",
-    "pt": "Para conectar, mencione @openhands em qualquer issue do Jira Data Center ou vincule sua conta agora.",
-    "es": "Para conectar, menciona a @openhands en cualquier incidencia de Jira Data Center, o vincula tu cuenta ahora.",
-    "ca": "Per connectar-te, menciona @openhands en qualsevol incidència de Jira Data Center o enllaça el teu compte ara.",
-    "tr": "Bağlanmak için herhangi bir Jira Data Center sorununda @openhands'ten bahsedin ya da hesabınızı şimdi bağlayın.",
-    "uk": "Щоб підключитися, згадайте @openhands у будь-якій задачі Jira Data Center або прив'яжіть свій акаунт зараз."
+    "en": "To connect, mention @madagascar on any Jira Data Center issue, or link your account now.",
+    "ja": "接続するには、Jira Data Center の任意の課題で @madagascar にメンションするか、今すぐアカウントをリンクしてください。",
+    "zh-CN": "如需连接，请在任意 Jira Data Center 问题中提及 @madagascar，或立即关联您的账户。",
+    "zh-TW": "若要連接，請在任何 Jira Data Center 問題上提及 @madagascar，或立即連結您的帳戶。",
+    "ko-KR": "연결하려면 Jira Data Center 이슈에서 @madagascar를 멘션하거나 지금 계정을 연결하세요.",
+    "no": "For å koble til, nevn @madagascar i en hvilken som helst Jira Data Center-sak, eller koble til kontoen din nå.",
+    "ar": "للربط، اذكر @madagascar في أي مشكلة على Jira Data Center، أو اربط حسابك الآن.",
+    "de": "Erwähne zum Verbinden @madagascar in einem beliebigen Jira Data Center-Vorgang oder verknüpfe jetzt dein Konto.",
+    "fr": "Pour vous connecter, mentionnez @madagascar sur n'importe quel ticket Jira Data Center, ou liez votre compte maintenant.",
+    "it": "Per connetterti, menziona @madagascar in qualsiasi issue di Jira Data Center oppure collega subito il tuo account.",
+    "pt": "Para conectar, mencione @madagascar em qualquer issue do Jira Data Center ou vincule sua conta agora.",
+    "es": "Para conectar, menciona a @madagascar en cualquier incidencia de Jira Data Center, o vincula tu cuenta ahora.",
+    "ca": "Per connectar-te, menciona @madagascar en qualsevol incidència de Jira Data Center o enllaça el teu compte ara.",
+    "tr": "Bağlanmak için herhangi bir Jira Data Center sorununda @madagascar'ten bahsedin ya da hesabınızı şimdi bağlayın.",
+    "uk": "Щоб підключитися, згадайте @madagascar у будь-якій задачі Jira Data Center або прив'яжіть свій акаунт зараз."
   },
   "PROJECT_MANAGEMENT$JIRA_DC_ASK_ADMIN": {
     "en": "Ask an admin to configure Jira Data Center.",

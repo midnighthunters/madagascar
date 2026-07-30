@@ -10,22 +10,22 @@ from unittest.mock import MagicMock, patch
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Agent, AgentContext, Conversation
-from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-from openhands.sdk.hooks import HookConfig
-from openhands.sdk.hooks.config import HookDefinition, HookMatcher
-from openhands.sdk.marketplace import MarketplaceRegistration
-from openhands.sdk.mcp.client import MCPClient
-from openhands.sdk.mcp.config import MCPServer, dump_mcp_config
-from openhands.sdk.plugin import (
+from madagascar.sdk import LLM, Agent, AgentContext, Conversation
+from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+from madagascar.sdk.hooks import HookConfig
+from madagascar.sdk.hooks.config import HookDefinition, HookMatcher
+from madagascar.sdk.marketplace import MarketplaceRegistration
+from madagascar.sdk.mcp.client import MCPClient
+from madagascar.sdk.mcp.config import MCPServer, dump_mcp_config
+from madagascar.sdk.plugin import (
     PluginSource,
     discovery,
     install_plugin,
     installed,
 )
-from openhands.sdk.skills import Skill
-from openhands.sdk.skills.skill import DEFAULT_MARKETPLACE_PATH
-from openhands.sdk.tool.builtins import ThinkTool
+from madagascar.sdk.skills import Skill
+from madagascar.sdk.skills.skill import DEFAULT_MARKETPLACE_PATH
+from madagascar.sdk.tool.builtins import ThinkTool
 
 
 class EmptyMCPClient:
@@ -168,7 +168,7 @@ class TestLocalConversationPlugins:
         workspace.mkdir()
         public_skill = Skill(name="public-skill", content="Public", trigger=None)
         with patch(
-            "openhands.sdk.context.agent_context.load_available_skills",
+            "madagascar.sdk.context.agent_context.load_available_skills",
             return_value={"public-skill": public_skill},
         ) as load_available_skills:
             agent = Agent(
@@ -298,7 +298,7 @@ class TestLocalConversationPlugins:
         )
 
         with patch(
-            "openhands.sdk.marketplace.registry.fetch_plugin_with_resolution",
+            "madagascar.sdk.marketplace.registry.fetch_plugin_with_resolution",
             return_value=(marketplace_dir, "abc123"),
         ) as mock_fetch:
             conversation._ensure_plugins_loaded()
@@ -351,7 +351,7 @@ class TestLocalConversationPlugins:
         )
 
         with caplog.at_level(
-            "WARNING", logger="openhands.sdk.conversation.impl.local_conversation"
+            "WARNING", logger="madagascar.sdk.conversation.impl.local_conversation"
         ):
             conversation._ensure_plugins_loaded()
 
@@ -494,7 +494,7 @@ class TestLocalConversationPlugins:
 
     def test_registered_marketplaces_keep_public_skill_loading(self, tmp_path: Path):
         with patch(
-            "openhands.sdk.context.agent_context.load_available_skills",
+            "madagascar.sdk.context.agent_context.load_available_skills",
             return_value={},
         ) as mock_load_available_skills:
             AgentContext(
@@ -629,7 +629,7 @@ class TestLocalConversationPlugins:
         with (
             caplog.at_level(logging.INFO),
             patch(
-                "openhands.sdk.conversation.impl.local_conversation."
+                "madagascar.sdk.conversation.impl.local_conversation."
                 "fetch_plugin_with_resolution",
                 return_value=(plugin_dir, "abc123"),
             ) as mock_fetch,
@@ -773,7 +773,7 @@ class TestLocalConversationPlugins:
             return runtime_processor, runtime_processor.on_event
 
         with patch(
-            "openhands.sdk.conversation.impl.local_conversation.create_hook_callback",
+            "madagascar.sdk.conversation.impl.local_conversation.create_hook_callback",
             side_effect=mock_create_hook_callback,
         ) as mock_create_hook_callback:
             conversation.load_plugin("hook-plugin")
@@ -922,7 +922,7 @@ class TestLocalConversationPlugins:
         )
 
         with patch(
-            "openhands.sdk.conversation.impl.local_conversation.create_hook_callback",
+            "madagascar.sdk.conversation.impl.local_conversation.create_hook_callback",
             return_value=(processor, processor.on_event),
         ) as mock_create_hook_callback:
             conversation._ensure_plugins_loaded()
@@ -1091,7 +1091,7 @@ class TestPluginMcpSecretsExpansion:
     These tests verify that secrets injected via the REST API are correctly
     used for MCP config variable expansion (${VAR} syntax).
 
-    See: https://github.com/OpenHands/software-agent-sdk/issues/2872
+    See: https://github.com/Madagascar/software-agent-sdk/issues/2872
     """
 
     def test_plugin_mcp_secrets_without_defaults(self, tmp_path: Path, basic_agent):
@@ -1310,7 +1310,7 @@ class TestPluginSourceSecretExpansion:
             return plugin_dir, "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
 
         with patch(
-            "openhands.sdk.conversation.impl.local_conversation."
+            "madagascar.sdk.conversation.impl.local_conversation."
             "fetch_plugin_with_resolution",
             side_effect=fake_fetch,
         ):
@@ -1345,7 +1345,7 @@ class TestPluginSourceSecretExpansion:
             return plugin_dir, "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
 
         with patch(
-            "openhands.sdk.conversation.impl.local_conversation."
+            "madagascar.sdk.conversation.impl.local_conversation."
             "fetch_plugin_with_resolution",
             side_effect=fake_fetch,
         ):
@@ -1377,7 +1377,7 @@ class TestPluginSourceSecretExpansion:
             return plugin_dir, "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
 
         with patch(
-            "openhands.sdk.conversation.impl.local_conversation."
+            "madagascar.sdk.conversation.impl.local_conversation."
             "fetch_plugin_with_resolution",
             side_effect=fake_fetch,
         ):
@@ -1405,7 +1405,7 @@ class TestPluginSourceSecretExpansion:
             return plugin_dir, "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"
 
         with patch(
-            "openhands.sdk.conversation.impl.local_conversation."
+            "madagascar.sdk.conversation.impl.local_conversation."
             "fetch_plugin_with_resolution",
             side_effect=fake_fetch,
         ):
@@ -1542,7 +1542,7 @@ class TestAmbientPluginAutoLoad:
         with (
             caplog.at_level(logging.DEBUG),
             patch(
-                "openhands.sdk.conversation.impl.local_conversation."
+                "madagascar.sdk.conversation.impl.local_conversation."
                 "fetch_plugin_with_resolution",
                 return_value=(plugin_dir, "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef"),
             ),

@@ -15,8 +15,8 @@ Usage:
 
 import os
 
-from openhands.sdk import LLM, Agent, Conversation
-from openhands.tools.preset.gpt5 import get_gpt5_agent
+from madagascar.sdk import LLM, Agent, Conversation
+from madagascar.tools.preset.gpt5 import get_gpt5_agent
 
 
 # Resolve API key from env

@@ -1,10 +1,10 @@
 # Development Guide
 
-This guide is for people working on OpenHands and editing the source code.
+This guide is for people working on Madagascar and editing the source code.
 If you wish to contribute your changes, check out the
-[CONTRIBUTING.md](https://github.com/OpenHands/OpenHands/blob/main/CONTRIBUTING.md)
+[CONTRIBUTING.md](https://github.com/Madagascar/Madagascar/blob/main/CONTRIBUTING.md)
 on how to clone and setup the project initially before moving on. Otherwise,
-you can clone the OpenHands project directly.
+you can clone the Madagascar project directly.
 
 ## Choose Your Setup
 
@@ -39,9 +39,9 @@ make build
 
 ### 3. Configure the Language Model
 
-OpenHands supports a diverse array of Language Models (LMs) through the powerful [litellm](https://docs.litellm.ai) library.
+Madagascar supports a diverse array of Language Models (LMs) through the powerful [litellm](https://docs.litellm.ai) library.
 
-For the V1 web app, start OpenHands and configure your model and API key in the Settings UI.
+For the V1 web app, start Madagascar and configure your model and API key in the Settings UI.
 
 If you are running headless or CLI workflows, you can prepare local defaults with:
 
@@ -50,7 +50,7 @@ make setup-config
 ```
 
 **Note on Alternative Models:**
-See [our documentation](https://docs.openhands.dev/openhands/usage/llms/llms) for recommended models.
+See [our documentation](https://docs.madagascar.dev/madagascar/usage/llms/llms) for recommended models.
 
 ### 4. Run the Application
 
@@ -63,7 +63,7 @@ make start-backend  # Backend only on port 3000
 make start-frontend # Frontend only on port 3001
 ```
 
-These targets serve the current OpenHands V1 API by default. In the codebase, `make start-backend` runs `openhands.server.listen:app`, and that app includes the `openhands/app_server` V1 routes unless `ENABLE_V1=0`.
+These targets serve the current Madagascar V1 API by default. In the codebase, `make start-backend` runs `madagascar.server.listen:app`, and that app includes the `madagascar/app_server` V1 routes unless `ENABLE_V1=0`.
 
 ---
 
@@ -168,7 +168,7 @@ Follow [Step 1 from the Linux setup](#1-install-prerequisites-1) to install syst
 4. Go to Settings > Resources > WSL Integration
 5. Enable integration with your Ubuntu distribution
 
-**Important:** Keep your project files in the WSL filesystem (e.g., `~/workspace/openhands`), not in `/mnt/c`. Files accessed via `/mnt/c` will be significantly slower.
+**Important:** Keep your project files in the WSL filesystem (e.g., `~/workspace/madagascar`), not in `/mnt/c`. Files accessed via `/mnt/c` will be significantly slower.
 
 ### 4. Build and Setup the Environment
 
@@ -222,7 +222,7 @@ For more details, see the [dev container documentation](./containers/dev/README.
 
 ### Alternative: Docker Run
 
-If you just want to run OpenHands without setting up a dev environment:
+If you just want to run Madagascar without setting up a dev environment:
 
 ```bash
 make docker-run
@@ -255,9 +255,9 @@ mamba install conda-forge::poetry
 
 ---
 
-## Running OpenHands with OpenHands
+## Running Madagascar with Madagascar
 
-You can use OpenHands to develop and improve OpenHands itself!
+You can use Madagascar to develop and improve Madagascar itself!
 
 ### Quick Start
 
@@ -320,12 +320,12 @@ make help
 ## Key Documentation Resources
 
 - [/README.md](./README.md): Main project overview, features, and basic setup instructions
-- [/Development.md](./Development.md) (this file): Comprehensive guide for developers working on OpenHands
+- [/Development.md](./Development.md) (this file): Comprehensive guide for developers working on Madagascar
 - [/CONTRIBUTING.md](./CONTRIBUTING.md): Guidelines for contributing to the project, including code style and PR process
-- [DOC_STYLE_GUIDE.md](https://github.com/OpenHands/docs/blob/main/openhands/DOC_STYLE_GUIDE.md): Standards for writing and maintaining project documentation
-- [/openhands/app_server/README.md](./openhands/app_server/README.md): Current V1 application server implementation and REST API modules
+- [DOC_STYLE_GUIDE.md](https://github.com/Madagascar/docs/blob/main/madagascar/DOC_STYLE_GUIDE.md): Standards for writing and maintaining project documentation
+- [/madagascar/app_server/README.md](./madagascar/app_server/README.md): Current V1 application server implementation and REST API modules
 - [/frontend/README.md](./frontend/README.md): Frontend React application setup and development guide
 - [/containers/README.md](./containers/README.md): Information about Docker containers and deployment
 - [/tests/unit/README.md](./tests/unit/README.md): Guide to writing and running unit tests
-- [OpenHands/benchmarks](https://github.com/OpenHands/benchmarks): Documentation for the evaluation framework and benchmarks
+- [Madagascar/benchmarks](https://github.com/Madagascar/benchmarks): Documentation for the evaluation framework and benchmarks
 - [/skills/README.md](./skills/README.md): Information about the skills architecture and implementation

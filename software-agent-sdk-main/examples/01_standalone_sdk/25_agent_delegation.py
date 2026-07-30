@@ -9,7 +9,7 @@ which then merges both analyses into a single consolidated report.
 
 import os
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     AgentContext,
@@ -17,11 +17,11 @@ from openhands.sdk import (
     Tool,
     get_logger,
 )
-from openhands.sdk.context import Skill
-from openhands.sdk.subagent import register_agent
-from openhands.tools import register_builtins_agents
-from openhands.tools.delegate import DelegationVisualizer
-from openhands.tools.task import TaskToolSet
+from madagascar.sdk.context import Skill
+from madagascar.sdk.subagent import register_agent
+from madagascar.tools import register_builtins_agents
+from madagascar.tools.delegate import DelegationVisualizer
+from madagascar.tools.task import TaskToolSet
 
 
 logger = get_logger(__name__)

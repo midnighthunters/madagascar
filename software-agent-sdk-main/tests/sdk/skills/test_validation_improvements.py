@@ -1,7 +1,7 @@
 """Tests for skill validation improvements."""
 
-from openhands.sdk.skills import Skill
-from openhands.sdk.utils import DEFAULT_TRUNCATE_NOTICE
+from madagascar.sdk.skills import Skill
+from madagascar.sdk.utils import DEFAULT_TRUNCATE_NOTICE
 
 
 MAX_DESCRIPTION_LENGTH = 1024

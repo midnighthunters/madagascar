@@ -9,7 +9,7 @@ from integrations.azure_devops.azure_devops_view import (
     AzureDevOpsPRComment,
     AzureDevOpsViewType,
     actor_email,
-    mark_openhands_comment,
+    mark_madagascar_comment,
 )
 from integrations.manager import Manager
 from integrations.models import Message, SourceType
@@ -17,7 +17,7 @@ from integrations.types import ResolverViewInterface
 from integrations.utils import (
     CONVERSATION_URL,
     HOST_URL,
-    OPENHANDS_RESOLVER_TEMPLATES_DIR,
+    MADAGASCAR_RESOLVER_TEMPLATES_DIR,
     get_session_expired_message,
 )
 from integrations.v1_utils import get_saas_user_auth
@@ -25,24 +25,24 @@ from jinja2 import Environment, FileSystemLoader
 from pydantic import SecretStr
 from server.auth.token_manager import TokenManager
 
-from openhands.app_server.integrations.azure_devops.azure_devops_service import (
+from madagascar.app_server.integrations.azure_devops.azure_devops_service import (
     AzureDevOpsServiceImpl,
 )
-from openhands.app_server.integrations.provider import ProviderToken, ProviderType
-from openhands.app_server.secrets.secrets_models import Secrets
-from openhands.app_server.types import (
+from madagascar.app_server.integrations.provider import ProviderToken, ProviderType
+from madagascar.app_server.secrets.secrets_models import Secrets
+from madagascar.app_server.types import (
     LLMAuthenticationError,
     MissingSettingsError,
     SessionExpiredError,
 )
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 
 class AzureDevOpsManager(Manager[AzureDevOpsViewType]):
     def __init__(self, token_manager: TokenManager, data_collector: None = None):
         self.token_manager = token_manager
         self.jinja_env = Environment(
-            loader=FileSystemLoader(OPENHANDS_RESOLVER_TEMPLATES_DIR + 'azure_devops')
+            loader=FileSystemLoader(MADAGASCAR_RESOLVER_TEMPLATES_DIR + 'azure_devops')
         )
 
     def _confirm_incoming_source_type(self, message: Message) -> None:
@@ -92,7 +92,7 @@ class AzureDevOpsManager(Manager[AzureDevOpsViewType]):
         if not keycloak_user_id:
             logger.info(
                 f'[Azure DevOps] Mentioner {actor.get("displayName") or actor.get("uniqueName") or "unknown"} '
-                'has no OpenHands account; ignoring event.'
+                'has no Madagascar account; ignoring event.'
             )
             return
 
@@ -128,7 +128,7 @@ class AzureDevOpsManager(Manager[AzureDevOpsViewType]):
     async def send_message(
         self, message: str, azure_view: ResolverViewInterface
     ) -> None:
-        message = mark_openhands_comment(message)
+        message = mark_madagascar_comment(message)
         azure_service = AzureDevOpsServiceImpl(
             external_auth_id=azure_view.user_info.keycloak_user_id
         )
@@ -210,7 +210,7 @@ class AzureDevOpsManager(Manager[AzureDevOpsViewType]):
                 )
                 msg_info = (
                     f'@{azure_view.user_info.username} please re-login into '
-                    f'[OpenHands Cloud]({HOST_URL}) before starting a job.'
+                    f'[Madagascar Cloud]({HOST_URL}) before starting a job.'
                 )
             except LLMAuthenticationError as e:
                 logger.warning(
@@ -219,7 +219,7 @@ class AzureDevOpsManager(Manager[AzureDevOpsViewType]):
                 )
                 msg_info = (
                     f'@{azure_view.user_info.username} please set a valid LLM API key '
-                    f'in [OpenHands Cloud]({HOST_URL}) before starting a job.'
+                    f'in [Madagascar Cloud]({HOST_URL}) before starting a job.'
                 )
             except SessionExpiredError as e:
                 logger.warning(

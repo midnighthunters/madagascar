@@ -16,7 +16,7 @@ from server.routes.integration.bitbucket_dc import (
     update_bitbucket_dc_webhook_id,
 )
 
-from openhands.app_server.integrations.service_types import ProviderType, Repository
+from madagascar.app_server.integrations.service_types import ProviderType, Repository
 
 
 def _signed(body: bytes, secret: str = 'shared-secret') -> str:
@@ -41,7 +41,7 @@ def _pr_comment_body() -> bytes:
                     }
                 },
             },
-            'comment': {'id': 99, 'text': 'Hey @openhands'},
+            'comment': {'id': 99, 'text': 'Hey @madagascar'},
         }
     ).encode()
 
@@ -141,7 +141,7 @@ async def test_connection_event_uses_connection_repository_when_payload_identity
     body = json.dumps(
         {
             'pullRequest': {'id': 1},
-            'comment': {'id': 99, 'text': 'Hey @openhands'},
+            'comment': {'id': 99, 'text': 'Hey @madagascar'},
         }
     ).encode()
 

@@ -16,19 +16,19 @@ from integrations.slack.slack_v1_callback_processor import (
     SlackV1CallbackProcessor,
 )
 
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.app_server.app_conversation.app_conversation_models import (
     AppConversationInfo,
 )
-from openhands.app_server.event_callback.event_callback_models import EventCallback
-from openhands.app_server.event_callback.event_callback_result_models import (
+from madagascar.app_server.event_callback.event_callback_models import EventCallback
+from madagascar.app_server.event_callback.event_callback_result_models import (
     EventCallbackResultStatus,
 )
-from openhands.app_server.sandbox.sandbox_models import (
+from madagascar.app_server.sandbox.sandbox_models import (
     ExposedUrl,
     SandboxInfo,
     SandboxStatus,
 )
-from openhands.sdk.event import ConversationStateUpdateEvent
+from madagascar.sdk.event import ConversationStateUpdateEvent
 
 
 def _create_mock_event():
@@ -198,9 +198,9 @@ class TestSlackV1CallbackProcessor:
     # -------------------------------------------------------------------------
 
     @patch('storage.slack_team_store.SlackTeamStore.get_instance')
-    @patch('openhands.app_server.config.get_httpx_client')
-    @patch('openhands.app_server.config.get_sandbox_service')
-    @patch('openhands.app_server.config.get_app_conversation_info_service')
+    @patch('madagascar.app_server.config.get_httpx_client')
+    @patch('madagascar.app_server.config.get_sandbox_service')
+    @patch('madagascar.app_server.config.get_app_conversation_info_service')
     @patch('integrations.slack.slack_v1_callback_processor.WebClient')
     async def test_successful_end_to_end_flow(
         self,
@@ -383,9 +383,9 @@ class TestSlackV1CallbackProcessor:
         ],
     )
     @patch('storage.slack_team_store.SlackTeamStore.get_instance')
-    @patch('openhands.app_server.config.get_httpx_client')
-    @patch('openhands.app_server.config.get_sandbox_service')
-    @patch('openhands.app_server.config.get_app_conversation_info_service')
+    @patch('madagascar.app_server.config.get_httpx_client')
+    @patch('madagascar.app_server.config.get_sandbox_service')
+    @patch('madagascar.app_server.config.get_app_conversation_info_service')
     async def test_agent_server_error_scenarios(
         self,
         mock_get_app_conversation_info_service,
@@ -439,9 +439,9 @@ class TestSlackV1CallbackProcessor:
         assert expected_error_fragment in result.detail
 
     @patch('storage.slack_team_store.SlackTeamStore.get_instance')
-    @patch('openhands.app_server.config.get_httpx_client')
-    @patch('openhands.app_server.config.get_sandbox_service')
-    @patch('openhands.app_server.config.get_app_conversation_info_service')
+    @patch('madagascar.app_server.config.get_httpx_client')
+    @patch('madagascar.app_server.config.get_sandbox_service')
+    @patch('madagascar.app_server.config.get_app_conversation_info_service')
     @patch('integrations.slack.slack_v1_callback_processor._logger')
     @patch('integrations.slack.slack_v1_callback_processor.WebClient')
     async def test_budget_exceeded_error_logs_info_and_sends_friendly_message(
@@ -514,7 +514,7 @@ class TestSlackV1CallbackProcessor:
         mock_slack_client.chat_postMessage.assert_called_once()
         call_kwargs = mock_slack_client.chat_postMessage.call_args[1]
         posted_message = call_kwargs.get('markdown_text', '')
-        assert 'OpenHands encountered an error' in posted_message
+        assert 'Madagascar encountered an error' in posted_message
         assert 'LLM budget has been exceeded' in posted_message
         assert 'please re-fill' in posted_message
         # Should NOT contain the raw error message

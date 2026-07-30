@@ -7,8 +7,8 @@ from pathlib import Path
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk.llm import LLM, LLM_PROFILE_SCHEMA_VERSION
-from openhands.sdk.llm.llm_profile_store import (
+from madagascar.sdk.llm import LLM, LLM_PROFILE_SCHEMA_VERSION
+from madagascar.sdk.llm.llm_profile_store import (
     LLMProfileStore,
     ProfileLimitExceeded,
 )
@@ -146,7 +146,7 @@ def test_load_rejects_newer_profile_schema_version(
         profile_store.load("future")
 
 
-def test_load_migrates_legacy_openhands_proxy_profile(
+def test_load_migrates_legacy_madagascar_proxy_profile(
     profile_store: LLMProfileStore,
 ) -> None:
     profile_path = profile_store.base_dir / "legacy.json"
@@ -162,11 +162,11 @@ def test_load_migrates_legacy_openhands_proxy_profile(
 
     loaded = profile_store.load("legacy")
 
-    assert loaded.model == "openhands/claude-opus-4-8"
+    assert loaded.model == "madagascar/claude-opus-4-8"
     assert loaded.base_url is None
 
 
-def test_list_summaries_migrates_legacy_openhands_proxy_profile(
+def test_list_summaries_migrates_legacy_madagascar_proxy_profile(
     profile_store: LLMProfileStore,
 ) -> None:
     profile_path = profile_store.base_dir / "legacy.json"
@@ -185,7 +185,7 @@ def test_list_summaries_migrates_legacy_openhands_proxy_profile(
     assert summaries == [
         {
             "name": "legacy",
-            "model": "openhands/claude-opus-4-8",
+            "model": "madagascar/claude-opus-4-8",
             "base_url": None,
             "api_key_set": False,
         }

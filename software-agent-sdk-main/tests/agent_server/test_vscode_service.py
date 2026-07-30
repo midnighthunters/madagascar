@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from openhands.agent_server.vscode_service import (
+from madagascar.agent_server.vscode_service import (
     VSCodeService,
     get_vscode_service,
 )
@@ -22,7 +22,7 @@ def vscode_service(tmp_path):
 @pytest.fixture
 def mock_openvscode_binary(tmp_path):
     """Create a mock VSCode binary for testing."""
-    openvscode_root = tmp_path / "openhands" / ".openvscode-server"
+    openvscode_root = tmp_path / "madagascar" / ".openvscode-server"
     openvscode_root.mkdir(parents=True)
 
     bin_dir = openvscode_root / "bin"
@@ -332,8 +332,8 @@ async def test_wait_for_startup_timeout(vscode_service):
 def test_get_vscode_service_enabled(tmp_path):
     """Test get_vscode_service returns VSCodeService when enabled."""
     with (
-        patch("openhands.agent_server.config.get_default_config") as mock_config,
-        patch("openhands.agent_server.vscode_service._vscode_service", None),
+        patch("madagascar.agent_server.config.get_default_config") as mock_config,
+        patch("madagascar.agent_server.vscode_service._vscode_service", None),
     ):
         mock_config.return_value.enable_vscode = True
         mock_config.return_value.vscode_port = 8001
@@ -348,8 +348,8 @@ def test_get_vscode_service_enabled(tmp_path):
 def test_get_vscode_service_disabled():
     """Test get_vscode_service returns None when disabled."""
     with (
-        patch("openhands.agent_server.config.get_default_config") as mock_config,
-        patch("openhands.agent_server.vscode_service._vscode_service", None),
+        patch("madagascar.agent_server.config.get_default_config") as mock_config,
+        patch("madagascar.agent_server.vscode_service._vscode_service", None),
     ):
         mock_config.return_value.enable_vscode = False
 
@@ -361,8 +361,8 @@ def test_get_vscode_service_disabled():
 def test_get_vscode_service_singleton():
     """Test get_vscode_service returns the same instance on multiple calls."""
     with (
-        patch("openhands.agent_server.config.get_default_config") as mock_config,
-        patch("openhands.agent_server.vscode_service._vscode_service", None),
+        patch("madagascar.agent_server.config.get_default_config") as mock_config,
+        patch("madagascar.agent_server.vscode_service._vscode_service", None),
     ):
         mock_config.return_value.enable_vscode = True
         mock_config.return_value.vscode_port = 8001
@@ -379,8 +379,8 @@ def test_get_vscode_service_singleton():
 def test_get_vscode_service_with_custom_port():
     """Test get_vscode_service uses the configured port."""
     with (
-        patch("openhands.agent_server.config.get_default_config") as mock_config,
-        patch("openhands.agent_server.vscode_service._vscode_service", None),
+        patch("madagascar.agent_server.config.get_default_config") as mock_config,
+        patch("madagascar.agent_server.vscode_service._vscode_service", None),
     ):
         mock_config.return_value.enable_vscode = True
         mock_config.return_value.vscode_port = 9001
@@ -396,8 +396,8 @@ def test_get_vscode_service_with_custom_port():
 def test_get_vscode_service_with_base_path():
     """Test get_vscode_service passes vscode_base_path from config."""
     with (
-        patch("openhands.agent_server.config.get_default_config") as mock_config,
-        patch("openhands.agent_server.vscode_service._vscode_service", None),
+        patch("madagascar.agent_server.config.get_default_config") as mock_config,
+        patch("madagascar.agent_server.vscode_service._vscode_service", None),
     ):
         mock_config.return_value.enable_vscode = True
         mock_config.return_value.vscode_port = 8001
@@ -423,7 +423,7 @@ def test_vscode_port_configuration():
     """Test that vscode_port configuration is properly used."""
     import os
 
-    from openhands.agent_server.config import Config, from_env
+    from madagascar.agent_server.config import Config, from_env
 
     # Test default value
     config = Config()
@@ -439,7 +439,7 @@ def test_vscode_base_path_configuration():
     """Test that vscode_base_path configuration is properly used."""
     import os
 
-    from openhands.agent_server.config import Config, from_env
+    from madagascar.agent_server.config import Config, from_env
 
     # Test default value is None
     config = Config()

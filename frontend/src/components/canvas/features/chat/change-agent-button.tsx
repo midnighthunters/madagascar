@@ -38,7 +38,7 @@ export function ChangeAgentButton() {
 
   const { curAgentState } = useAgentState();
 
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const isAgentRunning = curAgentState === AgentState.RUNNING;
 

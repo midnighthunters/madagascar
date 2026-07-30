@@ -62,7 +62,7 @@ export function ChatInputActions({
   buttonClassName = "",
   handleSubmit = () => {},
 }: ChatInputActionsProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const unifiedPauseMutation = useUnifiedPauseConversation();
   const pauseConversationMutation = usePauseConversation();
   const resumeConversationMutation = useResumeConversation();
@@ -71,7 +71,7 @@ export function ChatInputActions({
   const isCloud = backend.kind === "cloud";
   const modelState = useChatInputModelState();
   // The home page defaults to the AgentProfile picker (#3727) on both local and
-  // cloud (cloud gained the /api/agent-profiles surface in OpenHands #15060). A
+  // cloud (cloud gained the /api/agent-profiles surface in Madagascar #15060). A
   // backend without that surface returns none — fall back so the composer still
   // shows a model affordance instead of nothing (#1571). Only fetched on home.
   const homeAgentProfiles = useAgentProfiles({
@@ -80,7 +80,7 @@ export function ChatInputActions({
   const agentProfilesUnavailableOnHome =
     homeAgentProfiles.isFetched &&
     (homeAgentProfiles.data?.profiles?.length ?? 0) === 0;
-  // Code/Plan mode switching is a cloud OpenHands feature — it doesn't apply
+  // Code/Plan mode switching is a cloud Madagascar feature — it doesn't apply
   // to ACP conversations (which have no "plan" mode), so hide it when ACP.
   const showChangeAgentButton = isCloud && !modelState.isAcpContext;
   const webSocketStatus = useUnifiedWebSocketStatus();

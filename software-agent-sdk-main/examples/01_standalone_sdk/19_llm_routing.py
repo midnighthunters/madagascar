@@ -2,7 +2,7 @@ import os
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
@@ -13,8 +13,8 @@ from openhands.sdk import (
     TextContent,
     get_logger,
 )
-from openhands.sdk.llm.router import MultimodalRouter
-from openhands.tools.preset.default import get_default_tools
+from madagascar.sdk.llm.router import MultimodalRouter
+from madagascar.tools.preset.default import get_default_tools
 
 
 logger = get_logger(__name__)
@@ -44,7 +44,7 @@ multimodal_router = MultimodalRouter(
 )
 
 # Tools
-tools = get_default_tools()  # Use our default openhands experience
+tools = get_default_tools()  # Use our default madagascar experience
 
 # Agent
 agent = Agent(llm=multimodal_router, tools=tools)

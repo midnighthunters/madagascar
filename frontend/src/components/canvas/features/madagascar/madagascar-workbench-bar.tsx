@@ -1,4 +1,4 @@
-/* eslint-disable i18next/no-literal-string -- Madagascar desktop labels are outside the legacy OpenHands translation catalog. */
+/* eslint-disable i18next/no-literal-string -- Madagascar desktop labels are outside the legacy Madagascar translation catalog. */
 import {
   type FormEvent,
   useCallback,

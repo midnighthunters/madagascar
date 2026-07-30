@@ -2,11 +2,11 @@
 
 from typing import cast
 
-from openhands.sdk.event.base import Event
-from openhands.sdk.event.llm_convertible.action import ActionEvent
-from openhands.sdk.llm import MessageToolCall, TextContent
-from openhands.tools.file_editor.definition import CommandLiteral, FileEditorAction
-from openhands.tools.terminal.definition import TerminalAction
+from madagascar.sdk.event.base import Event
+from madagascar.sdk.event.llm_convertible.action import ActionEvent
+from madagascar.sdk.llm import MessageToolCall, TextContent
+from madagascar.tools.file_editor.definition import CommandLiteral, FileEditorAction
+from madagascar.tools.terminal.definition import TerminalAction
 from tests.integration.early_stopper import (
     BashCommandPruner,
     CompositeEarlyStopper,

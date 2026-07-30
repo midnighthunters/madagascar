@@ -6,7 +6,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from openhands.agent_server.desktop_service import DesktopService, get_desktop_service
+from madagascar.agent_server.desktop_service import DesktopService, get_desktop_service
 
 
 class TestDesktopService:
@@ -400,9 +400,9 @@ class TestGetDesktopService:
 
     def setup_method(self):
         """Reset global state before each test."""
-        import openhands.agent_server.desktop_service
+        import madagascar.agent_server.desktop_service
 
-        openhands.agent_server.desktop_service._desktop_service = None
+        madagascar.agent_server.desktop_service._desktop_service = None
 
     def test_get_desktop_service_vnc_enabled(self):
         """Test getting desktop service when VNC is enabled."""
@@ -410,7 +410,7 @@ class TestGetDesktopService:
         mock_config.enable_vnc = True
 
         with patch(
-            "openhands.agent_server.desktop_service.get_default_config",
+            "madagascar.agent_server.desktop_service.get_default_config",
             return_value=mock_config,
         ):
             service = get_desktop_service()
@@ -423,7 +423,7 @@ class TestGetDesktopService:
         mock_config.enable_vnc = False
 
         with patch(
-            "openhands.agent_server.desktop_service.get_default_config",
+            "madagascar.agent_server.desktop_service.get_default_config",
             return_value=mock_config,
         ):
             service = get_desktop_service()
@@ -435,7 +435,7 @@ class TestGetDesktopService:
         mock_config.enable_vnc = True
 
         with patch(
-            "openhands.agent_server.desktop_service.get_default_config",
+            "madagascar.agent_server.desktop_service.get_default_config",
             return_value=mock_config,
         ):
             service1 = get_desktop_service()
@@ -448,7 +448,7 @@ class TestGetDesktopService:
         mock_config.enable_vnc = True
 
         with patch(
-            "openhands.agent_server.desktop_service.get_default_config",
+            "madagascar.agent_server.desktop_service.get_default_config",
             return_value=mock_config,
         ):
             service = get_desktop_service()

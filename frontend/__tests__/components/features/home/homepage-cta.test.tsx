@@ -11,9 +11,9 @@ vi.mock("react-i18next", async () => {
     useTranslation: () => ({
       t: (key: string) => {
         const translations: Record<string, string> = {
-          "CTA$ENTERPRISE_TITLE": "Get OpenHands for Enterprise",
+          "CTA$ENTERPRISE_TITLE": "Get Madagascar for Enterprise",
           "CTA$ENTERPRISE_DESCRIPTION":
-            "Cloud allows you to access OpenHands anywhere and coordinate with your team like never before",
+            "Cloud allows you to access Madagascar anywhere and coordinate with your team like never before",
           "CTA$LEARN_MORE": "Learn More",
         };
         return translations[key] || key;
@@ -52,14 +52,14 @@ describe("HomepageCTA", () => {
     it("renders the enterprise title", () => {
       renderHomepageCTA();
       expect(
-        screen.getByText("Get OpenHands for Enterprise"),
+        screen.getByText("Get Madagascar for Enterprise"),
       ).toBeInTheDocument();
     });
 
     it("renders the enterprise description", () => {
       renderHomepageCTA();
       expect(
-        screen.getByText(/Cloud allows you to access OpenHands anywhere/),
+        screen.getByText(/Cloud allows you to access Madagascar anywhere/),
       ).toBeInTheDocument();
     });
 
@@ -123,7 +123,7 @@ describe("HomepageCTA", () => {
       const learnMoreLink = screen.getByRole("link", { name: "Learn More" });
       expect(learnMoreLink).toHaveAttribute(
         "href",
-        "https://openhands.dev/enterprise/",
+        "https://madagascar.dev/enterprise/",
       );
       expect(learnMoreLink).toHaveAttribute("target", "_blank");
       expect(learnMoreLink).toHaveAttribute("rel", "noopener noreferrer");

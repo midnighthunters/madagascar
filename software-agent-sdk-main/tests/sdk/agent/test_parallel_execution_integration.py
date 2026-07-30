@@ -13,19 +13,19 @@ from typing import TYPE_CHECKING, Self
 import pytest
 from pydantic import Field, ValidationError
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation import Conversation
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.event import ActionEvent, AgentErrorEvent, ObservationEvent
-from openhands.sdk.llm import Message, MessageToolCall, TextContent
-from openhands.sdk.testing import TestLLM
-from openhands.sdk.tool import Action, Observation, Tool, ToolExecutor, register_tool
-from openhands.sdk.tool.tool import DeclaredResources, ToolDefinition
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation import Conversation
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.event import ActionEvent, AgentErrorEvent, ObservationEvent
+from madagascar.sdk.llm import Message, MessageToolCall, TextContent
+from madagascar.sdk.testing import TestLLM
+from madagascar.sdk.tool import Action, Observation, Tool, ToolExecutor, register_tool
+from madagascar.sdk.tool.tool import DeclaredResources, ToolDefinition
 
 
 if TYPE_CHECKING:
-    from openhands.sdk.conversation.base import BaseConversation
-    from openhands.sdk.conversation.state import ConversationState
+    from madagascar.sdk.conversation.base import BaseConversation
+    from madagascar.sdk.conversation.state import ConversationState
 
 
 # --- Test tools ---

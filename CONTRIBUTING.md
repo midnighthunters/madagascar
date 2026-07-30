@@ -1,10 +1,10 @@
 # Contributing
 
-Thanks for your interest in contributing to OpenHands! We're building the future of AI-powered software development, and we'd love for you to be part of this journey.
+Thanks for your interest in contributing to Madagascar! We're building the future of AI-powered software development, and we'd love for you to be part of this journey.
 
 ## Our Vision
 
-The OpenHands community is built around the belief that AI and AI agents are going to fundamentally change the way we build software. If this is true, we should do everything we can to make sure that the benefits provided by such powerful technology are accessible to everyone.
+The Madagascar community is built around the belief that AI and AI agents are going to fundamentally change the way we build software. If this is true, we should do everything we can to make sure that the benefits provided by such powerful technology are accessible to everyone.
 
 We believe in the power of open source to democratize access to cutting-edge AI technology. Just as the internet transformed how we share information, we envision a world where AI-powered development tools are available to every developer, regardless of their background or resources.
 
@@ -12,10 +12,10 @@ We believe in the power of open source to democratize access to cutting-edge AI 
 
 ### Quick Ways to Contribute
 
-- **Use OpenHands** and [report issues](https://github.com/OpenHands/OpenHands/issues) you encounter
+- **Use Madagascar** and [report issues](https://github.com/Madagascar/Madagascar/issues) you encounter
 - **Give feedback** using the thumbs-up/thumbs-down buttons after each session
-- **Star our repository** on [GitHub](https://github.com/OpenHands/OpenHands)
-- **Share OpenHands** with other developers
+- **Star our repository** on [GitHub](https://github.com/Madagascar/Madagascar)
+- **Share Madagascar** with other developers
 
 ### Set Up Your Development Environment
 
@@ -28,15 +28,15 @@ Full details in our [Development Guide](./Development.md).
 
 ### Find Your First Issue
 
-- Browse [good first issues](https://github.com/OpenHands/OpenHands/labels/good%20first%20issue)
-- Check our [project boards](https://github.com/OpenHands/OpenHands/projects) for organized tasks
-- Join our [Slack community](https://openhands.dev/joinslack) to ask what needs help
+- Browse [good first issues](https://github.com/Madagascar/Madagascar/labels/good%20first%20issue)
+- Check our [project boards](https://github.com/Madagascar/Madagascar/projects) for organized tasks
+- Join our [Slack community](https://madagascar.dev/joinslack) to ask what needs help
 
 ## Understanding the Codebase
 
 - **[Frontend](./frontend/README.md)** - React application
-- **[App Server (V1)](./openhands/app_server/README.md)** - Current FastAPI application server and REST API modules
-- **[Evaluation](https://github.com/OpenHands/benchmarks)** - Testing and benchmarks
+- **[App Server (V1)](./madagascar/app_server/README.md)** - Current FastAPI application server and REST API modules
+- **[Evaluation](https://github.com/Madagascar/benchmarks)** - Testing and benchmarks
 
 ## What Can You Build?
 
@@ -46,7 +46,7 @@ Full details in our [Development Guide](./Development.md).
 - Mobile responsiveness
 - Component libraries
 
-For bigger changes, join the #proj-gui channel in [Slack](https://openhands.dev/joinslack) first.
+For bigger changes, join the #proj-gui channel in [Slack](https://madagascar.dev/joinslack) first.
 
 ### Agent Development
 - Prompt engineering
@@ -86,14 +86,14 @@ These are evaluated based on:
 - **Efficiency** - Does it improve speed or reduce resource usage?
 - **Code Quality** - Is the code maintainable and well-tested?
 
-Discuss major changes in [GitHub issues](https://github.com/OpenHands/OpenHands/issues) or [Slack](https://openhands.dev/joinslack) first.
+Discuss major changes in [GitHub issues](https://github.com/Madagascar/Madagascar/issues) or [Slack](https://madagascar.dev/joinslack) first.
 
-## Sending Pull Requests to OpenHands
+## Sending Pull Requests to Madagascar
 
 You'll need to fork our repository to send us a Pull Request. You can learn more
 about how to fork a GitHub repo and open a PR with your changes in [this article](https://medium.com/swlh/forks-and-pull-requests-how-to-contribute-to-github-repos-8843fac34ce8).
 
-You may also check out previous PRs in the [PR list](https://github.com/OpenHands/OpenHands/pulls).
+You may also check out previous PRs in the [PR list](https://github.com/Madagascar/Madagascar/pulls).
 
 ### Pull Request Title Format
 
@@ -136,6 +136,6 @@ Note that just making many PRs does not immediately imply that you will become a
 
 ## Need Help?
 
-- **Slack**: [Join our community](https://openhands.dev/joinslack)
-- **GitHub Issues**: [Open an issue](https://github.com/OpenHands/OpenHands/issues)
-- **Email**: contact@openhands.dev
+- **Slack**: [Join our community](https://madagascar.dev/joinslack)
+- **GitHub Issues**: [Open an issue](https://github.com/Madagascar/Madagascar/issues)
+- **Email**: contact@madagascar.dev

@@ -25,16 +25,16 @@ from server.constants import (
     get_default_litellm_model,
 )
 
-from openhands.app_server.config_api.default_llm_model_service import (
+from madagascar.app_server.config_api.default_llm_model_service import (
     DefaultLLMModelService,
 )
-from openhands.app_server.config_api.llm_model_service import (
+from madagascar.app_server.config_api.llm_model_service import (
     LLMModelService,
     LLMModelServiceInjector,
 )
-from openhands.app_server.services.injector import InjectorState
-from openhands.app_server.utils.http_session import httpx_verify_option
-from openhands.app_server.utils.llm import ModelsResponse, get_supported_llm_models
+from madagascar.app_server.services.injector import InjectorState
+from madagascar.app_server.utils.http_session import httpx_verify_option
+from madagascar.app_server.utils.llm import ModelsResponse, get_supported_llm_models
 
 _logger = logging.getLogger(__name__)
 
@@ -46,23 +46,23 @@ CACHE_TTL_SECONDS = 60.0
 # The proxy-transport prefix used by LITELLM_DEFAULT_MODEL.
 _LITELLM_PROXY_PREFIX = 'litellm_proxy/'
 # The public/stored prefix used by the app. The SDK translates
-# ``openhands/`` -> ``litellm_proxy/`` at the transport boundary.
-_OPENHANDS_PREFIX = 'openhands/'
+# ``madagascar/`` -> ``litellm_proxy/`` at the transport boundary.
+_MADAGASCAR_PREFIX = 'madagascar/'
 
 
 def _derive_default_model() -> str:
     """Translate the env-derived default model to the public prefix.
 
     ``LITELLM_DEFAULT_MODEL`` holds the default as ``litellm_proxy/<name>``;
-    the app stores and displays models as ``openhands/<name>``. An already-
-    ``openhands/``-prefixed default is kept as-is; a bare name is prefixed.
+    the app stores and displays models as ``madagascar/<name>``. An already-
+    ``madagascar/``-prefixed default is kept as-is; a bare name is prefixed.
     """
     default = get_default_litellm_model()
     if default.startswith(_LITELLM_PROXY_PREFIX):
-        return _OPENHANDS_PREFIX + default[len(_LITELLM_PROXY_PREFIX) :]
-    if default.startswith(_OPENHANDS_PREFIX):
+        return _MADAGASCAR_PREFIX + default[len(_LITELLM_PROXY_PREFIX) :]
+    if default.startswith(_MADAGASCAR_PREFIX):
         return default
-    return _OPENHANDS_PREFIX + default
+    return _MADAGASCAR_PREFIX + default
 
 
 class LiteLLMProxyModelService(DefaultLLMModelService):
@@ -99,11 +99,11 @@ class LiteLLMProxyModelService(DefaultLLMModelService):
     ) -> tuple[list[str], list[str], dict[str, str]]:
         """Fetch ``(visible, hidden, canonicals)`` model names from the proxy.
 
-        Entries flagged ``model_info.openhands_hidden`` (legacy alias routes
+        Entries flagged ``model_info.madagascar_hidden`` (legacy alias routes
         the proxy still serves after a rename) are collected separately: they
         must not be offered as dropdown options, but a saved setting that
         references one is still valid. A hidden entry may carry
-        ``model_info.openhands_canonical`` naming the visible route it
+        ``model_info.madagascar_canonical`` naming the visible route it
         aliases; ``canonicals`` maps hidden name -> canonical name, dropping
         mappings whose target is not among the visible names. A duplicated
         ``model_name`` is an intentional load-balanced deployment — it is
@@ -133,10 +133,10 @@ class LiteLLMProxyModelService(DefaultLLMModelService):
                 continue
             model_info: Any = entry.get('model_info') or {}
             hidden = isinstance(model_info, dict) and bool(
-                model_info.get('openhands_hidden')
+                model_info.get('madagascar_hidden')
             )
             if hidden and name not in canonical_by_name:
-                canonical = model_info.get('openhands_canonical')
+                canonical = model_info.get('madagascar_canonical')
                 if canonical and isinstance(canonical, str):
                     canonical_by_name[name] = canonical
             if name not in hidden_by_name:
@@ -162,15 +162,15 @@ class LiteLLMProxyModelService(DefaultLLMModelService):
         hidden_model_canonicals: dict[str, str] | None = None,
     ) -> ModelsResponse:
         return ModelsResponse(
-            models=[_OPENHANDS_PREFIX + name for name in model_names],
+            models=[_MADAGASCAR_PREFIX + name for name in model_names],
             verified_models=list(model_names),
-            verified_providers=['openhands'],
+            verified_providers=['madagascar'],
             default_model=_derive_default_model(),
             hidden_models=[
-                _OPENHANDS_PREFIX + name for name in hidden_model_names or []
+                _MADAGASCAR_PREFIX + name for name in hidden_model_names or []
             ],
             hidden_model_canonicals={
-                _OPENHANDS_PREFIX + alias: _OPENHANDS_PREFIX + canonical
+                _MADAGASCAR_PREFIX + alias: _MADAGASCAR_PREFIX + canonical
                 for alias, canonical in (hidden_model_canonicals or {}).items()
             },
         )
@@ -178,7 +178,7 @@ class LiteLLMProxyModelService(DefaultLLMModelService):
     async def _byok_enabled(self) -> bool:
         """Whether BYOK is on. Read from the resolved web-client config so
         discovery and the UI gate agree on the same value."""
-        from openhands.app_server.config import get_global_config
+        from madagascar.app_server.config import get_global_config
 
         config = await get_global_config().web_client.get_web_client_config()
         return config.feature_flags.allow_user_llm_configuration
@@ -197,7 +197,7 @@ class LiteLLMProxyModelService(DefaultLLMModelService):
         extra = [
             m
             for m in catalogue.models
-            if not m.startswith(_OPENHANDS_PREFIX) and m not in proxy_models
+            if not m.startswith(_MADAGASCAR_PREFIX) and m not in proxy_models
         ]
         return ModelsResponse(
             models=proxy_response.models + extra,
@@ -212,10 +212,10 @@ class LiteLLMProxyModelService(DefaultLLMModelService):
         self, model_name: str, name: str, models_response: ModelsResponse
     ) -> bool:
         # Managed proxy models are verified; the unioned SDK catalogue (BYOK)
-        # is not. Require the openhands/ prefix so a catalogue model whose bare
+        # is not. Require the madagascar/ prefix so a catalogue model whose bare
         # name collides with a proxy one (openai/gpt-5 vs proxy gpt-5) isn't
         # falsely verified.
-        return model_name.startswith(_OPENHANDS_PREFIX) and name in set(
+        return model_name.startswith(_MADAGASCAR_PREFIX) and name in set(
             models_response.verified_models
         )
 

@@ -16,7 +16,7 @@ from storage.linear_conversation import LinearConversation
 from storage.linear_user import LinearUser
 from storage.linear_workspace import LinearWorkspace
 from storage.maintenance_task import MaintenanceTask, MaintenanceTaskStatus
-from storage.openhands_pr import OpenhandsPR
+from storage.madagascar_pr import MadagascarPR
 from storage.org import Org
 from storage.org_budget_settings import OrgBudgetSettings
 from storage.org_budget_threshold import OrgBudgetThreshold
@@ -65,7 +65,7 @@ __all__ = [
     'LinearWorkspace',
     'MaintenanceTask',
     'MaintenanceTaskStatus',
-    'OpenhandsPR',
+    'MadagascarPR',
     'Org',
     'OrgBudgetSettings',
     'OrgBudgetThreshold',

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSettings } from "#/hooks/query/use-settings";
 import { SETTINGS_QUERY_KEYS } from "#/hooks/query/query-keys";
-import { openHands } from "#/api/open-hands-axios";
+import { madagascar } from "#/api/madagascar-axios";
 import { displaySuccessToast } from "#/utils/custom-toast-handlers";
 import { useEmailVerification } from "#/hooks/use-email-verification";
 import { useSelectedOrganizationId } from "#/context/use-selected-organization";
@@ -179,7 +179,7 @@ function UserSettingsScreen() {
     if (email === originalEmail || !isEmailValid) return;
     try {
       setIsSaving(true);
-      await openHands.post("/api/email", { email }, { withCredentials: true });
+      await madagascar.post("/api/email", { email }, { withCredentials: true });
       setOriginalEmail(email);
       // Display toast notification instead of setting state
       displaySuccessToast(t("SETTINGS$EMAIL_SAVED_SUCCESSFULLY"));

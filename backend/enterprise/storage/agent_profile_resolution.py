@@ -3,7 +3,7 @@
 The thin glue (#15044) that lets the SDK profile substrate
 (``resolve_agent_profile`` / ``find_referrers`` / ``cascade_rename``) operate
 over the SaaS storage model. Everything domain-level is imported from
-``openhands.sdk.profiles``; this module only adapts the ``org.agent_profiles`` /
+``madagascar.sdk.profiles``; this module only adapts the ``org.agent_profiles`` /
 ``org.llm_profiles`` columns to the SDK's store/loader/mutator Protocols.
 
 Used by the ``/api/agent-profiles`` router, the LLM-profile FK guard in
@@ -16,17 +16,17 @@ from typing import TYPE_CHECKING
 
 from pydantic import ValidationError
 
-from openhands.app_server.settings.agent_profiles import AgentProfiles
-from openhands.app_server.settings.llm_profiles import LLMProfiles
-from openhands.app_server.utils.logger import openhands_logger as logger
-from openhands.sdk.mcp.config import MCPServer, coerce_mcp_config
+from madagascar.app_server.settings.agent_profiles import AgentProfiles
+from madagascar.app_server.settings.llm_profiles import LLMProfiles
+from madagascar.app_server.utils.logger import madagascar_logger as logger
+from madagascar.sdk.mcp.config import MCPServer, coerce_mcp_config
 
 if TYPE_CHECKING:
     from storage.org import Org
     from storage.org_member import OrgMember
 
-    from openhands.sdk.llm import LLM
-    from openhands.sdk.utils.cipher import Cipher
+    from madagascar.sdk.llm import LLM
+    from madagascar.sdk.utils.cipher import Cipher
 
 
 def load_agent_profiles(org: Org) -> AgentProfiles:

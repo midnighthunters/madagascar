@@ -2,7 +2,7 @@
 Example demonstrating that user messages can be sent and processed while
 an agent is busy.
 
-This example demonstrates a key capability of the OpenHands agent system: the ability
+This example demonstrates a key capability of the Madagascar agent system: the ability
 to receive and process new user messages even while the agent is actively working on
 a previous task. This is made possible by the agent's event-driven architecture.
 
@@ -45,14 +45,14 @@ from datetime import datetime
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
 )
-from openhands.sdk.tool import Tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.tool import Tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 
 
 # Configure LLM

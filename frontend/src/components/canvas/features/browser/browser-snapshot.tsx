@@ -6,7 +6,7 @@ interface BrowserSnaphsotProps {
 }
 
 export function BrowserSnapshot({ src }: BrowserSnaphsotProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <img

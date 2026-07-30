@@ -8,19 +8,19 @@ from unittest.mock import patch
 import pytest
 from pydantic import SecretStr
 
-from openhands.sdk import Agent
-from openhands.sdk.context import AgentContext, Skill
-from openhands.sdk.context.condenser.llm_summarizing_condenser import (
+from madagascar.sdk import Agent
+from madagascar.sdk.context import AgentContext, Skill
+from madagascar.sdk.context.condenser.llm_summarizing_condenser import (
     LLMSummarizingCondenser,
 )
-from openhands.sdk.conversation import Conversation
-from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-from openhands.sdk.conversation.state import ConversationExecutionStatus
-from openhands.sdk.llm import LLM, Message, TextContent
-from openhands.sdk.tool import Tool, register_tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.preset.default import get_default_agent
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.conversation import Conversation
+from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+from madagascar.sdk.conversation.state import ConversationExecutionStatus
+from madagascar.sdk.llm import LLM, Message, TextContent
+from madagascar.sdk.tool import Tool, register_tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.preset.default import get_default_agent
+from madagascar.tools.terminal import TerminalTool
 
 
 pytestmark = pytest.mark.skipif(
@@ -124,7 +124,7 @@ def test_conversation_fails_when_removing_tools():
 
     Tools are part of the system prompt and cannot be changed mid-conversation.
     To use different tools, start a new conversation or use conversation forking.
-    See: https://github.com/OpenHands/OpenHands/issues/8560
+    See: https://github.com/Madagascar/Madagascar/issues/8560
     """
     with tempfile.TemporaryDirectory() as temp_dir:
         # Create conversation with original agent having 2 tools
@@ -226,7 +226,7 @@ def test_conversation_fails_when_used_tool_is_missing():
     were used or not. This test verifies the behavior when a used tool
     is removed.
     """
-    from openhands.sdk.event import ActionEvent
+    from madagascar.sdk.event import ActionEvent
 
     with tempfile.TemporaryDirectory() as temp_dir:
         # Create conversation with two tools
@@ -249,7 +249,7 @@ def test_conversation_fails_when_used_tool_is_missing():
         conversation.agent.init_state(conversation.state, lambda e: None)
 
         # Simulate that TerminalTool was used by adding an ActionEvent
-        from openhands.sdk.llm import MessageToolCall, TextContent
+        from madagascar.sdk.llm import MessageToolCall, TextContent
 
         action_event = ActionEvent(
             tool_name="TerminalTool",
@@ -421,7 +421,7 @@ def test_conversation_fails_when_agent_type_changes():
             )
 
 
-@patch("openhands.sdk.llm.llm.litellm_completion")
+@patch("madagascar.sdk.llm.llm.litellm_completion")
 def test_conversation_persistence_lifecycle(mock_completion):
     """Test full conversation persistence lifecycle similar to examples/10_persistence.py."""  # noqa: E501
     from tests.conftest import create_mock_litellm_response
@@ -510,7 +510,7 @@ def test_conversation_resume_overrides_agent_llm_but_preserves_state_settings():
     couple of state settings, then resume with a different LLM configuration.
     """
 
-    from openhands.sdk.security.confirmation_policy import AlwaysConfirm
+    from madagascar.sdk.security.confirmation_policy import AlwaysConfirm
 
     with tempfile.TemporaryDirectory() as temp_dir:
         tools = [Tool(name="TerminalTool")]

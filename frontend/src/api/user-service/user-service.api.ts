@@ -1,4 +1,4 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 import { GitUser } from "#/types/git";
 import { UserGitOrganizationsResponse } from "#/types/org";
 
@@ -11,7 +11,7 @@ class UserService {
    * @returns Git user information
    */
   static async getUser(): Promise<GitUser> {
-    const { data } = await openHands.get<GitUser>("/api/v1/users/git-info");
+    const { data } = await madagascar.get<GitUser>("/api/v1/users/git-info");
     return data;
   }
 
@@ -20,7 +20,7 @@ class UserService {
    * @returns Git organizations for the current user's provider
    */
   static async getGitOrganizations(): Promise<UserGitOrganizationsResponse> {
-    const { data } = await openHands.get<UserGitOrganizationsResponse>(
+    const { data } = await madagascar.get<UserGitOrganizationsResponse>(
       "/api/v1/users/git-organizations",
     );
     return data;

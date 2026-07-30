@@ -8,8 +8,8 @@ from __future__ import annotations
 
 from storage.user_store import UserStore
 
-from openhands.analytics.user_base import UserBase
-from openhands.analytics.user_provider import AnalyticsUserProvider
+from madagascar.analytics.user_base import UserBase
+from madagascar.analytics.user_provider import AnalyticsUserProvider
 
 
 class SaasAnalyticsUserProvider(AnalyticsUserProvider):

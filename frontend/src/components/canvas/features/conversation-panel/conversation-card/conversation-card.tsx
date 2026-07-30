@@ -8,7 +8,7 @@ import { transformVSCodeUrl } from "#/utils/vscode-url-helper";
 import ConversationService from "#/api/conversation-service/conversation-service.api";
 import { ExecutionStatus } from "#/types/agent-server/core/base/common";
 import { SandboxStatus } from "#/api/conversation-service/agent-server-conversation-service.types";
-import { RepositorySelection } from "#/api/open-hands.types";
+import { RepositorySelection } from "#/api/madagascar.types";
 import { formatTimeDelta } from "#/utils/format-time-delta";
 import { ConversationCardHeader } from "./conversation-card-header";
 import { ConversationCardActions } from "./conversation-card-actions";
@@ -36,7 +36,7 @@ interface ConversationCardProps {
   showRepositoryMetadata?: boolean;
   llmModel?: string | null;
   showLlmProfiles?: boolean;
-  agentKind?: "openhands" | "acp" | null;
+  agentKind?: "madagascar" | "acp" | null;
   acpServer?: string | null;
   isPinned?: boolean;
   onTogglePin?: () => void;
@@ -70,7 +70,7 @@ export function ConversationCard({
   onTogglePin,
   alwaysShowPinIcon = false,
 }: ConversationCardProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { trackDownloadVsCodeButtonClicked } = useTracking();
   const [titleMode, setTitleMode] = React.useState<"view" | "edit">("view");
   const { mutateAsync: downloadConversation } = useDownloadConversation();

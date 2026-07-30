@@ -16,7 +16,7 @@ export function ModalCloseButton({
   className,
   disabled = false,
 }: ModalCloseButtonProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <button

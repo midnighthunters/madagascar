@@ -3,11 +3,11 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.tool.schema import TextContent
-from openhands.tools.file_editor.definition import (
+from madagascar.sdk.tool.schema import TextContent
+from madagascar.tools.file_editor.definition import (
     FileEditorObservation,
 )
-from openhands.tools.file_editor.editor import FileEditor
+from madagascar.tools.file_editor.editor import FileEditor
 
 
 @pytest.fixture

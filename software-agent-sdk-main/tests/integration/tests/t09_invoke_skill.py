@@ -15,12 +15,12 @@ from typing import Any
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Agent, AgentContext, get_logger
-from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-from openhands.sdk.conversation.visualizer import DefaultConversationVisualizer
-from openhands.sdk.event.llm_convertible.action import ActionEvent
-from openhands.sdk.skills import Skill
-from openhands.sdk.tool import Tool
+from madagascar.sdk import LLM, Agent, AgentContext, get_logger
+from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+from madagascar.sdk.conversation.visualizer import DefaultConversationVisualizer
+from madagascar.sdk.event.llm_convertible.action import ActionEvent
+from madagascar.sdk.skills import Skill
+from madagascar.sdk.tool import Tool
 from tests.integration.base import (
     BaseIntegrationTest,
     TestResult,

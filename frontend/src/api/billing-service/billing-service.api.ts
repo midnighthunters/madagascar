@@ -1,4 +1,4 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 
 /**
  * Billing Service API - Handles all billing-related API endpoints
@@ -10,7 +10,7 @@ class BillingService {
    * @returns The redirect URL for the checkout session
    */
   static async createCheckoutSession(amount: number): Promise<string> {
-    const { data } = await openHands.post(
+    const { data } = await madagascar.post(
       "/api/billing/create-checkout-session",
       {
         amount,
@@ -24,7 +24,7 @@ class BillingService {
    * @returns The redirect URL for the customer setup session
    */
   static async createBillingSessionResponse(): Promise<string> {
-    const { data } = await openHands.post(
+    const { data } = await madagascar.post(
       "/api/billing/create-customer-setup-session",
     );
     return data.redirect_url;
@@ -35,7 +35,7 @@ class BillingService {
    * @returns The user's credit balance as a string
    */
   static async getBalance(): Promise<string> {
-    const { data } = await openHands.get<{ credits: string }>(
+    const { data } = await madagascar.get<{ credits: string }>(
       "/api/billing/credits",
     );
     return data.credits;

@@ -13,11 +13,11 @@ from storage.org_store import OrgStore
 from storage.role import Role
 from storage.user import User
 
-from openhands.app_server.settings.settings_models import Settings
-from openhands.sdk.settings import (
+from madagascar.app_server.settings.settings_models import Settings
+from madagascar.sdk.settings import (
     ACPAgentSettings,
     ConversationSettings,
-    OpenHandsAgentSettings,
+    MadagascarAgentSettings,
 )
 
 
@@ -126,7 +126,7 @@ async def test_update_org(async_session_maker, mock_litellm_api):
         # Create a test org
         org = Org(
             name='test-org',
-            agent_settings=OpenHandsAgentSettings(agent='CodeActAgent'),
+            agent_settings=MadagascarAgentSettings(agent='CodeActAgent'),
         )
         session.add(org)
         await session.commit()
@@ -149,7 +149,7 @@ async def test_update_org(async_session_maker, mock_litellm_api):
             org_id=org_id,
             update_data=OrgUpdate(
                 name='updated-org',
-                agent_settings_diff={'llm': {'model': 'openhands/claude-3'}},
+                agent_settings_diff={'llm': {'model': 'madagascar/claude-3'}},
             ),
             user_id=str(uuid.uuid4()),
         )
@@ -157,7 +157,7 @@ async def test_update_org(async_session_maker, mock_litellm_api):
         assert updated_org is not None
         assert updated_org.name == 'updated-org'
         agent_settings = OrgStore.get_agent_settings_from_org(updated_org)
-        assert agent_settings.llm.model == 'openhands/claude-3'
+        assert agent_settings.llm.model == 'madagascar/claude-3'
 
 
 def test_get_org_settings_from_org_use_persisted_loaders():
@@ -165,7 +165,7 @@ def test_get_org_settings_from_org_use_persisted_loaders():
     org.agent_settings = {'legacy': True}
     org.conversation_settings = {'legacy': True}
 
-    loaded_agent_settings = OpenHandsAgentSettings(agent='MigratedAgent')
+    loaded_agent_settings = MadagascarAgentSettings(agent='MigratedAgent')
     loaded_conversation_settings = ConversationSettings(max_iterations=77)
 
     with (
@@ -188,7 +188,7 @@ def test_get_org_settings_from_org_use_persisted_loaders():
 def test_get_agent_settings_from_org_preserves_acp_variant():
     """Regression: ACP org settings (``agent_kind: 'acp'``, null
     ``agent_context``) must load as ``ACPAgentSettings`` rather than being
-    coerced into ``OpenHandsAgentSettings`` — that coercion 500'd on the
+    coerced into ``MadagascarAgentSettings`` — that coercion 500'd on the
     non-nullable ``agent_context``.
     """
     org = MagicMock(spec=Org)
@@ -211,9 +211,9 @@ def test_merge_and_validate_settings_switches_variant_without_mongrel():
     produce an invalid ``llm``-plus-``acp_server`` mongrel).
     """
     merged = OrgStore._merge_and_validate_settings(
-        {'agent_kind': 'openhands', 'llm': {'model': 'gpt'}},
+        {'agent_kind': 'madagascar', 'llm': {'model': 'gpt'}},
         {'agent_kind': 'acp', 'acp_server': 'claude-code'},
-        OpenHandsAgentSettings,
+        MadagascarAgentSettings,
     )
 
     assert isinstance(merged, ACPAgentSettings)
@@ -241,7 +241,7 @@ async def test_create_org(async_session_maker, mock_litellm_api):
         org = await OrgStore.create_org(
             kwargs={
                 'name': 'new-org',
-                'agent_settings': OpenHandsAgentSettings(agent='CodeActAgent'),
+                'agent_settings': MadagascarAgentSettings(agent='CodeActAgent'),
             }
         )
 
@@ -497,7 +497,7 @@ async def test_persist_org_with_owner_returns_refreshed_org(
         name='Test Org',
         contact_name='Jane Doe',
         contact_email='jane@example.com',
-        agent_settings=OpenHandsAgentSettings(agent='CodeActAgent'),
+        agent_settings=MadagascarAgentSettings(agent='CodeActAgent'),
     )
 
     org_member = OrgMember(
@@ -598,7 +598,7 @@ async def test_persist_org_with_owner_with_multiple_fields(
         name='Complex Org',
         contact_name='Alice Smith',
         contact_email='alice@example.com',
-        agent_settings=OpenHandsAgentSettings(agent='CodeActAgent'),
+        agent_settings=MadagascarAgentSettings(agent='CodeActAgent'),
         billing_margin=0.15,
     )
 
@@ -1403,7 +1403,7 @@ async def test_update_org_defaults_async_with_llm_api_key():
     mock_org = Org(
         id=org_id,
         name='Test Organization',
-        agent_settings=OpenHandsAgentSettings(llm={'model': 'old-model'}),
+        agent_settings=MadagascarAgentSettings(llm={'model': 'old-model'}),
     )
 
     llm_settings = OrgUpdate(
@@ -1462,10 +1462,10 @@ async def test_update_org_defaults_async_propagates_managed_key_reset():
     mock_org = Org(
         id=org_id,
         name='Test Organization',
-        agent_settings=OpenHandsAgentSettings(llm={'model': 'openhands/claude-3'}),
+        agent_settings=MadagascarAgentSettings(llm={'model': 'madagascar/claude-3'}),
     )
     update_data = OrgUpdate(
-        agent_settings_diff={'llm': {'model': 'openhands/claude-3'}}
+        agent_settings_diff={'llm': {'model': 'madagascar/claude-3'}}
     )
 
     mock_session = AsyncMock()
@@ -1494,7 +1494,7 @@ async def test_update_org_defaults_async_propagates_managed_key_reset():
 
     assert result is not None
     agent_settings = OrgStore.get_agent_settings_from_org(result)
-    assert agent_settings.llm.model == 'openhands/claude-3'
+    assert agent_settings.llm.model == 'madagascar/claude-3'
     mock_member_update.assert_called_once()
     member_settings = mock_member_update.call_args[0][2]
     assert member_settings.llm_api_key.get_secret_value() == 'managed-key'
@@ -1514,7 +1514,7 @@ async def test_update_org_defaults_async_non_key_changes_keep_custom_key_flags()
     mock_org = Org(
         id=org_id,
         name='Test Organization',
-        agent_settings=OpenHandsAgentSettings(llm={'model': 'openhands/claude-3'}),
+        agent_settings=MadagascarAgentSettings(llm={'model': 'madagascar/claude-3'}),
         conversation_settings=ConversationSettings(),
     )
     update_data = OrgUpdate(conversation_settings_diff={'max_iterations': 42})
@@ -1556,7 +1556,7 @@ async def test_update_org_defaults_async_does_not_broadcast_mcp_config(
     async with async_session_maker() as session:
         org = Org(
             name='test-org',
-            agent_settings=OpenHandsAgentSettings(
+            agent_settings=MadagascarAgentSettings(
                 llm={'model': 'old-model'}
             ).model_dump(mode='json'),
         )

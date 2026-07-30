@@ -7,7 +7,7 @@ Tests cover four bugs that made LLM.subscription_login() unusable:
 4. Reasoning item IDs cause 404 on follow-up requests (store=false)
 5. Retry path must not add unsupported temperature param
 
-See: https://github.com/OpenHands/software-agent-sdk/issues/2797
+See: https://github.com/Madagascar/software-agent-sdk/issues/2797
 """
 
 import json
@@ -23,15 +23,15 @@ from openai.types.responses.response_function_tool_call import (
     ResponseFunctionToolCall,
 )
 
-from openhands.sdk.llm.exceptions import LLMNoResponseError
-from openhands.sdk.llm.llm import LLM
-from openhands.sdk.llm.message import (
+from madagascar.sdk.llm.exceptions import LLMNoResponseError
+from madagascar.sdk.llm.llm import LLM
+from madagascar.sdk.llm.message import (
     Message,
     MessageToolCall,
     ReasoningItemModel,
     TextContent,
 )
-from openhands.sdk.llm.options.responses_options import select_responses_options
+from madagascar.sdk.llm.options.responses_options import select_responses_options
 
 
 # ---------------------------------------------------------------------------
@@ -139,7 +139,7 @@ def test_non_subscription_keeps_structured_param(param: str, check: Any):
 # ---------------------------------------------------------------------------
 
 
-@patch("openhands.sdk.llm.llm.litellm_responses")
+@patch("madagascar.sdk.llm.llm.litellm_responses")
 def test_subscription_retry_does_not_add_temperature(mock_responses: Any):
     """Subscription mode intentionally omits temperature.
 

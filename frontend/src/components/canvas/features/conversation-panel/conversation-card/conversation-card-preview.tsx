@@ -5,7 +5,7 @@ import { FaCodeBranch } from "react-icons/fa";
 import type { IconType } from "react-icons/lib";
 import { useTranslation } from "react-i18next";
 import { I18nKey } from "#/i18n/declaration";
-import type { RepositorySelection } from "#/api/open-hands.types";
+import type { RepositorySelection } from "#/api/madagascar.types";
 import type { Provider } from "#/types/settings";
 import type { ExecutionStatus } from "#/types/agent-server/core/base/common";
 import type { SandboxStatus } from "#/api/conversation-service/agent-server-conversation-service.types";
@@ -54,7 +54,7 @@ export function ConversationCardPreview({
   llmModel,
   createdAt,
 }: ConversationCardPreviewProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const repository = selectedRepository?.selected_repository ?? null;
   const branch = selectedRepository?.selected_branch ?? null;

@@ -27,7 +27,7 @@ export function SettingsMobileDrawer({
   onCloseMobileMenu,
   navigationItems,
 }: SettingsMobileDrawerProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <>

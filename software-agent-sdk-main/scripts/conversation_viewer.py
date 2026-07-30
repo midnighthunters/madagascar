@@ -1,13 +1,13 @@
-"""Streamlit app to explore OpenHands conversation logs.
+"""Streamlit app to explore Madagascar conversation logs.
 
 Usage:
     streamlit run scripts/conversation_viewer.py
 
 The viewer expects a directory containing conversation folders. By default we
 look for ``.conversations`` next to the repository root (the location created by
-``openhands`` when recording sessions). You can override the location via:
+``madagascar`` when recording sessions). You can override the location via:
 
-* Environment variable ``OPENHANDS_CONVERSATIONS_ROOT``
+* Environment variable ``MADAGASCAR_CONVERSATIONS_ROOT``
 * URL query parameter ``?root=/path/to/logs`` when the app is open
 * The sidebar text input labelled "Conversations directory"
 
@@ -31,14 +31,14 @@ from typing import Any
 import streamlit as st
 
 
-ENV_ROOT = os.getenv("OPENHANDS_CONVERSATIONS_ROOT")
+ENV_ROOT = os.getenv("MADAGASCAR_CONVERSATIONS_ROOT")
 DEFAULT_CONVERSATIONS_ROOT = (
     Path(ENV_ROOT).expanduser()
     if ENV_ROOT
     else Path(__file__).resolve().parents[1] / ".conversations"
 )
 
-st.set_page_config(page_title="OpenHands Agent-SDK Conversation Viewer", layout="wide")
+st.set_page_config(page_title="Madagascar Agent-SDK Conversation Viewer", layout="wide")
 
 
 @dataclass
@@ -300,7 +300,7 @@ def draw_event_detail(event: dict[str, Any]) -> None:
 
 
 def main() -> None:
-    st.title("OpenHands Conversation Viewer")
+    st.title("Madagascar Conversation Viewer")
 
     # Initialize root directory in session state if not present
     if "root_directory" not in st.session_state:
@@ -317,7 +317,7 @@ def main() -> None:
     root_input = st.sidebar.text_input(
         "Conversations directory",
         value=st.session_state["root_directory"],
-        help="Root folder containing OpenHands conversation dumps",
+        help="Root folder containing Madagascar conversation dumps",
     )
 
     # Ensure root_input is not None (should not happen with default value)

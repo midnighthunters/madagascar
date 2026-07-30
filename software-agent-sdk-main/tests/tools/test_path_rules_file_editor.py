@@ -2,21 +2,21 @@
 
 The injection seam reads the touched path from the action's ``path`` field
 (``local_conversation._touched_rule_path``). These tests use the actual
-``FileEditorAction`` / ``FileEditorObservation`` from openhands-tools so a
+``FileEditorAction`` / ``FileEditorObservation`` from madagascar-tools so a
 rename of that field (which would silently no-op the whole feature) is caught.
 """
 
 from pathlib import Path
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.context.agent_context import AgentContext
-from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-from openhands.sdk.event import ActionEvent, ObservationEvent
-from openhands.sdk.llm import Message, MessageToolCall, TextContent
-from openhands.sdk.skills import PathTrigger, Skill
-from openhands.sdk.testing import TestLLM
-from openhands.tools.file_editor import FileEditorAction, FileEditorObservation
-from openhands.tools.file_editor.definition import CommandLiteral
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.context.agent_context import AgentContext
+from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+from madagascar.sdk.event import ActionEvent, ObservationEvent
+from madagascar.sdk.llm import Message, MessageToolCall, TextContent
+from madagascar.sdk.skills import PathTrigger, Skill
+from madagascar.sdk.testing import TestLLM
+from madagascar.tools.file_editor import FileEditorAction, FileEditorObservation
+from madagascar.tools.file_editor.definition import CommandLiteral
 
 
 def _conversation(tmp_path: Path) -> LocalConversation:

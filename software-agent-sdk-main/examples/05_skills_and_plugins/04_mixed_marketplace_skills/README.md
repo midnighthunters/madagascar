@@ -85,7 +85,7 @@ python main.py --list
 
 3. **Skill Installation**: The `install_skills_from_marketplace()` function:
    - Resolves each skill source
-   - Copies the skill to `~/.openhands/skills/installed/`
+   - Copies the skill to `~/.madagascar/skills/installed/`
    - Tracks installation metadata
 
 4. **Skill Loading**: Installed skills can be loaded with `load_installed_skills()`
@@ -95,7 +95,7 @@ python main.py --list
 ### Install Skills from Marketplace
 
 ```python
-from openhands.sdk.skills import install_skills_from_marketplace
+from madagascar.sdk.skills import install_skills_from_marketplace
 
 # Install all skills from a marketplace
 installed = install_skills_from_marketplace("./my-marketplace", force=False)
@@ -107,7 +107,7 @@ for info in installed:
 ### Load Installed Skills
 
 ```python
-from openhands.sdk.skills import load_installed_skills
+from madagascar.sdk.skills import load_installed_skills
 
 # Load all installed skills
 skills = load_installed_skills()
@@ -120,7 +120,7 @@ for skill in skills:
 ### List Installed Skills
 
 ```python
-from openhands.sdk.skills import list_installed_skills
+from madagascar.sdk.skills import list_installed_skills
 
 # Get metadata for installed skills
 installed = list_installed_skills()

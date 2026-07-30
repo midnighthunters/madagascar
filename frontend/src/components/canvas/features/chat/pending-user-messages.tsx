@@ -23,7 +23,7 @@ import { ChatMessage } from "./chat-message";
  * bubbles over.
  */
 export function PendingUserMessages() {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { conversationId } = useOptionalConversationId();
   const pendingMessages = useOptimisticUserMessageStore(
     (state) => state.pendingMessages,

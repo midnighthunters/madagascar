@@ -27,7 +27,7 @@ export function getSkillTypeLabelKey(type: SkillType): I18nKey {
 }
 
 export function SkillTypeBadge({ type }: SkillTypeBadgeProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const config = TYPE_CONFIG[type];
   return (
     <span

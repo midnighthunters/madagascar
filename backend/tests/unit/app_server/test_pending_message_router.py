@@ -10,11 +10,11 @@ from uuid import uuid4
 import pytest
 from fastapi import HTTPException, status
 
-from openhands.agent_server.models import TextContent
-from openhands.app_server.pending_messages.pending_message_models import (
+from madagascar.agent_server.models import TextContent
+from madagascar.app_server.pending_messages.pending_message_models import (
     PendingMessageResponse,
 )
-from openhands.app_server.pending_messages.pending_message_router import (
+from madagascar.app_server.pending_messages.pending_message_router import (
     queue_pending_message,
 )
 

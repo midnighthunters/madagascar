@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
-import { openHands } from "#/api/open-hands-axios";
+import { madagascar } from "#/api/madagascar-axios";
 import { I18nKey } from "#/i18n/declaration";
 import { displayErrorToast } from "#/utils/custom-toast-handlers";
 import { retrieveAxiosErrorMessage } from "#/utils/retrieve-axios-error-message";
@@ -21,7 +21,7 @@ export function useUpdateJiraDcWorkspaceStatus({
 
   return useMutation({
     mutationFn: async (data: UpdateJiraDcWorkspaceStatusData) => {
-      const response = await openHands.post(
+      const response = await madagascar.post(
         "/integration/jira-dc/workspaces/status",
         {
           workspace_name: data.workspace,

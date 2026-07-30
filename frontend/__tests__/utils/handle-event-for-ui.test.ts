@@ -4,7 +4,7 @@ import {
   ObservationEvent,
   MessageEvent,
   SecurityRisk,
-  OpenHandsEvent,
+  MadagascarEvent,
 } from "#/types/v1/core";
 import { ACPToolCallEvent } from "#/types/v1/core/events/acp-tool-call-event";
 import { StreamingDeltaEvent } from "#/types/v1/core/events/streaming-delta-event";
@@ -103,7 +103,7 @@ describe("handleEventForUI", () => {
   });
 
   it("should handle empty uiEvents array", () => {
-    const initialUiEvents: OpenHandsEvent[] = [];
+    const initialUiEvents: MadagascarEvent[] = [];
     const result = handleEventForUI(mockObservationEvent, initialUiEvents);
 
     expect(result).toEqual([mockObservationEvent]);
@@ -301,7 +301,7 @@ describe("handleEventForUI - streaming deltas", () => {
     extended_content: [],
   });
 
-  const stateUpdate = (id: string): OpenHandsEvent =>
+  const stateUpdate = (id: string): MadagascarEvent =>
     ({
       id,
       timestamp: "2026-06-29T00:00:05.500Z",
@@ -309,10 +309,10 @@ describe("handleEventForUI - streaming deltas", () => {
       kind: "ConversationStateUpdateEvent",
       key: "stats",
       value: {},
-    }) as unknown as OpenHandsEvent;
+    }) as unknown as MadagascarEvent;
 
   it("merges consecutive deltas into one growing bubble keeping the first id", () => {
-    let ui: OpenHandsEvent[] = [userMessage];
+    let ui: MadagascarEvent[] = [userMessage];
     const first = delta("Hello");
     ui = handleEventForUI(first, ui);
     ui = handleEventForUI(delta(", "), ui);
@@ -326,7 +326,7 @@ describe("handleEventForUI - streaming deltas", () => {
   });
 
   it("merges deltas into one bubble even when a state update interleaves", () => {
-    let ui: OpenHandsEvent[] = [userMessage];
+    let ui: MadagascarEvent[] = [userMessage];
     const first = delta("Hello");
     ui = handleEventForUI(first, ui);
     ui = handleEventForUI(stateUpdate("state-1"), ui);
@@ -339,7 +339,7 @@ describe("handleEventForUI - streaming deltas", () => {
   });
 
   it("concatenates reasoning_content across deltas", () => {
-    let ui: OpenHandsEvent[] = [userMessage];
+    let ui: MadagascarEvent[] = [userMessage];
     ui = handleEventForUI(delta(null, "think "), ui);
     ui = handleEventForUI(delta(null, "more"), ui);
 
@@ -353,7 +353,7 @@ describe("handleEventForUI - streaming deltas", () => {
   });
 
   it("reconciles the final assistant message into the delta without duplicating the bubble", () => {
-    let ui: OpenHandsEvent[] = [userMessage];
+    let ui: MadagascarEvent[] = [userMessage];
     const first = delta("Hello");
     ui = handleEventForUI(first, ui);
     ui = handleEventForUI(delta(", world"), ui);
@@ -367,7 +367,7 @@ describe("handleEventForUI - streaming deltas", () => {
   });
 
   it("appends the final message's unstreamed suffix to the last delta", () => {
-    let ui: OpenHandsEvent[] = [userMessage];
+    let ui: MadagascarEvent[] = [userMessage];
     ui = handleEventForUI(delta("Hel"), ui);
     // The provider buffered the tail: final text has content never streamed.
     ui = handleEventForUI(assistantMessage("Hello, world"), ui);
@@ -452,7 +452,7 @@ describe("handleEventForUI - durable events supersede streaming deltas", () => {
     // therefore arrive after the turn's final message is already rendered.
     // Rendering them would fragment and duplicate the finished message.
     const final = mkAssistant("2026-07-03T00:00:09.000Z", "Hello, world");
-    let ui: OpenHandsEvent[] = [userMessage];
+    let ui: MadagascarEvent[] = [userMessage];
     ui = handleEventForUI(final, ui);
     ui = handleEventForUI(
       mkDelta("sup-late-1", "2026-07-03T00:00:01.000Z", "Hello"),
@@ -466,7 +466,7 @@ describe("handleEventForUI - durable events supersede streaming deltas", () => {
     // The next step's narration streams after the previous step's action; it
     // is newer than every durable event and must still render.
     const action = mkAction("2026-07-03T00:00:02.000Z", "I'll run a command");
-    let ui: OpenHandsEvent[] = [userMessage, action];
+    let ui: MadagascarEvent[] = [userMessage, action];
     const live = mkDelta("sup-live-1", "2026-07-03T00:00:03.000Z", "Next, ");
     ui = handleEventForUI(live, ui);
 
@@ -478,7 +478,7 @@ describe("handleEventForUI - durable events supersede streaming deltas", () => {
     // The action card renders its own thought (the same text that just
     // streamed), so leaving the preview deltas in place displays every
     // step's reasoning twice.
-    let ui: OpenHandsEvent[] = [userMessage];
+    let ui: MadagascarEvent[] = [userMessage];
     ui = handleEventForUI(
       mkDelta("sup-d1", "2026-07-03T00:00:01.000Z", "I'll run a command"),
       ui,
@@ -492,7 +492,7 @@ describe("handleEventForUI - durable events supersede streaming deltas", () => {
   it("keeps a reasoning-only bubble when the superseding action lacks reasoning", () => {
     // For many models the delta is the sole carrier of reasoning_content, so
     // stripping the streamed text must not lose the reasoning display.
-    let ui: OpenHandsEvent[] = [userMessage];
+    let ui: MadagascarEvent[] = [userMessage];
     ui = handleEventForUI(
       mkDelta(
         "sup-d5",
@@ -518,7 +518,7 @@ describe("handleEventForUI - durable events supersede streaming deltas", () => {
     // include earlier steps' text, so the final summary never reconciles
     // against them; previously both the stale bubble and the final message
     // rendered. The durable final message is canonical.
-    let ui: OpenHandsEvent[] = [userMessage];
+    let ui: MadagascarEvent[] = [userMessage];
     ui = handleEventForUI(
       mkDelta("sup-d2", "2026-07-03T00:00:01.000Z", "Fin"),
       ui,

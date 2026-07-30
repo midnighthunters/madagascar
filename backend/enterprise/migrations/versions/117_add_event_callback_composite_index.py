@@ -15,7 +15,7 @@ in well under a second; the brief lock on writes during the build is acceptable
 and is consistent with every other migration in this chain.
 
 The OSS app_server chain creates the equivalent index in
-openhands/app_server/app_lifespan/alembic/versions/010.py. Both use IF NOT
+madagascar/app_server/app_lifespan/alembic/versions/010.py. Both use IF NOT
 EXISTS so they are safe to coexist across deployment modes.
 
 Revision ID: 117

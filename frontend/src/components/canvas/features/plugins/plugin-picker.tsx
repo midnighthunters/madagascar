@@ -37,7 +37,7 @@ export function PluginPicker({
   onChange,
   disabled = false,
 }: PluginPickerProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { data: catalog, isLoading, isError } = usePluginsMarketplace();
   const [search, setSearch] = useState("");
 

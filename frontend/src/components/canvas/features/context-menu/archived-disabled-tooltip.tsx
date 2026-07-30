@@ -14,7 +14,7 @@ export function ArchivedDisabledTooltip({
   children,
   placement = "right",
 }: ArchivedDisabledTooltipProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   if (!isDisabled) {
     return children;

@@ -1,7 +1,7 @@
 import { AgentState } from "../agent-state";
-import { OpenHandsObservationEvent } from "./base";
+import { MadagascarObservationEvent } from "./base";
 
-export interface AgentStateChangeObservation extends OpenHandsObservationEvent<"agent_state_changed"> {
+export interface AgentStateChangeObservation extends MadagascarObservationEvent<"agent_state_changed"> {
   source: "agent";
   extras: {
     agent_state: AgentState;
@@ -9,7 +9,7 @@ export interface AgentStateChangeObservation extends OpenHandsObservationEvent<"
   };
 }
 
-export interface CommandObservation extends OpenHandsObservationEvent<"run"> {
+export interface CommandObservation extends MadagascarObservationEvent<"run"> {
   source: "agent" | "user";
   extras: {
     command: string;
@@ -18,7 +18,7 @@ export interface CommandObservation extends OpenHandsObservationEvent<"run"> {
   };
 }
 
-export interface IPythonObservation extends OpenHandsObservationEvent<"run_ipython"> {
+export interface IPythonObservation extends MadagascarObservationEvent<"run_ipython"> {
   source: "agent";
   extras: {
     code: string;
@@ -26,14 +26,14 @@ export interface IPythonObservation extends OpenHandsObservationEvent<"run_ipyth
   };
 }
 
-export interface DelegateObservation extends OpenHandsObservationEvent<"delegate"> {
+export interface DelegateObservation extends MadagascarObservationEvent<"delegate"> {
   source: "agent";
   extras: {
     outputs: Record<string, unknown>;
   };
 }
 
-export interface BrowseObservation extends OpenHandsObservationEvent<"browse"> {
+export interface BrowseObservation extends MadagascarObservationEvent<"browse"> {
   source: "agent";
   extras: {
     url: string;
@@ -50,7 +50,7 @@ export interface BrowseObservation extends OpenHandsObservationEvent<"browse"> {
   };
 }
 
-export interface BrowseInteractiveObservation extends OpenHandsObservationEvent<"browse_interactive"> {
+export interface BrowseInteractiveObservation extends MadagascarObservationEvent<"browse_interactive"> {
   source: "agent";
   extras: {
     url: string;
@@ -67,7 +67,7 @@ export interface BrowseInteractiveObservation extends OpenHandsObservationEvent<
   };
 }
 
-export interface WriteObservation extends OpenHandsObservationEvent<"write"> {
+export interface WriteObservation extends MadagascarObservationEvent<"write"> {
   source: "agent";
   extras: {
     path: string;
@@ -75,7 +75,7 @@ export interface WriteObservation extends OpenHandsObservationEvent<"write"> {
   };
 }
 
-export interface ReadObservation extends OpenHandsObservationEvent<"read"> {
+export interface ReadObservation extends MadagascarObservationEvent<"read"> {
   source: "agent";
   extras: {
     path: string;
@@ -83,7 +83,7 @@ export interface ReadObservation extends OpenHandsObservationEvent<"read"> {
   };
 }
 
-export interface EditObservation extends OpenHandsObservationEvent<"edit"> {
+export interface EditObservation extends MadagascarObservationEvent<"edit"> {
   source: "agent";
   extras: {
     path: string;
@@ -92,14 +92,14 @@ export interface EditObservation extends OpenHandsObservationEvent<"edit"> {
   };
 }
 
-export interface ErrorObservation extends OpenHandsObservationEvent<"error"> {
+export interface ErrorObservation extends MadagascarObservationEvent<"error"> {
   source: "user";
   extras: {
     error_id?: string;
   };
 }
 
-export interface AgentThinkObservation extends OpenHandsObservationEvent<"think"> {
+export interface AgentThinkObservation extends MadagascarObservationEvent<"think"> {
   source: "agent";
   extras: {
     thought: string;
@@ -112,7 +112,7 @@ export interface MicroagentKnowledge {
   content: string;
 }
 
-export interface RecallObservation extends OpenHandsObservationEvent<"recall"> {
+export interface RecallObservation extends MadagascarObservationEvent<"recall"> {
   source: "agent";
   extras: {
     recall_type?: "workspace_context" | "knowledge";
@@ -128,7 +128,7 @@ export interface RecallObservation extends OpenHandsObservationEvent<"recall"> {
   };
 }
 
-export interface MCPObservation extends OpenHandsObservationEvent<"mcp"> {
+export interface MCPObservation extends MadagascarObservationEvent<"mcp"> {
   source: "agent";
   extras: {
     name: string;
@@ -136,12 +136,12 @@ export interface MCPObservation extends OpenHandsObservationEvent<"mcp"> {
   };
 }
 
-export interface UserRejectedObservation extends OpenHandsObservationEvent<"user_rejected"> {
+export interface UserRejectedObservation extends MadagascarObservationEvent<"user_rejected"> {
   source: "agent";
   extras: Record<string, unknown>;
 }
 
-export interface TaskTrackingObservation extends OpenHandsObservationEvent<"task_tracking"> {
+export interface TaskTrackingObservation extends MadagascarObservationEvent<"task_tracking"> {
   source: "agent";
   extras: {
     command: string;
@@ -154,7 +154,7 @@ export interface TaskTrackingObservation extends OpenHandsObservationEvent<"task
   };
 }
 
-export type OpenHandsObservation =
+export type MadagascarObservation =
   | AgentStateChangeObservation
   | AgentThinkObservation
   | CommandObservation

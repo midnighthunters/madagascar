@@ -32,7 +32,7 @@ export function PluginDetailModal({
   onClose,
   onStartConversation,
 }: PluginDetailModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const actionsDisabled = isDisabled || isBusy;
 
   return (

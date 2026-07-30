@@ -4,8 +4,8 @@ from unittest.mock import AsyncMock
 import pytest
 from pydantic import SecretStr
 
-from openhands.app_server.integrations.provider import ProviderHandler, ProviderToken
-from openhands.app_server.integrations.service_types import (
+from madagascar.app_server.integrations.provider import ProviderHandler, ProviderToken
+from madagascar.app_server.integrations.service_types import (
     AuthenticationError,
     ProviderType,
     UnknownException,

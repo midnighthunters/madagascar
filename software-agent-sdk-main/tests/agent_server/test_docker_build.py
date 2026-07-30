@@ -12,15 +12,15 @@ import pytest
 BUILDKIT_STDERR_SAMPLE = "\n".join(
     [
         "#8 importing cache manifest from "
-        "ghcr.io/openhands/eval-agent-server:buildcache-source-minimal-sample",
+        "ghcr.io/madagascar/eval-agent-server:buildcache-source-minimal-sample",
         "#8 DONE 15.3s",
         "#12 importing cache manifest from "
-        "ghcr.io/openhands/eval-agent-server:buildcache-shared-source-minimal-main",
+        "ghcr.io/madagascar/eval-agent-server:buildcache-shared-source-minimal-main",
         "#12 ERROR: failed to configure registry cache importer: "
-        "ghcr.io/openhands/eval-agent-server:"
+        "ghcr.io/madagascar/eval-agent-server:"
         "buildcache-shared-source-minimal-main: not found",
         "#14 importing cache manifest from "
-        "ghcr.io/openhands/eval-agent-server:buildcache-shared-source-minimal",
+        "ghcr.io/madagascar/eval-agent-server:buildcache-shared-source-minimal",
         "#14 DONE 20.4s",
         "#17 [builder 10/10] RUN uv sync",
         "#17 CACHED",
@@ -37,11 +37,11 @@ BUILDKIT_STDERR_SAMPLE = "\n".join(
 
 
 def _create_fake_sdist(tmp_path: Path) -> Path:
-    src_root = tmp_path / "openhands-sdk-test"
+    src_root = tmp_path / "madagascar-sdk-test"
     src_root.mkdir()
     (src_root / "README.md").write_text("fixture", encoding="utf-8")
 
-    tarball = tmp_path / "openhands-sdk-test.tar.gz"
+    tarball = tmp_path / "madagascar-sdk-test.tar.gz"
     with tarfile.open(tarball, "w:gz") as tar:
         tar.add(src_root, arcname=src_root.name)
 
@@ -50,7 +50,7 @@ def _create_fake_sdist(tmp_path: Path) -> Path:
 
 def test_git_info_priority_sdk_sha():
     """Test that SDK_SHA takes priority over GITHUB_SHA and git commands."""
-    from openhands.agent_server.docker.build import _git_info
+    from madagascar.agent_server.docker.build import _git_info
 
     with patch.dict(
         os.environ,
@@ -62,7 +62,7 @@ def test_git_info_priority_sdk_sha():
         clear=False,
     ):
         with patch(
-            "openhands.agent_server.docker.build._run"
+            "madagascar.agent_server.docker.build._run"
         ) as mock_run:  # Should not be called
             git_ref, git_sha = _git_info()
 
@@ -74,7 +74,7 @@ def test_git_info_priority_sdk_sha():
 
 def test_git_info_priority_github_sha():
     """Test that GITHUB_SHA is used when SDK_SHA is not set."""
-    from openhands.agent_server.docker.build import _git_info
+    from madagascar.agent_server.docker.build import _git_info
 
     with patch.dict(
         os.environ,
@@ -91,7 +91,7 @@ def test_git_info_priority_github_sha():
             del os.environ["SDK_REF"]
 
         with patch(
-            "openhands.agent_server.docker.build._run"
+            "madagascar.agent_server.docker.build._run"
         ) as mock_run:  # Should not be called
             git_ref, git_sha = _git_info()
 
@@ -102,7 +102,7 @@ def test_git_info_priority_github_sha():
 
 def test_git_info_priority_sdk_ref():
     """Test that SDK_REF takes priority over GITHUB_REF and git commands."""
-    from openhands.agent_server.docker.build import _git_info
+    from madagascar.agent_server.docker.build import _git_info
 
     with patch.dict(
         os.environ,
@@ -120,7 +120,7 @@ def test_git_info_priority_sdk_ref():
 
 def test_git_info_priority_github_ref():
     """Test that GITHUB_REF is used when SDK_REF is not set."""
-    from openhands.agent_server.docker.build import _git_info
+    from madagascar.agent_server.docker.build import _git_info
 
     with patch.dict(
         os.environ,
@@ -146,7 +146,7 @@ def test_git_info_submodule_scenario():
     Test the submodule scenario where parent repo sets SDK_SHA and SDK_REF.
     This simulates the use case from the PR description.
     """
-    from openhands.agent_server.docker.build import _git_info
+    from madagascar.agent_server.docker.build import _git_info
 
     # Simulate parent repo extracting submodule commit and passing it
     with patch.dict(
@@ -166,7 +166,7 @@ def test_git_info_submodule_scenario():
 
 def test_git_info_empty_sdk_sha_falls_back():
     """Test that empty SDK_SHA falls back to GITHUB_SHA."""
-    from openhands.agent_server.docker.build import _git_info
+    from madagascar.agent_server.docker.build import _git_info
 
     with patch.dict(
         os.environ,
@@ -177,7 +177,7 @@ def test_git_info_empty_sdk_sha_falls_back():
         },
         clear=False,
     ):
-        with patch("openhands.agent_server.docker.build._run") as mock_run:
+        with patch("madagascar.agent_server.docker.build._run") as mock_run:
             git_ref, git_sha = _git_info()
 
             assert git_sha == "github123456"
@@ -187,7 +187,7 @@ def test_git_info_empty_sdk_sha_falls_back():
 
 def test_base_slug_short_image():
     """Test that short image names are returned unchanged."""
-    from openhands.agent_server.docker.build import _base_slug
+    from madagascar.agent_server.docker.build import _base_slug
 
     # Simple image name, no truncation needed
     result = _base_slug("python:3.13")
@@ -200,7 +200,7 @@ def test_base_slug_short_image():
 
 def test_base_slug_no_tag():
     """Test base_slug with image that has no tag."""
-    from openhands.agent_server.docker.build import _base_slug
+    from madagascar.agent_server.docker.build import _base_slug
 
     result = _base_slug("python")
     assert result == "python"
@@ -211,7 +211,7 @@ def test_base_slug_no_tag():
 
 def test_truncate_ident_cases():
     """Exercise _truncate_ident priority rules."""
-    from openhands.agent_server.docker.build import _truncate_ident
+    from madagascar.agent_server.docker.build import _truncate_ident
 
     assert _truncate_ident("repo", "v1", 20) == "repo_tag_v1"
     assert _truncate_ident("averylongrepo", "tag", 10) == "av_tag_tag"
@@ -221,7 +221,7 @@ def test_truncate_ident_cases():
 
 def test_base_slug_truncation_with_tag():
     """Test that long image names with tags are truncated correctly."""
-    from openhands.agent_server.docker.build import _base_slug
+    from madagascar.agent_server.docker.build import _base_slug
 
     # Create a very long image name that exceeds max_len=64
     long_image = (
@@ -244,7 +244,7 @@ def test_base_slug_truncation_with_tag():
 
 def test_base_slug_truncation_no_tag():
     """Test that long image names without tags are truncated correctly."""
-    from openhands.agent_server.docker.build import _base_slug
+    from madagascar.agent_server.docker.build import _base_slug
 
     # Create a very long image name without a tag
     long_image = (
@@ -267,7 +267,7 @@ def test_base_slug_truncation_no_tag():
 
 def test_base_slug_preserves_latest_tag_suffix():
     """Ensure tag_latest suffix is not mangled when truncating long slugs."""
-    from openhands.agent_server.docker.build import _base_slug
+    from madagascar.agent_server.docker.build import _base_slug
 
     image = (
         "docker.io/swebench/sweb.eval.x86_64.astropy_1776_astropy-8872:"
@@ -282,7 +282,7 @@ def test_base_slug_preserves_latest_tag_suffix():
 
 def test_base_slug_preserves_tag_with_registry_port():
     """Handle registries with ports without losing the tag segment."""
-    from openhands.agent_server.docker.build import _base_slug
+    from madagascar.agent_server.docker.build import _base_slug
 
     image = (
         "localhost:5001/swebench/sweb.eval.x86_64.astropy_1776_astropy-8872:"
@@ -297,7 +297,7 @@ def test_base_slug_preserves_tag_with_registry_port():
 
 def test_base_slug_custom_max_len():
     """Test base_slug with custom max_len parameter."""
-    from openhands.agent_server.docker.build import _base_slug
+    from madagascar.agent_server.docker.build import _base_slug
 
     image = "ghcr.io/org/very-long-repository-name:v1.2.3"
 
@@ -314,7 +314,7 @@ def test_base_slug_custom_max_len():
 
 def test_base_slug_digest_consistency():
     """Test that the same image always produces the same digest."""
-    from openhands.agent_server.docker.build import _base_slug
+    from madagascar.agent_server.docker.build import _base_slug
 
     long_image = (
         "ghcr.io/very-long-organization-name/"
@@ -335,7 +335,7 @@ def test_base_slug_digest_consistency():
 
 def test_base_slug_edge_case_exact_max_len():
     """Test base_slug when slug length exactly equals max_len."""
-    from openhands.agent_server.docker.build import _base_slug
+    from madagascar.agent_server.docker.build import _base_slug
 
     # Create an image that results in exactly 30 characters
     # "python_tag_3.13" is 15 chars, let's use it with max_len=15
@@ -345,21 +345,21 @@ def test_base_slug_edge_case_exact_max_len():
 
 
 def test_release_tag_aliases_expand_semver_parts():
-    from openhands.agent_server.docker.build import _release_tag_aliases
+    from madagascar.agent_server.docker.build import _release_tag_aliases
 
     assert _release_tag_aliases("v1.2.3") == ["v1", "v1.2", "v1.2.3"]
     assert _release_tag_aliases("1.2.3") == ["1", "1.2", "1.2.3"]
 
 
 def test_release_tag_aliases_sanitize_non_semver_tags():
-    from openhands.agent_server.docker.build import _release_tag_aliases
+    from madagascar.agent_server.docker.build import _release_tag_aliases
 
     assert _release_tag_aliases("release/v1.2.3+build") == ["release-v1.2.3-build"]
 
 
 def test_versioned_tags_use_sdk_version_for_semver_git_tags():
     """Semver git tags (v1.2.3) defer to sdk_version (PEP 440, no 'v')."""
-    from openhands.agent_server.docker.build import BuildOptions
+    from madagascar.agent_server.docker.build import BuildOptions
 
     opts = BuildOptions(
         custom_tags="python",
@@ -374,7 +374,7 @@ def test_versioned_tags_use_sdk_version_for_semver_git_tags():
 
 def test_versioned_tags_semver_git_tag_strips_v_when_sdk_version_unknown():
     """Semver git tags still produce bare semver even if sdk_version is unknown."""
-    from openhands.agent_server.docker.build import BuildOptions
+    from madagascar.agent_server.docker.build import BuildOptions
 
     opts = BuildOptions(
         custom_tags="python",
@@ -388,7 +388,7 @@ def test_versioned_tags_semver_git_tag_strips_v_when_sdk_version_unknown():
 
 def test_versioned_tags_fallback_to_sdk_version_aliases():
     """Test versioned_tags fall back to the SDK version when no git tag exists."""
-    from openhands.agent_server.docker.build import BuildOptions
+    from madagascar.agent_server.docker.build import BuildOptions
 
     opts = BuildOptions(
         custom_tags="python,java,golang",
@@ -411,7 +411,7 @@ def test_versioned_tags_fallback_to_sdk_version_aliases():
 
 def test_versioned_tags_non_semver_git_tag_preserved():
     """Test non-semver git tags are published exactly once per custom tag."""
-    from openhands.agent_server.docker.build import BuildOptions
+    from madagascar.agent_server.docker.build import BuildOptions
 
     opts = BuildOptions(
         custom_tags="python",
@@ -425,7 +425,7 @@ def test_versioned_tags_non_semver_git_tag_preserved():
 
 def test_versioned_tags_no_custom_tags():
     """Test versioned_tags when no custom tags are provided."""
-    from openhands.agent_server.docker.build import BuildOptions
+    from madagascar.agent_server.docker.build import BuildOptions
 
     opts = BuildOptions(
         custom_tags="",
@@ -438,7 +438,7 @@ def test_versioned_tags_no_custom_tags():
 
 def test_all_tags_include_short_long_sha_and_branch():
     """Test that all_tags includes short SHA, long SHA, and sanitized branch tags."""
-    from openhands.agent_server.docker.build import BuildOptions
+    from madagascar.agent_server.docker.build import BuildOptions
 
     opts = BuildOptions(
         custom_tags="python",
@@ -448,15 +448,15 @@ def test_all_tags_include_short_long_sha_and_branch():
     )
 
     assert opts.all_tags == [
-        "ghcr.io/openhands/agent-server:abc1234-python",
-        "ghcr.io/openhands/agent-server:abc1234567890fedcba-python",
-        "ghcr.io/openhands/agent-server:feature-release-1-python",
+        "ghcr.io/madagascar/agent-server:abc1234-python",
+        "ghcr.io/madagascar/agent-server:abc1234567890fedcba-python",
+        "ghcr.io/madagascar/agent-server:feature-release-1-python",
     ]
 
 
 def test_all_tags_includes_versioned_tags():
     """Test that all_tags includes bare semver aliases when enabled for a tag build."""
-    from openhands.agent_server.docker.build import BuildOptions
+    from madagascar.agent_server.docker.build import BuildOptions
 
     opts = BuildOptions(
         custom_tags="python,java",
@@ -469,19 +469,19 @@ def test_all_tags_includes_versioned_tags():
 
     all_tags = opts.all_tags
 
-    assert "ghcr.io/openhands/agent-server:abc1234-python" in all_tags
-    assert "ghcr.io/openhands/agent-server:abc1234567890-python" in all_tags
+    assert "ghcr.io/madagascar/agent-server:abc1234-python" in all_tags
+    assert "ghcr.io/madagascar/agent-server:abc1234567890-python" in all_tags
     # Versioned tags use bare semver (no "v" prefix)
-    assert "ghcr.io/openhands/agent-server:1-python" in all_tags
-    assert "ghcr.io/openhands/agent-server:1.2-python" in all_tags
-    assert "ghcr.io/openhands/agent-server:1.2.0-python" in all_tags
-    assert "ghcr.io/openhands/agent-server:1.2.0-java" in all_tags
-    assert "ghcr.io/openhands/agent-server:1-java" in all_tags
+    assert "ghcr.io/madagascar/agent-server:1-python" in all_tags
+    assert "ghcr.io/madagascar/agent-server:1.2-python" in all_tags
+    assert "ghcr.io/madagascar/agent-server:1.2.0-python" in all_tags
+    assert "ghcr.io/madagascar/agent-server:1.2.0-java" in all_tags
+    assert "ghcr.io/madagascar/agent-server:1-java" in all_tags
 
 
 def test_all_tags_excludes_versioned_tags_when_disabled():
     """Test that all_tags excludes versioned tags when disabled."""
-    from openhands.agent_server.docker.build import BuildOptions
+    from madagascar.agent_server.docker.build import BuildOptions
 
     opts = BuildOptions(
         custom_tags="python",
@@ -494,15 +494,15 @@ def test_all_tags_excludes_versioned_tags_when_disabled():
 
     all_tags = opts.all_tags
 
-    assert "ghcr.io/openhands/agent-server:abc1234-python" in all_tags
-    assert "ghcr.io/openhands/agent-server:abc1234567890-python" in all_tags
-    assert "ghcr.io/openhands/agent-server:main-python" in all_tags
-    assert "ghcr.io/openhands/agent-server:1-python" not in all_tags
+    assert "ghcr.io/madagascar/agent-server:abc1234-python" in all_tags
+    assert "ghcr.io/madagascar/agent-server:abc1234567890-python" in all_tags
+    assert "ghcr.io/madagascar/agent-server:main-python" in all_tags
+    assert "ghcr.io/madagascar/agent-server:1-python" not in all_tags
 
 
 def test_all_tags_with_arch_suffix():
     """Test that expanded release tags include architecture suffixes."""
-    from openhands.agent_server.docker.build import BuildOptions
+    from madagascar.agent_server.docker.build import BuildOptions
 
     opts = BuildOptions(
         custom_tags="python",
@@ -517,15 +517,15 @@ def test_all_tags_with_arch_suffix():
     all_tags = opts.all_tags
 
     # Versioned tags use bare semver (no "v" prefix)
-    assert "ghcr.io/openhands/agent-server:1-python-amd64" in all_tags
-    assert "ghcr.io/openhands/agent-server:1.2-python-amd64" in all_tags
-    assert "ghcr.io/openhands/agent-server:1.2.0-python-amd64" in all_tags
-    assert "ghcr.io/openhands/agent-server:abc1234567890-python-amd64" in all_tags
+    assert "ghcr.io/madagascar/agent-server:1-python-amd64" in all_tags
+    assert "ghcr.io/madagascar/agent-server:1.2-python-amd64" in all_tags
+    assert "ghcr.io/madagascar/agent-server:1.2.0-python-amd64" in all_tags
+    assert "ghcr.io/madagascar/agent-server:abc1234567890-python-amd64" in all_tags
 
 
 def test_all_tags_with_target_suffix():
     """Test expanded release tags on non-binary targets."""
-    from openhands.agent_server.docker.build import BuildOptions
+    from madagascar.agent_server.docker.build import BuildOptions
 
     opts = BuildOptions(
         custom_tags="python",
@@ -539,23 +539,23 @@ def test_all_tags_with_target_suffix():
 
     all_tags = opts.all_tags
 
-    assert "ghcr.io/openhands/agent-server:1-python-source" in all_tags
-    assert "ghcr.io/openhands/agent-server:1.2-python-source" in all_tags
-    assert "ghcr.io/openhands/agent-server:1.2.0-python-source" in all_tags
-    assert "ghcr.io/openhands/agent-server:abc1234567890-python-source" in all_tags
+    assert "ghcr.io/madagascar/agent-server:1-python-source" in all_tags
+    assert "ghcr.io/madagascar/agent-server:1.2-python-source" in all_tags
+    assert "ghcr.io/madagascar/agent-server:1.2.0-python-source" in all_tags
+    assert "ghcr.io/madagascar/agent-server:abc1234567890-python-source" in all_tags
 
 
 def test_make_build_context_reuses_prebuilt_sdist_without_running_uv_build(
     tmp_path: Path,
 ):
-    from openhands.agent_server.docker.build import (
+    from madagascar.agent_server.docker.build import (
         _default_sdk_project_root,
         _make_build_context,
     )
 
     prebuilt_sdist = _create_fake_sdist(tmp_path)
 
-    with patch("openhands.agent_server.docker.build._run") as mock_run:
+    with patch("madagascar.agent_server.docker.build._run") as mock_run:
         ctx = _make_build_context(
             _default_sdk_project_root(),
             prebuilt_sdist=prebuilt_sdist,
@@ -573,7 +573,7 @@ def test_make_build_context_reuses_prebuilt_sdist_without_running_uv_build(
 
 
 def test_build_with_prebuilt_sdist_preserves_tags_and_docker_args(tmp_path: Path):
-    from openhands.agent_server.docker.build import (
+    from madagascar.agent_server.docker.build import (
         BuildOptions,
         _default_sdk_project_root,
         build,
@@ -605,18 +605,18 @@ def test_build_with_prebuilt_sdist_preserves_tags_and_docker_args(tmp_path: Path
 
     with (
         patch(
-            "openhands.agent_server.docker.build._make_build_context", return_value=ctx
+            "madagascar.agent_server.docker.build._make_build_context", return_value=ctx
         ) as mock_make_context,
-        patch("openhands.agent_server.docker.build._run", side_effect=fake_run),
+        patch("madagascar.agent_server.docker.build._run", side_effect=fake_run),
         patch(
-            "openhands.agent_server.docker.build._active_buildx_driver",
+            "madagascar.agent_server.docker.build._active_buildx_driver",
             return_value="docker-container",
         ),
         patch(
-            "openhands.agent_server.docker.build._default_local_cache_dir",
+            "madagascar.agent_server.docker.build._default_local_cache_dir",
             return_value=tmp_path / "cache",
         ),
-        patch("openhands.agent_server.docker.build.shutil.rmtree"),
+        patch("madagascar.agent_server.docker.build.shutil.rmtree"),
     ):
         tags = build(opts)
 
@@ -634,7 +634,7 @@ def test_build_with_prebuilt_sdist_preserves_tags_and_docker_args(tmp_path: Path
 
 
 def test_build_can_reuse_same_prebuilt_sdist_multiple_times(tmp_path: Path):
-    from openhands.agent_server.docker.build import (
+    from madagascar.agent_server.docker.build import (
         BuildOptions,
         _default_sdk_project_root,
         build,
@@ -657,19 +657,19 @@ def test_build_can_reuse_same_prebuilt_sdist_multiple_times(tmp_path: Path):
 
     with (
         patch(
-            "openhands.agent_server.docker.build._make_build_context",
+            "madagascar.agent_server.docker.build._make_build_context",
             side_effect=fake_make_context,
         ),
-        patch("openhands.agent_server.docker.build._run", side_effect=fake_run),
+        patch("madagascar.agent_server.docker.build._run", side_effect=fake_run),
         patch(
-            "openhands.agent_server.docker.build._active_buildx_driver",
+            "madagascar.agent_server.docker.build._active_buildx_driver",
             return_value="docker-container",
         ),
         patch(
-            "openhands.agent_server.docker.build._default_local_cache_dir",
+            "madagascar.agent_server.docker.build._default_local_cache_dir",
             return_value=tmp_path / "cache",
         ),
-        patch("openhands.agent_server.docker.build.shutil.rmtree"),
+        patch("madagascar.agent_server.docker.build.shutil.rmtree"),
     ):
         first_tags = build(
             BuildOptions(
@@ -700,7 +700,7 @@ def test_build_can_reuse_same_prebuilt_sdist_multiple_times(tmp_path: Path):
 
 
 def test_parse_buildkit_telemetry_extracts_phase_timings():
-    from openhands.agent_server.docker.build import _parse_buildkit_telemetry
+    from madagascar.agent_server.docker.build import _parse_buildkit_telemetry
 
     telemetry = _parse_buildkit_telemetry(BUILDKIT_STDERR_SAMPLE)
 
@@ -729,7 +729,7 @@ def test_parse_buildkit_telemetry_cache_export_with_preparing_line():
     ("exporting cache to registry" -> cache_export), subsequent sub-operation
     descriptions don't overwrite it.
     """
-    from openhands.agent_server.docker.build import _parse_buildkit_telemetry
+    from madagascar.agent_server.docker.build import _parse_buildkit_telemetry
 
     # Real-world BuildKit output pattern
     stderr_with_preparing = "\n".join(
@@ -751,7 +751,7 @@ def test_parse_buildkit_telemetry_cache_export_with_preparing_line():
 
 
 def test_build_with_telemetry_returns_parsed_buildkit_fields(tmp_path: Path):
-    from openhands.agent_server.docker.build import (
+    from madagascar.agent_server.docker.build import (
         BuildOptions,
         _default_sdk_project_root,
         build_with_telemetry,
@@ -772,7 +772,7 @@ def test_build_with_telemetry_returns_parsed_buildkit_fields(tmp_path: Path):
         custom_tags="python",
         git_sha="abc1234567890",
         git_ref="refs/heads/main",
-        image="ghcr.io/openhands/eval-agent-server",
+        image="ghcr.io/madagascar/eval-agent-server",
         target="source-minimal",
         push=True,
         sdk_project_root=_default_sdk_project_root(),
@@ -780,14 +780,14 @@ def test_build_with_telemetry_returns_parsed_buildkit_fields(tmp_path: Path):
 
     with (
         patch(
-            "openhands.agent_server.docker.build._make_build_context", return_value=ctx
+            "madagascar.agent_server.docker.build._make_build_context", return_value=ctx
         ),
-        patch("openhands.agent_server.docker.build._run", side_effect=fake_run),
+        patch("madagascar.agent_server.docker.build._run", side_effect=fake_run),
         patch(
-            "openhands.agent_server.docker.build.time.monotonic",
+            "madagascar.agent_server.docker.build.time.monotonic",
             side_effect=[10.0, 13.25, 20.0, 45.5, 46.0, 46.2],
         ),
-        patch("openhands.agent_server.docker.build.shutil.rmtree"),
+        patch("madagascar.agent_server.docker.build.shutil.rmtree"),
     ):
         result = build_with_telemetry(opts)
 
@@ -807,7 +807,7 @@ def test_build_with_telemetry_returns_parsed_buildkit_fields(tmp_path: Path):
 def test_build_with_telemetry_preserves_telemetry_on_failure(tmp_path: Path):
     import pytest
 
-    from openhands.agent_server.docker.build import (
+    from madagascar.agent_server.docker.build import (
         BuildCommandError,
         BuildOptions,
         _default_sdk_project_root,
@@ -832,7 +832,7 @@ def test_build_with_telemetry_preserves_telemetry_on_failure(tmp_path: Path):
         custom_tags="python",
         git_sha="abc1234567890",
         git_ref="refs/heads/main",
-        image="ghcr.io/openhands/eval-agent-server",
+        image="ghcr.io/madagascar/eval-agent-server",
         target="source-minimal",
         push=True,
         sdk_project_root=_default_sdk_project_root(),
@@ -840,14 +840,14 @@ def test_build_with_telemetry_preserves_telemetry_on_failure(tmp_path: Path):
 
     with (
         patch(
-            "openhands.agent_server.docker.build._make_build_context", return_value=ctx
+            "madagascar.agent_server.docker.build._make_build_context", return_value=ctx
         ),
-        patch("openhands.agent_server.docker.build._run", side_effect=fake_run),
+        patch("madagascar.agent_server.docker.build._run", side_effect=fake_run),
         patch(
-            "openhands.agent_server.docker.build.time.monotonic",
+            "madagascar.agent_server.docker.build.time.monotonic",
             side_effect=[10.0, 13.25, 20.0, 45.5, 46.0, 46.2],
         ),
-        patch("openhands.agent_server.docker.build.shutil.rmtree"),
+        patch("madagascar.agent_server.docker.build.shutil.rmtree"),
         pytest.raises(BuildCommandError) as excinfo,
     ):
         build_with_telemetry(opts)
@@ -873,8 +873,8 @@ def test_cache_export_modes(
     expect_cache_to: bool,
     expect_mode_value: str | None,
 ):
-    """Test cache export behavior for different OPENHANDS_BUILDKIT_CACHE_MODE values."""
-    from openhands.agent_server.docker.build import (
+    """Test cache export behavior for different MADAGASCAR_BUILDKIT_CACHE_MODE values."""
+    from madagascar.agent_server.docker.build import (
         BuildOptions,
         _default_sdk_project_root,
         build,
@@ -895,20 +895,20 @@ def test_cache_export_modes(
         custom_tags="python",
         git_sha="abc1234567890",
         git_ref="refs/heads/main",
-        image="ghcr.io/openhands/eval-agent-server",
+        image="ghcr.io/madagascar/eval-agent-server",
         target="source-minimal",
         push=True,
         sdk_project_root=_default_sdk_project_root(),
     )
 
     with (
-        patch.dict(os.environ, {"OPENHANDS_BUILDKIT_CACHE_MODE": mode}, clear=False),
+        patch.dict(os.environ, {"MADAGASCAR_BUILDKIT_CACHE_MODE": mode}, clear=False),
         patch(
-            "openhands.agent_server.docker.build._make_build_context",
+            "madagascar.agent_server.docker.build._make_build_context",
             return_value=ctx,
         ),
-        patch("openhands.agent_server.docker.build._run", side_effect=fake_run),
-        patch("openhands.agent_server.docker.build.shutil.rmtree"),
+        patch("madagascar.agent_server.docker.build._run", side_effect=fake_run),
+        patch("madagascar.agent_server.docker.build.shutil.rmtree"),
     ):
         build(opts)
 

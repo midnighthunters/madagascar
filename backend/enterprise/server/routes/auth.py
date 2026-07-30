@@ -63,16 +63,16 @@ from storage.default_org_service import DefaultOrgBootstrapService
 from storage.user import User
 from storage.user_store import UserStore
 
-from openhands.analytics import get_analytics_service, resolve_analytics_context
-from openhands.app_server.integrations.provider import (
+from madagascar.analytics import get_analytics_service, resolve_analytics_context
+from madagascar.app_server.integrations.provider import (
     PROVIDER_TOKEN_TYPE,
     ProviderHandler,
     ProviderToken,
 )
-from openhands.app_server.integrations.service_types import ProviderType, TokenResponse
-from openhands.app_server.user_auth import get_access_token
-from openhands.app_server.user_auth.user_auth import AuthType, get_user_auth
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.integrations.service_types import ProviderType, TokenResponse
+from madagascar.app_server.user_auth import get_access_token
+from madagascar.app_server.user_auth.user_auth import AuthType, get_user_auth
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 with warnings.catch_warnings():
     warnings.simplefilter('ignore')
@@ -223,7 +223,7 @@ async def _track_login_analytics_background(
                 {'id': str(org.id), 'name': org.name, 'member_count': member_count}
             )
 
-        from openhands.analytics.analytics_context import AnalyticsContext
+        from madagascar.analytics.analytics_context import AnalyticsContext
 
         ctx = AnalyticsContext(
             user_id=user_id,
@@ -999,7 +999,7 @@ async def accept_tos(request: Request):
         try:
             analytics = get_analytics_service()
             if analytics:
-                from openhands.analytics.analytics_context import AnalyticsContext
+                from madagascar.analytics.analytics_context import AnalyticsContext
 
                 org_id_str = str(user.current_org_id) if user.current_org_id else None
                 email = user.email

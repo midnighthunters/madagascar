@@ -7,7 +7,7 @@ export interface LoadingSpinnerProps {
 }
 
 export function LoadingSpinner({ className }: LoadingSpinnerProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <div className="flex items-center justify-center">

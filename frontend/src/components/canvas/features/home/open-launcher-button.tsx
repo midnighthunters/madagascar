@@ -23,7 +23,7 @@ export function OpenLauncherButton({
   disabled = false,
   disabledTooltip,
 }: OpenLauncherButtonProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   const isLocal = kind === "local";
   const label = isLocal

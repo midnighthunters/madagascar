@@ -1,6 +1,6 @@
 import pytest
 
-from openhands.sdk.llm.utils.model_features import (
+from madagascar.sdk.llm.utils.model_features import (
     get_features,
     model_matches,
 )

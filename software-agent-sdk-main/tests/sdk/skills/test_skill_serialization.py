@@ -4,14 +4,14 @@ import json
 
 from pydantic import BaseModel, Field, SecretStr
 
-from openhands.sdk.mcp.config import MCPServer
-from openhands.sdk.skills import (
+from madagascar.sdk.mcp.config import MCPServer
+from madagascar.sdk.skills import (
     KeywordTrigger,
     Skill,
     TaskTrigger,
 )
-from openhands.sdk.skills.types import InputMetadata
-from openhands.sdk.utils.models import OpenHandsModel
+from madagascar.sdk.skills.types import InputMetadata
+from madagascar.sdk.utils.models import MadagascarModel
 
 
 def test_repo_skill_serialization():
@@ -201,10 +201,10 @@ def test_skill_union_polymorphic_list():
     assert deserialized_list[2] == skills[2]
 
 
-def test_discriminated_union_with_openhands_model():
-    """Test trigger discrimination functionality with OpenHandsModel."""
+def test_discriminated_union_with_madagascar_model():
+    """Test trigger discrimination functionality with MadagascarModel."""
 
-    class TestModel(OpenHandsModel):
+    class TestModel(MadagascarModel):
         skills: list[Skill] = Field(default_factory=list)
 
     # Create test data with different trigger types
@@ -341,7 +341,7 @@ def test_mcp_tools_secrets_exposed_under_expose_secrets():
 def test_mcp_tools_secrets_encrypted_under_cipher():
     """With a cipher in context, secrets are encrypted (not plaintext, not
     dropped) so they can be decrypted on restore."""
-    from openhands.sdk.utils.cipher import Cipher
+    from madagascar.sdk.utils.cipher import Cipher
 
     skill = _skill_with_mcp_secret()
     cipher = Cipher(secret_key="test-encryption-key")

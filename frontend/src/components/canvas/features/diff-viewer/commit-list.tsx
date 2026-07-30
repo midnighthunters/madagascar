@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { GitCommit } from "#/api/open-hands.types";
+import { GitCommit } from "#/api/madagascar.types";
 import { I18nKey } from "#/i18n/declaration";
 import { CommitRow } from "./commit-row";
 
@@ -17,7 +17,7 @@ export interface CommitListProps {
  * (see routes/commits-tab.tsx).
  */
 export function CommitList({ commits, hasMore }: CommitListProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const [expandedSha, setExpandedSha] = React.useState<string | null>(null);
 
   // Author is noise when every commit has the same one (the usual

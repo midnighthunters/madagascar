@@ -10,14 +10,14 @@ Claude models). Models with reasoning_effort (like OpenAI o-series and GPT-5.x)
 produce reasoning items instead of thinking blocks, and are skipped.
 """
 
-from openhands.sdk import LLM, Message, TextContent, Tool
-from openhands.sdk.context.condenser.base import CondenserBase
-from openhands.sdk.context.view import View
-from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-from openhands.sdk.event import ActionEvent, Condensation
-from openhands.sdk.llm.utils.model_features import get_features
-from openhands.sdk.tool import register_tool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk import LLM, Message, TextContent, Tool
+from madagascar.sdk.context.condenser.base import CondenserBase
+from madagascar.sdk.context.view import View
+from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+from madagascar.sdk.event import ActionEvent, Condensation
+from madagascar.sdk.llm.utils.model_features import get_features
+from madagascar.sdk.tool import register_tool
+from madagascar.tools.terminal import TerminalTool
 from tests.integration.base import BaseIntegrationTest, SkipTest, TestResult
 
 

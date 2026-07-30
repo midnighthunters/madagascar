@@ -12,7 +12,7 @@ import { SettingsInput } from "#/components/features/settings/settings-input";
 import { HelpLink } from "#/ui/help-link";
 import { useConfig } from "#/hooks/query/use-config";
 import { KeyStatusIcon } from "#/components/features/settings/key-status-icon";
-import { OpenHandsApiKeyHelp } from "#/components/features/settings/openhands-api-key-help";
+import { MadagascarApiKeyHelp } from "#/components/features/settings/madagascar-api-key-help";
 import {
   SdkSectionHeaderProps,
   SdkSectionPage,
@@ -89,11 +89,11 @@ const normalizeBaseUrl = (baseUrl: string) => {
 };
 
 const isProviderDefaultBaseUrl = (model: string, baseUrl: string) => {
-  // For openhands/* models, base_url is server-owned (auto-filled on save) —
+  // For madagascar/* models, base_url is server-owned (auto-filled on save) —
   // never treat it as user customization that warrants the advanced view.
-  // Accepted edge case: a deliberately customized base_url on an openhands/*
+  // Accepted edge case: a deliberately customized base_url on an madagascar/*
   // model also lands on basic; values are preserved, Advanced is a click away.
-  if (model.startsWith("openhands/")) {
+  if (model.startsWith("madagascar/")) {
     return true;
   }
 
@@ -322,13 +322,13 @@ export function LlmSettingsScreen({
         view === "basic"
           ? (selectedProvider ?? derivedProvider)
           : derivedProvider;
-      const shouldUseOpenHandsKey =
-        isSaasMode && activeProvider === "openhands";
-      // The OpenHands key help links to OpenHands Cloud keys/pricing — only
+      const shouldUseMadagascarKey =
+        isSaasMode && activeProvider === "madagascar";
+      // The Madagascar key help links to Madagascar Cloud keys/pricing — only
       // meaningful on enterprise cloud, not self-hosted managed installs.
-      const showOpenHandsApiKeyHelp =
+      const showMadagascarApiKeyHelp =
         isEnterpriseCloud &&
-        modelValue.startsWith("openhands/") &&
+        modelValue.startsWith("madagascar/") &&
         allowUserLlmConfiguration;
       // While editing, the set-but-unfetchable key indicator must reflect
       // the clicked profile, not whichever profile is currently active.
@@ -344,7 +344,7 @@ export function LlmSettingsScreen({
           return null;
         }
 
-        if (shouldUseOpenHandsKey) {
+        if (shouldUseMadagascarKey) {
           return null;
         }
 
@@ -372,7 +372,7 @@ export function LlmSettingsScreen({
               testId={helpTestId}
               text={t(I18nKey.SETTINGS$DONT_KNOW_API_KEY)}
               linkText={t(I18nKey.SETTINGS$CLICK_FOR_INSTRUCTIONS)}
-              href="https://docs.openhands.dev/usage/local-setup#getting-an-api-key"
+              href="https://docs.madagascar.dev/usage/local-setup#getting-an-api-key"
             />
           </>
         );
@@ -422,8 +422,8 @@ export function LlmSettingsScreen({
                 isDisabled={isDisabled}
               />
 
-              {showOpenHandsApiKeyHelp ? (
-                <OpenHandsApiKeyHelp testId="openhands-api-key-help" />
+              {showMadagascarApiKeyHelp ? (
+                <MadagascarApiKeyHelp testId="madagascar-api-key-help" />
               ) : null}
 
               {/* A blank create form has no provider yet — rendering the key
@@ -452,8 +452,8 @@ export function LlmSettingsScreen({
                 isDisabled={isDisabled}
               />
 
-              {showOpenHandsApiKeyHelp ? (
-                <OpenHandsApiKeyHelp testId="openhands-api-key-help-2" />
+              {showMadagascarApiKeyHelp ? (
+                <MadagascarApiKeyHelp testId="madagascar-api-key-help-2" />
               ) : null}
 
               <SettingsInput
@@ -518,11 +518,11 @@ export function LlmSettingsScreen({
         context.view === "basic"
           ? (selectedProvider ?? derivedProvider)
           : derivedProvider;
-      const shouldUseOpenHandsKey =
-        isSaasMode && activeProvider === "openhands";
+      const shouldUseMadagascarKey =
+        isSaasMode && activeProvider === "madagascar";
 
       const llm = (agentSettings.llm ?? {}) as Record<string, unknown>;
-      if (shouldUseOpenHandsKey && llm.model !== undefined) {
+      if (shouldUseMadagascarKey && llm.model !== undefined) {
         llm.api_key = "";
         agentSettings.llm = llm;
       }
@@ -546,7 +546,7 @@ export function LlmSettingsScreen({
               : "";
           llm.base_url = baseUrlValue || null;
         }
-        if (shouldUseOpenHandsKey && llm.api_key === undefined) {
+        if (shouldUseMadagascarKey && llm.api_key === undefined) {
           llm.api_key = "";
         }
         agentSettings.llm = llm;
@@ -559,14 +559,14 @@ export function LlmSettingsScreen({
       // fire on same-value re-saves (e.g. save → delete profile → save
       // again).
       lastSavedModelRef.current = modelValue || null;
-      // OpenHands-managed saves force api_key to "" above — that's not a
+      // Madagascar-managed saves force api_key to "" above — that's not a
       // user-typed key, so it must not defeat key preservation.
       const typedApiKey =
         typeof context.values["llm.api_key"] === "string"
           ? context.values["llm.api_key"].trim()
           : "";
       lastSavedApiKeyTypedRef.current =
-        !shouldUseOpenHandsKey && typedApiKey.length > 0;
+        !shouldUseMadagascarKey && typedApiKey.length > 0;
 
       return { agent_settings_diff: agentSettings };
     },
@@ -791,9 +791,9 @@ export function LlmSettingsScreen({
             settingsSource: "agent_settings",
             sectionKeys: ["llm"],
             excludeKeys: LLM_EXCLUDED_KEYS,
-            // The "llm" key exists under both the openhands and acp union
-            // variants; target openhands so the acp duplicate is dropped.
-            variant: "openhands",
+            // The "llm" key exists under both the madagascar and acp union
+            // variants; target madagascar so the acp duplicate is dropped.
+            variant: "madagascar",
           },
         ]}
         header={buildHeader}

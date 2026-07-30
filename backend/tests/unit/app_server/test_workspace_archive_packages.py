@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from openhands.app_server.sandbox import workspace_archive as wa
+from madagascar.app_server.sandbox import workspace_archive as wa
 
 # --- parsers ---------------------------------------------------------------
 

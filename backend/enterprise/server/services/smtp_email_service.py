@@ -6,9 +6,9 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from typing import TypedDict
 
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
-DEFAULT_FROM_EMAIL = 'OpenHands <no-reply@openhands.dev>'
+DEFAULT_FROM_EMAIL = 'Madagascar <no-reply@madagascar.dev>'
 DEFAULT_WEB_HOST = 'https://app.all-hands.dev'
 
 
@@ -150,12 +150,12 @@ class SMTPEmailService:
             invitation_id: The invitation ID for logging
         """
         invitation_url = SMTPEmailService.build_invitation_url(invitation_token)
-        subject = f"You're invited to join {org_name} on OpenHands"
+        subject = f"You're invited to join {org_name} on Madagascar"
         body = f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <p>Hi,</p>
 
-            <p><strong>{inviter_name}</strong> has invited you to join <strong>{org_name}</strong> on OpenHands as a <strong>{role_name}</strong>.</p>
+            <p><strong>{inviter_name}</strong> has invited you to join <strong>{org_name}</strong> on Madagascar as a <strong>{role_name}</strong>.</p>
 
             <p>Click the button below to accept the invitation:</p>
 
@@ -185,7 +185,7 @@ class SMTPEmailService:
 
             <p style="color: #999; font-size: 12px;">
                 Best,<br>
-                The OpenHands Team
+                The Madagascar Team
             </p>
         </div>
         """
@@ -205,7 +205,7 @@ class SMTPEmailService:
         threshold: int,
     ) -> None:
         subject = (
-            f'OpenHands budget alert: {org_name} reached {threshold}% of its limit'
+            f'Madagascar budget alert: {org_name} reached {threshold}% of its limit'
         )
         body = f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -217,7 +217,7 @@ class SMTPEmailService:
             <strong>Threshold:</strong> {threshold}%</p>
             <p>Please review your Usage & Monitoring dashboard for more details.</p>
             <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-            <p style="color: #999; font-size: 12px;">Best,<br>The OpenHands Team</p>
+            <p style="color: #999; font-size: 12px;">Best,<br>The Madagascar Team</p>
         </div>
         """
 

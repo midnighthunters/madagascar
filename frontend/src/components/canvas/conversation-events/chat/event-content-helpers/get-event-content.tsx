@@ -5,7 +5,7 @@ import {
   CANVAS_UI_CLIENT_TOOL_NAME,
 } from "#/constants/canvas-ui";
 import {
-  OpenHandsEvent,
+  MadagascarEvent,
   ObservationEvent,
   ActionEvent,
 } from "#/types/agent-server/core";
@@ -47,7 +47,7 @@ const createTitleFromKey = (
 
   return (
     <Trans
-      ns="openhands"
+      ns="madagascar"
       i18nKey={key}
       values={values}
       components={{
@@ -61,7 +61,7 @@ const createTitleFromKey = (
 /**
  * Detects the agent-server's default summary fallback, which has the shape
  * `{tool_name}: {json-args}` (see `_extract_summary` in
- * `openhands/sdk/agent/agent.py`). When the LLM omits a summary the server
+ * `madagascar/sdk/agent/agent.py`). When the LLM omits a summary the server
  * dumps the raw arguments JSON, which renders as a huge unreadable blob in
  * the chat. Treat that case as "no summary" so the action-kind specific
  * title (e.g. "Editing <path>", "Running <cmd>") is used instead.
@@ -143,7 +143,7 @@ const getVisionInspectObservationTitle = (
 };
 
 // Action Event Processing
-const getActionEventTitle = (event: OpenHandsEvent): React.ReactNode => {
+const getActionEventTitle = (event: MadagascarEvent): React.ReactNode => {
   // Early return if not an action event
   if (!isActionEvent(event)) {
     return "";
@@ -258,7 +258,7 @@ const getActionEventTitle = (event: OpenHandsEvent): React.ReactNode => {
 
 // Observation Event Processing
 const getObservationEventTitle = (
-  event: OpenHandsEvent,
+  event: MadagascarEvent,
   correspondingAction?: ActionEvent,
 ): React.ReactNode => {
   // Early return if not an observation event
@@ -407,7 +407,7 @@ const getCanvasUIClientObservationContent = (
 };
 
 export const getEventContent = (
-  event: OpenHandsEvent | SkillReadyEvent,
+  event: MadagascarEvent | SkillReadyEvent,
   correspondingAction?: ActionEvent,
 ) => {
   let title: React.ReactNode = "";

@@ -13,7 +13,7 @@ export function TabNavigation({
   onTabChange,
   hasTools,
 }: TabNavigationProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   return (
     <div

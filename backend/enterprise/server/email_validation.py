@@ -5,19 +5,19 @@ Email domain validation utilities for enterprise endpoints.
 from fastapi import Depends, HTTPException, Request, status
 from server.constants import OPEN_ORG_CREATION_ENABLED
 
-from openhands.app_server.user_auth import get_user_auth, get_user_id
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.user_auth import get_user_auth, get_user_id
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 
 async def get_admin_user_id(
     request: Request, user_id: str | None = Depends(get_user_id)
 ) -> str:
     """
-    Dependency that validates user has @openhands.dev email domain.
+    Dependency that validates user has @madagascar.dev email domain.
 
     This dependency can be used in place of get_user_id for endpoints that
     should only be accessible to admin users. Currently, this is implemented
-    by checking for @openhands.dev email domain.
+    by checking for @madagascar.dev email domain.
 
     TODO: In the future, this should be replaced with an explicit is_admin flag
     in user/org settings instead of relying on email domain validation.
@@ -30,7 +30,7 @@ async def get_admin_user_id(
         str: User ID if email domain is valid
 
     Raises:
-        HTTPException: 403 if email domain is not @openhands.dev
+        HTTPException: 403 if email domain is not @madagascar.dev
         HTTPException: 401 if user is not authenticated
 
     Example:
@@ -56,14 +56,14 @@ async def get_admin_user_id(
             detail='User email not available',
         )
 
-    if not user_email.endswith('@openhands.dev'):
+    if not user_email.endswith('@madagascar.dev'):
         logger.warning(
             'Access denied - invalid email domain',
             extra={'user_id': user_id, 'email_domain': user_email.split('@')[-1]},
         )
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail='Access restricted to @openhands.dev users',
+            detail='Access restricted to @madagascar.dev users',
         )
 
     return user_id
@@ -80,7 +80,7 @@ async def get_org_creator_user_id(
     - When **enabled**, any authenticated user is allowed to create an
       organization (only ``get_user_id`` is enforced).
     - When **disabled** (the default), this falls back to ``get_admin_user_id``
-      so org creation remains restricted to ``@openhands.dev`` admin users.
+      so org creation remains restricted to ``@madagascar.dev`` admin users.
 
     Args:
         request: FastAPI request object
@@ -92,7 +92,7 @@ async def get_org_creator_user_id(
     Raises:
         HTTPException: 401 if user is not authenticated
         HTTPException: 403 if the feature switch is disabled and the user is
-            not an ``@openhands.dev`` admin
+            not an ``@madagascar.dev`` admin
 
     Example:
         @router.post('/endpoint')

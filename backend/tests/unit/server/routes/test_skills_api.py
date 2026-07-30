@@ -8,20 +8,20 @@ from fastapi import Request
 from fastapi.testclient import TestClient
 from pydantic import SecretStr
 
-from openhands.app_server.app import app
-from openhands.app_server.file_store.memory import InMemoryFileStore
-from openhands.app_server.integrations.provider import ProviderToken, ProviderType
-from openhands.app_server.integrations.service_types import UserGitInfo
-from openhands.app_server.secrets.secrets_models import Secrets
-from openhands.app_server.secrets.secrets_store import SecretsStore
-from openhands.app_server.settings.file_settings_store import FileSettingsStore
-from openhands.app_server.settings.settings_models import MarketplaceRegistration
-from openhands.app_server.settings.settings_store import SettingsStore
-from openhands.app_server.user.skills_router import (
+from madagascar.app_server.app import app
+from madagascar.app_server.file_store.memory import InMemoryFileStore
+from madagascar.app_server.integrations.provider import ProviderToken, ProviderType
+from madagascar.app_server.integrations.service_types import UserGitInfo
+from madagascar.app_server.secrets.secrets_models import Secrets
+from madagascar.app_server.secrets.secrets_store import SecretsStore
+from madagascar.app_server.settings.file_settings_store import FileSettingsStore
+from madagascar.app_server.settings.settings_models import MarketplaceRegistration
+from madagascar.app_server.settings.settings_store import SettingsStore
+from madagascar.app_server.user.skills_router import (
     GLOBAL_SKILLS_DIR,
     _clone_marketplace_repo,
 )
-from openhands.app_server.user_auth.user_auth import UserAuth
+from madagascar.app_server.user_auth.user_auth import UserAuth
 
 
 class MockUserAuth(UserAuth):
@@ -75,13 +75,13 @@ class MockUserAuth(UserAuth):
 def test_client():
     with (
         patch.dict(os.environ, {'SESSION_API_KEY': ''}, clear=False),
-        patch('openhands.app_server.utils.dependencies._SESSION_API_KEY', None),
+        patch('madagascar.app_server.utils.dependencies._SESSION_API_KEY', None),
         patch(
-            'openhands.app_server.user_auth.user_auth.UserAuth.get_instance',
+            'madagascar.app_server.user_auth.user_auth.UserAuth.get_instance',
             return_value=MockUserAuth(),
         ),
         patch(
-            'openhands.app_server.settings.file_settings_store.FileSettingsStore.get_instance',
+            'madagascar.app_server.settings.file_settings_store.FileSettingsStore.get_instance',
             AsyncMock(return_value=FileSettingsStore(InMemoryFileStore())),
         ),
     ):
@@ -121,9 +121,9 @@ async def test_skills_search_returns_skills(test_client, tmp_path):
     )
 
     with (
-        patch('openhands.app_server.user.skills_router.GLOBAL_SKILLS_DIR', global_dir),
+        patch('madagascar.app_server.user.skills_router.GLOBAL_SKILLS_DIR', global_dir),
         patch(
-            'openhands.app_server.user.skills_router.USER_SKILLS_DIR',
+            'madagascar.app_server.user.skills_router.USER_SKILLS_DIR',
             tmp_path / 'nonexistent',
         ),
     ):
@@ -159,11 +159,11 @@ async def test_skills_search_handles_missing_dirs(test_client, tmp_path):
     """Test that the endpoint handles missing directories gracefully."""
     with (
         patch(
-            'openhands.app_server.user.skills_router.GLOBAL_SKILLS_DIR',
+            'madagascar.app_server.user.skills_router.GLOBAL_SKILLS_DIR',
             tmp_path / 'no_such_dir',
         ),
         patch(
-            'openhands.app_server.user.skills_router.USER_SKILLS_DIR',
+            'madagascar.app_server.user.skills_router.USER_SKILLS_DIR',
             tmp_path / 'also_missing',
         ),
     ):
@@ -186,8 +186,8 @@ async def test_skills_search_sorted_by_source_then_name(test_client, tmp_path):
     _write_skill_file(user_dir, 'b_user', skill_type='repo')
 
     with (
-        patch('openhands.app_server.user.skills_router.GLOBAL_SKILLS_DIR', global_dir),
-        patch('openhands.app_server.user.skills_router.USER_SKILLS_DIR', user_dir),
+        patch('madagascar.app_server.user.skills_router.GLOBAL_SKILLS_DIR', global_dir),
+        patch('madagascar.app_server.user.skills_router.USER_SKILLS_DIR', user_dir),
     ):
         response = test_client.get('/api/v1/skills/search')
 
@@ -214,9 +214,9 @@ async def test_skills_search_pagination(test_client, tmp_path):
     _write_skill_file(global_dir, 'skill_c', skill_type='repo')
 
     with (
-        patch('openhands.app_server.user.skills_router.GLOBAL_SKILLS_DIR', global_dir),
+        patch('madagascar.app_server.user.skills_router.GLOBAL_SKILLS_DIR', global_dir),
         patch(
-            'openhands.app_server.user.skills_router.USER_SKILLS_DIR',
+            'madagascar.app_server.user.skills_router.USER_SKILLS_DIR',
             tmp_path / 'nonexistent',
         ),
     ):
@@ -293,7 +293,7 @@ class TestMarketplaceSkillsCloneFailures:
 
         # Mock _parse_marketplace_source to return invalid path (empty = parse failure)
         with patch(
-            'openhands.app_server.user.skills_router._parse_marketplace_source',
+            'madagascar.app_server.user.skills_router._parse_marketplace_source',
             return_value=('github', ''),
         ):
             result = await _clone_marketplace_repo(marketplace, mock_user_context)
@@ -316,7 +316,7 @@ class TestMarketplaceSkillsCloneFailures:
 
         # Mock subprocess.run to raise TimeoutExpired
         with patch(
-            'openhands.app_server.user.skills_router.subprocess.run'
+            'madagascar.app_server.user.skills_router.subprocess.run'
         ) as mock_run:
             mock_run.side_effect = subprocess.TimeoutExpired(
                 cmd='git clone', timeout=120
@@ -344,7 +344,7 @@ class TestMarketplaceSkillsCloneFailures:
         mock_result.stderr = 'Repository not found'
 
         with patch(
-            'openhands.app_server.user.skills_router.subprocess.run'
+            'madagascar.app_server.user.skills_router.subprocess.run'
         ) as mock_run:
             mock_run.return_value = mock_result
             result = await _clone_marketplace_repo(marketplace, mock_user_context)
@@ -380,9 +380,9 @@ class TestMarketplaceSkillsCloneFailures:
             return mock_clone_result
 
         with patch(
-            'openhands.app_server.user.skills_router.subprocess.run'
+            'madagascar.app_server.user.skills_router.subprocess.run'
         ) as mock_run:
-            with patch('openhands.app_server.user.skills_router._cleanup_clone_dir'):
+            with patch('madagascar.app_server.user.skills_router._cleanup_clone_dir'):
                 with patch('tempfile.mkdtemp', return_value=Path('/tmp/test_clone')):
                     mock_run.side_effect = run_side_effect
                     result = await _clone_marketplace_repo(
@@ -412,13 +412,13 @@ class TestMarketplaceSkillsCloneFailures:
             return mock_clone_result
 
         with patch(
-            'openhands.app_server.user.skills_router.subprocess.run'
+            'madagascar.app_server.user.skills_router.subprocess.run'
         ) as mock_run:
             with patch(
-                'openhands.app_server.user.skills_router.Path.exists'
+                'madagascar.app_server.user.skills_router.Path.exists'
             ) as mock_exists:
                 with patch(
-                    'openhands.app_server.user.skills_router._cleanup_clone_dir'
+                    'madagascar.app_server.user.skills_router._cleanup_clone_dir'
                 ):
                     with patch(
                         'tempfile.mkdtemp', return_value=Path('/tmp/test_clone')

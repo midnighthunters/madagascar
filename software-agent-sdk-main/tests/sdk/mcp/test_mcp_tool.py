@@ -5,12 +5,12 @@ from unittest.mock import MagicMock, Mock
 
 import mcp.types
 
-from openhands.sdk.llm import ImageContent, TextContent
-from openhands.sdk.mcp.client import MCPClient
-from openhands.sdk.mcp.definition import MCPToolObservation
-from openhands.sdk.mcp.tool import MCPToolDefinition, MCPToolExecutor
-from openhands.sdk.tool import ToolAnnotations
-from openhands.sdk.utils.async_executor import AsyncExecutor
+from madagascar.sdk.llm import ImageContent, TextContent
+from madagascar.sdk.mcp.client import MCPClient
+from madagascar.sdk.mcp.definition import MCPToolObservation
+from madagascar.sdk.mcp.tool import MCPToolDefinition, MCPToolExecutor
+from madagascar.sdk.tool import ToolAnnotations
+from madagascar.sdk.utils.async_executor import AsyncExecutor
 
 
 class MockMCPClient(MCPClient):

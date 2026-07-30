@@ -15,20 +15,20 @@ import pytest
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 
-from openhands.agent_server.models import ConversationInfo, Success
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.agent_server.models import ConversationInfo, Success
+from madagascar.app_server.app_conversation.app_conversation_models import (
     ACP_SERVER_TAG_KEY,
     AppConversationInfo,
 )
-from openhands.app_server.app_conversation.sql_app_conversation_info_service import (
+from madagascar.app_server.app_conversation.sql_app_conversation_info_service import (
     SQLAppConversationInfoService,
 )
-from openhands.app_server.event_callback.webhook_router import on_conversation_update
-from openhands.app_server.user.specifiy_user_context import SpecifyUserContext
-from openhands.app_server.utils.sql_utils import Base
-from openhands.sdk import Agent
-from openhands.sdk.agent.acp_agent import ACPAgent
-from openhands.sdk.llm import LLM
+from madagascar.app_server.event_callback.webhook_router import on_conversation_update
+from madagascar.app_server.user.specifiy_user_context import SpecifyUserContext
+from madagascar.app_server.utils.sql_utils import Base
+from madagascar.sdk import Agent
+from madagascar.sdk.agent.acp_agent import ACPAgent
+from madagascar.sdk.llm import LLM
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -118,7 +118,7 @@ def _make_acp_conversation_info(acp_command: list[str]) -> ConversationInfo:
 async def test_llm_conversation_stores_llm_model(
     async_session, service, sandbox_record
 ):
-    """LLM path stores the real model in llm_model and sets agent_kind='openhands'."""
+    """LLM path stores the real model in llm_model and sets agent_kind='madagascar'."""
     llm_info = _make_llm_conversation_info()
     conversation_id = llm_info.id
 
@@ -130,7 +130,7 @@ async def test_llm_conversation_stores_llm_model(
     )
 
     with patch(
-        'openhands.app_server.event_callback.webhook_router.valid_conversation',
+        'madagascar.app_server.event_callback.webhook_router.valid_conversation',
         return_value=existing,
     ):
         result = await on_conversation_update(
@@ -144,7 +144,7 @@ async def test_llm_conversation_stores_llm_model(
     saved = await service.get_app_conversation_info(conversation_id)
     assert saved is not None
     assert saved.llm_model == 'anthropic/claude-sonnet-4-6'
-    assert saved.agent_kind == 'openhands'
+    assert saved.agent_kind == 'madagascar'
 
 
 @pytest.mark.asyncio
@@ -163,7 +163,7 @@ async def test_acp_conversation_sets_agent_kind(async_session, service, sandbox_
     )
 
     with patch(
-        'openhands.app_server.event_callback.webhook_router.valid_conversation',
+        'madagascar.app_server.event_callback.webhook_router.valid_conversation',
         return_value=existing,
     ):
         result = await on_conversation_update(
@@ -205,7 +205,7 @@ async def test_acp_server_tag_preserved_on_webhook_update(
     )
 
     with patch(
-        'openhands.app_server.event_callback.webhook_router.valid_conversation',
+        'madagascar.app_server.event_callback.webhook_router.valid_conversation',
         return_value=existing,
     ):
         await on_conversation_update(
@@ -256,7 +256,7 @@ async def test_acp_conversation_persists_live_current_model_id(
     )
 
     with patch(
-        'openhands.app_server.event_callback.webhook_router.valid_conversation',
+        'madagascar.app_server.event_callback.webhook_router.valid_conversation',
         return_value=existing,
     ):
         await on_conversation_update(
@@ -293,7 +293,7 @@ async def test_acp_server_key_derived_from_command(
     )
 
     with patch(
-        'openhands.app_server.event_callback.webhook_router.valid_conversation',
+        'madagascar.app_server.event_callback.webhook_router.valid_conversation',
         return_value=existing,
     ):
         await on_conversation_update(
@@ -335,15 +335,15 @@ async def test_acp_conversation_analytics_llm_model_is_null(
 
     with (
         patch(
-            'openhands.app_server.event_callback.webhook_router.valid_conversation',
+            'madagascar.app_server.event_callback.webhook_router.valid_conversation',
             return_value=existing,
         ),
         patch(
-            'openhands.app_server.event_callback.webhook_router.get_analytics_service',
+            'madagascar.app_server.event_callback.webhook_router.get_analytics_service',
             return_value=analytics,
         ),
         patch(
-            'openhands.app_server.event_callback.webhook_router.resolve_analytics_context',
+            'madagascar.app_server.event_callback.webhook_router.resolve_analytics_context',
             new=AsyncMock(return_value=MagicMock()),
         ),
     ):
@@ -373,8 +373,8 @@ def test_legacy_llm_payload_deserialises_as_agent():
     correctly returns ``False`` — i.e. the on_conversation_update branch
     that writes ``llm_model`` is selected.
     """
-    from openhands.sdk.agent.agent import Agent
-    from openhands.sdk.llm import LLM
+    from madagascar.sdk.agent.agent import Agent
+    from madagascar.sdk.llm import LLM
 
     agent = Agent(llm=LLM(model='anthropic/claude-sonnet-4-6', usage_id='test-usage'))
     legacy_payload: dict = {

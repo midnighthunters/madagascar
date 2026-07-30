@@ -11,7 +11,7 @@ from server.auth.constants import (
     SUSPICIOUS_LABELS,
 )
 
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 
 @dataclass

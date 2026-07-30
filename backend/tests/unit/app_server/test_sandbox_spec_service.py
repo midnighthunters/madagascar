@@ -1,7 +1,7 @@
 """Tests for sandbox_spec_service helpers.
 
 Covers ``get_agent_server_image`` (derived from the installed
-``openhands-agent-server`` package, with auto-correction of stale canonical
+``madagascar-agent-server`` package, with auto-correction of stale canonical
 tags for self-hosted installs) and ``is_custom_sandbox_spec`` (which compares
 a sandbox spec id against the bundled default).
 """
@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 import pytest
 
-from openhands.app_server.sandbox.sandbox_spec_service import (
+from madagascar.app_server.sandbox.sandbox_spec_service import (
     _bundled_agent_server_version,
     get_agent_server_image,
     is_custom_sandbox_spec,
@@ -31,7 +31,7 @@ def _clear_caches():
 
 
 def test_get_agent_server_image_derived_from_package_version():
-    """The URL must be built from the installed openhands-agent-server version,
+    """The URL must be built from the installed madagascar-agent-server version,
     not a hand-maintained constant — that's the whole point of removing the
     drift-prone AGENT_SERVER_IMAGE string."""
     fake_version = '9.9.9'
@@ -41,7 +41,7 @@ def test_get_agent_server_image_derived_from_package_version():
         return_value=fake_version,
     ):
         assert get_agent_server_image() == (
-            f'ghcr.io/openhands/agent-server:{fake_version}-python'
+            f'ghcr.io/madagascar/agent-server:{fake_version}-python'
         )
 
 
@@ -89,13 +89,13 @@ def test_get_agent_server_image_auto_corrects_stale_canonical_tag():
         with patch.dict(
             'os.environ',
             {
-                'AGENT_SERVER_IMAGE_REPOSITORY': 'ghcr.io/openhands/agent-server',
+                'AGENT_SERVER_IMAGE_REPOSITORY': 'ghcr.io/madagascar/agent-server',
                 'AGENT_SERVER_IMAGE_TAG': '1.31.1-python',
             },
             clear=False,
         ):
             assert get_agent_server_image() == (
-                f'ghcr.io/openhands/agent-server:{fake_version}-python'
+                f'ghcr.io/madagascar/agent-server:{fake_version}-python'
             )
 
 
@@ -109,13 +109,13 @@ def test_get_agent_server_image_passes_through_canonical_tag_without_suffix():
         with patch.dict(
             'os.environ',
             {
-                'AGENT_SERVER_IMAGE_REPOSITORY': 'ghcr.io/openhands/agent-server',
+                'AGENT_SERVER_IMAGE_REPOSITORY': 'ghcr.io/madagascar/agent-server',
                 'AGENT_SERVER_IMAGE_TAG': 'nightly',
             },
             clear=False,
         ):
             assert get_agent_server_image() == (
-                'ghcr.io/openhands/agent-server:nightly'
+                'ghcr.io/madagascar/agent-server:nightly'
             )
 
 
@@ -127,13 +127,13 @@ def test_get_agent_server_image_passes_through_canonical_repo_with_matching_tag(
         with patch.dict(
             'os.environ',
             {
-                'AGENT_SERVER_IMAGE_REPOSITORY': 'ghcr.io/openhands/agent-server',
+                'AGENT_SERVER_IMAGE_REPOSITORY': 'ghcr.io/madagascar/agent-server',
                 'AGENT_SERVER_IMAGE_TAG': f'{fake_version}-python',
             },
             clear=False,
         ):
             assert get_agent_server_image() == (
-                f'ghcr.io/openhands/agent-server:{fake_version}-python'
+                f'ghcr.io/madagascar/agent-server:{fake_version}-python'
             )
 
 
@@ -170,12 +170,12 @@ def test_is_custom_sandbox_spec_true_for_self_hosted_custom_repo():
 
 
 def test_get_agent_server_image_propagates_package_not_found():
-    """openhands-agent-server is a hard runtime dependency; a missing install
+    """madagascar-agent-server is a hard runtime dependency; a missing install
     must surface as PackageNotFoundError at first call, not silently degrade."""
     with patch.object(
         importlib.metadata,
         'version',
-        side_effect=importlib.metadata.PackageNotFoundError('openhands-agent-server'),
+        side_effect=importlib.metadata.PackageNotFoundError('madagascar-agent-server'),
     ):
         with pytest.raises(importlib.metadata.PackageNotFoundError):
             get_agent_server_image()

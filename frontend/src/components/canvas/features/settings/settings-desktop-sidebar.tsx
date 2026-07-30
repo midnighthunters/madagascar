@@ -19,7 +19,7 @@ interface SettingsDesktopSidebarProps {
 export function SettingsDesktopSidebar({
   navigationItems,
 }: SettingsDesktopSidebarProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const desktopNavItems = navigationItems.filter(
     (item): item is Extract<SettingsNavRenderedItem, { type: "item" }> =>
       item.type === "item",

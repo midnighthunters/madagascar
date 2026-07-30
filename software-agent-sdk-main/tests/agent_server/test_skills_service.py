@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import pytest
 
-from openhands.agent_server.skills_service import (
+from madagascar.agent_server.skills_service import (
     SANDBOX_WORKER_URL_PREFIX,
     ExposedUrlData,
     SkillLoadResult,
@@ -19,8 +19,8 @@ from openhands.agent_server.skills_service import (
     merge_skills,
     sync_public_skills,
 )
-from openhands.sdk.marketplace.registration import MarketplaceRegistration
-from openhands.sdk.skills import Skill
+from madagascar.sdk.marketplace.registration import MarketplaceRegistration
+from madagascar.sdk.skills import Skill
 
 
 def _create_test_plugin(plugin_dir: Path, name: str, skill_name: str) -> Path:
@@ -194,7 +194,7 @@ class TestLoadOrgSkillsFromUrl:
             mock_run.side_effect = Exception("Git not found")
 
             result = load_org_skills_from_url(
-                org_repo_url="https://github.com/org/.openhands",
+                org_repo_url="https://github.com/org/.madagascar",
                 org_name="test-org",
             )
 
@@ -211,7 +211,7 @@ class TestLoadOrgSkillsFromUrl:
             )
 
             result = load_org_skills_from_url(
-                org_repo_url="https://github.com/org/.openhands",
+                org_repo_url="https://github.com/org/.madagascar",
                 org_name="test-org",
             )
 
@@ -228,7 +228,7 @@ class TestLoadOrgSkillsFromUrl:
             )
 
             result = load_org_skills_from_url(
-                org_repo_url="https://github.com/org/.openhands",
+                org_repo_url="https://github.com/org/.madagascar",
                 org_name="test-org",
             )
 
@@ -246,7 +246,7 @@ class TestLoadOrgSkillsFromUrl:
                 )
 
                 result = load_org_skills_from_url(
-                    org_repo_url="https://github.com/org/.openhands",
+                    org_repo_url="https://github.com/org/.madagascar",
                     org_name="test-org",
                     working_dir=tmpdir,
                 )
@@ -257,7 +257,7 @@ class TestLoadOrgSkillsFromUrl:
 class TestLoadAllSkills:
     """Tests for load_all_skills function."""
 
-    _PATCH_TARGET = "openhands.agent_server.skills_service.load_available_skills"
+    _PATCH_TARGET = "madagascar.agent_server.skills_service.load_available_skills"
 
     def test_load_all_skills_registered_marketplaces_keep_legacy_public(
         self, tmp_path: Path
@@ -362,7 +362,7 @@ class TestLoadAllSkills:
         marketplace_dir = _create_test_marketplace(tmp_path / "marketplace")
 
         with patch(
-            "openhands.sdk.marketplace.registry.fetch_plugin_with_resolution",
+            "madagascar.sdk.marketplace.registry.fetch_plugin_with_resolution",
             return_value=(marketplace_dir, "abc123"),
         ) as mock_fetch:
             skills = load_registered_marketplace_skills(
@@ -529,7 +529,7 @@ class TestLoadAllSkills:
         """Every org repo is loaded (in order) and merged into the org source."""
         with patch(self._PATCH_TARGET, return_value={}):
             with patch(
-                "openhands.agent_server.skills_service.load_org_skills_from_url",
+                "madagascar.agent_server.skills_service.load_org_skills_from_url",
                 side_effect=[
                     [Skill(name="org_a", content="a", trigger=None)],
                     [Skill(name="org_b", content="b", trigger=None)],
@@ -541,14 +541,14 @@ class TestLoadAllSkills:
                     load_project=False,
                     load_org=True,
                     org_repos=[
-                        ("https://git/hieptl/.openhands", "hieptl"),
+                        ("https://git/hieptl/.madagascar", "hieptl"),
                         ("https://git/hieptl/.agents", "hieptl"),
                     ],
                 )
 
         assert result.sources["org"] == 2
         assert [c.kwargs["org_repo_url"] for c in mock_org.call_args_list] == [
-            "https://git/hieptl/.openhands",
+            "https://git/hieptl/.madagascar",
             "https://git/hieptl/.agents",
         ]
 
@@ -556,9 +556,9 @@ class TestLoadAllSkills:
         """A skill in multiple org repos resolves to the later repo's version."""
         with patch(self._PATCH_TARGET, return_value={}):
             with patch(
-                "openhands.agent_server.skills_service.load_org_skills_from_url",
+                "madagascar.agent_server.skills_service.load_org_skills_from_url",
                 side_effect=[
-                    [Skill(name="shared", content="openhands", trigger=None)],
+                    [Skill(name="shared", content="madagascar", trigger=None)],
                     [Skill(name="shared", content="agents", trigger=None)],
                 ],
             ):
@@ -568,7 +568,7 @@ class TestLoadAllSkills:
                     load_project=False,
                     load_org=True,
                     org_repos=[
-                        ("https://git/hieptl/.openhands", "hieptl"),
+                        ("https://git/hieptl/.madagascar", "hieptl"),
                         ("https://git/hieptl/.agents", "hieptl"),
                     ],
                 )
@@ -579,9 +579,9 @@ class TestLoadAllSkills:
 
 
 class TestDiscoverProfileSkills:
-    """Tests for discover_profile_skills (the OpenHands profile launch catalog)."""
+    """Tests for discover_profile_skills (the Madagascar profile launch catalog)."""
 
-    _LOAD_ALL = "openhands.agent_server.skills_service.load_all_skills"
+    _LOAD_ALL = "madagascar.agent_server.skills_service.load_all_skills"
 
     def test_returns_merged_user_and_public_skills(self):
         skills = [Skill(name="a", content="x"), Skill(name="b", content="y")]
@@ -614,10 +614,10 @@ class TestSyncPublicSkills:
         """Test successful skill sync."""
         with (
             patch(
-                "openhands.agent_server.skills_service.get_skills_cache_dir"
+                "madagascar.agent_server.skills_service.get_skills_cache_dir"
             ) as mock_cache,
             patch(
-                "openhands.agent_server.skills_service.update_skills_repository"
+                "madagascar.agent_server.skills_service.update_skills_repository"
             ) as mock_update,
         ):
             mock_cache.return_value = Path("/tmp/cache")
@@ -632,10 +632,10 @@ class TestSyncPublicSkills:
         """Test failed skill sync."""
         with (
             patch(
-                "openhands.agent_server.skills_service.get_skills_cache_dir"
+                "madagascar.agent_server.skills_service.get_skills_cache_dir"
             ) as mock_cache,
             patch(
-                "openhands.agent_server.skills_service.update_skills_repository"
+                "madagascar.agent_server.skills_service.update_skills_repository"
             ) as mock_update,
         ):
             mock_cache.return_value = Path("/tmp/cache")
@@ -649,7 +649,7 @@ class TestSyncPublicSkills:
     def test_sync_public_skills_exception(self):
         """Test skill sync with exception."""
         with patch(
-            "openhands.agent_server.skills_service.get_skills_cache_dir"
+            "madagascar.agent_server.skills_service.get_skills_cache_dir"
         ) as mock_cache:
             mock_cache.side_effect = Exception("Permission denied")
 
@@ -663,13 +663,13 @@ class TestSyncPublicSkills:
         re-parses immediately instead of waiting for the TTL."""
         with (
             patch(
-                "openhands.agent_server.skills_service.get_skills_cache_dir"
+                "madagascar.agent_server.skills_service.get_skills_cache_dir"
             ) as mock_cache,
             patch(
-                "openhands.agent_server.skills_service.update_skills_repository"
+                "madagascar.agent_server.skills_service.update_skills_repository"
             ) as mock_update,
             patch(
-                "openhands.agent_server.skills_service._invalidate_public_skills_cache"
+                "madagascar.agent_server.skills_service._invalidate_public_skills_cache"
             ) as mock_invalidate,
         ):
             mock_cache.return_value = Path("/tmp/cache")
@@ -685,13 +685,13 @@ class TestSyncPublicSkills:
         stay available until the next successful refresh."""
         with (
             patch(
-                "openhands.agent_server.skills_service.get_skills_cache_dir"
+                "madagascar.agent_server.skills_service.get_skills_cache_dir"
             ) as mock_cache,
             patch(
-                "openhands.agent_server.skills_service.update_skills_repository"
+                "madagascar.agent_server.skills_service.update_skills_repository"
             ) as mock_update,
             patch(
-                "openhands.agent_server.skills_service._invalidate_public_skills_cache"
+                "madagascar.agent_server.skills_service._invalidate_public_skills_cache"
             ) as mock_invalidate,
         ):
             mock_cache.return_value = Path("/tmp/cache")
@@ -729,7 +729,7 @@ class TestMarketplaceCatalogCache:
 
     def setup_method(self):
         """Reset the module-level cache before each test."""
-        import openhands.agent_server.skills_service as svc
+        import madagascar.agent_server.skills_service as svc
 
         svc._catalog_cache = None
 
@@ -738,15 +738,15 @@ class TestMarketplaceCatalogCache:
         entries = [("github", "GitHub skill", "github:org/repo")]
         with (
             patch(
-                "openhands.agent_server.skills_service._fetch_catalog_entries",
+                "madagascar.agent_server.skills_service._fetch_catalog_entries",
                 return_value=entries,
             ) as mock_fetch,
             patch(
-                "openhands.agent_server.skills_service.service_list_installed_skills",
+                "madagascar.agent_server.skills_service.service_list_installed_skills",
                 return_value=[],
             ),
         ):
-            from openhands.agent_server.skills_service import (
+            from madagascar.agent_server.skills_service import (
                 service_get_marketplace_catalog,
             )
 
@@ -762,15 +762,15 @@ class TestMarketplaceCatalogCache:
         entries = [("github", "GitHub skill", "github:org/repo")]
         with (
             patch(
-                "openhands.agent_server.skills_service._fetch_catalog_entries",
+                "madagascar.agent_server.skills_service._fetch_catalog_entries",
                 return_value=entries,
             ) as mock_fetch,
             patch(
-                "openhands.agent_server.skills_service.service_list_installed_skills",
+                "madagascar.agent_server.skills_service.service_list_installed_skills",
                 return_value=[],
             ),
         ):
-            from openhands.agent_server.skills_service import (
+            from madagascar.agent_server.skills_service import (
                 service_get_marketplace_catalog,
             )
 
@@ -783,7 +783,7 @@ class TestMarketplaceCatalogCache:
         """installed flag is derived fresh on every call, not from the cache."""
         from unittest.mock import MagicMock
 
-        from openhands.agent_server.skills_service import (
+        from madagascar.agent_server.skills_service import (
             InstalledSkillInfo,
             service_get_marketplace_catalog,
         )
@@ -794,11 +794,11 @@ class TestMarketplaceCatalogCache:
 
         with (
             patch(
-                "openhands.agent_server.skills_service._fetch_catalog_entries",
+                "madagascar.agent_server.skills_service._fetch_catalog_entries",
                 return_value=entries,
             ),
             patch(
-                "openhands.agent_server.skills_service.service_list_installed_skills",
+                "madagascar.agent_server.skills_service.service_list_installed_skills",
             ) as mock_installed,
         ):
             # First call: skill not installed
@@ -816,20 +816,20 @@ class TestMarketplaceCatalogCache:
 
     def test_cache_expires_after_ttl(self):
         """After TTL expires, the next call fetches from the repository again."""
-        import openhands.agent_server.skills_service as svc
+        import madagascar.agent_server.skills_service as svc
 
         entries = [("github", "GitHub skill", "github:org/repo")]
         with (
             patch(
-                "openhands.agent_server.skills_service._fetch_catalog_entries",
+                "madagascar.agent_server.skills_service._fetch_catalog_entries",
                 return_value=entries,
             ) as mock_fetch,
             patch(
-                "openhands.agent_server.skills_service.service_list_installed_skills",
+                "madagascar.agent_server.skills_service.service_list_installed_skills",
                 return_value=[],
             ),
         ):
-            from openhands.agent_server.skills_service import (
+            from madagascar.agent_server.skills_service import (
                 service_get_marketplace_catalog,
             )
 

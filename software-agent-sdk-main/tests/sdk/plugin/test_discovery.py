@@ -1,6 +1,6 @@
 """Tests for local + installed plugin discovery.
 
-Covers ``openhands.sdk.plugin.discovery`` — the *ambient* plugin set that
+Covers ``madagascar.sdk.plugin.discovery`` — the *ambient* plugin set that
 auto-loads into conversations: plugins in the user/project directories plus
 enabled installed plugins. Mirrors the user/project skill discovery tests.
 """
@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.plugin import (
+from madagascar.sdk.plugin import (
     disable_plugin,
     discovery,
     install_plugin,
@@ -85,11 +85,11 @@ def test_load_user_plugins_does_not_load_installed_store_as_plugin(
 ):
     # Arrange: a user plugins dir holding a real plugin AND the install store as
     # a child directory named "installed".
-    openhands_plugins = tmp_path / ".openhands" / "plugins"
-    _make_plugin(openhands_plugins / "real-plugin", "real-plugin", "rs", "Real.")
-    install_store = openhands_plugins / "installed"
+    madagascar_plugins = tmp_path / ".madagascar" / "plugins"
+    _make_plugin(madagascar_plugins / "real-plugin", "real-plugin", "rs", "Real.")
+    install_store = madagascar_plugins / "installed"
     install_store.mkdir(parents=True)
-    monkeypatch.setattr(discovery, "USER_PLUGINS_DIRS", [openhands_plugins])
+    monkeypatch.setattr(discovery, "USER_PLUGINS_DIRS", [madagascar_plugins])
     monkeypatch.setattr(installed, "DEFAULT_INSTALLED_PLUGINS_DIR", install_store)
 
     # Act

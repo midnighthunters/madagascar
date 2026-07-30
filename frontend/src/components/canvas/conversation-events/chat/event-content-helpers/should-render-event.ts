@@ -1,4 +1,4 @@
-import { MessageEvent, OpenHandsEvent } from "#/types/agent-server/core";
+import { MessageEvent, MadagascarEvent } from "#/types/agent-server/core";
 import {
   isActionEvent,
   isObservationEvent,
@@ -12,7 +12,7 @@ import {
 } from "#/types/agent-server/type-guards";
 
 // Prefixes of the SDK goal-loop re-prompts (FOLLOWUP_PROMPT / RESUME_PROMPT in
-// openhands.sdk .../conversation/goal/prompts.py). The goal loop injects these
+// madagascar.sdk .../conversation/goal/prompts.py). The goal loop injects these
 // as `user` messages each round to steer the agent, and FOLLOWUP_PROMPT embeds
 // the judge's verdict — which the goal banner already surfaces. The persisted
 // event carries no marker distinguishing them from real user input, so we match
@@ -36,7 +36,7 @@ const isGoalLoopReprompt = (event: MessageEvent): boolean => {
   return GOAL_REPROMPT_PREFIXES.some((prefix) => text.startsWith(prefix));
 };
 
-export const shouldRenderEvent = (event: OpenHandsEvent) => {
+export const shouldRenderEvent = (event: MadagascarEvent) => {
   if (isConversationStateUpdateEvent(event)) {
     // A finished `/goal` loop renders inline so it settles into the
     // conversation; the live (active) banner is shown separately by
@@ -128,5 +128,5 @@ export const shouldRenderEvent = (event: OpenHandsEvent) => {
   return false;
 };
 
-export const hasUserEvent = (events: OpenHandsEvent[]) =>
+export const hasUserEvent = (events: MadagascarEvent[]) =>
   events.some((event) => event.source === "user");

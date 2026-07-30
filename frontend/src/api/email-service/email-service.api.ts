@@ -1,4 +1,4 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 import {
   ResendEmailVerificationParams,
   ResendEmailVerificationResponse,
@@ -25,7 +25,7 @@ export const emailService = {
     if (isAuthFlow !== undefined) {
       body.is_auth_flow = isAuthFlow;
     }
-    const { data } = await openHands.put<ResendEmailVerificationResponse>(
+    const { data } = await madagascar.put<ResendEmailVerificationResponse>(
       "/api/email/resend",
       body,
       { withCredentials: true },

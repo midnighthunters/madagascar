@@ -2,12 +2,12 @@
 
 import pytest
 
-from openhands.sdk.agent import Agent
-from openhands.sdk.conversation import Conversation
-from openhands.sdk.conversation.base import BaseConversation
-from openhands.sdk.conversation.goal import GoalOutcome, run_goal
-from openhands.sdk.llm import Message, TextContent
-from openhands.sdk.testing import TestLLM
+from madagascar.sdk.agent import Agent
+from madagascar.sdk.conversation import Conversation
+from madagascar.sdk.conversation.base import BaseConversation
+from madagascar.sdk.conversation.goal import GoalOutcome, run_goal
+from madagascar.sdk.llm import Message, TextContent
+from madagascar.sdk.testing import TestLLM
 
 
 def _text_llm(*texts: str) -> TestLLM:

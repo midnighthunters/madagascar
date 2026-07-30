@@ -12,52 +12,52 @@ from uuid import uuid4
 import pytest
 from pydantic import SecretStr
 
-from openhands.agent_server.models import (
+from madagascar.agent_server.models import (
     SendMessageRequest,
     StartConversationRequest,
     TextContent,
 )
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.app_server.app_conversation.app_conversation_models import (
     AgentType,
     AppConversationInfo,
     AppConversationStartRequest,
     ConversationTrigger,
 )
-from openhands.app_server.app_conversation.app_conversation_service import (
+from madagascar.app_server.app_conversation.app_conversation_service import (
     ConversationExportAlreadyRunning,
     ConversationExportLockUnavailable,
     ConversationExportTooLarge,
 )
-from openhands.app_server.app_conversation.live_status_app_conversation_service import (
+from madagascar.app_server.app_conversation.live_status_app_conversation_service import (
     LiveStatusAppConversationService,
     _merge_launch_context,
     effective_disabled_skills,
 )
-from openhands.app_server.integrations.provider import ProviderToken, ProviderType
-from openhands.app_server.integrations.service_types import SuggestedTask, TaskType
-from openhands.app_server.sandbox.sandbox_models import (
+from madagascar.app_server.integrations.provider import ProviderToken, ProviderType
+from madagascar.app_server.integrations.service_types import SuggestedTask, TaskType
+from madagascar.app_server.sandbox.sandbox_models import (
     AGENT_SERVER,
     ExposedUrl,
     SandboxInfo,
     SandboxPage,
     SandboxStatus,
 )
-from openhands.app_server.sandbox.sandbox_spec_models import SandboxSpecInfo
-from openhands.app_server.settings.llm_profiles import LLMProfiles
-from openhands.app_server.settings.settings_models import (
+from madagascar.app_server.sandbox.sandbox_spec_models import SandboxSpecInfo
+from madagascar.app_server.settings.llm_profiles import LLMProfiles
+from madagascar.app_server.settings.settings_models import (
     SandboxGroupingStrategy,
     Settings,
 )
-from openhands.app_server.user.user_context import UserContext
-from openhands.app_server.utils.redis_lock import RedisLockUnavailable
-from openhands.sdk import Agent, AgentContext, Event
-from openhands.sdk.llm import LLM
-from openhands.sdk.profiles import OpenHandsAgentProfile, resolve_agent_profile
-from openhands.sdk.secret import LookupSecret, StaticSecret
-from openhands.sdk.settings import ConversationSettings, OpenHandsAgentSettings
-from openhands.sdk.skills import Skill
-from openhands.sdk.tool import Tool
-from openhands.sdk.workspace.remote.async_remote_workspace import AsyncRemoteWorkspace
+from madagascar.app_server.user.user_context import UserContext
+from madagascar.app_server.utils.redis_lock import RedisLockUnavailable
+from madagascar.sdk import Agent, AgentContext, Event
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.profiles import MadagascarAgentProfile, resolve_agent_profile
+from madagascar.sdk.secret import LookupSecret, StaticSecret
+from madagascar.sdk.settings import ConversationSettings, MadagascarAgentSettings
+from madagascar.sdk.skills import Skill
+from madagascar.sdk.tool import Tool
+from madagascar.sdk.workspace.remote.async_remote_workspace import AsyncRemoteWorkspace
 
 
 def _async_iter(items):
@@ -81,7 +81,7 @@ class _FakeExportLock:
         self.released = True
 
 
-def _build_test_user_agent_settings(user: SimpleNamespace) -> OpenHandsAgentSettings:
+def _build_test_user_agent_settings(user: SimpleNamespace) -> MadagascarAgentSettings:
     llm_vals: dict = {}
     model = getattr(user, 'llm_model', '') or ''
     llm_vals['model'] = model
@@ -111,7 +111,7 @@ class _TestUserInfo(SimpleNamespace):
         super().__init__(**kwargs)
 
     @property
-    def agent_settings(self) -> OpenHandsAgentSettings:
+    def agent_settings(self) -> MadagascarAgentSettings:
         override = getattr(self, '_agent_settings_override', None)
         if override is not None:
             return override
@@ -159,7 +159,7 @@ class _TestUserInfo(SimpleNamespace):
             kwargs['max_iterations'] = max_iter
         return ConversationSettings(**kwargs)
 
-    def to_agent_settings(self) -> OpenHandsAgentSettings:
+    def to_agent_settings(self) -> MadagascarAgentSettings:
         return self.agent_settings
 
 
@@ -177,7 +177,7 @@ def _resolved_profile_user(
     available_skills=None,
     enable_switch_llm_tool=True,
 ):
-    profile = OpenHandsAgentProfile(
+    profile = MadagascarAgentProfile(
         name='reviewer',
         revision=7,
         llm_profile_ref='Default',
@@ -213,7 +213,7 @@ class TestEffectiveDisabledSkills:
 
     def _user(self, member, profile_disabled):
         user = _TestUserInfo(disabled_skills=member)
-        user.agent_settings = OpenHandsAgentSettings(
+        user.agent_settings = MadagascarAgentSettings(
             agent_context=AgentContext(disabled_skills=profile_disabled)
         )
         return user
@@ -231,7 +231,7 @@ class TestEffectiveDisabledSkills:
     def test_member_only_on_non_profile_launch(self):
         # Non-profile launch: resolved context carries no profile deny-list.
         user = _TestUserInfo(disabled_skills=['m'])
-        user.agent_settings = OpenHandsAgentSettings(agent_context=AgentContext())
+        user.agent_settings = MadagascarAgentSettings(agent_context=AgentContext())
         assert effective_disabled_skills(user) == ['m']
 
     def test_missing_name_carried_as_noop_never_raises(self):
@@ -280,7 +280,7 @@ class TestConversationLaunchSnapshot:
         assert merged.user_message_suffix == 'PERSISTED_SUFFIX'
 
 
-# Env var used by openhands SDK LLM to skip context-window validation (e.g. for gpt-4 in tests)
+# Env var used by madagascar SDK LLM to skip context-window validation (e.g. for gpt-4 in tests)
 _ALLOW_SHORT_CONTEXT_WINDOWS = 'ALLOW_SHORT_CONTEXT_WINDOWS'
 
 
@@ -335,7 +335,7 @@ class TestLiveStatusAppConversationService:
             max_num_conversations_per_sandbox=20,
             httpx_client=self.mock_httpx_client,
             web_url='https://test.example.com',
-            openhands_provider_base_url='https://provider.example.com',
+            madagascar_provider_base_url='https://provider.example.com',
             access_token_hard_timeout=None,
             app_mode='test',
         )
@@ -787,7 +787,7 @@ class TestLiveStatusAppConversationService:
         default_server = mcp_config['default']
         assert default_server.url == 'https://test.example.com/mcp/mcp'
         assert default_server.headers[
-            'X-OpenHands-ServerConversation-ID'
+            'X-Madagascar-ServerConversation-ID'
         ].get_secret_value() == str(self.conversation_id)
         assert (
             default_server.headers['X-Session-API-Key'].get_secret_value()
@@ -846,12 +846,12 @@ class TestLiveStatusAppConversationService:
         assert llm.extended_thinking_budget is None
 
     @pytest.mark.asyncio
-    async def test_configure_llm_and_mcp_openhands_model_uses_user_base_url(
+    async def test_configure_llm_and_mcp_madagascar_model_uses_user_base_url(
         self,
     ):
-        """openhands/* model uses user's base_url when set."""
+        """madagascar/* model uses user's base_url when set."""
         # Arrange
-        self.mock_user.llm_model = 'openhands/special'
+        self.mock_user.llm_model = 'madagascar/special'
         self.mock_user.llm_base_url = 'https://user-llm.example.com'
         self.mock_user_context.get_mcp_api_key.return_value = None
 
@@ -860,16 +860,16 @@ class TestLiveStatusAppConversationService:
             self.mock_user, self.mock_user.llm_model, self.conversation_id
         )
 
-        # Assert — user base_url takes precedence for openhands/ models
+        # Assert — user base_url takes precedence for madagascar/ models
         assert llm.base_url == 'https://user-llm.example.com'
 
     @pytest.mark.asyncio
-    async def test_configure_llm_and_mcp_openhands_model_falls_back_to_provider_url(
+    async def test_configure_llm_and_mcp_madagascar_model_falls_back_to_provider_url(
         self,
     ):
-        """openhands/* model falls back to provider base URL when user has no base_url."""
+        """madagascar/* model falls back to provider base URL when user has no base_url."""
         # Arrange
-        self.mock_user.llm_model = 'openhands/default'
+        self.mock_user.llm_model = 'madagascar/default'
         self.mock_user.llm_base_url = None
         self.mock_user_context.get_mcp_api_key.return_value = None
 
@@ -878,16 +878,16 @@ class TestLiveStatusAppConversationService:
             self.mock_user, self.mock_user.llm_model, self.conversation_id
         )
 
-        # Assert — falls back to service-level openhands_provider_base_url
+        # Assert — falls back to service-level madagascar_provider_base_url
         assert llm.base_url == 'https://provider.example.com'
 
     @pytest.mark.asyncio
-    async def test_configure_llm_and_mcp_openhands_model_no_base_urls(self):
-        """openhands/* model is kept public when no explicit base URL exists."""
+    async def test_configure_llm_and_mcp_madagascar_model_no_base_urls(self):
+        """madagascar/* model is kept public when no explicit base URL exists."""
         # Arrange
-        self.mock_user.llm_model = 'openhands/default'
+        self.mock_user.llm_model = 'madagascar/default'
         self.mock_user.llm_base_url = None
-        self.service.openhands_provider_base_url = None
+        self.service.madagascar_provider_base_url = None
         self.mock_user_context.get_mcp_api_key.return_value = None
 
         # Act
@@ -896,14 +896,14 @@ class TestLiveStatusAppConversationService:
         )
 
         # Assert
-        assert llm.model == 'openhands/default'
+        assert llm.model == 'madagascar/default'
         assert llm.base_url is None
 
     @pytest.mark.asyncio
     async def test_configure_llm_and_mcp_litellm_proxy_model_keeps_empty_base_url(
         self,
     ):
-        """litellm_proxy/* is not treated as an OpenHands provider model."""
+        """litellm_proxy/* is not treated as an Madagascar provider model."""
         self.mock_user.llm_base_url = None
         self.mock_user_context.get_mcp_api_key.return_value = None
 
@@ -931,12 +931,12 @@ class TestLiveStatusAppConversationService:
         assert llm.base_url == 'https://user-llm.example.com'
 
     @pytest.mark.asyncio
-    async def test_configure_llm_and_mcp_non_openhands_model_ignores_provider(self):
-        """Non-openhands model ignores provider base URL and uses user base URL."""
+    async def test_configure_llm_and_mcp_non_madagascar_model_ignores_provider(self):
+        """Non-madagascar model ignores provider base URL and uses user base URL."""
         # Arrange
         self.mock_user.llm_model = 'gpt-4'
         self.mock_user.llm_base_url = 'https://user-llm.example.com'
-        self.service.openhands_provider_base_url = 'https://provider.example.com'
+        self.service.madagascar_provider_base_url = 'https://provider.example.com'
         self.mock_user_context.get_mcp_api_key.return_value = None
 
         # Act
@@ -964,7 +964,7 @@ class TestLiveStatusAppConversationService:
 
         default_headers = mcp_config['default'].headers
         assert default_headers[
-            'X-OpenHands-ServerConversation-ID'
+            'X-Madagascar-ServerConversation-ID'
         ].get_secret_value() == str(self.conversation_id)
         assert 'X-Session-API-Key' not in default_headers
 
@@ -1023,26 +1023,26 @@ class TestLiveStatusAppConversationService:
 
         metadata, tags = self.service._build_observability_context(
             conversation_id,
-            agent_kind='openhands',
-            selected_repository='OpenHands/software-agent-sdk',
+            agent_kind='madagascar',
+            selected_repository='Madagascar/software-agent-sdk',
             selected_branch='main',
             git_provider=ProviderType.GITHUB,
         )
 
         assert metadata == {
-            'app': 'openhands',
+            'app': 'madagascar',
             'conversation_id': str(conversation_id),
-            'agent_kind': 'openhands',
-            'repo_name': 'OpenHands/software-agent-sdk',
+            'agent_kind': 'madagascar',
+            'repo_name': 'Madagascar/software-agent-sdk',
             'selected_branch': 'main',
             'git_provider': 'github',
         }
-        assert 'repo:OpenHands/software-agent-sdk' in tags
+        assert 'repo:Madagascar/software-agent-sdk' in tags
         assert 'branch:main' in tags
         assert 'git_provider:github' in tags
 
     def test_apply_server_overrides_adds_repo_metadata(self):
-        llm = LLM(model='openhands/gpt-4', api_key='k', usage_id='agent')
+        llm = LLM(model='madagascar/gpt-4', api_key='k', usage_id='agent')
         agent = Agent(llm=llm, tools=[])
 
         updated = self.service._apply_server_agent_overrides(
@@ -1050,21 +1050,21 @@ class TestLiveStatusAppConversationService:
             AgentType.DEFAULT,
             uuid4(),
             'user-1',
-            repo_name='OpenHands/software-agent-sdk',
+            repo_name='Madagascar/software-agent-sdk',
             git_provider=ProviderType.GITHUB,
             selected_branch='main',
         )
 
         metadata = updated.llm.litellm_extra_body['metadata']
-        assert metadata['repo_name'] == 'OpenHands/software-agent-sdk'
+        assert metadata['repo_name'] == 'Madagascar/software-agent-sdk'
         assert metadata['git_provider'] == 'github'
         assert metadata['selected_branch'] == 'main'
-        assert 'repo:OpenHands/software-agent-sdk' in metadata['tags']
+        assert 'repo:Madagascar/software-agent-sdk' in metadata['tags']
         assert 'branch:main' in metadata['tags']
         assert 'git_provider:github' in metadata['tags']
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1100,7 +1100,7 @@ class TestLiveStatusAppConversationService:
         self.service._load_skills_and_update_agent.assert_called_once()
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1111,7 +1111,7 @@ class TestLiveStatusAppConversationService:
         # Member disables one skill; the launched profile (resolved agent_context)
         # disables another. Both must reach _load_skills_and_update_agent.
         self.mock_user.disabled_skills = ['member-skill']
-        self.mock_user.agent_settings = OpenHandsAgentSettings(
+        self.mock_user.agent_settings = MadagascarAgentSettings(
             llm=LLM(model='gpt-4', api_key=SecretStr('test-key')),
             agent_context=AgentContext(disabled_skills=['profile-skill']),
         )
@@ -1141,7 +1141,7 @@ class TestLiveStatusAppConversationService:
         assert set(kwargs['disabled_skills']) == {'member-skill', 'profile-skill'}
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1170,7 +1170,7 @@ class TestLiveStatusAppConversationService:
         assert result.conversation_id == conversation_id
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1190,7 +1190,7 @@ class TestLiveStatusAppConversationService:
         conversation_id = uuid4()
 
         with patch(
-            'openhands.app_server.app_conversation.live_status_app_conversation_service._logger'
+            'madagascar.app_server.app_conversation.live_status_app_conversation_service._logger'
         ) as mock_logger:
             result = await self.service._build_start_conversation_request_for_user(
                 sandbox=self.mock_sandbox,
@@ -1208,9 +1208,9 @@ class TestLiveStatusAppConversationService:
 
     def test_apply_server_overrides_sets_condenser_usage_id(self):
         """Condenser LLM must get usage_id='condenser' even when it inherits 'agent'."""
-        from openhands.sdk.context.condenser import LLMSummarizingCondenser
+        from madagascar.sdk.context.condenser import LLMSummarizingCondenser
 
-        llm = LLM(model='openhands/gpt-4', api_key='k', usage_id='agent')
+        llm = LLM(model='madagascar/gpt-4', api_key='k', usage_id='agent')
         condenser = LLMSummarizingCondenser(llm=llm)
         agent = Agent(llm=llm, tools=[], condenser=condenser)
 
@@ -1221,9 +1221,9 @@ class TestLiveStatusAppConversationService:
         assert updated.llm.usage_id == 'agent'
         assert updated.condenser.llm.usage_id == 'condenser'
 
-    def test_apply_server_overrides_condenser_non_openhands_model(self):
-        """Condenser usage_id is set even for non-openhands models (no metadata)."""
-        from openhands.sdk.context.condenser import LLMSummarizingCondenser
+    def test_apply_server_overrides_condenser_non_madagascar_model(self):
+        """Condenser usage_id is set even for non-madagascar models (no metadata)."""
+        from madagascar.sdk.context.condenser import LLMSummarizingCondenser
 
         llm = LLM(model='gpt-4', api_key='k', usage_id='agent')
         condenser = LLMSummarizingCondenser(llm=llm)
@@ -1233,11 +1233,11 @@ class TestLiveStatusAppConversationService:
             agent, AgentType.DEFAULT, uuid4(), 'user-1'
         )
 
-        # Non-openhands model: main LLM unchanged, but condenser still gets usage_id
+        # Non-madagascar model: main LLM unchanged, but condenser still gets usage_id
         assert updated.condenser.llm.usage_id == 'condenser'
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1318,7 +1318,7 @@ class TestLiveStatusAppConversationService:
         )
 
         with patch(
-            'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+            'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
             return_value=[Tool(name='browser')],
         ) as mock_defaults:
             result = await self.service._build_start_conversation_request_for_user(
@@ -1426,10 +1426,10 @@ class TestLiveStatusAppConversationService:
 
         with (
             patch(
-                'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools'
+                'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools'
             ) as mock_defaults,
             patch(
-                'openhands.app_server.app_conversation.live_status_app_conversation_service.get_planning_tools',
+                'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_planning_tools',
                 return_value=[Tool(name='task_tracker')],
             ) as mock_planning,
         ):
@@ -1448,7 +1448,7 @@ class TestLiveStatusAppConversationService:
         mock_defaults.assert_not_called()
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1475,9 +1475,9 @@ class TestLiveStatusAppConversationService:
         )
 
         assert result.observability_metadata == {
-            'app': 'openhands',
+            'app': 'madagascar',
             'conversation_id': str(result.conversation_id),
-            'agent_kind': 'openhands',
+            'agent_kind': 'madagascar',
             'repo_name': 'test/repo',
             'selected_branch': 'feature-x',
             'repo': 'test/repo',
@@ -1486,7 +1486,7 @@ class TestLiveStatusAppConversationService:
         }
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1521,9 +1521,9 @@ class TestLiveStatusAppConversationService:
         )
 
         assert result.observability_metadata == {
-            'app': 'openhands',
+            'app': 'madagascar',
             'conversation_id': str(result.conversation_id),
-            'agent_kind': 'openhands',
+            'agent_kind': 'madagascar',
             'repo_name': 'test/repo',
             'selected_branch': 'feature-x',
             'repo': 'test/repo',
@@ -1536,7 +1536,7 @@ class TestLiveStatusAppConversationService:
         )
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1566,15 +1566,15 @@ class TestLiveStatusAppConversationService:
         )
 
         assert result.observability_metadata == {
-            'app': 'openhands',
+            'app': 'madagascar',
             'conversation_id': str(result.conversation_id),
-            'agent_kind': 'openhands',
+            'agent_kind': 'madagascar',
             'repo_name': 'test/repo',
             'repo': 'test/repo',
         }
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1600,9 +1600,9 @@ class TestLiveStatusAppConversationService:
         )
 
         assert result.observability_metadata == {
-            'app': 'openhands',
+            'app': 'madagascar',
             'conversation_id': str(result.conversation_id),
-            'agent_kind': 'openhands',
+            'agent_kind': 'madagascar',
         }
 
     @pytest.mark.asyncio
@@ -1613,7 +1613,7 @@ class TestLiveStatusAppConversationService:
         forward git_provider/selected_branch/remote_workspace into
         ``_build_acp_start_conversation_request`` for this to populate.
         """
-        from openhands.sdk.settings import ACPAgentSettings
+        from madagascar.sdk.settings import ACPAgentSettings
 
         self.mock_user.agent_settings = ACPAgentSettings(
             acp_server='claude-code',
@@ -1646,7 +1646,7 @@ class TestLiveStatusAppConversationService:
 
         assert result.agent.agent_kind == 'acp'
         assert result.observability_metadata == {
-            'app': 'openhands',
+            'app': 'madagascar',
             'conversation_id': str(result.conversation_id),
             'agent_kind': 'acp',
             'repo_name': 'test/repo',
@@ -1662,7 +1662,7 @@ class TestLiveStatusAppConversationService:
         )
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1689,7 +1689,7 @@ class TestLiveStatusAppConversationService:
         assert 'git fetch --unshallow' in suffix
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1717,13 +1717,13 @@ class TestLiveStatusAppConversationService:
         assert '<GIT_WORKSPACE_CONTEXT>' not in suffix
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_registered_agent_definitions'
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_registered_agent_definitions'
     )
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.register_builtins_agents'
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.register_builtins_agents'
     )
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1731,8 +1731,8 @@ class TestLiveStatusAppConversationService:
         self, mock_tools, mock_register_builtins, mock_get_agent_definitions
     ):
         """Built-in sub-agents are registered when the user setting is on."""
-        from openhands.sdk.settings import OpenHandsAgentSettings
-        from openhands.sdk.subagent.schema import AgentDefinition
+        from madagascar.sdk.settings import MadagascarAgentSettings
+        from madagascar.sdk.subagent.schema import AgentDefinition
 
         agent_definition = AgentDefinition(
             name='general-purpose',
@@ -1741,7 +1741,7 @@ class TestLiveStatusAppConversationService:
         )
         mock_get_agent_definitions.return_value = [agent_definition]
 
-        agent_settings = OpenHandsAgentSettings(
+        agent_settings = MadagascarAgentSettings(
             llm={'model': 'gpt-4', 'api_key': 'test-key'},
             enable_sub_agents=True,
         )
@@ -1768,13 +1768,13 @@ class TestLiveStatusAppConversationService:
         assert result.agent_definitions == [agent_definition]
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_registered_agent_definitions'
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_registered_agent_definitions'
     )
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.register_builtins_agents'
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.register_builtins_agents'
     )
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1782,9 +1782,9 @@ class TestLiveStatusAppConversationService:
         self, mock_tools, mock_register_builtins, mock_get_agent_definitions
     ):
         """Built-in sub-agents are registered but not forwarded when disabled."""
-        from openhands.sdk.settings import OpenHandsAgentSettings
+        from madagascar.sdk.settings import MadagascarAgentSettings
 
-        agent_settings = OpenHandsAgentSettings(
+        agent_settings = MadagascarAgentSettings(
             llm={'model': 'gpt-4', 'api_key': 'test-key'},
             enable_sub_agents=False,
         )
@@ -1811,7 +1811,7 @@ class TestLiveStatusAppConversationService:
         assert result.agent_definitions == []
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1869,7 +1869,7 @@ class TestLiveStatusAppConversationService:
         assert secrets['ANOTHER_SECRET'].value.get_secret_value() == 'another_value'
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -1918,7 +1918,7 @@ class TestLiveStatusAppConversationService:
         assert secrets['SHARED_SECRET'].value.get_secret_value() == 'overridden_value'
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -2040,7 +2040,7 @@ class TestLiveStatusAppConversationService:
 
         # Act
         with patch(
-            'openhands.app_server.app_conversation.live_status_app_conversation_service._logger'
+            'madagascar.app_server.app_conversation.live_status_app_conversation_service._logger'
         ) as mock_logger:
             result = await self.service._find_running_sandbox_for_user()
 
@@ -2334,7 +2334,7 @@ class TestLiveStatusAppConversationService:
 
         fake_lock = _FakeExportLock()
         with patch(
-            'openhands.app_server.app_conversation.live_status_app_conversation_service.try_acquire_redis_lock',
+            'madagascar.app_server.app_conversation.live_status_app_conversation_service.try_acquire_redis_lock',
             new=AsyncMock(return_value=fake_lock),
         ) as mock_acquire_lock:
             stream = await self.service.open_conversation_export(conversation_id)
@@ -2360,7 +2360,7 @@ class TestLiveStatusAppConversationService:
         )
 
         with patch(
-            'openhands.app_server.app_conversation.live_status_app_conversation_service.try_acquire_redis_lock',
+            'madagascar.app_server.app_conversation.live_status_app_conversation_service.try_acquire_redis_lock',
             new=AsyncMock(return_value=None),
         ):
             with pytest.raises(ConversationExportAlreadyRunning):
@@ -2382,7 +2382,7 @@ class TestLiveStatusAppConversationService:
         )
 
         with patch(
-            'openhands.app_server.app_conversation.live_status_app_conversation_service.try_acquire_redis_lock',
+            'madagascar.app_server.app_conversation.live_status_app_conversation_service.try_acquire_redis_lock',
             new=AsyncMock(side_effect=RedisLockUnavailable()),
         ):
             with pytest.raises(ConversationExportLockUnavailable):
@@ -2412,7 +2412,7 @@ class TestLiveStatusAppConversationService:
         )
 
         with patch(
-            'openhands.app_server.app_conversation.live_status_app_conversation_service.try_acquire_redis_lock',
+            'madagascar.app_server.app_conversation.live_status_app_conversation_service.try_acquire_redis_lock',
             new=AsyncMock(side_effect=RedisLockUnavailable()),
         ):
             stream = await self.service.open_conversation_export(conversation_id)
@@ -2442,10 +2442,10 @@ class TestLiveStatusAppConversationService:
         self.mock_event_service.iter_events_for_export.assert_not_called()
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.AsyncRemoteWorkspace'
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.AsyncRemoteWorkspace'
     )
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.ConversationInfo'
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.ConversationInfo'
     )
     async def test_start_app_conversation_default_title_uses_first_five_characters(
         self, mock_conversation_info_class, mock_remote_workspace_class
@@ -2558,17 +2558,17 @@ class TestLiveStatusAppConversationService:
         assert resolved_calls[0].kwargs['override_agent_profile_id'] is None
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.AsyncRemoteWorkspace'
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.AsyncRemoteWorkspace'
     )
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.ConversationInfo'
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.ConversationInfo'
     )
     @pytest.mark.asyncio
     async def test_start_app_conversation_preserves_acp_and_repository_tags(
         self, mock_conversation_info_class, mock_remote_workspace_class
     ):
         """ACP conversations keep provider tags when repository tags are added."""
-        from openhands.sdk.settings import ACPAgentSettings
+        from madagascar.sdk.settings import ACPAgentSettings
 
         conversation_id = uuid4()
         self.mock_user.agent_settings = ACPAgentSettings(
@@ -2633,7 +2633,7 @@ class TestLiveStatusAppConversationService:
         self.mock_event_callback_service.save_event_callback = AsyncMock()
 
         request = AppConversationStartRequest(
-            selected_repository='OpenHands/OpenHands',
+            selected_repository='Madagascar/Madagascar',
             selected_branch='main',
             git_provider=ProviderType.GITHUB,
             agent_profile_id=requested_profile_id,
@@ -2646,7 +2646,7 @@ class TestLiveStatusAppConversationService:
             0
         ][0]
         assert saved_info.tags['acpserver'] == 'claude-code'
-        assert saved_info.tags['repo_name'] == 'OpenHands/OpenHands'
+        assert saved_info.tags['repo_name'] == 'Madagascar/Madagascar'
         assert saved_info.tags['git_provider'] == 'github'
         assert saved_info.tags['selected_branch'] == 'main'
         assert saved_info.tags['agentprofileid'] == requested_profile_id
@@ -2663,17 +2663,17 @@ class TestLiveStatusAppConversationService:
         )
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.AsyncRemoteWorkspace'
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.AsyncRemoteWorkspace'
     )
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.ConversationInfo'
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.ConversationInfo'
     )
     @pytest.mark.asyncio
     async def test_start_app_conversation_stores_acp_model_as_llm_model(
         self, mock_conversation_info_class, mock_remote_workspace_class
     ):
         """ACP conversations persist acp_model as llm_model in AppConversationInfo."""
-        from openhands.sdk.settings import ACPAgentSettings
+        from madagascar.sdk.settings import ACPAgentSettings
 
         conversation_id = uuid4()
 
@@ -2902,7 +2902,7 @@ class TestLiveStatusAppConversationService:
         wrapper — so ``_configure_llm_and_mcp`` must hand back the flat
         ``{server_name: MCPServer}`` shape directly.
         """
-        from openhands.sdk.mcp.config import MCPServer
+        from madagascar.sdk.mcp.config import MCPServer
 
         # Arrange
         self.mock_user_context.get_mcp_api_key.return_value = 'mcp_key'
@@ -3082,19 +3082,19 @@ class TestLiveStatusAppConversationService:
 
     def test_get_project_dir_with_repo(self):
         """get_project_dir appends repo name to working_dir."""
-        from openhands.app_server.app_conversation.app_conversation_service_base import (
+        from madagascar.app_server.app_conversation.app_conversation_service_base import (
             get_project_dir,
         )
 
         assert (
-            get_project_dir('/workspace/project', 'OpenHands/software-agent-sdk')
+            get_project_dir('/workspace/project', 'Madagascar/software-agent-sdk')
             == '/workspace/project/software-agent-sdk'
         )
         assert get_project_dir('/w', 'org/repo-name') == '/w/repo-name'
 
     def test_get_project_dir_without_repo(self):
         """get_project_dir returns working_dir unchanged when no repo selected."""
-        from openhands.app_server.app_conversation.app_conversation_service_base import (
+        from madagascar.app_server.app_conversation.app_conversation_service_base import (
             get_project_dir,
         )
 
@@ -3102,7 +3102,7 @@ class TestLiveStatusAppConversationService:
         assert get_project_dir('/workspace/project', '') == '/workspace/project'
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -3112,7 +3112,7 @@ class TestLiveStatusAppConversationService:
         This is the root cause of the V1 hook-stop bug: if workspace.working_dir
         points to the sandbox mount root (/workspace/project) instead of the
         cloned repo (/workspace/project/<repo>), the agent's CWD is wrong and
-        .openhands/hooks/on_stop.sh is not found.
+        .madagascar/hooks/on_stop.sh is not found.
         """
         self.mock_user_context.get_user_info.return_value = self.mock_user
 
@@ -3128,7 +3128,7 @@ class TestLiveStatusAppConversationService:
             system_message_suffix=None,
             git_provider=None,
             working_dir='/workspace/project',
-            selected_repository='OpenHands/software-agent-sdk',
+            selected_repository='Madagascar/software-agent-sdk',
         )
 
         assert (
@@ -3136,7 +3136,7 @@ class TestLiveStatusAppConversationService:
         ), 'workspace.working_dir must point to the repo root, not the sandbox mount'
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -3168,7 +3168,7 @@ class TestLiveStatusAppConversationService:
         This verifies that the sandbox_id filter is correctly propagated through
         the service layer to the underlying info service.
         """
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             AppConversationInfoPage,
         )
 
@@ -3257,7 +3257,7 @@ class TestLiveStatusAppConversationService:
     @pytest.mark.asyncio
     async def test_search_app_conversations_sandbox_id_filter_returns_empty(self):
         """Test that search with non-matching sandbox_id returns empty results."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             AppConversationInfoPage,
         )
 
@@ -3313,7 +3313,7 @@ class TestPluginHandling:
             max_num_conversations_per_sandbox=20,
             httpx_client=self.mock_httpx_client,
             web_url='https://test.example.com',
-            openhands_provider_base_url='https://provider.example.com',
+            madagascar_provider_base_url='https://provider.example.com',
             access_token_hard_timeout=None,
             app_mode='test',
         )
@@ -3337,7 +3337,7 @@ class TestPluginHandling:
 
     def test_construct_initial_message_with_plugin_params_no_plugins(self):
         """Test _construct_initial_message_with_plugin_params with no plugins returns original message."""
-        from openhands.agent_server.models import SendMessageRequest, TextContent
+        from madagascar.agent_server.models import SendMessageRequest, TextContent
 
         # Test with None initial message and None plugins
         result = self.service._construct_initial_message_with_plugin_params(None, None)
@@ -3356,8 +3356,8 @@ class TestPluginHandling:
 
     def test_construct_initial_message_with_plugin_params_no_params(self):
         """Test _construct_initial_message_with_plugin_params with plugins but no parameters."""
-        from openhands.agent_server.models import SendMessageRequest, TextContent
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.agent_server.models import SendMessageRequest, TextContent
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3379,8 +3379,8 @@ class TestPluginHandling:
 
     def test_construct_initial_message_with_plugin_params_creates_new_message(self):
         """Test _construct_initial_message_with_plugin_params creates message when no initial message."""
-        from openhands.agent_server.models import TextContent
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.agent_server.models import TextContent
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3405,8 +3405,8 @@ class TestPluginHandling:
 
     def test_construct_initial_message_with_plugin_params_appends_to_message(self):
         """Test _construct_initial_message_with_plugin_params appends to existing message."""
-        from openhands.agent_server.models import SendMessageRequest, TextContent
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.agent_server.models import SendMessageRequest, TextContent
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3437,8 +3437,8 @@ class TestPluginHandling:
 
     def test_construct_initial_message_with_plugin_params_preserves_role(self):
         """Test _construct_initial_message_with_plugin_params preserves message role."""
-        from openhands.agent_server.models import SendMessageRequest, TextContent
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.agent_server.models import SendMessageRequest, TextContent
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3457,8 +3457,8 @@ class TestPluginHandling:
 
     def test_construct_initial_message_with_plugin_params_empty_content(self):
         """Test _construct_initial_message_with_plugin_params handles empty content list."""
-        from openhands.agent_server.models import SendMessageRequest, TextContent
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.agent_server.models import SendMessageRequest, TextContent
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3476,8 +3476,8 @@ class TestPluginHandling:
 
     def test_construct_initial_message_with_multiple_plugins(self):
         """Test _construct_initial_message_with_plugin_params handles multiple plugins."""
-        from openhands.agent_server.models import TextContent
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.agent_server.models import TextContent
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3509,12 +3509,12 @@ class TestPluginHandling:
 
     @pytest.mark.asyncio
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     async def test_build_request_with_plugins(self, _mock_tools):
         """Plugins are converted to PluginSource and included in the request."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3556,7 +3556,7 @@ class TestPluginHandling:
         assert '- api_key: test123' in result.initial_message.content[0].text
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
@@ -3582,13 +3582,13 @@ class TestPluginHandling:
         assert result.plugins is None
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
     async def test_build_request_plugin_with_repo_path(self, _mock_tools):
         """repo_path is propagated through to PluginSource."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3624,13 +3624,13 @@ class TestPluginHandling:
         assert result.plugins[0].repo_path == 'plugins/city-weather'
 
     @patch(
-        'openhands.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
+        'madagascar.app_server.app_conversation.live_status_app_conversation_service.get_default_tools',
         return_value=[],
     )
     @pytest.mark.asyncio
     async def test_build_request_multiple_plugins(self, _mock_tools):
         """Multiple plugins are all converted correctly."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3674,7 +3674,7 @@ class TestPluginSpecModel:
 
     def test_plugin_spec_with_all_fields(self):
         """Test PluginSpec with all fields provided."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3692,7 +3692,7 @@ class TestPluginSpecModel:
 
     def test_plugin_spec_with_only_source(self):
         """Test PluginSpec with only source provided."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3705,7 +3705,7 @@ class TestPluginSpecModel:
 
     def test_plugin_spec_serialization(self):
         """Test PluginSpec serialization to JSON."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3726,7 +3726,7 @@ class TestPluginSpecModel:
 
     def test_plugin_spec_deserialization(self):
         """Test PluginSpec deserialization from dict."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3746,7 +3746,7 @@ class TestPluginSpecModel:
 
     def test_plugin_spec_display_name_github_format(self):
         """Test display_name extracts repo name from github:owner/repo format."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3755,7 +3755,7 @@ class TestPluginSpecModel:
 
     def test_plugin_spec_display_name_git_url(self):
         """Test display_name extracts repo name from git URL."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3764,7 +3764,7 @@ class TestPluginSpecModel:
 
     def test_plugin_spec_display_name_local_path(self):
         """Test display_name extracts directory name from local path."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3773,7 +3773,7 @@ class TestPluginSpecModel:
 
     def test_plugin_spec_display_name_no_slash(self):
         """Test display_name returns source as-is when no slash present."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3782,7 +3782,7 @@ class TestPluginSpecModel:
 
     def test_plugin_spec_format_params_as_text(self):
         """Test format_params_as_text formats parameters as text."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3796,7 +3796,7 @@ class TestPluginSpecModel:
 
     def test_plugin_spec_format_params_as_text_with_indent(self):
         """Test format_params_as_text with custom indent."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3810,7 +3810,7 @@ class TestPluginSpecModel:
 
     def test_plugin_spec_format_params_as_text_no_params(self):
         """Test format_params_as_text returns None when no parameters."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3821,7 +3821,7 @@ class TestPluginSpecModel:
         """Test PluginSpec inherits validation from SDK's PluginSource."""
         import pytest
 
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             PluginSpec,
         )
 
@@ -3839,7 +3839,7 @@ class TestAppConversationStartRequestWithPlugins:
 
     def test_start_request_with_plugins(self):
         """Test AppConversationStartRequest with plugins field."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             AppConversationStartRequest,
             PluginSpec,
         )
@@ -3865,7 +3865,7 @@ class TestAppConversationStartRequestWithPlugins:
 
     def test_start_request_without_plugins(self):
         """Test AppConversationStartRequest without plugins field (backwards compatible)."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             AppConversationStartRequest,
         )
 
@@ -3877,7 +3877,7 @@ class TestAppConversationStartRequestWithPlugins:
 
     def test_start_request_serialization_with_plugins(self):
         """Test AppConversationStartRequest serialization includes plugins."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             AppConversationStartRequest,
             PluginSpec,
         )
@@ -3893,7 +3893,7 @@ class TestAppConversationStartRequestWithPlugins:
 
     def test_start_request_deserialization_with_plugins(self):
         """Test AppConversationStartRequest deserialization from JSON with plugins."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             AppConversationStartRequest,
         )
 
@@ -3918,7 +3918,7 @@ class TestAppConversationStartRequestWithPlugins:
 
     def test_start_request_with_multiple_plugins(self):
         """Test AppConversationStartRequest with multiple plugins."""
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             AppConversationStartRequest,
             PluginSpec,
         )
@@ -3975,7 +3975,7 @@ class TestLoadHooksFromWorkspace:
             max_num_conversations_per_sandbox=20,
             httpx_client=self.mock_httpx_client,
             web_url='https://test.example.com',
-            openhands_provider_base_url='https://provider.example.com',
+            madagascar_provider_base_url='https://provider.example.com',
             access_token_hard_timeout=None,
             app_mode='test',
         )
@@ -4093,19 +4093,19 @@ class TestLoadHooksFromWorkspace:
 
     def test_get_project_dir_for_hooks_with_selected_repository(self):
         """Test get_project_dir_for_hooks with a selected repository."""
-        from openhands.app_server.app_conversation.hook_loader import (
+        from madagascar.app_server.app_conversation.hook_loader import (
             get_project_dir_for_hooks,
         )
 
         result = get_project_dir_for_hooks(
             '/workspace/project',
-            'OpenHands/software-agent-sdk',
+            'Madagascar/software-agent-sdk',
         )
         assert result == '/workspace/project/software-agent-sdk'
 
     def test_get_project_dir_for_hooks_without_selected_repository(self):
         """Test get_project_dir_for_hooks without a selected repository."""
-        from openhands.app_server.app_conversation.hook_loader import (
+        from madagascar.app_server.app_conversation.hook_loader import (
             get_project_dir_for_hooks,
         )
 
@@ -4114,7 +4114,7 @@ class TestLoadHooksFromWorkspace:
 
     def test_get_project_dir_for_hooks_with_empty_string(self):
         """Test get_project_dir_for_hooks with empty string repository."""
-        from openhands.app_server.app_conversation.hook_loader import (
+        from madagascar.app_server.app_conversation.hook_loader import (
             get_project_dir_for_hooks,
         )
 
@@ -4226,14 +4226,14 @@ class TestAgentKindConversationUrl:
     because the frontend polls the wrong route and 404s.
     """
 
-    @pytest.mark.parametrize('agent_kind', ['openhands', 'acp'])
+    @pytest.mark.parametrize('agent_kind', ['madagascar', 'acp'])
     def test_build_conversation_url_uses_unified_path(self, agent_kind):
         from uuid import UUID
 
-        from openhands.app_server.app_conversation.app_conversation_models import (
+        from madagascar.app_server.app_conversation.app_conversation_models import (
             AppConversationInfo,
         )
-        from openhands.app_server.sandbox.sandbox_models import (
+        from madagascar.app_server.sandbox.sandbox_models import (
             AGENT_SERVER,
             ExposedUrl,
             SandboxInfo,
@@ -4295,7 +4295,7 @@ class TestBuildAcpStartConversationRequestSecrets:
             max_num_conversations_per_sandbox=20,
             httpx_client=Mock(),
             web_url=None,
-            openhands_provider_base_url=None,
+            madagascar_provider_base_url=None,
             access_token_hard_timeout=None,
             app_mode='test',
         )
@@ -4304,7 +4304,7 @@ class TestBuildAcpStartConversationRequestSecrets:
         self, acp_server='claude-code', context_secrets=None, api_key=None
     ):
         try:
-            from openhands.sdk.settings import (
+            from madagascar.sdk.settings import (
                 ACPAgentSettings,  # type: ignore[attr-defined]
             )
         except ImportError:
@@ -4591,7 +4591,7 @@ class TestBuildAcpStartConversationRequestSecrets:
     @pytest.mark.asyncio
     async def test_observability_metadata_populated(self, service, tmp_path):
         """Repo / branch / provider land on the request's observability_metadata
-        for ACP conversations too, matching the OpenHands-agent path."""
+        for ACP conversations too, matching the Madagascar-agent path."""
         user = self._make_acp_user()
 
         request = await self._call_build(
@@ -4604,7 +4604,7 @@ class TestBuildAcpStartConversationRequestSecrets:
         )
 
         assert request.observability_metadata == {
-            'app': 'openhands',
+            'app': 'madagascar',
             'conversation_id': str(request.conversation_id),
             'agent_kind': 'acp',
             'repo_name': 'test/repo',
@@ -4617,7 +4617,7 @@ class TestBuildAcpStartConversationRequestSecrets:
     @pytest.mark.asyncio
     async def test_observability_metadata_includes_commit(self, service, tmp_path):
         """The post-clone HEAD sha is resolved from the workspace and added,
-        mirroring the OpenHands-agent path's commit resolution."""
+        mirroring the Madagascar-agent path's commit resolution."""
         user = self._make_acp_user()
         remote_workspace = Mock(spec=AsyncRemoteWorkspace)
         remote_workspace.execute_command = AsyncMock(
@@ -4635,7 +4635,7 @@ class TestBuildAcpStartConversationRequestSecrets:
         )
 
         assert request.observability_metadata == {
-            'app': 'openhands',
+            'app': 'madagascar',
             'conversation_id': str(request.conversation_id),
             'agent_kind': 'acp',
             'repo_name': 'test/repo',
@@ -4656,7 +4656,7 @@ class TestBuildAcpStartConversationRequestSecrets:
         request = await self._call_build(service, user, tmp_path)
 
         assert request.observability_metadata == {
-            'app': 'openhands',
+            'app': 'madagascar',
             'conversation_id': str(request.conversation_id),
             'agent_kind': 'acp',
         }

@@ -5,8 +5,8 @@ import json
 import mcp.types
 from rich.text import Text
 
-from openhands.sdk.llm import TextContent
-from openhands.sdk.mcp.definition import MCPToolObservation
+from madagascar.sdk.llm import TextContent
+from madagascar.sdk.mcp.definition import MCPToolObservation
 
 
 def test_mcp_observation_with_list_json():

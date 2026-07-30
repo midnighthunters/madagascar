@@ -8,7 +8,7 @@ interface CostSectionProps {
 }
 
 export function CostSection({ cost, maxBudgetPerTask }: CostSectionProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   if (cost === null) {
     return null;

@@ -25,9 +25,9 @@ import os
 import httpx
 from scripts.utils import ManagedAPIServer
 
-from openhands.sdk import Conversation, get_logger
-from openhands.sdk.workspace.remote.base import RemoteWorkspace
-from openhands.tools.preset.default import get_default_agent
+from madagascar.sdk import Conversation, get_logger
+from madagascar.sdk.workspace.remote.base import RemoteWorkspace
+from madagascar.tools.preset.default import get_default_agent
 
 
 logger = get_logger(__name__)

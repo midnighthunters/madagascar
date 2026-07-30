@@ -1,6 +1,6 @@
 # PostHog Error Debugging Workflow
 
-This example demonstrates how to use OpenHands agents to automatically debug errors from PostHog in a GitHub Actions workflow.
+This example demonstrates how to use Madagascar agents to automatically debug errors from PostHog in a GitHub Actions workflow.
 
 ## Overview
 
@@ -8,7 +8,7 @@ The workflow:
 1. Fetches events from PostHog based on configurable queries
 2. Searches for or creates GitHub issues to track errors
 3. Clones relevant repositories for comprehensive analysis
-4. Uses OpenHands AI agents to analyze code and identify root causes
+4. Uses Madagascar AI agents to analyze code and identify root causes
 5. Posts debugging insights as comments on GitHub issues
 
 ## Files
@@ -42,7 +42,7 @@ Run on-demand via GitHub Actions UI with configurable inputs:
 - Identifies root causes across repository boundaries
 
 ### AI-Powered Debugging
-- Automatic code analysis using OpenHands agents
+- Automatic code analysis using Madagascar agents
 - Identifies error locations and root causes
 - Provides actionable fix recommendations
 - Posts detailed findings as GitHub comments
@@ -93,7 +93,7 @@ LLM_BASE_URL: Base URL for LLM service (optional)
    - **PostHog Query**: 
      - For `event-query`: Event name (default: `$exception`)
      - For `event-id`: Event ID
-   - **Repository List**: Comma-separated repos to analyze (default: `OpenHands/OpenHands,All-Hands-AI/infra`)
+   - **Repository List**: Comma-separated repos to analyze (default: `Madagascar/Madagascar,All-Hands-AI/infra`)
    - **Issue Repository**: Where to create issues (default: `All-Hands-AI/infra`)
    - **Parent Issue**: Optional parent issue URL for tracking
    - **Issue Prefix**: Prefix for issue titles (default: `PostHog Error: `)
@@ -107,7 +107,7 @@ LLM_BASE_URL: Base URL for LLM service (optional)
 gh workflow run posthog-debugging.yml \
   -f query_type="event-query" \
   -f posthog_query="$exception" \
-  -f repo_list="OpenHands/OpenHands,All-Hands-AI/infra" \
+  -f repo_list="Madagascar/Madagascar,All-Hands-AI/infra" \
   -f issue_repo="All-Hands-AI/infra"
 ```
 
@@ -116,7 +116,7 @@ gh workflow run posthog-debugging.yml \
 gh workflow run posthog-debugging.yml \
   -f query_type="event-id" \
   -f posthog_query="01234567-89ab-cdef-0123-456789abcdef" \
-  -f repo_list="OpenHands/OpenHands,All-Hands-AI/infra,All-Hands-AI/deploy" \
+  -f repo_list="Madagascar/Madagascar,All-Hands-AI/infra,All-Hands-AI/deploy" \
   -f issue_repo="All-Hands-AI/infra"
 ```
 
@@ -127,7 +127,7 @@ gh workflow run posthog-debugging.yml \
 python posthog_debugging.py \
   --query-type event-query \
   --query '$exception' \
-  --repos "OpenHands/OpenHands,All-Hands-AI/infra" \
+  --repos "Madagascar/Madagascar,All-Hands-AI/infra" \
   --issue-repo "All-Hands-AI/infra" \
   --issue-prefix "PostHog Error: "
 
@@ -135,7 +135,7 @@ python posthog_debugging.py \
 python posthog_debugging.py \
   --query-type event-query \
   --query 'application_error' \
-  --repos "OpenHands/OpenHands,All-Hands-AI/infra,All-Hands-AI/deploy" \
+  --repos "Madagascar/Madagascar,All-Hands-AI/infra,All-Hands-AI/deploy" \
   --issue-repo "All-Hands-AI/infra"
 ```
 
@@ -145,7 +145,7 @@ python posthog_debugging.py \
 ```yaml
 query_type: "event-query"
 posthog_query: "$exception"
-repo_list: "OpenHands/OpenHands,All-Hands-AI/infra,All-Hands-AI/deploy"
+repo_list: "Madagascar/Madagascar,All-Hands-AI/infra,All-Hands-AI/deploy"
 issue_repo: "All-Hands-AI/infra"
 issue_parent: "https://github.com/All-Hands-AI/infra/issues/672"
 ```
@@ -154,7 +154,7 @@ issue_parent: "https://github.com/All-Hands-AI/infra/issues/672"
 ```yaml
 query_type: "event-id"
 posthog_query: "01234567-89ab-cdef-0123-456789abcdef"
-repo_list: "OpenHands/OpenHands,All-Hands-AI/infra,All-Hands-AI/deploy"
+repo_list: "Madagascar/Madagascar,All-Hands-AI/infra,All-Hands-AI/deploy"
 issue_repo: "All-Hands-AI/infra"
 issue_parent: "https://github.com/All-Hands-AI/infra/issues/672"
 ```
@@ -213,7 +213,7 @@ ORDER BY timestamp DESC
 
 Comma-separated list of `owner/repo`:
 ```
-OpenHands/OpenHands,All-Hands-AI/infra,All-Hands-AI/deploy
+Madagascar/Madagascar,All-Hands-AI/infra,All-Hands-AI/deploy
 ```
 
 ### LLM Model Options
@@ -230,7 +230,7 @@ OpenHands/OpenHands,All-Hands-AI/infra,All-Hands-AI/deploy
 |-------|------|----------|---------|-------------|
 | `posthog_query` | string | Yes | `$exception` | PostHog event name or event ID |
 | `query_type` | string | No | `event-query` | Type of query: `event-query` or `event-id` |
-| `repo_list` | string | Yes | `OpenHands/OpenHands,All-Hands-AI/infra` | Comma-separated list of repositories |
+| `repo_list` | string | Yes | `Madagascar/Madagascar,All-Hands-AI/infra` | Comma-separated list of repositories |
 | `issue_repo` | string | Yes | `All-Hands-AI/infra` | Repository to create/update issues in |
 | `issue_parent` | string | No | - | Parent GitHub issue URL for tracking |
 | `issue_prefix` | string | No | `PostHog Error: ` | Prefix for issue titles |
@@ -393,4 +393,4 @@ This example is analogous to the DataDog debugging example but adapted for PostH
 - [PostHog API Documentation](https://posthog.com/docs/api)
 - [PostHog HogQL Documentation](https://posthog.com/docs/hogql)
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [OpenHands SDK Documentation](https://github.com/OpenHands/software-agent-sdk)
+- [Madagascar SDK Documentation](https://github.com/Madagascar/software-agent-sdk)

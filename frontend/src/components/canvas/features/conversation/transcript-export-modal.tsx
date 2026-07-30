@@ -40,7 +40,7 @@ export function TranscriptExportModal({
   model,
   onClose,
 }: TranscriptExportModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { trackConversationExported } = useTracking();
   const [format, setFormat] =
     React.useState<TranscriptExportFormat>("markdown");

@@ -5,15 +5,15 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.context.agent_context import AgentContext
-from openhands.sdk.skills import (
+from madagascar.sdk.context.agent_context import AgentContext
+from madagascar.sdk.skills import (
     KeywordTrigger,
     Skill,
     installed,
     load_user_skills,
     skill,
 )
-from openhands.sdk.skills.installed import disable_skill, install_skill
+from madagascar.sdk.skills.installed import disable_skill, install_skill
 
 
 @pytest.fixture
@@ -26,8 +26,8 @@ def temp_user_skills_dir():
         agents_dir = root / ".agents" / "skills"
         agents_dir.mkdir(parents=True)
 
-        # Create .openhands/skills directory
-        skills_dir = root / ".openhands" / "skills"
+        # Create .madagascar/skills directory
+        skills_dir = root / ".madagascar" / "skills"
         skills_dir.mkdir(parents=True)
 
         yield root, agents_dir, skills_dir
@@ -39,8 +39,8 @@ def temp_microagents_dir():
     with tempfile.TemporaryDirectory() as temp_dir:
         root = Path(temp_dir)
 
-        # Create .openhands/microagents directory
-        microagents_dir = root / ".openhands" / "microagents"
+        # Create .madagascar/microagents directory
+        microagents_dir = root / ".madagascar" / "microagents"
         microagents_dir.mkdir(parents=True)
 
         yield root, microagents_dir
@@ -49,7 +49,7 @@ def temp_microagents_dir():
 def test_load_user_skills_no_directories(tmp_path):
     """Test load_user_skills when no user skills directories exist."""
     # Point USER_SKILLS_DIRS to non-existent directories
-    from openhands.sdk.skills import skill
+    from madagascar.sdk.skills import skill
 
     original_dirs = skill.USER_SKILLS_DIRS
     try:
@@ -73,7 +73,7 @@ def test_load_user_skills_with_agents_directory(temp_user_skills_dir):
         "---\nname: agent_skill\ntriggers:\n  - agent\n---\nAgent skill content."
     )
 
-    from openhands.sdk.skills import skill
+    from madagascar.sdk.skills import skill
 
     original_dirs = skill.USER_SKILLS_DIRS
     try:
@@ -88,7 +88,7 @@ def test_load_user_skills_with_agents_directory(temp_user_skills_dir):
 
 
 def test_load_user_skills_with_skills_directory(temp_user_skills_dir):
-    """Test load_user_skills loads from .openhands/skills directory."""
+    """Test load_user_skills loads from .madagascar/skills directory."""
     root, _, skills_dir = temp_user_skills_dir
 
     # Create a test skill file
@@ -97,7 +97,7 @@ def test_load_user_skills_with_skills_directory(temp_user_skills_dir):
         "---\nname: test_skill\ntriggers:\n  - test\n---\nThis is a test skill."
     )
 
-    from openhands.sdk.skills import skill
+    from madagascar.sdk.skills import skill
 
     original_dirs = skill.USER_SKILLS_DIRS
     try:
@@ -126,7 +126,7 @@ def test_load_user_skills_with_microagents_directory(temp_microagents_dir):
         "This is a legacy microagent skill."
     )
 
-    from openhands.sdk.skills import skill
+    from madagascar.sdk.skills import skill
 
     original_dirs = skill.USER_SKILLS_DIRS
     try:
@@ -140,10 +140,10 @@ def test_load_user_skills_with_microagents_directory(temp_microagents_dir):
 
 
 def test_load_user_skills_priority_order(tmp_path):
-    """Test precedence .agents/skills > .openhands/skills > microagents."""
+    """Test precedence .agents/skills > .madagascar/skills > microagents."""
     agents_dir = tmp_path / ".agents" / "skills"
-    skills_dir = tmp_path / ".openhands" / "skills"
-    microagents_dir = tmp_path / ".openhands" / "microagents"
+    skills_dir = tmp_path / ".madagascar" / "skills"
+    microagents_dir = tmp_path / ".madagascar" / "microagents"
     agents_dir.mkdir(parents=True)
     skills_dir.mkdir(parents=True)
     microagents_dir.mkdir(parents=True)
@@ -152,13 +152,13 @@ def test_load_user_skills_priority_order(tmp_path):
         "---\nname: duplicate\n---\nFrom .agents/skills."
     )
     (skills_dir / "duplicate.md").write_text(
-        "---\nname: duplicate\n---\nFrom .openhands/skills."
+        "---\nname: duplicate\n---\nFrom .madagascar/skills."
     )
     (microagents_dir / "duplicate.md").write_text(
-        "---\nname: duplicate\n---\nFrom .openhands/microagents."
+        "---\nname: duplicate\n---\nFrom .madagascar/microagents."
     )
 
-    from openhands.sdk.skills import skill
+    from madagascar.sdk.skills import skill
 
     original_dirs = skill.USER_SKILLS_DIRS
     try:
@@ -172,12 +172,12 @@ def test_load_user_skills_priority_order(tmp_path):
 
 
 def test_load_user_skills_merges_all_directories(tmp_path):
-    """Test loading unique skills from .agents/skills, .openhands/skills,
+    """Test loading unique skills from .agents/skills, .madagascar/skills,
     microagents.
     """
     agents_dir = tmp_path / ".agents" / "skills"
-    skills_dir = tmp_path / ".openhands" / "skills"
-    microagents_dir = tmp_path / ".openhands" / "microagents"
+    skills_dir = tmp_path / ".madagascar" / "skills"
+    microagents_dir = tmp_path / ".madagascar" / "microagents"
     agents_dir.mkdir(parents=True)
     skills_dir.mkdir(parents=True)
     microagents_dir.mkdir(parents=True)
@@ -190,7 +190,7 @@ def test_load_user_skills_merges_all_directories(tmp_path):
         "---\nname: skill2\n---\nSkill 2 content."
     )
 
-    from openhands.sdk.skills import skill
+    from madagascar.sdk.skills import skill
 
     original_dirs = skill.USER_SKILLS_DIRS
     try:
@@ -216,7 +216,7 @@ def test_load_user_skills_handles_errors_gracefully(temp_user_skills_dir):
         "Invalid skill."
     )
 
-    from openhands.sdk.skills import skill
+    from madagascar.sdk.skills import skill
 
     original_dirs = skill.USER_SKILLS_DIRS
     try:
@@ -236,7 +236,7 @@ def test_agent_context_loads_user_skills_by_default(temp_user_skills_dir):
     skill_file = skills_dir / "auto_skill.md"
     skill_file.write_text("---\nname: auto_skill\n---\nAutomatically loaded skill.")
 
-    from openhands.sdk.skills import skill
+    from madagascar.sdk.skills import skill
 
     original_dirs = skill.USER_SKILLS_DIRS
     try:
@@ -269,7 +269,7 @@ def test_agent_context_merges_explicit_and_user_skills(temp_user_skills_dir):
         trigger=None,
     )
 
-    from openhands.sdk.skills import skill
+    from madagascar.sdk.skills import skill
 
     original_dirs = skill.USER_SKILLS_DIRS
     try:
@@ -298,7 +298,7 @@ def test_agent_context_explicit_skill_takes_precedence(temp_user_skills_dir):
         trigger=None,
     )
 
-    from openhands.sdk.skills import skill
+    from madagascar.sdk.skills import skill
 
     original_dirs = skill.USER_SKILLS_DIRS
     try:

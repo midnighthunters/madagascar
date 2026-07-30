@@ -4,7 +4,7 @@ from unittest.mock import patch
 from litellm.types.utils import ModelResponse
 from pydantic import SecretStr
 
-from openhands.sdk.llm import LLM, Message, TextContent
+from madagascar.sdk.llm import LLM, Message, TextContent
 
 
 def test_empty_api_key_string_converted_to_none():
@@ -219,7 +219,7 @@ def test_aws_bedrock_params_forwarded_to_litellm():
         aws_bedrock_runtime_endpoint="https://my-proxy.example.com",
     )
 
-    with patch("openhands.sdk.llm.llm.litellm_completion") as mock_completion:
+    with patch("madagascar.sdk.llm.llm.litellm_completion") as mock_completion:
         mock_completion.return_value = ModelResponse(
             id="test-id",
             choices=[

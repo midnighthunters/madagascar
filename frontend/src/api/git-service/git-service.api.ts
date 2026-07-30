@@ -1,6 +1,6 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 import { RepositoryPage, BranchPage, InstallationPage } from "#/types/git";
-import { GitChange, GitChangeDiff } from "../open-hands.types";
+import { GitChange, GitChangeDiff } from "../madagascar.types";
 import ConversationService from "../conversation-service/conversation-service.api";
 
 /**
@@ -24,7 +24,7 @@ class GitService {
     pageId?: string,
     installationId?: string,
   ): Promise<RepositoryPage> {
-    const { data } = await openHands.get<RepositoryPage>(
+    const { data } = await madagascar.get<RepositoryPage>(
       "/api/v1/git/repositories/search",
       {
         params: {
@@ -55,7 +55,7 @@ class GitService {
     limit = 30,
     installationId?: string,
   ): Promise<RepositoryPage> {
-    const { data } = await openHands.get<RepositoryPage>(
+    const { data } = await madagascar.get<RepositoryPage>(
       "/api/v1/git/repositories/search",
       {
         params: {
@@ -87,7 +87,7 @@ class GitService {
     limit = 30,
   ): Promise<RepositoryPage> {
     const installationId = installations[installationIndex];
-    const { data } = await openHands.get<RepositoryPage>(
+    const { data } = await madagascar.get<RepositoryPage>(
       "/api/v1/git/repositories/search",
       {
         params: {
@@ -117,7 +117,7 @@ class GitService {
     pageId?: string,
     limit = 30,
   ): Promise<BranchPage> {
-    const { data } = await openHands.get<BranchPage>(
+    const { data } = await madagascar.get<BranchPage>(
       "/api/v1/git/branches/search",
       {
         params: {
@@ -171,7 +171,7 @@ class GitService {
     pageId?: string,
     limit = 100,
   ): Promise<InstallationPage> {
-    const { data } = await openHands.get<InstallationPage>(
+    const { data } = await madagascar.get<InstallationPage>(
       "/api/v1/git/installations/search",
       {
         params: {
@@ -191,7 +191,7 @@ class GitService {
    */
   static async getGitChanges(conversationId: string): Promise<GitChange[]> {
     const url = `${ConversationService.getConversationUrl(conversationId)}/git/changes`;
-    const { data } = await openHands.get<GitChange[]>(url, {
+    const { data } = await madagascar.get<GitChange[]>(url, {
       headers: ConversationService.getConversationHeaders(),
     });
     return data;
@@ -208,7 +208,7 @@ class GitService {
     path: string,
   ): Promise<GitChangeDiff> {
     const url = `${ConversationService.getConversationUrl(conversationId)}/git/diff`;
-    const { data } = await openHands.get<GitChangeDiff>(url, {
+    const { data } = await madagascar.get<GitChangeDiff>(url, {
       params: { path },
       headers: ConversationService.getConversationHeaders(),
     });

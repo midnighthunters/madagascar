@@ -2,11 +2,11 @@ from pydantic import SecretStr
 from server.auth.constants import AZURE_DEVOPS_ORGANIZATION
 from server.auth.token_manager import TokenManager
 
-from openhands.app_server.integrations.azure_devops.azure_devops_service import (
+from madagascar.app_server.integrations.azure_devops.azure_devops_service import (
     AzureDevOpsService,
 )
-from openhands.app_server.integrations.service_types import ProviderType, RequestMethod
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.integrations.service_types import ProviderType, RequestMethod
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 # Git Repositories security namespace + GenericContribute (write) permission bit.
 GIT_REPOSITORIES_NAMESPACE_ID = '2e9eb7ed-3c0a-47d4-87c1-0ffdd275fd87'

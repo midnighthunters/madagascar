@@ -9,10 +9,10 @@ import pytest
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
-from openhands.agent_server.api import _find_http_exception, create_app
-from openhands.agent_server.config import Config
-from openhands.agent_server.dependencies import get_conversation_service
-from openhands.agent_server.openai.router import _parse_observability_overrides
+from madagascar.agent_server.api import _find_http_exception, create_app
+from madagascar.agent_server.config import Config
+from madagascar.agent_server.dependencies import get_conversation_service
+from madagascar.agent_server.openai.router import _parse_observability_overrides
 
 
 @pytest.fixture
@@ -128,7 +128,7 @@ def test_openai_routes_accept_bearer_session_key(client_with_auth, monkeypatch):
             return []
 
     monkeypatch.setattr(
-        "openhands.agent_server.openai.service.get_llm_profile_store", EmptyProfileStore
+        "madagascar.agent_server.openai.service.get_llm_profile_store", EmptyProfileStore
     )
 
     response = client_with_auth.get("/v1/models")
@@ -149,14 +149,14 @@ def test_openai_observability_headers_parse_to_conversation_overrides():
     overrides = _parse_observability_overrides(
         span_name="pr_review_evaluation",
         tags="pr-review,evaluation",
-        metadata='{"repo":"OpenHands/software-agent-sdk","pr_number":123}',
+        metadata='{"repo":"Madagascar/software-agent-sdk","pr_number":123}',
     )
 
     assert overrides == {
         "observability_span_name": "pr_review_evaluation",
         "observability_tags": ["pr-review", "evaluation"],
         "observability_metadata": {
-            "repo": "OpenHands/software-agent-sdk",
+            "repo": "Madagascar/software-agent-sdk",
             "pr_number": 123,
         },
     }
@@ -179,7 +179,7 @@ def test_openai_route_invalid_observability_header_returns_422(monkeypatch):
         raise AssertionError("run_chat_completion should not run for invalid headers")
 
     monkeypatch.setattr(
-        "openhands.agent_server.openai.router.run_chat_completion",
+        "madagascar.agent_server.openai.router.run_chat_completion",
         fail_if_called,
     )
     app = create_app(Config(session_api_keys=[]))
@@ -188,9 +188,9 @@ def test_openai_route_invalid_observability_header_returns_422(monkeypatch):
 
     response = client.post(
         "/v1/chat/completions",
-        headers={"X-OpenHands-Observability-Span-Name": "bad span name"},
+        headers={"X-Madagascar-Observability-Span-Name": "bad span name"},
         json={
-            "model": "openhands/test",
+            "model": "madagascar/test",
             "messages": [{"role": "user", "content": "hello"}],
         },
     )

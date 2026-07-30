@@ -1,4 +1,4 @@
-"""Tests for the Tool class in openhands.sdk.runtime.tool."""
+"""Tests for the Tool class in madagascar.sdk.runtime.tool."""
 
 from collections.abc import Sequence
 from typing import Any
@@ -6,8 +6,8 @@ from typing import Any
 import pytest
 from pydantic import Field, ValidationError
 
-from openhands.sdk.llm.message import ImageContent, TextContent
-from openhands.sdk.tool import (
+from madagascar.sdk.llm.message import ImageContent, TextContent
+from madagascar.sdk.tool import (
     Action,
     Observation,
     ToolAnnotations,

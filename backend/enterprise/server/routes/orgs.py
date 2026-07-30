@@ -75,9 +75,9 @@ from storage.org_service import OrgService
 from storage.org_store import OrgStore
 from storage.user_store import UserStore
 
-from openhands.analytics import get_analytics_service
-from openhands.app_server.user_auth import get_user_id
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.analytics import get_analytics_service
+from madagascar.app_server.user_auth import get_user_id
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 # Initialize API router
 org_router = APIRouter(
@@ -1044,7 +1044,7 @@ async def get_org_members_financial(
     within the specified organization. Access is restricted to:
     - Organization Admins
     - Organization Owners
-    - OpenHands members (users with @openhands.dev emails)
+    - Madagascar members (users with @madagascar.dev emails)
 
     Args:
         org_id: Organization ID (UUID)
@@ -1063,7 +1063,7 @@ async def get_org_members_financial(
 
     Raises:
         HTTPException: 401 if user is not authenticated
-        HTTPException: 403 if user lacks access (not admin/owner and not @openhands.dev)
+        HTTPException: 403 if user lacks access (not admin/owner and not @madagascar.dev)
         HTTPException: 400 if page_id is invalid
         HTTPException: 500 if retrieval fails
     """
@@ -1379,7 +1379,7 @@ async def switch_org(
         analytics = get_analytics_service()
         if analytics:
             try:
-                from openhands.analytics import resolve_analytics_context
+                from madagascar.analytics import resolve_analytics_context
 
                 ctx = await resolve_analytics_context(user_id)
 
@@ -1522,12 +1522,12 @@ async def get_git_claims(
     org_id: UUID,
     user_id: str = Depends(require_permission(Permission.MANAGE_ORG_CLAIMS)),
 ) -> list[GitOrgClaimResponse]:
-    """Get all Git organization claims for an OpenHands organization.
+    """Get all Git organization claims for an Madagascar organization.
 
     Only admin and owner roles can view Git organization claims.
 
     Args:
-        org_id: OpenHands organization UUID
+        org_id: Madagascar organization UUID
         user_id: Authenticated user ID (injected by permission check)
 
     Returns:
@@ -1564,13 +1564,13 @@ async def claim_git_organization(
     request: GitOrgClaimRequest,
     user_id: str = Depends(require_permission(Permission.MANAGE_ORG_CLAIMS)),
 ) -> GitOrgClaimResponse:
-    """Claim a Git organization for an OpenHands organization.
+    """Claim a Git organization for an Madagascar organization.
 
     Only admin and owner roles can claim Git organizations.
-    A Git organization can only be claimed by one OpenHands organization at a time.
+    A Git organization can only be claimed by one Madagascar organization at a time.
 
     Args:
-        org_id: OpenHands organization UUID
+        org_id: Madagascar organization UUID
         request: Claim request with provider and git_organization
         user_id: Authenticated user ID (injected by permission check)
 
@@ -1652,12 +1652,12 @@ async def disconnect_git_organization(
     claim_id: UUID,
     user_id: str = Depends(require_permission(Permission.MANAGE_ORG_CLAIMS)),
 ) -> dict:
-    """Remove a Git organization claim from an OpenHands organization.
+    """Remove a Git organization claim from an Madagascar organization.
 
     Only admin and owner roles can disconnect Git organization claims.
 
     Args:
-        org_id: OpenHands organization UUID
+        org_id: Madagascar organization UUID
         claim_id: Claim UUID to remove
         user_id: Authenticated user ID (injected by permission check)
 

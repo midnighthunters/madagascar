@@ -1,4 +1,4 @@
-"""Streamlit app to explore OpenHands completion logs.
+"""Streamlit app to explore Madagascar completion logs.
 
 Usage:
     streamlit run scripts/completion_logs_viewer.py
@@ -7,7 +7,7 @@ The viewer expects a directory containing run folders with ``*.json`` log
 files (e.g. ``output/Agent/logs/<run>/log.json``). You can override the logs
 directory via:
 
-* Environment variable ``OPENHANDS_COMPLETION_LOGS_ROOT``
+* Environment variable ``MADAGASCAR_COMPLETION_LOGS_ROOT``
 * URL query parameter ``?root=/path/to/logs`` when the app is open
 * The sidebar text input labelled "Logs directory"
 """
@@ -22,13 +22,13 @@ from typing import Any
 
 import streamlit as st
 
-from openhands.sdk.logger import ENV_LOG_DIR
+from madagascar.sdk.logger import ENV_LOG_DIR
 
 
-ENV_ROOT = os.getenv("OPENHANDS_COMPLETION_LOGS_ROOT")
+ENV_ROOT = os.getenv("MADAGASCAR_COMPLETION_LOGS_ROOT")
 DEFAULT_LOG_ROOT = Path(os.path.join(ENV_LOG_DIR, "completion_logs"))
 
-st.set_page_config(page_title="OpenHands Completion Logs Viewer", layout="wide")
+st.set_page_config(page_title="Madagascar Completion Logs Viewer", layout="wide")
 
 
 def format_timestamp(timestamp: float) -> str:
@@ -110,7 +110,7 @@ def list_log_files(run_dir: Path) -> list[Path]:
 
 
 def main() -> None:
-    st.title("OpenHands Completion Logs Viewer")
+    st.title("Madagascar Completion Logs Viewer")
 
     if "logs_root" not in st.session_state:
         params = st.query_params
@@ -125,7 +125,7 @@ def main() -> None:
     root_input = st.sidebar.text_input(
         "Logs directory",
         value=st.session_state["logs_root"],
-        help="Root folder containing OpenHands completion logs",
+        help="Root folder containing Madagascar completion logs",
     )
 
     if not root_input:

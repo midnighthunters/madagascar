@@ -4,14 +4,14 @@ import time
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Conversation,
     RemoteConversation,
     get_logger,
 )
-from openhands.tools.preset.default import get_default_agent
-from openhands.workspace import ApptainerWorkspace
+from madagascar.tools.preset.default import get_default_agent
+from madagascar.workspace import ApptainerWorkspace
 
 
 logger = get_logger(__name__)
@@ -44,8 +44,8 @@ def get_server_image():
     # built-in GITHUB_SHA which resolves to the merge-commit on PRs).
     sha = os.getenv("SDK_SHA") or os.getenv("GITHUB_SHA")
     if sha:
-        return f"ghcr.io/openhands/agent-server:{sha[:7]}-python-{arch}"
-    return "ghcr.io/openhands/agent-server:latest-python"
+        return f"ghcr.io/madagascar/agent-server:{sha[:7]}-python-{arch}"
+    return "ghcr.io/madagascar/agent-server:latest-python"
 
 
 # 2) Create an Apptainer-based remote workspace that will set up and manage

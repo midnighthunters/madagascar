@@ -26,14 +26,14 @@ from pathlib import Path
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Agent, AgentContext, Conversation
-from openhands.sdk.skills import (
+from madagascar.sdk import LLM, Agent, AgentContext, Conversation
+from madagascar.sdk.skills import (
     discover_skill_resources,
     load_skills_from_dir,
 )
-from openhands.sdk.tool import Tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.tool import Tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 
 
 # Get the directory containing this script

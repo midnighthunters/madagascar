@@ -2,7 +2,7 @@
 """
 Datadog Debugging Example
 
-This example demonstrates how to use the OpenHands agent to debug errors
+This example demonstrates how to use the Madagascar agent to debug errors
 logged in Datadog.
 The agent will:
 1. Query Datadog logs to understand the error using curl commands
@@ -13,7 +13,7 @@ The agent will:
 
 Usage:
     python 26_datadog_debugging.py --query "status:error service:deploy" \\
-        --repos "All-Hands-AI/OpenHands,All-Hands-AI/deploy"
+        --repos "All-Hands-AI/Madagascar,All-Hands-AI/deploy"
 
 Environment Variables Required:
     - DD_API_KEY: Your Datadog API key
@@ -34,7 +34,7 @@ import requests
 from jinja2 import Environment, FileSystemLoader
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     LLM,
     Agent,
     Conversation,
@@ -44,10 +44,10 @@ from openhands.sdk import (
     TextContent,
     get_logger,
 )
-from openhands.sdk.tool import Tool, register_tool
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.task_tracker import TaskTrackerTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk.tool import Tool, register_tool
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.task_tracker import TaskTrackerTool
+from madagascar.tools.terminal import TerminalTool
 
 
 logger = get_logger(__name__)
@@ -543,7 +543,7 @@ def create_debugging_prompt(
 def main():
     """Main function to run the Datadog debugging example."""
     parser = argparse.ArgumentParser(
-        description="Debug errors from Datadog logs using OpenHands agent",
+        description="Debug errors from Datadog logs using Madagascar agent",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -571,7 +571,7 @@ def main():
         "--repos",
         required=True,
         help="Comma-separated list of GitHub repositories to analyze "
-        "(e.g., 'All-Hands-AI/OpenHands,All-Hands-AI/deploy')",
+        "(e.g., 'All-Hands-AI/Madagascar,All-Hands-AI/deploy')",
     )
     parser.add_argument(
         "--working-dir",

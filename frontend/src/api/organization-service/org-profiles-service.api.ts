@@ -1,4 +1,4 @@
-import { openHands } from "../open-hands-axios";
+import { madagascar } from "../madagascar-axios";
 
 export interface OrgLlmProfileSummary {
   name: string;
@@ -26,7 +26,7 @@ export interface SaveOrgLlmProfileRequest {
 
 class OrgProfilesService {
   static async listProfiles(orgId: string): Promise<OrgLlmProfileListResponse> {
-    const { data } = await openHands.get<OrgLlmProfileListResponse>(
+    const { data } = await madagascar.get<OrgLlmProfileListResponse>(
       `/api/organizations/${orgId}/profiles`,
     );
     return data;
@@ -36,7 +36,7 @@ class OrgProfilesService {
     orgId: string,
     name: string,
   ): Promise<{ name: string; llm: Record<string, unknown> }> {
-    const { data } = await openHands.get(
+    const { data } = await madagascar.get(
       `/api/organizations/${orgId}/profiles/${encodeURIComponent(name)}`,
     );
     return data;
@@ -47,20 +47,20 @@ class OrgProfilesService {
     name: string,
     request: SaveOrgLlmProfileRequest = {},
   ): Promise<void> {
-    await openHands.post(
+    await madagascar.post(
       `/api/organizations/${orgId}/profiles/${encodeURIComponent(name)}`,
       request,
     );
   }
 
   static async deleteProfile(orgId: string, name: string): Promise<void> {
-    await openHands.delete(
+    await madagascar.delete(
       `/api/organizations/${orgId}/profiles/${encodeURIComponent(name)}`,
     );
   }
 
   static async activateProfile(orgId: string, name: string): Promise<void> {
-    await openHands.post(
+    await madagascar.post(
       `/api/organizations/${orgId}/profiles/${encodeURIComponent(name)}/activate`,
     );
   }
@@ -70,7 +70,7 @@ class OrgProfilesService {
     name: string,
     newName: string,
   ): Promise<void> {
-    await openHands.post(
+    await madagascar.post(
       `/api/organizations/${orgId}/profiles/${encodeURIComponent(name)}/rename`,
       { new_name: newName },
     );

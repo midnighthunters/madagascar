@@ -4,10 +4,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Messages } from "#/components/features/chat/messages";
 import {
   AssistantMessageAction,
-  OpenHandsAction,
+  MadagascarAction,
   UserMessageAction,
 } from "#/types/core/actions";
-import { OpenHandsObservation } from "#/types/core/observations";
+import { MadagascarObservation } from "#/types/core/observations";
 import { useSelectedOrganizationStore } from "#/stores/selected-organization-store";
 
 vi.mock("react-router", async (importOriginal) => ({
@@ -21,7 +21,7 @@ let queryClient: QueryClient;
 const renderMessages = ({
   messages,
 }: {
-  messages: (OpenHandsAction | OpenHandsObservation)[];
+  messages: (MadagascarAction | MadagascarObservation)[];
 }) => {
   const { rerender, ...rest } = render(
     <Messages messages={messages} isAwaitingUserConfirmation={false} />,
@@ -35,7 +35,7 @@ const renderMessages = ({
   );
 
   const rerenderMessages = (
-    newMessages: (OpenHandsAction | OpenHandsObservation)[],
+    newMessages: (MadagascarAction | MadagascarObservation)[],
   ) => {
     rerender(
       <Messages messages={newMessages} isAwaitingUserConfirmation={false} />,

@@ -11,14 +11,14 @@ import os
 
 from pydantic import SecretStr
 
-from openhands.sdk import (
+from madagascar.sdk import (
     Conversation,
     Event,
     LLMConvertibleEvent,
     get_logger,
 )
-from openhands.sdk.llm import LLM
-from openhands.tools.preset.default import get_default_agent
+from madagascar.sdk.llm import LLM
+from madagascar.tools.preset.default import get_default_agent
 
 
 logger = get_logger(__name__)
@@ -26,7 +26,7 @@ logger = get_logger(__name__)
 api_key = os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY")
 assert api_key, "Set LLM_API_KEY or OPENAI_API_KEY in your environment."
 
-model = "openhands/gpt-5-mini-2025-08-07"  # Use a model that supports Responses API
+model = "madagascar/gpt-5-mini-2025-08-07"  # Use a model that supports Responses API
 base_url = os.getenv("LLM_BASE_URL")
 
 llm = LLM(

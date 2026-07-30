@@ -1,11 +1,11 @@
 """Test hard context reset when condensation range is invalid."""
 
-from openhands.sdk import Tool
-from openhands.sdk.context.condenser import LLMSummarizingCondenser
-from openhands.sdk.conversation.impl.local_conversation import LocalConversation
-from openhands.sdk.event.condenser import Condensation
-from openhands.sdk.tool import register_tool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk import Tool
+from madagascar.sdk.context.condenser import LLMSummarizingCondenser
+from madagascar.sdk.conversation.impl.local_conversation import LocalConversation
+from madagascar.sdk.event.condenser import Condensation
+from madagascar.sdk.tool import register_tool
+from madagascar.tools.terminal import TerminalTool
 from tests.integration.base import BaseIntegrationTest, TestResult
 
 

@@ -29,9 +29,9 @@ from server.services.automation_event_service import AutomationEventService
 from storage.bitbucket_dc_webhook_store import BitbucketDCWebhookStore
 from storage.redis import get_redis_client_async
 
-from openhands.app_server.config_api.config_models import AppMode
-from openhands.app_server.integrations.provider import ProviderType
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.config_api.config_models import AppMode
+from madagascar.app_server.integrations.provider import ProviderType
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 bitbucket_dc_integration_router = APIRouter(prefix='/integration')
 
@@ -40,7 +40,7 @@ token_manager = TokenManager()
 bitbucket_dc_manager = BitbucketDCManager(token_manager)
 automation_event_service = AutomationEventService(token_manager)
 
-BITBUCKET_DC_WEBHOOK_NAME = 'OpenHands Resolver'
+BITBUCKET_DC_WEBHOOK_NAME = 'Madagascar Resolver'
 BITBUCKET_DC_WEBHOOK_EVENTS = [
     'repo:refs_changed',
     'repo:comment:added',

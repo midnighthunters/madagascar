@@ -10,7 +10,7 @@ import { useActiveBackend } from "#/contexts/active-backend-context";
 import { useTracking } from "#/hooks/use-tracking";
 
 const DOCS_URL =
-  "https://docs.openhands.dev/openhands/usage/automations/overview";
+  "https://docs.madagascar.dev/madagascar/usage/automations/overview";
 
 function InlineExampleWrap({ children }: { children?: ReactNode }) {
   return <span className="whitespace-nowrap">{children}</span>;
@@ -52,7 +52,7 @@ interface CreateInstructionsContentProps {
 export function CreateInstructionsContent({
   onLaunch,
 }: CreateInstructionsContentProps = {}) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const launchInChat = useLaunchSkillInChat();
   const active = useActiveBackend();
   const { trackAutomationCreated } = useTracking();
@@ -66,7 +66,7 @@ export function CreateInstructionsContent({
     <div className="flex flex-col gap-5">
       <p className="text-sm leading-relaxed text-tertiary-light">
         <Trans
-          ns="openhands"
+          ns="madagascar"
           i18nKey={I18nKey.AUTOMATIONS$EMPTY_OPTION_CONVERSATION_DESC}
           components={CREATE_INSTRUCTIONS_INLINE_COMPONENTS}
         />{" "}
@@ -101,7 +101,7 @@ export function CreateInstructionsContent({
 export function CreateInstructions({
   collapsible = false,
 }: CreateInstructionsProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const [isExpanded, setIsExpanded] = useState(!collapsible);
 
   if (collapsible) {

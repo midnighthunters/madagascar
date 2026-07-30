@@ -29,7 +29,7 @@ export function UserAssistantEventMessage({
   isLastMessage,
   isFromPlanningAgent,
 }: UserAssistantEventMessageProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { navigate } = useNavigation();
   const { conversationId } = useOptionalConversationId();
   const isCloud = useActiveBackend().backend.kind === "cloud";

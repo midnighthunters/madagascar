@@ -9,7 +9,7 @@ from integrations.bitbucket_data_center.bitbucket_dc_service import (
 from pydantic import SecretStr
 from server.auth.token_manager import TokenManager
 
-from openhands.app_server.integrations.service_types import RequestMethod
+from madagascar.app_server.integrations.service_types import RequestMethod
 
 
 @pytest.fixture
@@ -36,7 +36,7 @@ class TestSaaSBitbucketDCServiceInit:
     def test_refresh_flag_is_true(self):
         # self.refresh = True is required so the base class BitbucketDCService
         # retries the request with a refreshed token on 401 responses.
-        # See openhands/app_server/integrations/bitbucket_data_center/service/base.py,
+        # See madagascar/app_server/integrations/bitbucket_data_center/service/base.py,
         # which checks `if self.refresh` before attempting the retry.
         service = SaaSBitbucketDCService()
         assert service.refresh is True

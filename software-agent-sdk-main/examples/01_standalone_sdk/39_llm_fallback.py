@@ -17,10 +17,10 @@ import tempfile
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Agent, Conversation, LLMProfileStore, Tool
-from openhands.sdk.llm import FallbackStrategy
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk import LLM, Agent, Conversation, LLMProfileStore, Tool
+from madagascar.sdk.llm import FallbackStrategy
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 
 
 # Read configuration from environment
@@ -30,7 +30,7 @@ base_url = os.getenv("LLM_BASE_URL")
 primary_model = os.getenv("LLM_MODEL", "gpt-5.5")
 
 # Use a temporary directory so this example doesn't pollute your home folder.
-# In real usage you can omit base_dir to use the default (~/.openhands/profiles).
+# In real usage you can omit base_dir to use the default (~/.madagascar/profiles).
 profile_store_dir = tempfile.mkdtemp()
 store = LLMProfileStore(base_dir=profile_store_dir)
 

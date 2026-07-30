@@ -17,7 +17,7 @@ import { MetricsModal } from "./metrics-modal/metrics-modal";
 import { TranscriptExportModal } from "./transcript-export-modal";
 
 export function ConversationName() {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { conversationId } = useConversationId();
   const { data: conversation } = useActiveConversation();
   const { mutate: updateConversation } = useUpdateConversation();

@@ -12,19 +12,19 @@ import pytest
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 
-from openhands.app_server.app_conversation.app_conversation_models import (
+from madagascar.app_server.app_conversation.app_conversation_models import (
     ConversationTrigger,
 )
-from openhands.app_server.app_conversation.sql_app_conversation_info_service import (
+from madagascar.app_server.app_conversation.sql_app_conversation_info_service import (
     SQLAppConversationInfoService,
     StoredConversationMetadata,
 )
-from openhands.app_server.event_callback.webhook_router import (
+from madagascar.app_server.event_callback.webhook_router import (
     detect_automation_trigger,
     merge_conversation_tags,
 )
-from openhands.app_server.user.specifiy_user_context import SpecifyUserContext
-from openhands.app_server.utils.sql_utils import Base
+from madagascar.app_server.user.specifiy_user_context import SpecifyUserContext
+from madagascar.app_server.utils.sql_utils import Base
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -274,7 +274,7 @@ async def test_full_tag_roundtrip_with_automation_context(async_session, service
         'automation_id': 'auto-abc',
         'automation_name': 'Daily Report',
         'run_id': 'run-xyz',
-        'plugins': 'https://github.com/OpenHands/skill1,https://github.com/OpenHands/skill2',
+        'plugins': 'https://github.com/Madagascar/skill1,https://github.com/Madagascar/skill2',
     }
 
     stored = StoredConversationMetadata(

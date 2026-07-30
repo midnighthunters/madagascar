@@ -19,7 +19,7 @@ interface SayHelloStepProps {
 }
 
 /**
- * Step 3: a simple text input pre-filled with "hello OpenHands!" that
+ * Step 3: a simple text input pre-filled with "hello Madagascar!" that
  * launches a brand-new conversation with no workspace and navigates
  * to it. Completing this step finishes the onboarding flow.
  */
@@ -28,7 +28,7 @@ export function SayHelloStep({
   onClose,
   onLaunched,
 }: SayHelloStepProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const { navigate } = useNavigation();
   const { backend } = useActiveBackend();
   const showRecommendedAutomations = backend.kind !== "cloud";

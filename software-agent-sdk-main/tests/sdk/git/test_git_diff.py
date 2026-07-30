@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from openhands.sdk.git.git_diff import get_closest_git_repo, get_git_diff
-from openhands.sdk.git.models import GitDiff
+from madagascar.sdk.git.git_diff import get_closest_git_repo, get_git_diff
+from madagascar.sdk.git.models import GitDiff
 
 
 def run_bash_command(command: str, cwd: str) -> subprocess.CompletedProcess:
@@ -100,7 +100,7 @@ def test_get_git_diff_deleted_file():
         os.remove(test_file)
 
         # The function will raise GitPathError for deleted files
-        from openhands.sdk.git.exceptions import GitPathError
+        from madagascar.sdk.git.exceptions import GitPathError
 
         with pytest.raises(GitPathError):
             run_in_directory(temp_dir, get_git_diff, "deleted_file.txt")
@@ -145,7 +145,7 @@ def test_get_git_diff_no_repository():
         test_file = Path(temp_dir) / "file.txt"
         test_file.write_text("Content")
 
-        from openhands.sdk.git.exceptions import GitRepositoryError
+        from madagascar.sdk.git.exceptions import GitRepositoryError
 
         with pytest.raises(GitRepositoryError):
             run_in_directory(temp_dir, get_git_diff, "file.txt")
@@ -156,7 +156,7 @@ def test_get_git_diff_nonexistent_file():
     with tempfile.TemporaryDirectory() as temp_dir:
         setup_git_repo(temp_dir)
 
-        from openhands.sdk.git.exceptions import GitPathError
+        from madagascar.sdk.git.exceptions import GitPathError
 
         with pytest.raises(GitPathError):
             run_in_directory(temp_dir, get_git_diff, "nonexistent.txt")
@@ -284,7 +284,7 @@ def test_git_diff_large_file_error():
         large_content = "x" * (1024 * 1024 + 1)  # 1MB + 1 byte
         test_file.write_text(large_content)
 
-        from openhands.sdk.git.exceptions import GitPathError
+        from madagascar.sdk.git.exceptions import GitPathError
 
         with pytest.raises(GitPathError):
             run_in_directory(temp_dir, get_git_diff, "large_file.txt")
@@ -321,7 +321,7 @@ def test_get_git_diff_ref_head_compares_against_latest_commit():
 
 def test_get_git_diff_invalid_ref_raises():
     """An explicit ref that does not resolve should raise."""
-    from openhands.sdk.git.exceptions import GitCommandError
+    from madagascar.sdk.git.exceptions import GitCommandError
 
     with tempfile.TemporaryDirectory() as temp_dir:
         setup_git_repo(temp_dir)
@@ -346,7 +346,7 @@ def test_get_git_diff_committed_branch_change_diffs_against_fork_point():
         target.write_text("base")
         run_bash_command("git add .", temp_dir)
         run_bash_command("git commit -m 'base'", temp_dir)
-        run_bash_command("git checkout -b openhands/conv1", temp_dir)
+        run_bash_command("git checkout -b madagascar/conv1", temp_dir)
         target.write_text("changed by agent")
         run_bash_command("git commit -am 'agent work'", temp_dir)
 

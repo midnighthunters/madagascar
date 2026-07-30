@@ -8,13 +8,13 @@ import pytest
 from fastapi.testclient import TestClient
 from pydantic import SecretStr
 
-from openhands.agent_server import profiles_router as profiles_router_module
-from openhands.agent_server.api import create_app
-from openhands.agent_server.config import Config
-from openhands.agent_server.persistence import reset_stores
-from openhands.sdk.llm import LLM
-from openhands.sdk.llm.llm_profile_store import LLMProfileStore
-from openhands.sdk.profiles import AgentProfileStore, OpenHandsAgentProfile
+from madagascar.agent_server import profiles_router as profiles_router_module
+from madagascar.agent_server.api import create_app
+from madagascar.agent_server.config import Config
+from madagascar.agent_server.persistence import reset_stores
+from madagascar.sdk.llm import LLM
+from madagascar.sdk.llm.llm_profile_store import LLMProfileStore
+from madagascar.sdk.profiles import AgentProfileStore, MadagascarAgentProfile
 
 
 @pytest.fixture
@@ -61,11 +61,11 @@ def client(temp_profiles_dir, temp_agent_profiles_dir, temp_settings_dir, monkey
     # FK guard on delete/rename).
     with (
         patch(
-            "openhands.agent_server.profiles_router.get_llm_profile_store",
+            "madagascar.agent_server.profiles_router.get_llm_profile_store",
             lambda: LLMProfileStore(base_dir=temp_profiles_dir),
         ),
         patch(
-            "openhands.agent_server.profiles_router.get_agent_profile_store",
+            "madagascar.agent_server.profiles_router.get_agent_profile_store",
             lambda: AgentProfileStore(base_dir=temp_agent_profiles_dir),
         ),
     ):
@@ -93,7 +93,7 @@ def agent_store(temp_agent_profiles_dir):
 def test_delete_referenced_llm_profile_returns_409(client, store, agent_store):
     """Deleting an LLM profile cited by an AgentProfile returns 409 w/ referrers."""
     store.save("base-llm", LLM(model="gpt-4o"))
-    agent_store.save(OpenHandsAgentProfile(name="agent-a", llm_profile_ref="base-llm"))
+    agent_store.save(MadagascarAgentProfile(name="agent-a", llm_profile_ref="base-llm"))
 
     response = client.delete("/api/profiles/base-llm")
 
@@ -106,7 +106,7 @@ def test_delete_referenced_llm_profile_returns_409(client, store, agent_store):
 def test_delete_unreferenced_llm_profile_succeeds(client, store, agent_store):
     """An LLM profile no AgentProfile cites deletes normally."""
     store.save("lonely", LLM(model="gpt-4o"))
-    agent_store.save(OpenHandsAgentProfile(name="agent-a", llm_profile_ref="other-llm"))
+    agent_store.save(MadagascarAgentProfile(name="agent-a", llm_profile_ref="other-llm"))
 
     response = client.delete("/api/profiles/lonely")
 
@@ -118,7 +118,7 @@ def test_delete_unreferenced_llm_profile_succeeds(client, store, agent_store):
 def test_rename_llm_profile_cascades_to_agent_refs(client, store, agent_store):
     """Renaming an LLM profile repoints citing AgentProfile.llm_profile_ref."""
     store.save("old-llm", LLM(model="gpt-4o"))
-    agent_store.save(OpenHandsAgentProfile(name="agent-a", llm_profile_ref="old-llm"))
+    agent_store.save(MadagascarAgentProfile(name="agent-a", llm_profile_ref="old-llm"))
 
     response = client.post("/api/profiles/old-llm/rename", json={"new_name": "new-llm"})
 
@@ -747,11 +747,11 @@ def client_with_cipher(
 
     with (
         patch(
-            "openhands.agent_server.profiles_router.get_llm_profile_store",
+            "madagascar.agent_server.profiles_router.get_llm_profile_store",
             lambda: LLMProfileStore(base_dir=temp_profiles_dir),
         ),
         patch(
-            "openhands.agent_server.profiles_router.get_agent_profile_store",
+            "madagascar.agent_server.profiles_router.get_agent_profile_store",
             lambda: AgentProfileStore(base_dir=temp_agent_profiles_dir),
         ),
     ):
@@ -764,7 +764,7 @@ def client_with_cipher(
 @pytest.fixture
 def cipher(secret_key):
     """Create a cipher instance for testing."""
-    from openhands.sdk.utils.cipher import Cipher
+    from madagascar.sdk.utils.cipher import Cipher
 
     return Cipher(secret_key)
 

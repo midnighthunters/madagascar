@@ -111,7 +111,7 @@ class AgentStateWriteVisitor(ast.NodeVisitor):
 
 def get_sdk_python_files() -> list[Path]:
     """Get all Python files in the SDK source directory."""
-    sdk_dir = Path(__file__).parent.parent.parent.parent / "openhands-sdk"
+    sdk_dir = Path(__file__).parent.parent.parent.parent / "madagascar-sdk"
     if not sdk_dir.exists():
         pytest.skip(f"SDK directory not found: {sdk_dir}")
 
@@ -173,11 +173,11 @@ def test_agent_state_reassignment_triggers_autosave():
 
     from pydantic import SecretStr
 
-    from openhands.sdk import Agent
-    from openhands.sdk.conversation.state import ConversationState
-    from openhands.sdk.io import InMemoryFileStore
-    from openhands.sdk.llm import LLM
-    from openhands.sdk.workspace import LocalWorkspace
+    from madagascar.sdk import Agent
+    from madagascar.sdk.conversation.state import ConversationState
+    from madagascar.sdk.io import InMemoryFileStore
+    from madagascar.sdk.llm import LLM
+    from madagascar.sdk.workspace import LocalWorkspace
 
     # Create a state with autosave enabled
     llm = LLM(model="gpt-4o-mini", api_key=SecretStr("test-key"), usage_id="test-llm")
@@ -224,11 +224,11 @@ def test_agent_state_inplace_mutation_does_not_trigger_autosave():
 
     from pydantic import SecretStr
 
-    from openhands.sdk import Agent
-    from openhands.sdk.conversation.state import ConversationState
-    from openhands.sdk.io import InMemoryFileStore
-    from openhands.sdk.llm import LLM
-    from openhands.sdk.workspace import LocalWorkspace
+    from madagascar.sdk import Agent
+    from madagascar.sdk.conversation.state import ConversationState
+    from madagascar.sdk.io import InMemoryFileStore
+    from madagascar.sdk.llm import LLM
+    from madagascar.sdk.workspace import LocalWorkspace
 
     # Create a state with autosave enabled
     llm = LLM(model="gpt-4o-mini", api_key=SecretStr("test-key"), usage_id="test-llm")

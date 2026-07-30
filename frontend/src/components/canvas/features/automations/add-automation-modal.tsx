@@ -15,7 +15,7 @@ export function AddAutomationModal({
   isOpen,
   onClose,
 }: AddAutomationModalProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
 
   if (!isOpen) return null;
 

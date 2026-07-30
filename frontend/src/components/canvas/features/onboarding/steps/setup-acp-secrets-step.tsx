@@ -19,7 +19,7 @@ interface SetupAcpSecretsStepProps {
   /** ACP provider whose credentials we're collecting (e.g. ``"claude-code"``).
    * Typed as {@link OnboardingAgentId} — the same type the onboarding modal
    * tracks — so a mistyped key is a compile error rather than a silently empty
-   * form. Providers without a credentials entry (``"openhands"``) simply yield
+   * form. Providers without a credentials entry (``"madagascar"``) simply yield
    * no fields. */
   providerKey: OnboardingAgentId;
   /**
@@ -61,7 +61,7 @@ export function SetupAcpSecretsStep({
   onBack,
   onNext,
 }: SetupAcpSecretsStepProps) {
-  const { t } = useTranslation("openhands");
+  const { t } = useTranslation("madagascar");
   const activeBackend = useActiveBackend();
   // Login detection via AcpService (provider status commands run through the
   // agent-server bash endpoint) — see issue #964.
@@ -120,9 +120,9 @@ export function SetupAcpSecretsStep({
       // Land the user's ACP choice on the active AGENT profile so the next
       // conversation launches that provider (no LLM profile/key needed — the
       // subprocess owns its LLM). Best-effort; never blocks advancing. This
-      // step never renders for "openhands" (the modal shows SetupLlmStep
+      // step never renders for "madagascar" (the modal shows SetupLlmStep
       // there), so the guard just narrows the type for `acp_server`.
-      if (providerKey !== "openhands") {
+      if (providerKey !== "madagascar") {
         await applyAgentProfile({
           agent_kind: "acp",
           acp_server: providerKey,

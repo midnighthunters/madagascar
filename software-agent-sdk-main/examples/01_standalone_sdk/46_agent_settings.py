@@ -1,7 +1,7 @@
-"""Create, serialize, and deserialize OpenHandsAgentSettings, then build an agent.
+"""Create, serialize, and deserialize MadagascarAgentSettings, then build an agent.
 
 Demonstrates:
-1. Configuring an agent entirely through OpenHandsAgentSettings (LLM, tools, condenser).
+1. Configuring an agent entirely through MadagascarAgentSettings (LLM, tools, condenser).
 2. Serializing settings to JSON and restoring them.
 3. Building an Agent from settings via ``create_agent()``.
 4. Running a short conversation to prove the settings take effect.
@@ -13,17 +13,17 @@ import os
 
 from pydantic import SecretStr
 
-from openhands.sdk import LLM, Conversation, OpenHandsAgentSettings, Tool
-from openhands.sdk.settings import LLMSummarizingCondenserSettings
-from openhands.tools.file_editor import FileEditorTool
-from openhands.tools.terminal import TerminalTool
+from madagascar.sdk import LLM, Conversation, MadagascarAgentSettings, Tool
+from madagascar.sdk.settings import LLMSummarizingCondenserSettings
+from madagascar.tools.file_editor import FileEditorTool
+from madagascar.tools.terminal import TerminalTool
 
 
 # ── 1. Build settings ────────────────────────────────────────────────────
 api_key = os.getenv("LLM_API_KEY")
 assert api_key is not None, "LLM_API_KEY environment variable is not set."
 
-settings = OpenHandsAgentSettings(
+settings = MadagascarAgentSettings(
     llm=LLM(
         model=os.getenv("LLM_MODEL", "gpt-5.5"),
         api_key=SecretStr(api_key),
@@ -42,7 +42,7 @@ print("Serialized settings (JSON):")
 print(json.dumps(payload, indent=2, default=str)[:800], "…")
 print()
 
-restored = OpenHandsAgentSettings.model_validate(payload)
+restored = MadagascarAgentSettings.model_validate(payload)
 assert restored.condenser.enabled is True
 assert restored.condenser.max_size == 50
 assert restored.tools is not None and len(restored.tools) == 2
@@ -73,7 +73,7 @@ print()
 
 # ── 4. Different settings → different behavior ───────────────────────────
 # Now create settings with ONLY the terminal tool and condenser disabled.
-terminal_only_settings = OpenHandsAgentSettings(
+terminal_only_settings = MadagascarAgentSettings(
     llm=settings.llm,
     tools=[Tool(name=TerminalTool.name)],
     condenser=LLMSummarizingCondenserSettings(enabled=False),

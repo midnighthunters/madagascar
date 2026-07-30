@@ -27,7 +27,7 @@ const mockUseUserGitOrganizations = vi.mocked(useUserGitOrganizations);
 const mockUseGitClaims = vi.mocked(useGitClaims);
 
 function setupMocks({
-  userOrgs = { provider: "github", organizations: ["OpenHands", "AcmeCo"] },
+  userOrgs = { provider: "github", organizations: ["Madagascar", "AcmeCo"] },
   claims = [] as Array<{
     id: string;
     org_id: string;
@@ -78,7 +78,7 @@ describe("useGitConversationRouting", () => {
           id: "claim-1",
           org_id: "org-1",
           provider: "github",
-          git_organization: "openhands",
+          git_organization: "madagascar",
           claimed_by: "user-1",
           claimed_at: "2026-01-01T00:00:00",
         },
@@ -89,9 +89,9 @@ describe("useGitConversationRouting", () => {
 
     expect(result.current.orgs).toHaveLength(2);
 
-    const claimedOrg = result.current.orgs.find((o) => o.name === "OpenHands");
+    const claimedOrg = result.current.orgs.find((o) => o.name === "Madagascar");
     expect(claimedOrg).toMatchObject({
-      id: "github:openhands",
+      id: "github:madagascar",
       claimId: "claim-1",
       provider: "github",
       status: "claimed",
@@ -199,7 +199,7 @@ describe("useGitConversationRouting", () => {
           id: "claim-1",
           org_id: "org-1",
           provider: "github",
-          git_organization: "openhands",
+          git_organization: "madagascar",
           claimed_by: "user-1",
           claimed_at: "2026-01-01T00:00:00",
         },
@@ -209,7 +209,7 @@ describe("useGitConversationRouting", () => {
     const { result } = renderHook(() => useGitConversationRouting());
 
     act(() => {
-      result.current.disconnectOrg("github:openhands");
+      result.current.disconnectOrg("github:madagascar");
     });
 
     expect(mockDisconnectMutate).toHaveBeenCalledWith(
@@ -217,7 +217,7 @@ describe("useGitConversationRouting", () => {
       expect.objectContaining({ onSettled: expect.any(Function) }),
     );
 
-    const org = result.current.orgs.find((o) => o.id === "github:openhands");
+    const org = result.current.orgs.find((o) => o.id === "github:madagascar");
     expect(org?.status).toBe("disconnecting");
   });
 
@@ -247,7 +247,7 @@ describe("useGitConversationRouting", () => {
           id: "claim-1",
           org_id: "org-1",
           provider: "github",
-          git_organization: "openhands",
+          git_organization: "madagascar",
           claimed_by: "user-1",
           claimed_at: "2026-01-01T00:00:00",
         },
@@ -257,7 +257,7 @@ describe("useGitConversationRouting", () => {
     const { result } = renderHook(() => useGitConversationRouting());
 
     act(() => {
-      result.current.claimOrg("github:openhands");
+      result.current.claimOrg("github:madagascar");
     });
 
     expect(mockClaimMutate).not.toHaveBeenCalled();

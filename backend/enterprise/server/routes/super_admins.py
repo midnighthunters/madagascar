@@ -23,7 +23,7 @@ from pydantic import BaseModel, Field, model_validator
 from server.auth.authorization import Permission, require_permission
 from storage.user_store import SuperAdminRevokeResult, UserStore
 
-from openhands.app_server.utils.logger import openhands_logger as logger
+from madagascar.app_server.utils.logger import madagascar_logger as logger
 
 super_admin_router = APIRouter(prefix='/api/admin/super-admins', tags=['Admin'])
 
