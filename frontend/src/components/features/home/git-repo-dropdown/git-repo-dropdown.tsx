@@ -282,7 +282,7 @@ export function GitRepoDropdown({
 
     return (
       <div>
-        <Typography.Text className="text-xs text-[#6F7680] font-semibold leading-4 pl-2">
+        <Typography.Text className="text-xs text-ink-secondary font-semibold leading-4 pl-2">
           {t(I18nKey.COMMON$MOST_RECENT)}
         </Typography.Text>
       </div>
@@ -305,7 +305,7 @@ export function GitRepoDropdown({
         href={githubHref}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center w-full px-2 py-2 text-sm text-[#363B42] hover:bg-[#F3F4F6] rounded-lg transition-colors duration-150 font-normal"
+        className="flex items-center w-full px-2 py-2 text-sm text-ink-secondary hover:bg-surface-muted rounded-lg transition-colors duration-150 font-normal"
         onMouseDown={(e) => {
           // Prevent downshift from closing the menu when clicking the sticky footer
           e.preventDefault();
@@ -333,10 +333,10 @@ export function GitRepoDropdown({
             disabled,
             placeholder,
             className: cn(
-              "w-full px-3 py-2 border border-[#D8DCE2] rounded-xl shadow-[0_2px_0_#E7E9ED] h-[42px] min-h-[42px] max-h-[42px]",
-              "bg-[#FBFBFC] text-[#363B42] placeholder:text-[#9AA0A8]",
-              "focus:outline-none focus:ring-3 focus:ring-[#D7BC58]/20 focus:border-[#C2A33A] focus:bg-white",
-              "disabled:bg-[#F0F2F5] disabled:cursor-not-allowed disabled:opacity-60",
+              "w-full px-3 py-2 border border-line-strong rounded-xl shadow-[var(--md-shadow-control)] h-[42px] min-h-[42px] max-h-[42px]",
+              "bg-surface-inset text-ink-secondary placeholder:text-ink-muted",
+              "focus:outline-none focus:ring-3 focus:ring-action/20 focus:border-action focus:bg-surface-raised",
+              "disabled:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60",
               "pl-7 pr-16 text-sm font-normal leading-5", // Space for clear and toggle buttons
             ),
             // Direct onChange for cursor position preservation

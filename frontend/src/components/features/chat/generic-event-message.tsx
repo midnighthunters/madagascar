@@ -35,13 +35,13 @@ export function GenericEventMessage({
     >
       {showDetails ? (
         <ArrowUp
-          className={`h-4 w-4 inline fill-neutral-300 ${
+          className={`h-4 w-4 inline fill-ink-muted ${
             chevronPosition === "after" ? "ml-2" : "mr-2"
           }`}
         />
       ) : (
         <ArrowDown
-          className={`h-4 w-4 inline fill-neutral-300 ${
+          className={`h-4 w-4 inline fill-ink-muted ${
             chevronPosition === "after" ? "ml-2" : "mr-2"
           }`}
         />
@@ -50,8 +50,8 @@ export function GenericEventMessage({
   ) : null;
 
   return (
-    <div className="flex flex-col gap-2 border-l-2 pl-2 my-2 py-2 border-neutral-300 text-sm w-full">
-      <div className="flex items-center justify-between font-bold text-neutral-300">
+    <div className="my-2 flex w-full flex-col gap-2 rounded-[14px] border border-line bg-surface-muted p-3 text-sm text-ink-secondary">
+      <div className="flex items-center justify-between font-semibold text-ink-secondary">
         <div className="flex items-center">
           {chevronPosition === "before" && chevron}
           {title}

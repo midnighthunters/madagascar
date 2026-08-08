@@ -15,6 +15,7 @@ import { useConfig } from "#/hooks/query/use-config";
 import { displayErrorToast } from "#/utils/custom-toast-handlers";
 import { I18nKey } from "#/i18n/declaration";
 import { cn } from "#/utils/utils";
+import { ThemeToggle } from "./theme-toggle";
 
 export function Sidebar() {
   const { t } = useTranslation();
@@ -65,7 +66,7 @@ export function Sidebar() {
       <aside
         aria-label={t(I18nKey.SIDEBAR$NAVIGATION_LABEL)}
         className={cn(
-          "h-[54px] px-3 py-2 md:px-3 md:py-4 md:h-full flex flex-row md:flex-col bg-white border-b md:border-b-0 md:border-r border-[#E7E9ED] md:w-[224px] md:min-w-[224px] z-40",
+          "h-[54px] px-3 py-2 md:px-3 md:py-4 md:h-full flex flex-row md:flex-col bg-sidebar border-b md:border-b-0 md:border-r border-line md:w-[224px] md:min-w-[224px] z-40",
           pathname === "/" && "md:py-4",
         )}
       >
@@ -93,7 +94,8 @@ export function Sidebar() {
             )}
           </div>
 
-          <div className="flex flex-row md:flex-col md:items-stretch md:border-t md:border-[#E7E9ED] md:pt-3 gap-2">
+          <div className="flex flex-row md:flex-col md:items-stretch md:border-t md:border-line md:pt-3 gap-2">
+            <ThemeToggle />
             <UserActions
               user={
                 user.data ? { avatar_url: user.data.avatar_url } : undefined

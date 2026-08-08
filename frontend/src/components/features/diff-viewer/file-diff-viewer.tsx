@@ -19,6 +19,8 @@ import { MarkdownRenderer } from "#/components/features/markdown/markdown-render
 import { Typography } from "#/ui/typography";
 import { LoadingSpinner } from "./loading-spinner";
 import { EditorContainer } from "./editor-container";
+import { useTheme } from "#/hooks/use-theme";
+import { Button } from "#/ui/button";
 
 type ViewMode = "diff" | "old" | "new";
 
@@ -45,34 +47,13 @@ const STATUS_MAP: Record<GitChangeStatus, string | IconType> = {
   U: "Untracked",
 };
 
-const beforeMount = (monaco: Monaco) => {
-  monaco.editor.defineTheme("custom-diff-theme", {
-    base: "vs-dark",
-    inherit: true,
-    rules: [
-      { token: "comment", foreground: "6a9955" },
-      { token: "keyword", foreground: "569cd6" },
-      { token: "string", foreground: "ce9178" },
-      { token: "number", foreground: "b5cea8" },
-    ],
-    colors: {
-      "diffEditor.insertedTextBackground": "#014b01AA",
-      "diffEditor.removedTextBackground": "#750000AA",
-      "diffEditor.insertedLineBackground": "#003f00AA",
-      "diffEditor.removedLineBackground": "#5a0000AA",
-      "diffEditor.border": "#444444",
-      "editorUnnecessaryCode.border": "#00000000",
-      "editorUnnecessaryCode.opacity": "#00000077",
-    },
-  });
-};
-
 export interface FileDiffViewerProps {
   path: string;
   type: GitChangeStatus;
 }
 
 export function FileDiffViewer({ path, type }: FileDiffViewerProps) {
+  const { theme } = useTheme();
   const [isCollapsed, setIsCollapsed] = React.useState(true);
   const [editorHeight, setEditorHeight] = React.useState(400);
   const [viewMode, setViewMode] = React.useState<ViewMode>("diff");
@@ -147,6 +128,31 @@ export function FileDiffViewer({ path, type }: FileDiffViewerProps) {
   const isMarkdownFile = language === "markdown";
   const singleViewContent =
     viewMode === "old" ? (diff?.original ?? "") : (diff?.modified ?? "");
+  const editorTheme = `madagascar-${theme}`;
+
+  const beforeMount = React.useCallback(
+    (monaco: Monaco) => {
+      const styles = window.getComputedStyle(document.documentElement);
+      const color = (token: string) => styles.getPropertyValue(token).trim();
+      const withoutHash = (value: string) => value.replace("#", "");
+      monaco.editor.defineTheme(editorTheme, {
+        base: theme === "dark" ? "vs-dark" : "vs",
+        inherit: true,
+        rules: [],
+        colors: {
+          "editor.background": color("--md-editor"),
+          "editor.foreground": color("--md-text"),
+          "editorWidget.background": color("--md-editor-raised"),
+          "editorWidget.border": color("--md-border"),
+          "diffEditor.insertedLineBackground": `${withoutHash(color("--md-diff-added"))}AA`,
+          "diffEditor.removedLineBackground": `${withoutHash(color("--md-diff-removed"))}AA`,
+          "diffEditor.border": color("--md-border-strong"),
+          "editorUnnecessaryCode.border": "#00000000",
+        },
+      });
+    },
+    [editorTheme, theme],
+  );
 
   const renderContent = () => {
     if (viewMode === "diff") {
@@ -158,7 +164,7 @@ export function FileDiffViewer({ path, type }: FileDiffViewerProps) {
             language={language}
             original={isAdded ? "" : (diff?.original ?? "")}
             modified={isDeleted ? "" : (diff?.modified ?? "")}
-            theme="custom-diff-theme"
+            theme={editorTheme}
             onMount={handleDiffEditorMount}
             beforeMount={beforeMount}
             options={{
@@ -174,7 +180,7 @@ export function FileDiffViewer({ path, type }: FileDiffViewerProps) {
     if (isMarkdownFile) {
       return (
         <div
-          className="w-full border border-neutral-600 overflow-auto p-4 bg-neutral-900 prose prose-invert max-w-none"
+          className="w-full border border-line-strong overflow-auto p-4 bg-editor text-ink prose max-w-none"
           data-testid="markdown-preview"
         >
           <MarkdownRenderer
@@ -193,7 +199,7 @@ export function FileDiffViewer({ path, type }: FileDiffViewerProps) {
           className="w-full h-full"
           language={language}
           value={singleViewContent}
-          theme="custom-diff-theme"
+          theme={editorTheme}
           beforeMount={beforeMount}
           onMount={handleSingleEditorMount}
           options={SHARED_EDITOR_OPTIONS}
@@ -206,7 +212,7 @@ export function FileDiffViewer({ path, type }: FileDiffViewerProps) {
     <div data-testid="file-diff-viewer-outer" className="w-full flex flex-col">
       <div
         className={cn(
-          "flex justify-between items-center px-2.5 py-3.5 border border-neutral-600 rounded-xl hover:cursor-pointer",
+          "flex justify-between items-center px-2.5 py-3.5 border border-line-strong bg-editor-raised rounded-xl hover:cursor-pointer",
           !isCollapsed && !isLoading && "border-b-0 rounded-b-none",
         )}
         onClick={() => setIsCollapsed((prev) => !prev)}
@@ -220,31 +226,33 @@ export function FileDiffViewer({ path, type }: FileDiffViewerProps) {
               onClick={(e) => e.stopPropagation()}
             >
               {VIEW_MODES.map(({ mode, icon: Icon }) => (
-                <button
+                <Button
                   key={mode}
                   data-testid={`view-mode-${mode}`}
                   type="button"
                   onClick={() => setViewMode(mode)}
+                  variant="ghost"
+                  size="icon"
                   className={cn(
-                    "p-1 rounded transition-colors cursor-pointer",
+                    "size-7",
                     viewMode === mode
-                      ? "bg-neutral-600 text-white"
-                      : "text-neutral-400 hover:bg-neutral-700 hover:text-neutral-200",
+                      ? "bg-action-soft text-action"
+                      : "text-ink-muted",
                   )}
                 >
                   <Icon className="w-4 h-4" />
-                </button>
+                </Button>
               ))}
             </span>
           )}
-          <button data-testid="collapse" type="button">
+          <Button data-testid="collapse" type="button" variant="ghost" size="icon" className="size-7">
             <ChevronUp
               className={cn(
                 "w-4 h-4 transition-transform",
                 isCollapsed && "transform rotate-180",
               )}
             />
-          </button>
+          </Button>
         </span>
       </div>
 

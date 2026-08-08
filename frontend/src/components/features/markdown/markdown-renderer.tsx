@@ -1,7 +1,7 @@
 import Markdown, { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
-import { code } from "./code";
+import { Code } from "./code";
 import { ul, ol } from "./list";
 import { paragraph } from "./paragraph";
 import { anchor } from "./anchor";
@@ -53,7 +53,7 @@ export function MarkdownRenderer({
 }: MarkdownRendererProps) {
   // Build the components object with defaults and optional additions
   const components: Components = {
-    code,
+    code: Code,
     ul,
     ol,
     table,

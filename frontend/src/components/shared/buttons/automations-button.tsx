@@ -3,6 +3,7 @@ import { I18nKey } from "#/i18n/declaration";
 import { StyledTooltip } from "#/components/shared/buttons/styled-tooltip";
 import AutomationsIcon from "#/icons/automations.svg?react";
 import { cn } from "#/utils/utils";
+import { buttonVariants } from "#/ui/button";
 
 interface AutomationsButtonProps {
   disabled?: boolean;
@@ -28,7 +29,8 @@ export function AutomationsButton({
           }
         }}
         className={cn(
-          "h-9 w-9 md:w-full px-0 md:px-3 rounded-xl inline-flex items-center justify-center md:justify-start gap-2.5 border border-transparent text-[#555C65] hover:bg-[#F3F4F6] hover:text-[#272B30] text-sm font-medium",
+          buttonVariants({ variant: "ghost", size: "icon" }),
+          "md:w-full md:justify-start md:px-3",
           {
             "pointer-events-none opacity-50": disabled,
           },

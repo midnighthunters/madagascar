@@ -7,25 +7,24 @@ const cardVariants = cva(
   {
     variants: {
       theme: {
-        default:
-          "relative bg-white border-[#E7E9ED] rounded-[22px] shadow-[0_4px_0_#DFE2E7,0_8px_20px_rgba(20,30,50,0.04)]",
+        default: "relative bg-surface border-line rounded-[18px] md-surface-card",
         outlined:
-          "relative bg-white border-[#D8DCE2] rounded-[22px] shadow-[0_2px_0_#E7E9ED]",
-        dark: "relative bg-[#191C20] border-[#30343A] rounded-[18px] text-white shadow-[0_4px_0_#111316]",
+          "relative bg-surface border-line-strong rounded-[18px] shadow-[var(--md-shadow-control)]",
+        dark: "relative bg-editor border-line rounded-[18px] text-ink shadow-[var(--md-shadow-card)]",
       },
       hover: {
         none: "",
         elevated: [
-          "hover:-translate-y-0.5 hover:border-[#D8DCE2]",
-          "hover:shadow-[0_6px_0_#DFE2E7,0_12px_24px_rgba(20,30,50,0.06)]",
-          "active:translate-y-[3px] active:shadow-[0_1px_0_#DFE2E7]",
+          "hover:-translate-y-0.5 hover:border-line-strong",
+          "hover:shadow-[var(--md-shadow-card)]",
+          "active:translate-y-px active:shadow-none",
         ].join(" "),
       },
       gradient: {
         none: "",
         standard: [
-          "bg-white border-[#E7E9ED]",
-          "shadow-[0_4px_0_#DFE2E7,0_8px_20px_rgba(20,30,50,0.04)]",
+          "bg-surface border-line",
+          "shadow-[var(--md-shadow-card)]",
         ].join(" "),
       },
     },

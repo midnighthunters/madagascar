@@ -5,6 +5,7 @@ import { MadagascarSourceType } from "#/types/core/base";
 import { StyledTooltip } from "#/components/shared/buttons/styled-tooltip";
 import { MarkdownRenderer } from "../markdown/markdown-renderer";
 import { AnimalAvatar } from "#/components/shared/animal-avatar";
+import { Button } from "#/ui/button";
 
 interface ChatMessageProps {
   type: MadagascarSourceType;
@@ -17,6 +18,7 @@ interface ChatMessageProps {
   isFromPlanningAgent?: boolean;
 }
 
+/* eslint-disable i18next/no-literal-string */
 export function ChatMessage({
   type,
   message,
@@ -26,6 +28,7 @@ export function ChatMessage({
 }: React.PropsWithChildren<ChatMessageProps>) {
   const [isHovering, setIsHovering] = React.useState(false);
   const [isCopy, setIsCopy] = React.useState(false);
+  const isUser = type === "user";
 
   const handleCopyToClipboard = async () => {
     await navigator.clipboard.writeText(message);
@@ -33,91 +36,51 @@ export function ChatMessage({
   };
 
   React.useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
-    if (isCopy) {
-      timeout = setTimeout(() => {
-        setIsCopy(false);
-      }, 2000);
-    }
-
-    return () => {
-      clearTimeout(timeout);
-    };
+    if (!isCopy) return undefined;
+    const timeout = setTimeout(() => setIsCopy(false), 2000);
+    return () => clearTimeout(timeout);
   }, [isCopy]);
 
-  return (
-    <article
-      data-testid={`${type}-message`}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+  const bubble = (
+    <div
       className={cn(
-        "relative w-fit max-w-full last:mb-4 transition-all duration-150",
-        "flex flex-col gap-2",
-        type === "user" &&
-          "p-4 rounded-[20px] rounded-br-md bg-[#EEF4FA] border border-[#CCDEEF] text-[#263746] self-end shadow-[0_3px_0_#D7E3EF]",
-        type === "agent" &&
-          "mt-4 p-4 rounded-[20px] rounded-bl-md bg-white border border-[#E7E9ED] w-full max-w-full text-[#272B30] shadow-[0_3px_0_#DFE2E7]",
-        isFromPlanningAgent &&
-          type === "agent" &&
-          "border-[#D7BC58] bg-[#FFFCF0] p-4 mt-2 shadow-[0_3px_0_#E4D48E]",
+        "relative min-w-0 px-4 py-3 text-sm leading-relaxed",
+        isUser &&
+          "rounded-[20px] rounded-br-[6px] bg-user-bubble text-ink-inverse shadow-[0_1px_2px_var(--md-shadow-color)]",
+        !isUser &&
+          "rounded-[20px] rounded-bl-[6px] border border-line bg-assistant-bubble text-ink shadow-[var(--md-shadow-card)]",
+        !isUser && isFromPlanningAgent &&
+          "border-[var(--md-planning-border)] bg-planning-bubble",
       )}
     >
-      {/* Header Avatar Badge */}
-      <div className="flex items-center gap-2 mb-1 border-b border-[#E7E9ED] pb-2">
-        {type === "agent" ? (
-          <>
-            <AnimalAvatar
-              animal={isFromPlanningAgent ? "penguin" : "owl"}
-              size="xs"
-              status={isFromPlanningAgent ? "thinking" : "lead"}
-            />
-            {/* eslint-disable-next-line i18next/no-literal-string */}
-            <span className="text-xs font-semibold text-[#725E19]">
-              {isFromPlanningAgent ? "Planner agent" : "Lead agent"}
-            </span>
-          </>
-        ) : (
-          <>
-            <AnimalAvatar animal="dog" size="xs" showBadge={false} />
-            {/* eslint-disable-next-line i18next/no-literal-string */}
-            <span className="text-xs font-semibold text-[#3478C5]">User</span>
-          </>
-        )}
-      </div>
+      {!isUser && (
+        <div className="mb-1.5 text-[11px] font-semibold tracking-[0.02em] text-ink-secondary">
+          {isFromPlanningAgent ? "Penguin · Planner" : "Owl · Lead agent"}
+        </div>
+      )}
 
       <div
-        className={cn(
-          "absolute -top-2.5 -right-2.5 z-20",
-          !isHovering ? "hidden" : "flex",
-          "items-center gap-1",
-        )}
+        className={cn("absolute -top-3 z-20 items-center gap-1", isUser ? "-left-3" : "-right-3", !isHovering ? "hidden" : "flex")}
       >
-        {actions?.map((action, index) =>
-          action.tooltip ? (
-            <StyledTooltip key={index} content={action.tooltip} placement="top">
-              <button
-                type="button"
-                onClick={action.onClick}
-                className="p-1.5 rounded-lg bg-white border border-[#D8DCE2] hover:bg-[#F3F4F6] text-[#555C65] cursor-pointer shadow-sm"
-                aria-label={action.tooltip}
-              >
-                {action.icon}
-              </button>
-            </StyledTooltip>
-          ) : (
-            <button
-              key={index}
-              type="button"
+        {actions?.map((action, index) => {
+          const actionButton = (
+            <Button
+              key={action.tooltip || index}
+              variant="icon"
+              size="icon"
               onClick={action.onClick}
-              className="p-1.5 rounded-lg bg-white border border-[#D8DCE2] hover:bg-[#F3F4F6] text-[#555C65] cursor-pointer shadow-sm"
-              aria-label={`Action ${index + 1}`}
+              className="size-8"
+              aria-label={action.tooltip || `Action ${index + 1}`}
             >
               {action.icon}
-            </button>
-          ),
-        )}
-
+            </Button>
+          );
+          return action.tooltip ? (
+            <StyledTooltip key={action.tooltip} content={action.tooltip} placement="top">
+              {actionButton}
+            </StyledTooltip>
+          ) : actionButton;
+        })}
         <CopyToClipboardButton
           isHidden={!isHovering}
           isDisabled={isCopy}
@@ -126,17 +89,36 @@ export function ChatMessage({
         />
       </div>
 
-      <div
-        className="text-sm leading-relaxed"
-        style={{
-          whiteSpace: "normal",
-          wordBreak: "break-word",
-        }}
-      >
+      <div style={{ whiteSpace: "normal", wordBreak: "break-word" }}>
         <MarkdownRenderer includeStandard>{message}</MarkdownRenderer>
       </div>
-
       {children}
+    </div>
+  );
+
+  return (
+    <article
+      data-testid={`${type}-message`}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      className={cn(
+        "relative mb-1 flex w-full last:mb-5",
+        isUser ? "justify-end pl-[18%]" : "justify-start pr-[12%]",
+      )}
+    >
+      {isUser ? (
+        <div className="max-w-full sm:max-w-[82%]">{bubble}</div>
+      ) : (
+        <div className="flex max-w-full items-start gap-2.5 sm:max-w-[88%]">
+          <AnimalAvatar
+            animal={isFromPlanningAgent ? "penguin" : "owl"}
+            size="md"
+            status={isFromPlanningAgent ? "thinking" : "lead"}
+            className="mt-1"
+          />
+          {bubble}
+        </div>
+      )}
     </article>
   );
 }

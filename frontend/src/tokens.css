@@ -1,21 +1,36 @@
 @theme {
 
   /* Madagascar desktop semantic tokens */
-  --color-canvas: #F7F8FA;
-  --color-canvas-secondary: #F3F4F6;
-  --color-surface: #FFFFFF;
-  --color-surface-raised: #FFFFFF;
-  --color-surface-muted: #F0F2F5;
-  --color-ink: #272B30;
-  --color-ink-secondary: #6F7680;
-  --color-ink-muted: #9AA0A8;
-  --color-line: #E7E9ED;
-  --color-line-strong: #D8DCE2;
-  --color-focus: #9A7B1F;
-  --color-status-success: #228B55;
-  --color-status-warning: #A66A08;
-  --color-status-danger: #C5483D;
-  --color-status-info: #3478C5;
+  --color-canvas: var(--md-canvas);
+  --color-canvas-raised: var(--md-canvas-raised);
+  --color-canvas-secondary: var(--md-canvas-secondary);
+  --color-sidebar: var(--md-sidebar);
+  --color-surface: var(--md-surface);
+  --color-surface-raised: var(--md-surface-raised);
+  --color-surface-muted: var(--md-surface-muted);
+  --color-surface-inset: var(--md-surface-inset);
+  --color-overlay: var(--md-overlay);
+  --color-ink: var(--md-text);
+  --color-ink-secondary: var(--md-text-secondary);
+  --color-ink-muted: var(--md-text-muted);
+  --color-ink-inverse: var(--md-text-inverse);
+  --color-line: var(--md-border);
+  --color-line-strong: var(--md-border-strong);
+  --color-focus: var(--md-focus);
+  --color-action: var(--md-action);
+  --color-action-soft: var(--md-action-soft);
+  --color-status-success: var(--md-success);
+  --color-status-success-soft: var(--md-success-soft);
+  --color-status-warning: var(--md-warning);
+  --color-status-warning-soft: var(--md-warning-soft);
+  --color-status-danger: var(--md-danger);
+  --color-status-danger-soft: var(--md-danger-soft);
+  --color-status-info: var(--md-info);
+  --color-user-bubble: var(--md-user-bubble);
+  --color-assistant-bubble: var(--md-assistant-bubble);
+  --color-planning-bubble: var(--md-planning-bubble);
+  --color-editor: var(--md-editor);
+  --color-terminal: var(--md-terminal);
 
   /* COLOR VARIABLES */
 
@@ -138,17 +153,17 @@
 
   /* Legacy aliases mapped onto the desktop system */
 
-  --color-primary: #D7BC58;
-  --color-logo: #CFB755;
-  --color-base: #FFFFFF;
-  --color-base-secondary: #F3F4F6;
-  --color-danger: #C5483D;
-  --color-success: #228B55;
-  --color-basic: #6F7680;
-  --color-tertiary: #EEF0F3;
-  --color-tertiary-light: #D8DCE2;
-  --color-content: #363B42;
-  --color-content-2: #272B30;
+  --color-primary: var(--md-action);
+  --color-logo: var(--md-warning);
+  --color-base: var(--md-surface);
+  --color-base-secondary: var(--md-canvas-secondary);
+  --color-danger: var(--md-danger);
+  --color-success: var(--md-success);
+  --color-basic: var(--md-text-secondary);
+  --color-tertiary: var(--md-surface-muted);
+  --color-tertiary-light: var(--md-border-strong);
+  --color-content: var(--md-text-secondary);
+  --color-content-2: var(--md-text);
 
 }
 

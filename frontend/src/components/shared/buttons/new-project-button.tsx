@@ -4,6 +4,7 @@ import { I18nKey } from "#/i18n/declaration";
 import { StyledTooltip } from "#/components/shared/buttons/styled-tooltip";
 import PlusIcon from "#/icons/u-plus.svg?react";
 import { cn } from "#/utils/utils";
+import { buttonVariants } from "#/ui/button";
 
 interface NewProjectButtonProps {
   disabled?: boolean;
@@ -27,7 +28,8 @@ export function NewProjectButton({ disabled = false }: NewProjectButtonProps) {
           }
         }}
         className={cn(
-          "h-9 w-9 md:w-full px-0 md:px-3 rounded-xl flex items-center justify-center md:justify-start gap-2.5 bg-[#D7BC58] border border-[#C7AA42] text-[#342B0E] shadow-[0_3px_0_#B99D39] hover:-translate-y-0.5 hover:bg-[#DFC765] active:translate-y-0.5 active:shadow-[0_1px_0_#B99D39] transition-all duration-150 font-semibold text-sm",
+          buttonVariants({ variant: "primary", size: "icon" }),
+          "md:w-full md:justify-start md:px-3",
           {
             "pointer-events-none opacity-50": disabled,
           },

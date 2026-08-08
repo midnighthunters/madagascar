@@ -25,7 +25,7 @@ export function ChatSuggestions({ onSuggestionsClick }: ChatSuggestionsProps) {
           transition={{ duration: 0.18, ease: "easeOut" }}
           className="absolute top-0 left-0 right-0 bottom-[151px] flex flex-col items-center justify-center pointer-events-auto px-4 z-10"
         >
-          <div className="flex flex-col items-center p-6 rounded-[22px] bg-white border-[1.5px] border-[#E7E9ED] shadow-[0_4px_0_#DFE2E7,0_10px_24px_rgba(20,30,50,0.05)] max-w-lg w-full text-center">
+          <div className="md-surface-card flex w-full max-w-lg flex-col items-center rounded-[20px] border border-line bg-surface p-6 text-center">
             <AnimalAvatar
               animal="owl"
               size="xl"
@@ -33,11 +33,11 @@ export function ChatSuggestions({ onSuggestionsClick }: ChatSuggestionsProps) {
               className="mb-3"
             />
             {/* eslint-disable-next-line i18next/no-literal-string */}
-            <span className="text-2xl font-bold tracking-[-0.025em] text-[#272B30] pb-1">
+            <span className="text-2xl font-bold tracking-[-0.025em] text-ink pb-1">
               Madagascar
             </span>
             {/* eslint-disable-next-line i18next/no-literal-string */}
-            <p className="text-sm leading-5 text-[#6F7680] mb-5 max-w-sm">
+            <p className="text-sm leading-5 text-ink-secondary mb-5 max-w-sm">
               {t(I18nKey.SUGGESTIONS$WHAT_TO_BUILD)}
             </p>
 

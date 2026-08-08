@@ -1,15 +1,18 @@
 import { GuideMessage } from "./guide-message";
 import { HomeHeaderTitle } from "./home-header-title";
-import { AnimalAvatar } from "#/components/shared/animal-avatar";
+import { AgentIdentity } from "#/components/shared/animal-avatar";
 
 export function HomeHeader() {
   return (
     <header className="flex flex-col items-center text-center">
-      <div
-        className="mb-4 rounded-2xl border border-[#E7E9ED] bg-white p-2 shadow-[0_2px_0_#DFE2E7]"
-        aria-hidden="true"
-      >
-        <AnimalAvatar animal="owl" size="sm" status="lead" />
+      <div className="mb-5 rounded-[18px] border border-line bg-surface px-5 py-4 shadow-[var(--md-shadow-card)]">
+        <AgentIdentity
+          animal="owl"
+          size="xl"
+          status="lead"
+          label="Owl · Lead agent"
+          detail="Ready to plan and build in your workspace"
+        />
       </div>
       <HomeHeaderTitle />
       <div className="mt-5">

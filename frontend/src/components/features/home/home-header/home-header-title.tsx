@@ -9,7 +9,7 @@ export function HomeHeaderTitle() {
       <Typography.H1 className="text-[34px] sm:text-[40px]">
         {t("HOME$LETS_START_BUILDING")}
       </Typography.H1>
-      <Typography.Paragraph className="max-w-xl text-[15px] leading-6 text-[#6F7680]">
+      <Typography.Paragraph className="max-w-xl text-[15px] leading-6 text-ink-secondary">
         {t("HOME$NEW_PROJECT_DESCRIPTION")}
       </Typography.Paragraph>
     </div>

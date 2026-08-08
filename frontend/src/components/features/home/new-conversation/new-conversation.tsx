@@ -18,7 +18,7 @@ export function NewConversation() {
           {t(I18nKey.COMMON$START_FROM_SCRATCH)}
         </CardTitle>
       </div>
-      <Typography.Text className="mt-2 text-[#6F7680]">
+      <Typography.Text className="mt-2 text-ink-secondary">
         {t(I18nKey.HOME$NEW_PROJECT_DESCRIPTION)}
       </Typography.Text>
       <textarea
@@ -26,7 +26,7 @@ export function NewConversation() {
         onChange={(event) => setQuery(event.target.value)}
         placeholder={t(I18nKey.CHAT_INTERFACE$INPUT_PLACEHOLDER)}
         aria-label={t(I18nKey.CHAT_INTERFACE$MESSAGE_ARIA_LABEL)}
-        className="mt-5 min-h-28 w-full flex-1 resize-none rounded-2xl border-[1.5px] border-[#D8DCE2] bg-[#FBFBFC] px-4 py-3 text-[15px] leading-6 text-[#272B30] placeholder:text-[#9AA0A8] shadow-[inset_0_1px_2px_rgba(20,30,50,0.03)] outline-none transition-colors focus:border-[#C2A33A] focus:bg-white focus:ring-3 focus:ring-[#D7BC58]/20"
+        className="mt-5 min-h-28 w-full flex-1 resize-none rounded-2xl border border-line-strong bg-surface-inset px-4 py-3 text-[15px] leading-6 text-ink placeholder:text-ink-muted outline-none transition-colors focus:border-action focus:bg-surface-raised focus:ring-3 focus:ring-action/20"
       />
       <div className="mt-4 flex items-center justify-end gap-4">
         <CreateConversationButton query={query.trim() || undefined} />

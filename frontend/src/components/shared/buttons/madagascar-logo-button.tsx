@@ -15,16 +15,16 @@ export function MadagascarLogoButton() {
       <NavLink
         to="/"
         aria-label={ariaLabel}
-        className="group flex items-center gap-2.5 md:w-full px-1.5 md:px-2 py-1.5 rounded-xl hover:bg-[#F3F4F6] transition-colors duration-150"
+        className="group flex items-center gap-2.5 rounded-xl px-1.5 py-1.5 transition-colors duration-150 hover:bg-surface-muted md:w-full md:px-2"
       >
         <AnimalAvatar animal="owl" size="sm" status="lead" showBadge={false} />
         <div className="hidden md:flex flex-col">
           {/* eslint-disable-next-line i18next/no-literal-string */}
-          <span className="font-extrabold text-[13px] tracking-[0.12em] text-[#403815] group-hover:text-[#7B651C] transition-colors uppercase leading-none">
+          <span className="font-extrabold text-[13px] tracking-[0.12em] text-ink transition-colors uppercase leading-none">
             MADAGASCAR
           </span>
           {/* eslint-disable-next-line i18next/no-literal-string */}
-          <span className="text-[10px] font-medium tracking-tight text-[#7A8088] leading-none mt-1">
+          <span className="text-[10px] font-medium tracking-tight text-ink-muted leading-none mt-1">
             Desktop agent IDE
           </span>
         </div>

@@ -11,6 +11,7 @@ import { AgentState } from "#/types/agent-state";
 import DebugStackframeDot from "#/icons/debug-stackframe-dot.svg?react";
 import { ServerStatusContextMenu } from "../controls/server-status-context-menu";
 import { ConversationName } from "./conversation-name";
+import { AnimalAvatar } from "#/components/shared/animal-avatar";
 
 export function ConversationNameWithStatus() {
   const { conversationId } = useParams<{ conversationId: string }>();
@@ -53,7 +54,13 @@ export function ConversationNameWithStatus() {
   };
 
   return (
-    <div className="flex items-center">
+    <div className="flex min-w-0 items-center gap-2">
+      <AnimalAvatar
+        animal="owl"
+        size="sm"
+        status={curAgentState === AgentState.RUNNING ? "executing" : "lead"}
+        showBadge
+      />
       <div className="group relative">
         <DebugStackframeDot
           className="ml-[3.5px] w-6 h-6 cursor-pointer"

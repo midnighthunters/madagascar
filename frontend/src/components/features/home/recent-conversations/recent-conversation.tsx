@@ -12,6 +12,7 @@ import RepoForkedIcon from "#/icons/repo-forked.svg?react";
 import { Typography } from "#/ui/typography";
 import { resolveAgentChip } from "#/utils/agent-display-label";
 import { AgentChipIcon } from "#/components/shared/agent-chip-icon";
+import { AnimalAvatar } from "#/components/shared/animal-avatar";
 
 interface RecentConversationProps {
   conversation: V1AppConversation;
@@ -33,15 +34,20 @@ export function RecentConversation({ conversation }: RecentConversationProps) {
   return (
     <Link
       to={`/conversations/${conversation.id}`}
-      className="flex flex-col gap-1.5 p-3 cursor-pointer w-full rounded-xl border border-transparent hover:border-[#E7E9ED] hover:bg-[#F7F8FA] hover:-translate-y-0.5 transition-all duration-150 text-left"
+      className="flex w-full cursor-pointer flex-col gap-1.5 rounded-xl border border-transparent p-3 text-left transition-all duration-150 hover:-translate-y-0.5 hover:border-line hover:bg-surface-muted"
     >
       <div className="flex items-center gap-2 pl-1">
+        <AnimalAvatar
+          animal={conversation.agent_kind === "acp" ? "dog" : "owl"}
+          size="xs"
+          showBadge={false}
+        />
         <SandboxStatusIndicator sandboxStatus={conversation.sandbox_status} />
-        <span className="truncate text-sm text-[#272B30] leading-6 font-medium">
+        <span className="truncate text-sm text-ink leading-6 font-medium">
           {conversation.title}
         </span>
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#7A8088] leading-4 font-normal">
+      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-ink-muted leading-4 font-normal">
         <div className="flex items-center gap-3">
           {hasRepository ? (
             <div className="flex items-center gap-2">
@@ -57,7 +63,7 @@ export function RecentConversation({ conversation }: RecentConversationProps) {
             </div>
           ) : (
             <div className="flex items-center gap-1">
-              <RepoForkedIcon width={12} height={12} color="#7A8088" />
+              <RepoForkedIcon width={12} height={12} />
               <span className="max-w-[124px] truncate">
                 {t(I18nKey.COMMON$NO_REPOSITORY)}
               </span>
@@ -65,7 +71,7 @@ export function RecentConversation({ conversation }: RecentConversationProps) {
           )}
           {hasRepository ? (
             <div className="flex items-center gap-1">
-              <CodeBranchIcon width={12} height={12} color="#7A8088" />
+              <CodeBranchIcon width={12} height={12} />
               <span
                 className="max-w-[124px] truncate"
                 title={conversation.selected_branch || ""}

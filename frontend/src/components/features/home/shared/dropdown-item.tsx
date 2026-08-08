@@ -31,11 +31,11 @@ export function DropdownItem<T>({
       isProviderDropdown
         ? "px-2 py-0 cursor-pointer text-xs rounded-md mx-0 my-0 h-6 flex items-center"
         : "px-2 py-2 cursor-pointer text-sm rounded-md mx-0 my-0.5",
-      "text-[#363B42] focus:outline-none font-normal",
+      "text-ink-secondary focus:outline-none font-normal",
       {
-        "bg-[#F0E8C4] text-[#4B3D12]": isSelected,
-        "hover:bg-[#F3F4F6]": !isSelected,
-        "hover:bg-[#E9DFAE] hover:text-[#4B3D12]": isSelected,
+        "bg-action-soft text-action": isSelected,
+        "hover:bg-surface-muted": !isSelected,
+        "hover:bg-action-soft hover:text-action": isSelected,
       },
       itemClassName,
     ),

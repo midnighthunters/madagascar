@@ -18,6 +18,7 @@ import { ConversationTabsContextMenu } from "./conversation-tabs-context-menu";
 import { useConversationId } from "#/hooks/use-conversation-id";
 import { useSelectConversationTab } from "#/hooks/use-select-conversation-tab";
 import { useTaskList } from "#/hooks/use-task-list";
+import { Button } from "#/ui/button";
 
 export function ConversationTabs() {
   const { conversationId } = useConversationId();
@@ -169,17 +170,16 @@ export function ConversationTabs() {
         ),
       )}
       <div className="relative">
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className={cn(
-            "flex h-9 w-9 items-center justify-center rounded-xl cursor-pointer border border-transparent",
-            "text-[#6F7680] bg-white hover:bg-[#F3F4F6] hover:border-[#E7E9ED] hover:text-[#272B30]",
-          )}
+          className="text-ink-secondary"
           aria-label={t(I18nKey.COMMON$MORE_OPTIONS)}
         >
           <ThreeDotsVerticalIcon className={cn("w-5 h-5 text-inherit")} />
-        </button>
+        </Button>
         <ConversationTabsContextMenu
           isOpen={isMenuOpen}
           onClose={() => setIsMenuOpen(false)}

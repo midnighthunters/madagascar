@@ -187,7 +187,7 @@ export default function MainApp() {
 
   if (isLoading || shouldRedirectToLogin) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F7F8FA] text-[#272B30]">
+      <div className="min-h-screen flex items-center justify-center bg-canvas text-ink">
         <LoadingSpinner size="large" />
       </div>
     );
@@ -205,14 +205,14 @@ export default function MainApp() {
     <div
       data-testid="root-layout"
       className={cn(
-        "h-screen lg:min-w-5xl flex flex-col md:flex-row bg-[#F7F8FA] text-[#272B30] overflow-hidden relative",
+        "h-screen lg:min-w-5xl flex flex-col md:flex-row bg-canvas text-ink overflow-hidden relative",
         pathname === "/" ? "p-0" : "p-0",
       )}
     >
       <title>{appTitle}</title>
       <Sidebar />
 
-      <div className="flex flex-col w-full min-w-0 h-[calc(100%-54px)] md:h-full bg-[#F7F8FA]">
+      <div className="flex flex-col w-full min-w-0 h-[calc(100%-54px)] md:h-full bg-canvas">
         {config.data &&
           (config.data.maintenance_start_time ||
             (config.data.faulty_models &&
@@ -227,7 +227,7 @@ export default function MainApp() {
           )}
         <div
           id="root-outlet"
-          className="flex-1 relative overflow-auto custom-scrollbar text-[#272B30]"
+          className="flex-1 relative overflow-auto custom-scrollbar text-ink"
         >
           <OnboardingGuard>
             <EmailVerificationGuard>

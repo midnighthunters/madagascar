@@ -63,9 +63,9 @@ export function ChatInputContainer({
     <div
       ref={chatContainerRef}
       className={cn(
-        "bg-white border-[1.5px] border-[#D8DCE2] shadow-[0_4px_0_#DFE2E7,0_8px_18px_rgba(20,30,50,0.04)] box-border flex flex-col items-start justify-center p-3.5 relative rounded-2xl w-full transition-[border-color,box-shadow,transform] duration-150 focus-within:border-[#C2A33A] focus-within:shadow-[0_4px_0_#D7BC58,0_8px_18px_rgba(20,30,50,0.05)]",
+        "box-border flex w-full flex-col items-start justify-center rounded-[22px] border border-line-strong bg-surface-inset p-3.5 shadow-[inset_0_1px_2px_var(--md-shadow-color)] transition-[border-color,box-shadow] duration-150 focus-within:border-action focus-within:shadow-[0_0_0_3px_color-mix(in_srgb,var(--md-focus)_18%,transparent)]",
         conversationMode === "plan" &&
-          "border-[#D7BC58] shadow-[0_4px_0_#C7AA42]",
+          "border-[var(--md-planning-border)] bg-planning-bubble",
       )}
       onDragOver={(e) => onDragOver(e, disabled)}
       onDragLeave={(e) => onDragLeave(e, disabled)}

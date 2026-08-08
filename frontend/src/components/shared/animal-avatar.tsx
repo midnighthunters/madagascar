@@ -21,6 +21,12 @@ export interface AnimalAvatarProps {
   className?: string;
 }
 
+export interface AgentIdentityProps extends AnimalAvatarProps {
+  label?: string;
+  detail?: string;
+  align?: "start" | "center";
+}
+
 export const ANIMAL_MAP: Record<
   AnimalType,
   { name: string; title: string; color: string; bgGlow: string }
@@ -106,29 +112,18 @@ export function AnimalAvatar({
   const info = ANIMAL_MAP[animal] || ANIMAL_MAP.owl;
   const spriteUrl = `/animals/${animal}.webp`;
   const accessibleName = roleName ? `${info.name}: ${roleName}` : info.name;
-  const isWorking = status === "thinking" || status === "executing";
-
   let statusIndicator: React.ReactNode;
-  if (isWorking) {
+  if (status === "thinking" || status === "executing") {
     statusIndicator = (
-      <>
-        <span
-          className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-          style={{ backgroundColor: info.color }}
-        />
-        <span
-          className="relative inline-flex rounded-full h-2.5 w-2.5 border-2 border-white"
-          style={{ backgroundColor: info.color }}
-        />
-      </>
+      <span className="relative inline-flex h-2.5 w-2.5 rounded-full border-2 border-surface bg-status-warning" />
     );
   } else if (status === "lead") {
     statusIndicator = (
-      <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500 border-2 border-white shadow-sm" />
+      <span className="relative inline-flex h-2.5 w-2.5 rounded-full border-2 border-surface bg-action" />
     );
   } else {
     statusIndicator = (
-      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600 border-2 border-white" />
+      <span className="relative inline-flex h-2.5 w-2.5 rounded-full border-2 border-surface bg-status-success" />
     );
   }
 
@@ -137,7 +132,7 @@ export function AnimalAvatar({
       className={`relative inline-flex items-center justify-center shrink-0 ${className}`}
     >
       <div
-        className={`relative ${SIZE_MAP[size]} rounded-xl p-0.5 bg-white border border-[#E7E9ED] shadow-[0_2px_0_#DFE2E7] transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 overflow-hidden`}
+        className={`relative ${SIZE_MAP[size]} overflow-hidden rounded-xl border border-line bg-surface-raised p-0.5 shadow-[var(--md-shadow-control)]`}
       >
         <img
           src={spriteUrl}
@@ -172,13 +167,38 @@ export function AnimalBadge({
   const displayLabel = label || `${info.name}`;
 
   return (
-    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-white border border-[#E7E9ED] text-[#4B5159] text-xs font-medium shadow-[0_2px_0_#DFE2E7] hover:bg-[#F7F8FA] transition-all">
+    <div className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-surface-raised px-2.5 py-1 text-xs font-medium text-ink-secondary shadow-[var(--md-shadow-control)]">
       <AnimalAvatar
         animal={animal}
         size={size === "sm" ? "xs" : "sm"}
         showBadge={false}
       />
       <span>{displayLabel}</span>
+    </div>
+  );
+}
+
+export function AgentIdentity({
+  animal = "owl",
+  label,
+  detail,
+  align = "start",
+  ...avatarProps
+}: AgentIdentityProps) {
+  const info = ANIMAL_MAP[animal];
+  return (
+    <div
+      className={`inline-flex min-w-0 items-center gap-3 ${align === "center" ? "text-center" : "text-left"}`}
+    >
+      <AnimalAvatar animal={animal} {...avatarProps} />
+      <div className="min-w-0">
+        <div className="truncate text-sm font-semibold text-ink">
+          {label || info.title}
+        </div>
+        {detail && (
+          <div className="truncate text-xs text-ink-secondary">{detail}</div>
+        )}
+      </div>
     </div>
   );
 }

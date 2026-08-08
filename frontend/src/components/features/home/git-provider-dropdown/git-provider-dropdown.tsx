@@ -176,10 +176,10 @@ export function GitProviderDropdown({
             placeholder,
             readOnly: true, // Make it non-searchable like the original
             className: cn(
-              "w-29.5 h-7 py-0 border border-[#D8DCE2] rounded-lg shadow-none min-h-7 max-h-7",
-              "bg-white text-[#555C65] placeholder:text-[#9AA0A8]",
-              "focus:outline-none focus:ring-3 focus:ring-[#D7BC58]/20 focus:border-[#C2A33A]",
-              "disabled:bg-[#F0F2F5] disabled:cursor-not-allowed disabled:opacity-60",
+              "w-29.5 h-7 py-0 border border-line-strong rounded-lg shadow-none min-h-7 max-h-7",
+              "bg-surface-raised text-ink-secondary placeholder:text-ink-muted",
+              "focus:outline-none focus:ring-3 focus:ring-action/20 focus:border-action",
+              "disabled:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-60",
               "pl-1.5 pr-[1px] cursor-pointer text-xs font-normal leading-5", // Space for toggle button and pointer cursor
               selectedItem && "pl-6",
               inputClassName,

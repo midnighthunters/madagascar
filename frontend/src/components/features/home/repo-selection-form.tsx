@@ -148,8 +148,8 @@ export function RepositorySelectionForm({
         <div className="flex items-center gap-3 pb-4">
           <AnimalAvatar animal="monkey" size="sm" showBadge={false} />
           <div className="flex items-center gap-2">
-            <RepoForkedIcon width={20} height={20} className="text-[#8B711D]" />
-            <span className="leading-5 font-bold text-base text-[#272B30]">
+            <RepoForkedIcon width={20} height={20} className="text-action" />
+            <span className="leading-5 font-bold text-base text-ink">
               {t(I18nKey.COMMON$OPEN_REPOSITORY)}
             </span>
           </div>
@@ -158,7 +158,7 @@ export function RepositorySelectionForm({
 
       <div className="flex flex-col gap-3 pb-4">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-[#6F7680] font-medium">
+          <span className="text-xs text-ink-secondary font-medium">
             {t(I18nKey.HOME$SELECT_OR_INSERT_URL)}
           </span>
           {renderProviderSelector()}

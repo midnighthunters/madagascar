@@ -258,7 +258,7 @@ export function ChatInterface() {
         <div
           ref={scrollRef}
           onScroll={(e) => onChatBodyScroll(e.currentTarget)}
-          className="custom-scrollbar-always flex flex-col grow overflow-y-auto overflow-x-hidden px-4 sm:px-6 pt-5 gap-2"
+          className="custom-scrollbar-always flex flex-col grow overflow-y-auto overflow-x-hidden bg-canvas-raised px-4 sm:px-6 pt-5 gap-2"
         >
           {isChatLoading && isReturningToConversation && (
             <ChatMessagesSkeleton />
@@ -279,7 +279,7 @@ export function ChatInterface() {
           )}
         </div>
 
-        <div className="flex flex-col gap-[6px] border-t border-[#E7E9ED] bg-[#FBFBFC] px-3 sm:px-4 pt-3 pb-4">
+        <div className="flex flex-col gap-[6px] border-t border-line bg-canvas-raised px-3 sm:px-4 pt-3 pb-4">
           <BtwMessages conversationId={params.conversationId} />
           <div className="flex justify-between relative">
             <div className="flex items-end gap-1">

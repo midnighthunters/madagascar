@@ -1,5 +1,6 @@
 import PaperclipIcon from "#/icons/paper-clip.svg?react";
 import { cn } from "#/utils/utils";
+import { Button } from "#/ui/button";
 
 export interface ChatAddFileButtonProps {
   handleFileIconClick: () => void;
@@ -11,10 +12,12 @@ export function ChatAddFileButton({
   disabled = false,
 }: ChatAddFileButtonProps) {
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="icon"
       className={cn(
-        "h-[25px] relative shrink-0 w-[13px] cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95",
+        "size-9 relative shrink-0 rounded-full text-ink-secondary",
         disabled && "cursor-not-allowed",
       )}
       data-name="Shape"
@@ -23,8 +26,8 @@ export function ChatAddFileButton({
     >
       <PaperclipIcon
         className="block max-w-none w-[13px] h-[25px]"
-        color={disabled ? "#959CB2" : "white"}
+        color="currentColor"
       />
-    </button>
+    </Button>
   );
 }

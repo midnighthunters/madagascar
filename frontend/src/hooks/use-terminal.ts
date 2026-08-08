@@ -3,6 +3,7 @@ import { Terminal } from "@xterm/xterm";
 import React from "react";
 import { Command, useCommandStore } from "#/stores/command-store";
 import { parseTerminalOutput } from "#/utils/parse-terminal-output";
+import { useTheme } from "#/hooks/use-theme";
 
 /*
   NOTE: Tests for this hook are indirectly covered by the tests for the XTermTerminal component.
@@ -74,7 +75,18 @@ const canFitTerminal = (
 // This ensures terminal history is preserved when navigating away and back
 const persistentLastCommandIndex = { current: 0 };
 
+const getTerminalTheme = () => {
+  const styles = window.getComputedStyle(document.documentElement);
+  return {
+    background: styles.getPropertyValue("--md-terminal").trim(),
+    foreground: styles.getPropertyValue("--md-terminal-text").trim(),
+    cursor: styles.getPropertyValue("--md-terminal-cursor").trim(),
+    selectionBackground: styles.getPropertyValue("--md-action-soft").trim(),
+  };
+};
+
 export const useTerminal = () => {
+  const { theme } = useTheme();
   const commands = useCommandStore((state) => state.commands);
   const terminal = React.useRef<Terminal | null>(null);
   const fitAddon = React.useRef<FitAddon | null>(null);
@@ -90,9 +102,7 @@ export const useTerminal = () => {
       scrollSensitivity: 1,
       fastScrollSensitivity: 5,
       disableStdin: true, // Make terminal read-only
-      theme: {
-        background: "#25272D",
-      },
+      theme: getTerminalTheme(),
     });
 
   const fitTerminalSafely = React.useCallback(() => {
@@ -164,6 +174,13 @@ export const useTerminal = () => {
       lastCommandIndex.current = commands.length;
     }
   }, [commands]);
+
+  React.useEffect(() => {
+    if (terminal.current) {
+      terminal.current.options.theme = getTerminalTheme();
+      fitTerminalSafely();
+    }
+  }, [theme, fitTerminalSafely]);
 
   React.useEffect(() => {
     let resizeObserver: ResizeObserver | null = null;

@@ -28,15 +28,15 @@ export function ConversationTabNav({
       className={cn(
         "flex min-h-9 items-center gap-2 rounded-xl cursor-pointer border",
         "px-2.5 py-1.5",
-        "text-[#6F7680] bg-white border-transparent",
+        "text-ink-secondary bg-surface border-transparent",
         isActive &&
-          "bg-[#F0E8C4] text-[#4B3D12] border-[#D7BC58] shadow-[0_2px_0_#D7BC58]",
+          "bg-action-soft text-action border-action shadow-[var(--md-shadow-control)]",
         isActive
-          ? "hover:text-[#4B3D12] hover:bg-[#ECE1B4]"
-          : "hover:text-[#272B30] hover:bg-[#F3F4F6] hover:border-[#E7E9ED]",
+          ? "hover:text-action hover:bg-action-soft"
+          : "hover:text-ink hover:bg-surface-muted hover:border-line",
         isActive
-          ? "focus-within:text-[#4B3D12]"
-          : "focus-within:text-[#272B30]",
+          ? "focus-within:text-action"
+          : "focus-within:text-ink",
         className,
       )}
     >

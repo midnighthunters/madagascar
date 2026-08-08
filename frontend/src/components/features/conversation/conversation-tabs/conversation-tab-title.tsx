@@ -8,6 +8,7 @@ import { AgentState } from "#/types/agent-state";
 import { I18nKey } from "#/i18n/declaration";
 import { cn } from "#/utils/utils";
 import { Typography } from "#/ui/typography";
+import { Button } from "#/ui/button";
 
 type ConversationTabTitleProps = {
   title: string;
@@ -36,40 +37,43 @@ export function ConversationTabTitle({
   const isBuildDisabled = isAgentRunning || !planContent;
 
   return (
-    <div className="flex flex-row items-center justify-between border-b border-[#474A54] py-2 px-3">
-      <span className="text-xs font-medium text-white">{title}</span>
+    <div className="flex flex-row items-center justify-between border-b border-line bg-[var(--md-editor-raised)] py-2 px-3">
+      <span className="text-xs font-medium text-ink">{title}</span>
       {conversationKey === "editor" && (
-        <button
+        <Button
           type="button"
-          className="flex w-[26px] py-1 justify-center items-center gap-[10px] rounded-[7px] hover:enabled:bg-[#474A54] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          variant="ghost"
+          size="icon"
+          className="size-7"
           onClick={handleRefresh}
           disabled={isFetching}
         >
           <RefreshIcon
             width={12.75}
             height={15}
-            color="#ffffff"
             className={isFetching ? "animate-spin" : ""}
           />
-        </button>
+        </Button>
       )}
       {conversationKey === "planner" && (
-        <button
+        <Button
           type="button"
+          variant="primary"
+          size="compact"
           onClick={handleBuildPlanClick}
           disabled={isBuildDisabled}
           className={cn(
-            "flex items-center justify-center h-5 min-w-17 px-2 rounded bg-white transition-opacity",
+            "min-w-20",
             isBuildDisabled
               ? "opacity-50 cursor-not-allowed"
               : "hover:opacity-90 cursor-pointer",
           )}
           data-testid="planner-tab-build-button"
         >
-          <Typography.Text className="text-black text-[11px] font-medium leading-5">
+          <Typography.Text className="text-ink-inverse text-[11px] font-medium leading-5">
             {t(I18nKey.COMMON$BUILD)} ⌘↩
           </Typography.Text>
-        </button>
+        </Button>
       )}
     </div>
   );

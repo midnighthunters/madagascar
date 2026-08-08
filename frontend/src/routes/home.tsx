@@ -25,7 +25,7 @@ function HomeScreen() {
   return (
     <div
       data-testid="home-screen"
-      className="h-full overflow-y-auto bg-[#F7F8FA] px-5 py-8 sm:px-7 lg:px-10 lg:py-10 custom-scrollbar-always"
+      className="h-full overflow-y-auto bg-canvas px-5 py-8 sm:px-7 lg:px-10 lg:py-10 custom-scrollbar-always"
     >
       <div className="mx-auto flex w-full max-w-[1080px] flex-col">
         <HomeHeader />
