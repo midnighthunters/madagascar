@@ -67,7 +67,7 @@ describe("RecentConversation - chip", () => {
       "title",
       "anthropic/claude-sonnet-4-20250514",
     );
-    expect(model.querySelector("svg")).toBeInTheDocument();
+    expect(screen.getByTestId("agent-chip-icon")).toBeInTheDocument();
 
     const textSpan = model.querySelector("span.truncate");
     expect(textSpan).toBeInTheDocument();

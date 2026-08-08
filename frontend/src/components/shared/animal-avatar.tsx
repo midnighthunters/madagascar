@@ -95,65 +95,79 @@ const SIZE_MAP = {
   xl: "w-16 h-16 text-lg",
 };
 
-export const AnimalAvatar: React.FC<AnimalAvatarProps> = ({
+export function AnimalAvatar({
   animal = "owl",
   roleName,
   size = "md",
   status,
   showBadge = true,
   className = "",
-}) => {
+}: AnimalAvatarProps) {
   const info = ANIMAL_MAP[animal] || ANIMAL_MAP.owl;
   const spriteUrl = `/animals/${animal}.webp`;
+  const accessibleName = roleName ? `${info.name}: ${roleName}` : info.name;
+  const isWorking = status === "thinking" || status === "executing";
+
+  let statusIndicator: React.ReactNode;
+  if (isWorking) {
+    statusIndicator = (
+      <>
+        <span
+          className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+          style={{ backgroundColor: info.color }}
+        />
+        <span
+          className="relative inline-flex rounded-full h-2.5 w-2.5 border-2 border-white"
+          style={{ backgroundColor: info.color }}
+        />
+      </>
+    );
+  } else if (status === "lead") {
+    statusIndicator = (
+      <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500 border-2 border-white shadow-sm" />
+    );
+  } else {
+    statusIndicator = (
+      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600 border-2 border-white" />
+    );
+  }
 
   return (
     <div
       className={`relative inline-flex items-center justify-center shrink-0 ${className}`}
     >
-      {/* iOS Frosted Glass Container */}
       <div
         className={`relative ${SIZE_MAP[size]} rounded-xl p-0.5 bg-white border border-[#E7E9ED] shadow-[0_2px_0_#DFE2E7] transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 overflow-hidden`}
       >
         <img
           src={spriteUrl}
-          alt={info.name}
+          alt={accessibleName}
           className="w-full h-full object-cover rounded-[9px]"
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = "none";
+          onError={(event) => {
+            const failedImage = event.currentTarget;
+            failedImage.style.display = "none";
           }}
         />
       </div>
 
-      {/* Status Ring / Indicator Badge */}
       {showBadge && status && (
         <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center">
-          {status === "thinking" || status === "executing" ? (
-            <>
-              <span
-                className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                style={{ backgroundColor: info.color }}
-              />
-              <span
-                className="relative inline-flex rounded-full h-2.5 w-2.5 border-2 border-white"
-                style={{ backgroundColor: info.color }}
-              />
-            </>
-          ) : status === "lead" ? (
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500 border-2 border-white shadow-sm" />
-          ) : (
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600 border-2 border-white" />
-          )}
+          {statusIndicator}
         </span>
       )}
     </div>
   );
-};
+}
 
-export const AnimalBadge: React.FC<{
+export function AnimalBadge({
+  animal = "owl",
+  label,
+  size = "sm",
+}: {
   animal?: AnimalType;
   label?: string;
   size?: "sm" | "md";
-}> = ({ animal = "owl", label, size = "sm" }) => {
+}) {
   const info = ANIMAL_MAP[animal] || ANIMAL_MAP.owl;
   const displayLabel = label || `${info.name}`;
 
@@ -167,4 +181,4 @@ export const AnimalBadge: React.FC<{
       <span>{displayLabel}</span>
     </div>
   );
-};
+}
