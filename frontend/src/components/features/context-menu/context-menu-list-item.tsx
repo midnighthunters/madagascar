@@ -24,7 +24,7 @@ export function ContextMenuListItem({
       disabled={isDisabled}
       aria-current={ariaCurrent}
       className={cn(
-        "text-sm px-4 h-10 w-full text-start hover:bg-white/10 cursor-pointer",
+        "text-sm px-4 h-10 w-full text-start hover:bg-[#F3F4F6] cursor-pointer rounded-lg",
         "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent text-nowrap",
         className,
       )}

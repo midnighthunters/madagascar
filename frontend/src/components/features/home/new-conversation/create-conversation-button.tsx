@@ -4,7 +4,13 @@ import { BrandButton } from "../../settings/brand-button";
 import { useCreateConversation } from "#/hooks/mutation/use-create-conversation";
 import { useIsCreatingConversation } from "#/hooks/use-is-creating-conversation";
 
-export function CreateConversationButton() {
+interface CreateConversationButtonProps {
+  query?: string;
+}
+
+export function CreateConversationButton({
+  query,
+}: CreateConversationButtonProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -22,7 +28,7 @@ export function CreateConversationButton() {
 
   const handleCreateConversation = () => {
     createConversation(
-      {},
+      { query },
       {
         onSuccess: (data) => navigate(`/conversations/${data.conversation_id}`),
       },
@@ -36,7 +42,7 @@ export function CreateConversationButton() {
       type="button"
       onClick={handleCreateConversation}
       isDisabled={isCreatingConversation}
-      className="w-auto absolute bottom-5 left-5 right-5 font-semibold"
+      className="w-full sm:w-auto min-w-36 font-semibold"
     >
       {!isCreatingConversation && t("COMMON$NEW_CONVERSATION")}
       {isCreatingConversation && t("HOME$LOADING")}

@@ -26,62 +26,62 @@ export const ANIMAL_MAP: Record<
   { name: string; title: string; color: string; bgGlow: string }
 > = {
   owl: {
-    name: "Wise Owl",
-    title: "Lead AI Architect",
+    name: "Owl agent",
+    title: "Lead architect",
     color: "#F59E0B",
     bgGlow: "rgba(245, 158, 11, 0.3)",
   },
   dog: {
-    name: "Coder Dog",
-    title: "Lead Code Engineer",
+    name: "Dog agent",
+    title: "Code engineer",
     color: "#3B82F6",
     bgGlow: "rgba(59, 130, 246, 0.3)",
   },
   monkey: {
-    name: "Inspector Monkey",
-    title: "Web & UI Inspector",
+    name: "Monkey agent",
+    title: "UI inspector",
     color: "#10B981",
     bgGlow: "rgba(16, 185, 129, 0.3)",
   },
   rabbit: {
-    name: "Speedy Rabbit",
-    title: "Fast Task Executor",
+    name: "Rabbit agent",
+    title: "Task executor",
     color: "#EC4899",
     bgGlow: "rgba(236, 72, 153, 0.3)",
   },
   penguin: {
-    name: "Planner Penguin",
-    title: "Strategic Planner",
+    name: "Penguin agent",
+    title: "Planner",
     color: "#06B6D4",
     bgGlow: "rgba(6, 182, 212, 0.3)",
   },
   platypus: {
-    name: "Researcher Platypus",
-    title: "Deep Researcher",
+    name: "Platypus agent",
+    title: "Researcher",
     color: "#8B5CF6",
     bgGlow: "rgba(139, 92, 246, 0.3)",
   },
   mouse: {
-    name: "Runner Mouse",
-    title: "Terminal Runner",
+    name: "Mouse agent",
+    title: "Terminal operator",
     color: "#64748B",
     bgGlow: "rgba(100, 116, 139, 0.3)",
   },
   yellow: {
-    name: "Helper Chick",
-    title: "Assistant Helper",
+    name: "Yellow agent",
+    title: "Assistant",
     color: "#EAB308",
     bgGlow: "rgba(234, 179, 8, 0.3)",
   },
   cow: {
-    name: "Guard Cow",
-    title: "System Guard",
+    name: "Cow agent",
+    title: "System guard",
     color: "#14B8A6",
     bgGlow: "rgba(20, 184, 166, 0.3)",
   },
   pig: {
-    name: "Builder Pig",
-    title: "Build & Deployer",
+    name: "Pig agent",
+    title: "Build engineer",
     color: "#F43F5E",
     bgGlow: "rgba(244, 63, 94, 0.3)",
   },
@@ -112,13 +112,12 @@ export const AnimalAvatar: React.FC<AnimalAvatarProps> = ({
     >
       {/* iOS Frosted Glass Container */}
       <div
-        className={`relative ${SIZE_MAP[size]} rounded-2xl p-0.5 backdrop-blur-xl bg-white/10 border border-white/20 shadow-lg transition-all duration-300 hover:scale-105 overflow-hidden`}
-        style={{ boxShadow: `0 4px 18px ${info.bgGlow}` }}
+        className={`relative ${SIZE_MAP[size]} rounded-xl p-0.5 bg-white border border-[#E7E9ED] shadow-[0_2px_0_#DFE2E7] transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 overflow-hidden`}
       >
         <img
           src={spriteUrl}
           alt={info.name}
-          className="w-full h-full object-cover rounded-xl"
+          className="w-full h-full object-cover rounded-[9px]"
           onError={(e) => {
             (e.target as HTMLImageElement).style.display = "none";
           }}
@@ -135,14 +134,14 @@ export const AnimalAvatar: React.FC<AnimalAvatarProps> = ({
                 style={{ backgroundColor: info.color }}
               />
               <span
-                className="relative inline-flex rounded-full h-2.5 w-2.5 border border-white/40"
+                className="relative inline-flex rounded-full h-2.5 w-2.5 border-2 border-white"
                 style={{ backgroundColor: info.color }}
               />
             </>
           ) : status === "lead" ? (
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-400 border border-white/60 shadow-sm" />
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500 border-2 border-white shadow-sm" />
           ) : (
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 border border-white/40" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600 border-2 border-white" />
           )}
         </span>
       )}
@@ -159,7 +158,7 @@ export const AnimalBadge: React.FC<{
   const displayLabel = label || `${info.name}`;
 
   return (
-    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-md bg-white/10 border border-white/15 text-white/90 text-xs font-medium shadow-sm hover:bg-white/15 transition-all">
+    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-white border border-[#E7E9ED] text-[#4B5159] text-xs font-medium shadow-[0_2px_0_#DFE2E7] hover:bg-[#F7F8FA] transition-all">
       <AnimalAvatar
         animal={animal}
         size={size === "sm" ? "xs" : "sm"}

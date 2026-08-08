@@ -25,27 +25,29 @@ function HomeScreen() {
   return (
     <div
       data-testid="home-screen"
-      className="px-0 pt-4 bg-transparent h-full flex flex-col pt-[35px] overflow-y-auto rounded-xl lg:px-[42px] lg:pt-[42px] custom-scrollbar-always"
+      className="h-full overflow-y-auto bg-[#F7F8FA] px-5 py-8 sm:px-7 lg:px-10 lg:py-10 custom-scrollbar-always"
     >
-      <HomeHeader />
+      <div className="mx-auto flex w-full max-w-[1080px] flex-col">
+        <HomeHeader />
 
-      <div className="pt-[25px] flex justify-center">
-        <div
-          className="flex flex-col gap-5 px-6 sm:max-w-full sm:min-w-full md:flex-row lg:px-0 lg:max-w-[703px] lg:min-w-[703px]"
-          data-testid="home-screen-new-conversation-section"
-        >
-          <RepoConnector onRepoSelection={(repo) => setSelectedRepo(repo)} />
-          <NewConversation />
+        <div className="pt-8 flex justify-center">
+          <div
+            className="flex w-full flex-col gap-5 md:flex-row md:items-stretch"
+            data-testid="home-screen-new-conversation-section"
+          >
+            <NewConversation />
+            <RepoConnector onRepoSelection={(repo) => setSelectedRepo(repo)} />
+          </div>
         </div>
-      </div>
 
-      <div className="pt-4 flex sm:justify-start md:justify-center">
-        <div
-          className="flex flex-col gap-5 px-6 md:flex-row min-w-full md:max-w-full lg:px-0 lg:max-w-[703px] lg:min-w-[703px]"
-          data-testid="home-screen-recent-conversations-section"
-        >
-          <RecentConversations />
-          <TaskSuggestions filterFor={selectedRepo} />
+        <div className="pt-8 flex justify-center pb-10">
+          <div
+            className="flex w-full flex-col gap-5 md:flex-row"
+            data-testid="home-screen-recent-conversations-section"
+          >
+            <RecentConversations />
+            <TaskSuggestions filterFor={selectedRepo} />
+          </div>
         </div>
       </div>
 

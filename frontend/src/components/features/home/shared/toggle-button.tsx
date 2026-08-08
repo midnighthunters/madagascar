@@ -22,7 +22,7 @@ export function ToggleButton({
       {...getToggleButtonProps({
         disabled,
         className: cn(
-          "text-[#fff]",
+          "text-[#6F7680] hover:text-[#272B30] rounded-lg",
           "disabled:cursor-not-allowed disabled:opacity-60",
         ),
       })}

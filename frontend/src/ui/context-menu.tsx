@@ -2,11 +2,11 @@ import React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "#/utils/utils";
 
-const contextMenuVariants = cva("text-white overflow-hidden z-50", {
+const contextMenuVariants = cva("text-[#363B42] overflow-hidden z-50", {
   variants: {
     theme: {
       default:
-        "absolute bg-tertiary rounded-[6px] context-menu-box-shadow py-[6px] px-1",
+        "absolute bg-white border border-[#D8DCE2] rounded-xl context-menu-box-shadow py-[6px] px-1",
       naked: "relative",
     },
     size: {

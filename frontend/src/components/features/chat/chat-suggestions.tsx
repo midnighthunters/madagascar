@@ -4,7 +4,7 @@ import { Suggestions } from "#/components/features/suggestions/suggestions";
 import { I18nKey } from "#/i18n/declaration";
 import { SUGGESTIONS } from "#/utils/suggestions";
 import { useConversationStore } from "#/stores/conversation-store";
-import { AnimalAvatar, AnimalBadge } from "#/components/shared/animal-avatar";
+import { AnimalAvatar } from "#/components/shared/animal-avatar";
 
 interface ChatSuggestionsProps {
   onSuggestionsClick: (value: string) => void;
@@ -22,10 +22,10 @@ export function ChatSuggestions({ onSuggestionsClick }: ChatSuggestionsProps) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{ duration: 0.18, ease: "easeOut" }}
           className="absolute top-0 left-0 right-0 bottom-[151px] flex flex-col items-center justify-center pointer-events-auto px-4 z-10"
         >
-          <div className="flex flex-col items-center p-6 rounded-3xl backdrop-blur-2xl bg-neutral-900/60 border border-white/15 shadow-2xl max-w-lg w-full text-center">
+          <div className="flex flex-col items-center p-6 rounded-[22px] bg-white border-[1.5px] border-[#E7E9ED] shadow-[0_4px_0_#DFE2E7,0_10px_24px_rgba(20,30,50,0.05)] max-w-lg w-full text-center">
             <AnimalAvatar
               animal="owl"
               size="xl"
@@ -33,20 +33,13 @@ export function ChatSuggestions({ onSuggestionsClick }: ChatSuggestionsProps) {
               className="mb-3"
             />
             {/* eslint-disable-next-line i18next/no-literal-string */}
-            <span className="text-2xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-200 to-white pb-1">
-              Madagascar Animal AI IDE
+            <span className="text-2xl font-bold tracking-[-0.025em] text-[#272B30] pb-1">
+              Madagascar
             </span>
             {/* eslint-disable-next-line i18next/no-literal-string */}
-            <p className="text-xs text-white/70 mb-4 max-w-xs">
-              {t(I18nKey.LANDING$TITLE)} — Powered by your team of specialized
-              Animal Subagents.
+            <p className="text-sm leading-5 text-[#6F7680] mb-5 max-w-sm">
+              {t(I18nKey.SUGGESTIONS$WHAT_TO_BUILD)}
             </p>
-            <div className="flex flex-wrap justify-center gap-1.5 mb-5">
-              <AnimalBadge animal="dog" label="Coder Dog" />
-              <AnimalBadge animal="monkey" label="Inspector Monkey" />
-              <AnimalBadge animal="rabbit" label="Speedy Rabbit" />
-              <AnimalBadge animal="penguin" label="Planner Penguin" />
-            </div>
 
             <Suggestions
               suggestions={Object.entries(SUGGESTIONS.repo)

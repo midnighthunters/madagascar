@@ -27,11 +27,15 @@ export function AutomationsButton({
             e.preventDefault();
           }
         }}
-        className={cn("inline-flex items-center justify-center", {
-          "pointer-events-none opacity-50": disabled,
-        })}
+        className={cn(
+          "h-9 w-9 md:w-full px-0 md:px-3 rounded-xl inline-flex items-center justify-center md:justify-start gap-2.5 border border-transparent text-[#555C65] hover:bg-[#F3F4F6] hover:text-[#272B30] text-sm font-medium",
+          {
+            "pointer-events-none opacity-50": disabled,
+          },
+        )}
       >
-        <AutomationsIcon width={24} height={24} />
+        <AutomationsIcon width={18} height={18} />
+        <span className="hidden md:inline">{label}</span>
       </a>
     </StyledTooltip>
   );

@@ -9,23 +9,24 @@
   preferredstrategy: "pseudoelements";
 }
 
-/* OLD TAILWIND STYLES */
+/* Legacy utility names mapped to the desktop light system. */
 @theme {
-  --color-primary: #c9b974;
+  --color-primary: #d7bc58;
   --color-logo: #cfb755;
-  --color-base: #0d0f11;
-  --color-base-secondary: #24272e;
-  --color-danger: #e76a5e;
-  --color-success: #a5e75e;
-  --color-basic: #9099ac;
-  --color-tertiary: #454545;
-  --color-tertiary-light: #b7bdc2;
-  --color-content: #ecedee;
-  --color-content-2: #f9fbfe;
+  --color-base: #ffffff;
+  --color-base-secondary: #f3f4f6;
+  --color-danger: #c5483d;
+  --color-success: #228b55;
+  --color-basic: #6f7680;
+  --color-tertiary: #eef0f3;
+  --color-tertiary-light: #d8dce2;
+  --color-content: #363b42;
+  --color-content-2: #272b30;
 }
 
 .button-base {
-  @apply bg-tertiary border border-neutral-600 rounded-xs;
+  @apply bg-white border border-[#E7E9ED] rounded-xl;
+  box-shadow: 0 3px 0 #dfe2e7;
 }
 
 .skeleton {
@@ -37,7 +38,7 @@
 }
 
 .heading {
-  @apply text-[28px] leading-8 -tracking-[0.02em] font-bold text-content-2;
+  @apply text-[28px] leading-8 -tracking-[0.02em] font-bold text-[#272B30];
 }
 
 /* Custom Chat Input */
@@ -60,12 +61,12 @@
 
 /* Show scrollbar on hover */
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-  background: rgba(208, 217, 250, 0.3);
+  background: #c8cdd4;
   opacity: 1;
 }
 
 .custom-scrollbar:hover::-webkit-scrollbar-thumb:hover {
-  background: rgba(208, 217, 250, 0.5);
+  background: #aeb4bc;
 }
 
 /* Firefox scrollbar styling */
@@ -76,7 +77,7 @@
 }
 
 .custom-scrollbar:hover {
-  scrollbar-color: rgba(208, 217, 250, 0.3) transparent;
+  scrollbar-color: #c8cdd4 transparent;
 }
 
 /* Always visible scrollbar for chat interface */
@@ -90,25 +91,25 @@
 }
 
 .custom-scrollbar-always::-webkit-scrollbar-thumb {
-  background: rgba(208, 217, 250, 0.3);
+  background: #c8cdd4;
   border-radius: 3px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .custom-scrollbar-always::-webkit-scrollbar-thumb:hover {
-  background: rgba(208, 217, 250, 0.5);
+  background: #aeb4bc;
 }
 
 /* Firefox scrollbar styling for always visible */
 .custom-scrollbar-always {
   scrollbar-width: thin;
-  scrollbar-color: rgba(208, 217, 250, 0.3) transparent;
+  scrollbar-color: #c8cdd4 transparent;
 }
 
 /* Custom styles for contenteditable */
 .chat-input:empty:before {
   content: attr(data-placeholder);
-  color: #a1a1a1;
+  color: #8a919a;
   pointer-events: none;
   font-size: 16px;
   font-weight: 400;
@@ -157,13 +158,13 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 20px;
-  color: #fff;
+  color: #272b30;
 }
 
 /* File preview styles */
 .file-preview {
-  background: rgba(208, 217, 250, 0.1);
-  border: 1px solid rgba(208, 217, 250, 0.3);
+  background: #f3f4f6;
+  border: 1px solid #d8dce2;
   border-radius: 8px;
   padding: 8px;
   margin: 4px 0;
@@ -171,7 +172,7 @@
   align-items: center;
   gap: 8px;
   font-size: 12px;
-  color: #d0d9fa;
+  color: #363b42;
 }
 
 .file-preview .file-icon {
@@ -188,12 +189,12 @@
 }
 
 .file-preview .file-size {
-  color: #959cb2;
+  color: #6f7680;
   font-size: 10px;
 }
 
 .file-preview .remove-file {
-  background: rgba(255, 255, 255, 0.1);
+  background: #e7e9ed;
   border: none;
   border-radius: 50%;
   width: 16px;
@@ -202,13 +203,13 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #d0d9fa;
+  color: #363b42;
   font-size: 10px;
   transition: background-color 0.2s;
 }
 
 .file-preview .remove-file:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #d8dce2;
 }
 
 .loader {

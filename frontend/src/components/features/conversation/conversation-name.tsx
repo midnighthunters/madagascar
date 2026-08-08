@@ -157,11 +157,11 @@ export function ConversationName() {
             onKeyUp={handleKeyUp}
             type="text"
             defaultValue={conversation.title || ""}
-            className="text-white leading-5 bg-transparent border-none outline-none text-base font-normal w-fit max-w-fit field-sizing-content"
+            className="text-[#272B30] leading-5 bg-transparent border-none outline-none text-base font-semibold w-fit max-w-fit field-sizing-content"
           />
         ) : (
           <div
-            className="text-white leading-5 w-fit max-w-fit truncate"
+            className="text-[#272B30] leading-5 w-fit max-w-fit truncate font-semibold"
             data-testid="conversation-name-title"
             onDoubleClick={handleDoubleClick}
             title={conversation.title || ""}

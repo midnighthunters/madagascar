@@ -2,42 +2,40 @@ import { ReactNode } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "#/utils/utils";
 
-const cardVariants = cva("flex", {
-  variants: {
-    theme: {
-      default: "relative bg-[#26282D] border border-[#727987] rounded-xl",
-      outlined: "relative bg-transparent border border-[#727987] rounded-xl",
-      dark: "relative bg-black border border-[#242424] rounded-2xl",
+const cardVariants = cva(
+  "flex border-[1.5px] transition-[transform,box-shadow,border-color,background-color] duration-150",
+  {
+    variants: {
+      theme: {
+        default:
+          "relative bg-white border-[#E7E9ED] rounded-[22px] shadow-[0_4px_0_#DFE2E7,0_8px_20px_rgba(20,30,50,0.04)]",
+        outlined:
+          "relative bg-white border-[#D8DCE2] rounded-[22px] shadow-[0_2px_0_#E7E9ED]",
+        dark: "relative bg-[#191C20] border-[#30343A] rounded-[18px] text-white shadow-[0_4px_0_#111316]",
+      },
+      hover: {
+        none: "",
+        elevated: [
+          "hover:-translate-y-0.5 hover:border-[#D8DCE2]",
+          "hover:shadow-[0_6px_0_#DFE2E7,0_12px_24px_rgba(20,30,50,0.06)]",
+          "active:translate-y-[3px] active:shadow-[0_1px_0_#DFE2E7]",
+        ].join(" "),
+      },
+      gradient: {
+        none: "",
+        standard: [
+          "bg-white border-[#E7E9ED]",
+          "shadow-[0_4px_0_#DFE2E7,0_8px_20px_rgba(20,30,50,0.04)]",
+        ].join(" "),
+      },
     },
-    hover: {
-      none: "",
-      elevated: [
-        "transition-all duration-200",
-        "hover:bg-[linear-gradient(180deg,#0F0F0F_0%,#0A0A0A_100%)]",
-        "hover:border-t-[#242424CC]",
-        "hover:shadow-[0px_4px_6px_-4px_#0000001A,0px_10px_15px_-3px_#0000001A]",
-        "before:absolute before:inset-0 before:rounded-2xl before:opacity-0 before:transition-opacity before:duration-200",
-        "before:bg-[radial-gradient(98.4%_116.11%_at_50%_0%,rgba(255,255,255,0.08)_0%,rgba(0,0,0,0)_70%)]",
-        "hover:before:opacity-100",
-        "before:pointer-events-none",
-      ].join(" "),
-    },
-    gradient: {
-      none: "",
-      standard: [
-        "bg-[#0A0A0A80] border-t-[#24242499]",
-        "shadow-[0px_4px_6px_-4px_#0000001A,0px_10px_15px_-3px_#0000001A]",
-        "before:absolute before:inset-0 before:rounded-2xl before:pointer-events-none",
-        "before:bg-[radial-gradient(144.32%_106.6%_at_50%_0%,rgba(255,255,255,0.14)_0%,rgba(0,0,0,0)_55%)]",
-      ].join(" "),
+    defaultVariants: {
+      theme: "default",
+      hover: "none",
+      gradient: "none",
     },
   },
-  defaultVariants: {
-    theme: "default",
-    hover: "none",
-    gradient: "none",
-  },
-});
+);
 
 interface CardProps extends VariantProps<typeof cardVariants> {
   children?: ReactNode;

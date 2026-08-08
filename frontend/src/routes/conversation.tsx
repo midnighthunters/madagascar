@@ -101,7 +101,10 @@ function AppContent() {
       <WebSocketProviderWrapper conversationId={conversationId}>
         <ConversationSubscriptionsProvider>
           <EventHandler>
-            <div data-testid="app-route" className="flex flex-col h-full gap-3">
+            <div
+              data-testid="app-route"
+              className="flex h-full flex-col gap-3 bg-[#F7F8FA] p-3 md:p-4"
+            >
               <ArchivedConversationView />
             </div>
           </EventHandler>
@@ -115,9 +118,9 @@ function AppContent() {
       <EventHandler>
         <div
           data-testid="app-route"
-          className="p-3 md:p-0 flex flex-col h-full gap-3"
+          className="flex h-full flex-col gap-3 bg-[#F7F8FA] p-3 md:p-4"
         >
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4.5 pt-2 lg:pt-0">
+          <div className="flex shrink-0 flex-col lg:flex-row lg:items-center justify-between gap-3 rounded-2xl border-[1.5px] border-[#E7E9ED] bg-white px-3 py-2.5 shadow-[0_3px_0_#DFE2E7]">
             <ConversationNameWithStatus />
             <ConversationTabs />
           </div>

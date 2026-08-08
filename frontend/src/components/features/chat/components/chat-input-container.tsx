@@ -7,7 +7,6 @@ import { SlashCommandMenu } from "./slash-command-menu";
 import { useConversationStore } from "#/stores/conversation-store";
 import { cn } from "#/utils/utils";
 import { SlashCommandItem } from "#/hooks/chat/use-slash-command";
-import { SubagentSquadBar } from "#/components/shared/subagent-squad-bar";
 
 interface ChatInputContainerProps {
   chatContainerRef: React.RefObject<HTMLDivElement | null>;
@@ -64,22 +63,14 @@ export function ChatInputContainer({
     <div
       ref={chatContainerRef}
       className={cn(
-        "backdrop-blur-2xl bg-neutral-900/70 border border-white/15 shadow-2xl box-border flex flex-col items-start justify-center p-4 pt-3.5 relative rounded-3xl w-full transition-all duration-300 focus-within:border-amber-400/50 focus-within:shadow-[0_0_30px_rgba(245,158,11,0.15)]",
+        "bg-white border-[1.5px] border-[#D8DCE2] shadow-[0_4px_0_#DFE2E7,0_8px_18px_rgba(20,30,50,0.04)] box-border flex flex-col items-start justify-center p-3.5 relative rounded-2xl w-full transition-[border-color,box-shadow,transform] duration-150 focus-within:border-[#C2A33A] focus-within:shadow-[0_4px_0_#D7BC58,0_8px_18px_rgba(20,30,50,0.05)]",
         conversationMode === "plan" &&
-          "border-amber-400/60 shadow-[0_0_25px_rgba(245,158,11,0.2)]",
+          "border-[#D7BC58] shadow-[0_4px_0_#C7AA42]",
       )}
       onDragOver={(e) => onDragOver(e, disabled)}
       onDragLeave={(e) => onDragLeave(e, disabled)}
       onDrop={(e) => onDrop(e, disabled)}
     >
-      {/* Subagent Squad Header Bar */}
-      <div className="w-full flex items-center justify-between mb-2">
-        <SubagentSquadBar />
-        <span className="text-[10px] uppercase font-bold tracking-widest text-amber-300/80 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">
-          iOS Agent IDE
-        </span>
-      </div>
-
       {/* Drag Over UI */}
       {isDragOver && <DragOver />}
 

@@ -65,16 +65,16 @@ export function Sidebar() {
       <aside
         aria-label={t(I18nKey.SIDEBAR$NAVIGATION_LABEL)}
         className={cn(
-          "h-[54px] p-2 md:p-2 md:h-auto flex flex-row md:flex-col gap-2 backdrop-blur-2xl bg-neutral-900/60 border border-white/10 shadow-2xl md:w-[75px] md:min-w-[75px] md:m-2 md:rounded-3xl z-40 transition-all duration-300",
-          pathname === "/" && "md:pt-4 md:pb-4",
+          "h-[54px] px-3 py-2 md:px-3 md:py-4 md:h-full flex flex-row md:flex-col bg-white border-b md:border-b-0 md:border-r border-[#E7E9ED] md:w-[224px] md:min-w-[224px] z-40",
+          pathname === "/" && "md:py-4",
         )}
       >
-        <nav className="flex flex-row md:flex-col items-center justify-between w-full h-auto md:w-auto md:h-full gap-3">
-          <div className="flex flex-row md:flex-col items-center gap-4">
-            <div className="flex items-center justify-center">
+        <nav className="flex flex-row md:flex-col items-center md:items-stretch justify-between w-full h-auto md:h-full gap-3">
+          <div className="flex flex-row md:flex-col items-center md:items-stretch gap-2">
+            <div className="flex items-center justify-center md:justify-start md:mb-3">
               <MadagascarLogoButton />
             </div>
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center md:block">
               <NewProjectButton disabled={settings?.email_verified === false} />
             </div>
             <ConversationPanelButton
@@ -93,7 +93,7 @@ export function Sidebar() {
             )}
           </div>
 
-          <div className="flex flex-row md:flex-col md:items-center gap-4">
+          <div className="flex flex-row md:flex-col md:items-stretch md:border-t md:border-[#E7E9ED] md:pt-3 gap-2">
             <UserActions
               user={
                 user.data ? { avatar_url: user.data.avatar_url } : undefined

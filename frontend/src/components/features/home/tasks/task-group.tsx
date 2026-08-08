@@ -12,8 +12,8 @@ export function TaskGroup({ title, tasks }: TaskGroupProps) {
   const gitProvider = tasks.length > 0 ? tasks[0].git_provider : null;
 
   return (
-    <div className="text-content-2 px-[14px]">
-      <div className="flex items-center gap-2 border-b-1 border-[#717888] mb-2">
+    <div className="text-[#363B42] px-2">
+      <div className="flex items-center gap-2 border-b border-[#E7E9ED] mb-1">
         {gitProvider === "github" && <FaGithub size={14} />}
         {gitProvider === "gitlab" && <FaGitlab />}
         {gitProvider === "bitbucket" && <FaBitbucket />}

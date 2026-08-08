@@ -143,13 +143,13 @@ export function RepositorySelectionForm({
   };
 
   return (
-    <div className="flex flex-col backdrop-blur-2xl bg-neutral-900/70 border border-white/20 rounded-3xl p-6 shadow-2xl">
+    <div className="flex h-full flex-col">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 pb-4">
-          <AnimalAvatar animal="monkey" size="xs" showBadge={false} />
+          <AnimalAvatar animal="monkey" size="sm" showBadge={false} />
           <div className="flex items-center gap-2">
-            <RepoForkedIcon width={20} height={20} className="text-amber-300" />
-            <span className="leading-5 font-bold text-lg text-white">
+            <RepoForkedIcon width={20} height={20} className="text-[#8B711D]" />
+            <span className="leading-5 font-bold text-base text-[#272B30]">
               {t(I18nKey.COMMON$OPEN_REPOSITORY)}
             </span>
           </div>
@@ -158,7 +158,7 @@ export function RepositorySelectionForm({
 
       <div className="flex flex-col gap-3 pb-4">
         <div className="flex items-center justify-between">
-          <span className="text-xs text-white/80 font-medium">
+          <span className="text-xs text-[#6F7680] font-medium">
             {t(I18nKey.HOME$SELECT_OR_INSERT_URL)}
           </span>
           {renderProviderSelector()}
@@ -197,7 +197,7 @@ export function RepositorySelectionForm({
             },
           );
         }}
-        className="w-full font-semibold rounded-2xl py-3 shadow-lg"
+        className="mt-auto w-full font-semibold"
       >
         {!isCreatingConversation && "Launch Workspace"}
         {isCreatingConversation && t("HOME$LOADING")}

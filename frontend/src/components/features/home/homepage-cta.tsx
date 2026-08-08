@@ -27,16 +27,15 @@ export function HomepageCTA({ setShouldShowCTA }: HomepageCTAProps) {
   };
 
   return (
-    <Card theme="dark" className={cn("w-[320px] cta-card-gradient")}>
+    <Card className={cn("w-[320px]")}>
       <button
         type="button"
         onClick={handleClose}
         className={cn(
-          "absolute top-3 right-3 size-7 rounded-full",
-          "border border-[#242424] bg-[#0A0A0A]",
+          "absolute top-3 right-3 size-7 rounded-lg",
+          "border border-[#E7E9ED] bg-[#F7F8FA]",
           "flex items-center justify-center",
-          "text-white/60 hover:text-white cursor-pointer",
-          "shadow-[0px_1px_2px_-1px_#0000001A,0px_1px_3px_0px_#0000001A]",
+          "text-[#6F7680] hover:text-[#272B30] cursor-pointer",
         )}
         aria-label="Close"
       >
@@ -45,11 +44,11 @@ export function HomepageCTA({ setShouldShowCTA }: HomepageCTAProps) {
 
       <div className="p-6 flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <CardTitle className="font-inter font-semibold text-xl leading-7 tracking-normal text-[#FAFAFA]">
+          <CardTitle className="font-semibold text-xl leading-7 tracking-normal text-[#272B30]">
             {t(I18nKey.CTA$ENTERPRISE_TITLE)}
           </CardTitle>
 
-          <Typography.Text className="font-inter font-normal text-sm leading-5 tracking-normal text-[#8C8C8C]">
+          <Typography.Text className="font-normal text-sm leading-5 tracking-normal text-[#6F7680]">
             {t(I18nKey.CTA$ENTERPRISE_DESCRIPTION)}
           </Typography.Text>
         </div>
@@ -62,9 +61,9 @@ export function HomepageCTA({ setShouldShowCTA }: HomepageCTAProps) {
           onClick={handleLearnMoreClick}
           className={cn(
             "inline-flex items-center justify-center",
-            "w-fit h-10 px-4 rounded",
-            "bg-[#050505] border border-[#242424]",
-            "text-white hover:bg-white hover:text-black",
+            "w-fit h-10 px-4 rounded-xl",
+            "bg-[#D7BC58] border border-[#C7AA42] shadow-[0_3px_0_#B99D39]",
+            "text-[#342B0E] hover:-translate-y-0.5",
             "font-semibold text-sm",
           )}
         >

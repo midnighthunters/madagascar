@@ -135,7 +135,7 @@ export function ConversationTabs() {
     <div
       className={cn(
         "relative w-full",
-        "flex flex-row justify-start lg:justify-end items-center gap-4.5 flex-wrap",
+        "flex flex-row justify-start lg:justify-end items-center gap-1.5 flex-wrap",
       )}
     >
       {visibleTabs.map(
@@ -173,8 +173,8 @@ export function ConversationTabs() {
           type="button"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className={cn(
-            "p-1 pl-0 rounded-md cursor-pointer",
-            "text-[#9299AA] bg-[#0D0F11]",
+            "flex h-9 w-9 items-center justify-center rounded-xl cursor-pointer border border-transparent",
+            "text-[#6F7680] bg-white hover:bg-[#F3F4F6] hover:border-[#E7E9ED] hover:text-[#272B30]",
           )}
           aria-label={t(I18nKey.COMMON$MORE_OPTIONS)}
         >

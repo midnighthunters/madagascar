@@ -32,15 +32,15 @@ export function SandboxStatusIndicator({
   const sandboxStatusBackgroundColor = useMemo(() => {
     switch (sandboxStatus) {
       case "RUNNING":
-        return "bg-[#1FBD53]"; // Running/online - green
+        return "bg-[#228B55]"; // Running/online - green
       case "STARTING":
-        return "bg-[#FFD43B]"; // Busy/starting - yellow
+        return "bg-[#C68A16]"; // Busy/starting - amber
       case "PAUSED":
-        return "bg-[#A3A3A3]"; // Paused - grey
+        return "bg-[#8A919A]"; // Paused - grey
       case "MISSING":
-        return "bg-[#A3A3A3]"; // Missing - grey (archived)
+        return "bg-[#8A919A]"; // Missing - grey (archived)
       default:
-        return "bg-[#3C3C49]"; // Default to grey for unknown states
+        return "bg-[#6F7680]"; // Default to grey for unknown states
     }
   }, [sandboxStatus]);
 
@@ -51,7 +51,7 @@ export function SandboxStatusIndicator({
       content={statusLabel}
       placement="right"
       showArrow
-      tooltipClassName="bg-[#1a1a1a] text-white text-xs shadow-lg"
+      tooltipClassName="bg-[#272B30] text-white text-xs shadow-lg"
     >
       <div
         className={cn("w-1.5 h-1.5 rounded-full", sandboxStatusBackgroundColor)}

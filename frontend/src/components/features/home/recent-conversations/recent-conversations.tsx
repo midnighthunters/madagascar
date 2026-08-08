@@ -51,7 +51,7 @@ export function RecentConversations() {
   return (
     <section
       data-testid="recent-conversations"
-      className="flex flex-1 min-w-0 flex-col"
+      className="flex flex-1 min-w-0 flex-col rounded-[22px] border-[1.5px] border-[#E7E9ED] bg-white p-3 shadow-[0_4px_0_#DFE2E7,0_8px_20px_rgba(20,30,50,0.04)]"
     >
       <div
         className={cn(
@@ -59,7 +59,7 @@ export function RecentConversations() {
           !hasConversations && "mb-[14px]",
         )}
       >
-        <h3 className="text-xs leading-4 text-white font-bold py-[14px] pl-4">
+        <h3 className="text-xs leading-4 text-[#4B5159] font-bold py-[10px] pl-2 uppercase tracking-[0.08em]">
           {t(I18nKey.COMMON$RECENT_CONVERSATIONS)}
         </h3>
       </div>
@@ -79,7 +79,7 @@ export function RecentConversations() {
       </div>
 
       {!isInitialLoading && !error && displayedConversations?.length === 0 && (
-        <span className="text-xs leading-4 text-white font-medium pl-4">
+        <span className="text-xs leading-5 text-[#6F7680] font-medium px-2 pb-4">
           {t(I18nKey.HOME$NO_RECENT_CONVERSATIONS)}
         </span>
       )}
@@ -106,7 +106,7 @@ export function RecentConversations() {
           <button
             type="button"
             onClick={handleToggleExpansion}
-            className="text-xs leading-4 text-[#FAFAFA] font-normal cursor-pointer hover:underline"
+            className="text-xs leading-4 text-[#725E19] font-semibold cursor-pointer hover:underline"
           >
             {isExpanded
               ? t(I18nKey.COMMON$VIEW_LESS)

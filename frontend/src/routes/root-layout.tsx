@@ -187,7 +187,7 @@ export default function MainApp() {
 
   if (isLoading || shouldRedirectToLogin) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#090b0e]">
+      <div className="min-h-screen flex items-center justify-center bg-[#F7F8FA] text-[#272B30]">
         <LoadingSpinner size="large" />
       </div>
     );
@@ -205,18 +205,14 @@ export default function MainApp() {
     <div
       data-testid="root-layout"
       className={cn(
-        "h-screen lg:min-w-5xl flex flex-col md:flex-row bg-[#080a0d] text-slate-100 overflow-hidden relative",
-        pathname === "/" ? "p-0" : "p-0 md:p-3 md:pl-0",
+        "h-screen lg:min-w-5xl flex flex-col md:flex-row bg-[#F7F8FA] text-[#272B30] overflow-hidden relative",
+        pathname === "/" ? "p-0" : "p-0",
       )}
     >
-      {/* Background iOS Ambient Glow Effects */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-amber-500/10 blur-[120px] pointer-events-none" />
-      <div className="absolute top-1/2 -right-40 w-96 h-96 rounded-full bg-blue-500/10 blur-[120px] pointer-events-none" />
-
       <title>{appTitle}</title>
       <Sidebar />
 
-      <div className="flex flex-col w-full min-w-0 h-[calc(100%-50px)] md:h-full gap-3 z-10">
+      <div className="flex flex-col w-full min-w-0 h-[calc(100%-54px)] md:h-full bg-[#F7F8FA]">
         {config.data &&
           (config.data.maintenance_start_time ||
             (config.data.faulty_models &&
@@ -231,7 +227,7 @@ export default function MainApp() {
           )}
         <div
           id="root-outlet"
-          className="flex-1 relative overflow-auto custom-scrollbar"
+          className="flex-1 relative overflow-auto custom-scrollbar text-[#272B30]"
         >
           <OnboardingGuard>
             <EmailVerificationGuard>

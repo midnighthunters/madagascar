@@ -27,13 +27,14 @@ export function NewProjectButton({ disabled = false }: NewProjectButtonProps) {
           }
         }}
         className={cn(
-          "w-9 h-9 rounded-2xl flex items-center justify-center backdrop-blur-xl bg-amber-400/20 border border-amber-400/40 text-amber-300 shadow-lg hover:bg-amber-400/30 hover:scale-105 transition-all duration-300",
+          "h-9 w-9 md:w-full px-0 md:px-3 rounded-xl flex items-center justify-center md:justify-start gap-2.5 bg-[#D7BC58] border border-[#C7AA42] text-[#342B0E] shadow-[0_3px_0_#B99D39] hover:-translate-y-0.5 hover:bg-[#DFC765] active:translate-y-0.5 active:shadow-[0_1px_0_#B99D39] transition-all duration-150 font-semibold text-sm",
           {
             "pointer-events-none opacity-50": disabled,
           },
         )}
       >
         <PlusIcon width={18} height={18} />
+        <span className="hidden md:inline">{startNewProject}</span>
       </NavLink>
     </StyledTooltip>
   );

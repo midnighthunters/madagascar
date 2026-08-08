@@ -54,7 +54,7 @@ export function TaskSuggestions({ filterFor }: TaskSuggestionsProps) {
   return (
     <section
       data-testid="task-suggestions"
-      className="flex flex-1 min-w-0 flex-col"
+      className="flex flex-1 min-w-0 flex-col rounded-[22px] border-[1.5px] border-[#E7E9ED] bg-white p-3 shadow-[0_4px_0_#DFE2E7,0_8px_20px_rgba(20,30,50,0.04)]"
     >
       <div
         className={cn(
@@ -62,7 +62,7 @@ export function TaskSuggestions({ filterFor }: TaskSuggestionsProps) {
           !hasSuggestedTasks && "mb-[14px]",
         )}
       >
-        <h3 className="text-xs leading-4 text-white font-semibold py-[14px] pl-[14px]">
+        <h3 className="text-xs leading-4 text-[#4B5159] font-bold py-[10px] pl-2 uppercase tracking-[0.08em]">
           {t(I18nKey.TASKS$SUGGESTED_TASKS)}
         </h3>
       </div>
@@ -77,11 +77,11 @@ export function TaskSuggestions({ filterFor }: TaskSuggestionsProps) {
           !isLoading &&
           (hasNoProviders ? (
             <div className="px-[14px] flex flex-col gap-3 pb-6 sm:pb-8">
-              <Typography.Text className="text-xs leading-4 text-white font-medium">
+              <Typography.Text className="text-xs leading-4 text-[#4B5159] font-medium">
                 {t(I18nKey.TASKS$NO_GIT_PROVIDERS_TITLE)}
               </Typography.Text>
 
-              <Typography.Text className="text-xs leading-4 text-[#C9C9C9] font-normal">
+              <Typography.Text className="text-xs leading-5 text-[#6F7680] font-normal">
                 {t(I18nKey.TASKS$NO_GIT_PROVIDERS_DESCRIPTION)}
               </Typography.Text>
 
@@ -89,13 +89,13 @@ export function TaskSuggestions({ filterFor }: TaskSuggestionsProps) {
                 to="/settings/integrations"
                 className="w-fit hover:underline"
               >
-                <Typography.Text className="text-xs leading-4 text-[#FAFAFA] font-normal">
+                <Typography.Text className="text-xs leading-4 text-[#725E19] font-semibold">
                   {t(I18nKey.TASKS$NO_GIT_PROVIDERS_CTA)}
                 </Typography.Text>
               </Link>
             </div>
           ) : (
-            <Typography.Text className="text-xs leading-4 text-white font-medium px-[14px]">
+            <Typography.Text className="text-xs leading-5 text-[#6F7680] font-medium px-2 pb-4">
               {t(I18nKey.TASKS$NO_TASKS_AVAILABLE)}
             </Typography.Text>
           ))}
@@ -124,7 +124,7 @@ export function TaskSuggestions({ filterFor }: TaskSuggestionsProps) {
           <button
             type="button"
             onClick={handleToggle}
-            className="text-xs leading-4 text-[#FAFAFA] font-normal cursor-pointer hover:underline"
+            className="text-xs leading-4 text-[#725E19] font-semibold cursor-pointer hover:underline"
           >
             {isExpanded
               ? t(I18nKey.COMMON$VIEW_LESS)

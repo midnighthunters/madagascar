@@ -40,8 +40,8 @@ export function GitControlBarRepoButton({
         target="_blank"
         rel="noopener noreferrer"
         className={cn(
-          "group flex flex-row items-center justify-between gap-2 px-3 py-1.5 rounded-full flex-1 truncate relative",
-          "backdrop-blur-xl bg-white/10 border border-white/20 hover:bg-white/15 cursor-pointer shadow-sm transition-all duration-200",
+          "group flex flex-row items-center justify-between gap-2 px-3 py-1.5 rounded-xl flex-1 truncate relative",
+          "bg-white border border-[#D8DCE2] hover:bg-[#F3F4F6] cursor-pointer shadow-[0_2px_0_#DFE2E7] transition-all duration-150",
         )}
       >
         <div className="w-3.5 h-3.5 flex items-center justify-center flex-shrink-0">
@@ -51,7 +51,7 @@ export function GitControlBarRepoButton({
           />
         </div>
         <div
-          className="font-medium text-white text-xs leading-5 truncate flex-1 min-w-0"
+          className="font-medium text-[#363B42] text-xs leading-5 truncate flex-1 min-w-0"
           title={buttonText}
         >
           {buttonText}
@@ -67,18 +67,18 @@ export function GitControlBarRepoButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "group flex flex-row items-center justify-between gap-2 px-3 py-1.5 rounded-full flex-1 truncate relative min-w-[170px]",
-        "backdrop-blur-xl bg-white/10 border border-white/20 shadow-sm transition-all duration-200",
+        "group flex flex-row items-center justify-between gap-2 px-3 py-1.5 rounded-xl flex-1 truncate relative min-w-[170px]",
+        "bg-white border border-[#D8DCE2] shadow-[0_2px_0_#DFE2E7] transition-all duration-150",
         disabled
           ? "cursor-not-allowed opacity-50"
-          : "cursor-pointer hover:bg-white/15 hover:border-amber-400/40",
+          : "cursor-pointer hover:bg-[#F3F4F6] hover:border-[#C7AA42]",
       )}
     >
-      <div className="w-3.5 h-3.5 flex items-center justify-center flex-shrink-0 text-amber-300">
+      <div className="w-3.5 h-3.5 flex items-center justify-center flex-shrink-0 text-[#725E19]">
         <RepoForkedIcon width={13} height={13} />
       </div>
       <div
-        className="font-medium text-white text-xs leading-5 truncate flex-1 min-w-0"
+        className="font-medium text-[#363B42] text-xs leading-5 truncate flex-1 min-w-0"
         title={buttonText}
       >
         {buttonText}

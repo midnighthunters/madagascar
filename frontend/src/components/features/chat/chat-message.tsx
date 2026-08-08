@@ -52,19 +52,19 @@ export function ChatMessage({
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       className={cn(
-        "relative w-fit max-w-full last:mb-4 transition-all duration-300",
+        "relative w-fit max-w-full last:mb-4 transition-all duration-150",
         "flex flex-col gap-2",
         type === "user" &&
-          "p-4 rounded-[22px] rounded-br-md backdrop-blur-xl bg-blue-600/20 border border-blue-400/30 text-white self-end shadow-lg",
+          "p-4 rounded-[20px] rounded-br-md bg-[#EEF4FA] border border-[#CCDEEF] text-[#263746] self-end shadow-[0_3px_0_#D7E3EF]",
         type === "agent" &&
-          "mt-4 p-4 rounded-[22px] rounded-bl-md backdrop-blur-2xl bg-neutral-900/65 border border-white/10 w-full max-w-full text-slate-100 shadow-xl",
+          "mt-4 p-4 rounded-[20px] rounded-bl-md bg-white border border-[#E7E9ED] w-full max-w-full text-[#272B30] shadow-[0_3px_0_#DFE2E7]",
         isFromPlanningAgent &&
           type === "agent" &&
-          "border-amber-400/50 bg-amber-950/20 p-4 mt-2 shadow-[0_0_20px_rgba(245,158,11,0.15)]",
+          "border-[#D7BC58] bg-[#FFFCF0] p-4 mt-2 shadow-[0_3px_0_#E4D48E]",
       )}
     >
       {/* Header Avatar Badge */}
-      <div className="flex items-center gap-2 mb-1 border-b border-white/10 pb-2">
+      <div className="flex items-center gap-2 mb-1 border-b border-[#E7E9ED] pb-2">
         {type === "agent" ? (
           <>
             <AnimalAvatar
@@ -73,15 +73,15 @@ export function ChatMessage({
               status={isFromPlanningAgent ? "thinking" : "lead"}
             />
             {/* eslint-disable-next-line i18next/no-literal-string */}
-            <span className="text-xs font-semibold text-amber-300">
-              {isFromPlanningAgent ? "Planner Penguin" : "Wise Owl Lead AI"}
+            <span className="text-xs font-semibold text-[#725E19]">
+              {isFromPlanningAgent ? "Planner agent" : "Lead agent"}
             </span>
           </>
         ) : (
           <>
             <AnimalAvatar animal="dog" size="xs" showBadge={false} />
             {/* eslint-disable-next-line i18next/no-literal-string */}
-            <span className="text-xs font-semibold text-blue-300">User</span>
+            <span className="text-xs font-semibold text-[#3478C5]">User</span>
           </>
         )}
       </div>
@@ -99,7 +99,7 @@ export function ChatMessage({
               <button
                 type="button"
                 onClick={action.onClick}
-                className="p-1.5 rounded-full backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/20 text-white cursor-pointer"
+                className="p-1.5 rounded-lg bg-white border border-[#D8DCE2] hover:bg-[#F3F4F6] text-[#555C65] cursor-pointer shadow-sm"
                 aria-label={action.tooltip}
               >
                 {action.icon}
@@ -110,7 +110,7 @@ export function ChatMessage({
               key={index}
               type="button"
               onClick={action.onClick}
-              className="p-1.5 rounded-full backdrop-blur-md bg-white/10 border border-white/20 hover:bg-white/20 text-white cursor-pointer"
+              className="p-1.5 rounded-lg bg-white border border-[#D8DCE2] hover:bg-[#F3F4F6] text-[#555C65] cursor-pointer shadow-sm"
               aria-label={`Action ${index + 1}`}
             >
               {action.icon}

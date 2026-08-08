@@ -39,7 +39,7 @@ export function ConversationMain() {
       <div
         ref={containerRef}
         className={cn(
-          "flex flex-1 overflow-hidden",
+          "flex flex-1 overflow-hidden rounded-[18px]",
           isMobile ? "flex-col" : "transition-all duration-300 ease-in-out",
         )}
         style={
@@ -51,7 +51,7 @@ export function ConversationMain() {
         {/* Chat Panel - always mounted, styled differently for mobile/desktop */}
         <div
           className={cn(
-            "flex flex-col bg-base overflow-hidden",
+            "flex flex-col bg-white overflow-hidden border-[1.5px] border-[#E7E9ED] rounded-[18px] shadow-[0_4px_0_#DFE2E7]",
             isMobile
               ? getMobileChatPanelClass(isRightPanelShown)
               : "transition-all duration-300 ease-in-out",
@@ -78,7 +78,7 @@ export function ConversationMain() {
         {/* Tab Content Panel - always mounted, styled as bottom sheet (mobile) or side panel (desktop) */}
         <div
           className={cn(
-            "transition-all duration-300 ease-in-out overflow-hidden",
+            "transition-all duration-300 ease-in-out overflow-hidden rounded-[18px]",
             isMobile
               ? cn(
                   "absolute bottom-4 left-0 right-0 top-160",
@@ -101,7 +101,7 @@ export function ConversationMain() {
             className={cn(
               isMobile
                 ? "h-full flex flex-col gap-3 pb-2 md:pb-0 pt-2"
-                : "flex flex-col flex-1 gap-3 min-w-max h-full",
+                : "flex flex-col flex-1 min-w-max h-full",
             )}
           >
             <ConversationTabContent />

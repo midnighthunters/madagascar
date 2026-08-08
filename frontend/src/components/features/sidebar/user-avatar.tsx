@@ -16,8 +16,9 @@ export function UserAvatar({ avatarUrl, isLoading }: UserAvatarProps) {
     <button
       type="button"
       data-testid="user-avatar"
+      aria-label={t("SETTINGS$ALL")}
       className={cn(
-        "w-9 h-9 rounded-2xl flex items-center justify-center cursor-pointer transition-transform hover:scale-105 backdrop-blur-xl bg-white/10 border border-white/20 shadow-md p-0.5",
+        "w-9 h-9 rounded-xl flex items-center justify-center cursor-pointer transition-[transform,box-shadow] hover:-translate-y-0.5 bg-white border border-[#D8DCE2] shadow-[0_2px_0_#DFE2E7] p-0.5",
         isLoading && "bg-transparent",
       )}
     >

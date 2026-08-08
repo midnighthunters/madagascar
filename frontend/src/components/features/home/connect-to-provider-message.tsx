@@ -13,12 +13,16 @@ export function ConnectToProviderMessage() {
     <div className="flex flex-col gap-4 justify-between h-full">
       <div className="flex flex-col gap-2.5">
         <div className="flex items-center gap-[10px]">
-          <RepoForkedIcon width={24} height={24} />
-          <span className="leading-5 font-bold text-base text-white">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E7E9ED] bg-[#F7F8FA] text-[#725E19]">
+            <RepoForkedIcon width={18} height={18} />
+          </span>
+          <span className="leading-5 font-bold text-base text-[#272B30]">
             {t(I18nKey.COMMON$OPEN_REPOSITORY)}
           </span>
         </div>
-        <p>{t("HOME$CONNECT_PROVIDER_MESSAGE")}</p>
+        <p className="text-sm leading-6 text-[#6F7680]">
+          {t("HOME$CONNECT_PROVIDER_MESSAGE")}
+        </p>
       </div>
       <Link
         data-testid="navigate-to-settings-button"

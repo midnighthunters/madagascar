@@ -15,7 +15,7 @@ export function RepoConnector({ onRepoSelection }: RepoConnectorProps) {
   return (
     <section
       data-testid="repo-connector"
-      className="w-full flex flex-col gap-6 rounded-[12px] p-[20px] border border-[#727987] bg-[#26282D] min-h-[263.5px] relative"
+      className="w-full flex-1 flex flex-col rounded-[22px] p-5 sm:p-6 border-[1.5px] border-[#E7E9ED] bg-white min-h-[300px] relative shadow-[0_4px_0_#DFE2E7,0_8px_20px_rgba(20,30,50,0.04)]"
     >
       {!providersAreSet && <ConnectToProviderMessage />}
       {providersAreSet && (

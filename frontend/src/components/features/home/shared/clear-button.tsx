@@ -20,7 +20,7 @@ export function ClearButton({
       }}
       disabled={disabled}
       className={cn(
-        "p-1 text-[#fff]",
+        "p-1 text-[#6F7680] hover:text-[#272B30] rounded-lg",
         "cursor-pointer disabled:cursor-not-allowed disabled:opacity-60",
       )}
       type="button"
