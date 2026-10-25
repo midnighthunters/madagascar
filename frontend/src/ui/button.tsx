@@ -26,7 +26,8 @@ export const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
 }
@@ -47,10 +48,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => (
     <button
       ref={ref}
+      // eslint-disable-next-line react/button-has-type
       type={type}
       className={cn(buttonVariants({ variant, size }), className)}
       disabled={disabled || isLoading}
       aria-busy={isLoading || undefined}
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     >
       {isLoading && <span className="md-button-spinner" aria-hidden="true" />}

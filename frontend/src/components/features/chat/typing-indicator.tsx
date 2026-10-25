@@ -13,7 +13,10 @@ export function TypingIndicator() {
       <span className="text-xs font-medium text-ink-secondary">
         Lead agent working
       </span>
-      <span className="size-1.5 rounded-full bg-status-warning" aria-hidden="true" />
+      <span
+        className="size-1.5 rounded-full bg-status-warning"
+        aria-hidden="true"
+      />
     </div>
   );
 }

@@ -13,10 +13,7 @@ describe("useTheme", () => {
     document.documentElement.removeAttribute("data-theme");
     document.documentElement.style.colorScheme = "";
     resetThemeStoreForTests();
-    vi.stubGlobal(
-      "matchMedia",
-      vi.fn().mockReturnValue({ matches: false }),
-    );
+    vi.stubGlobal("matchMedia", vi.fn().mockReturnValue({ matches: false }));
   });
 
   afterEach(() => {

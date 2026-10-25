@@ -77,7 +77,7 @@ function AcpModelMenu({
             <div
               className={cn(
                 "flex items-center justify-between gap-2 p-2 rounded",
-                isActive ? "bg-[#5C5D62]" : "hover:bg-[#5C5D62]",
+                isActive ? "bg-action-soft" : "hover:bg-surface-muted",
               )}
             >
               <span className="truncate text-sm">{model.label}</span>
@@ -188,15 +188,15 @@ export function SwitchAcpModelButton() {
         title={currentModelId ?? undefined}
         aria-haspopup="menu"
         aria-expanded={menuOpen}
-        className="flex items-center gap-1 border border-[#4B505F] rounded-[100px] transition-opacity cursor-pointer hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed pl-2 max-w-[200px]"
+        className="flex items-center gap-1 border border-line rounded-xl bg-surface-raised text-ink-secondary transition-opacity cursor-pointer hover:bg-surface-muted disabled:opacity-50 disabled:cursor-not-allowed pl-2 max-w-[200px]"
       >
-        <span className="text-white text-2.75 not-italic font-normal leading-5 truncate">
+        <span className="text-inherit text-2.75 not-italic font-normal leading-5 truncate">
           {currentLabel}
         </span>
         <ChevronDownSmallIcon
           width={24}
           height={24}
-          color="#ffffff"
+          color="currentColor"
           className="shrink-0"
         />
       </button>

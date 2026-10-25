@@ -34,9 +34,7 @@ export function ConversationTabNav({
         isActive
           ? "hover:text-action hover:bg-action-soft"
           : "hover:text-ink hover:bg-surface-muted hover:border-line",
-        isActive
-          ? "focus-within:text-action"
-          : "focus-within:text-ink",
+        isActive ? "focus-within:text-action" : "focus-within:text-ink",
         className,
       )}
     >

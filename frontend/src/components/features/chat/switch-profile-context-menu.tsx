@@ -84,7 +84,7 @@ export function SwitchProfileContextMenu({
               title={profile.model ?? undefined}
               className={cn(
                 "flex flex-col gap-0.5 p-2 rounded",
-                isActive ? "bg-[#5C5D62]" : "hover:bg-[#5C5D62]",
+                isActive ? "bg-action-soft" : "hover:bg-surface-muted",
               )}
             >
               <div className="flex items-center justify-between gap-2">

@@ -49,7 +49,8 @@ export function ChatMessage({
           "rounded-[20px] rounded-br-[6px] bg-user-bubble text-ink-inverse shadow-[0_1px_2px_var(--md-shadow-color)]",
         !isUser &&
           "rounded-[20px] rounded-bl-[6px] border border-line bg-assistant-bubble text-ink shadow-[var(--md-shadow-card)]",
-        !isUser && isFromPlanningAgent &&
+        !isUser &&
+          isFromPlanningAgent &&
           "border-[var(--md-planning-border)] bg-planning-bubble",
       )}
     >
@@ -60,7 +61,11 @@ export function ChatMessage({
       )}
 
       <div
-        className={cn("absolute -top-3 z-20 items-center gap-1", isUser ? "-left-3" : "-right-3", !isHovering ? "hidden" : "flex")}
+        className={cn(
+          "absolute -top-3 z-20 items-center gap-1",
+          isUser ? "-left-3" : "-right-3",
+          !isHovering ? "hidden" : "flex",
+        )}
       >
         {actions?.map((action, index) => {
           const actionButton = (
@@ -76,10 +81,16 @@ export function ChatMessage({
             </Button>
           );
           return action.tooltip ? (
-            <StyledTooltip key={action.tooltip} content={action.tooltip} placement="top">
+            <StyledTooltip
+              key={action.tooltip}
+              content={action.tooltip}
+              placement="top"
+            >
               {actionButton}
             </StyledTooltip>
-          ) : actionButton;
+          ) : (
+            actionButton
+          );
         })}
         <CopyToClipboardButton
           isHidden={!isHovering}

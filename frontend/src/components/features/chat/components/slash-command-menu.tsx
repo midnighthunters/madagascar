@@ -97,7 +97,7 @@ function SlashCommandMenuItem({
       type="button"
       className={cn(
         "w-full px-3 py-2.5 text-left transition-colors",
-        isSelected ? "bg-[#383b45]" : "hover:bg-[#2a2d37]",
+        isSelected ? "bg-action-soft" : "hover:bg-surface-muted",
       )}
       onMouseDown={(e) => {
         // Use mouseDown instead of click to fire before input blur
@@ -107,7 +107,7 @@ function SlashCommandMenuItem({
     >
       <Text className="font-semibold">{item.command}</Text>
       {description && (
-        <Text className="text-xs text-[#9ca3af] mt-0.5 truncate block">
+        <Text className="text-xs text-ink-muted mt-0.5 truncate block">
           {description}
         </Text>
       )}
@@ -148,10 +148,10 @@ export function SlashCommandMenu({
     <div
       role="listbox"
       aria-label={t("CHAT_INTERFACE$COMMANDS")}
-      className="absolute bottom-full left-0 w-full mb-1 bg-[#1e2028] border border-[#383b45] rounded-lg shadow-lg max-h-[300px] overflow-y-auto custom-scrollbar z-50"
+      className="absolute bottom-full left-0 z-50 mb-1 max-h-[300px] w-full overflow-y-auto rounded-xl border border-line bg-surface-raised text-ink shadow-[var(--md-shadow-card)] custom-scrollbar"
       data-testid="slash-command-menu"
     >
-      <div className="px-3 py-2 text-xs text-[#9ca3af] border-b border-[#383b45]">
+      <div className="px-3 py-2 text-xs text-ink-muted border-b border-line">
         {t("CHAT_INTERFACE$COMMANDS")}
       </div>
       {items.map((item, index) => (

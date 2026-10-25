@@ -86,21 +86,21 @@ export function SwitchProfileButton() {
         title={activeProfileModel ?? undefined}
         aria-haspopup="menu"
         aria-expanded={contextMenuOpen}
-        className="flex items-center gap-1 border border-[#4B505F] rounded-[100px] transition-opacity cursor-pointer hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed pl-2 max-w-[200px]"
+        className="flex items-center gap-1 border border-line rounded-xl bg-surface-raised text-ink-secondary transition-opacity cursor-pointer hover:bg-surface-muted disabled:opacity-50 disabled:cursor-not-allowed pl-2 max-w-[200px]"
       >
         <CircuitIcon
           width={16}
           height={16}
-          color="#ffffff"
+          color="currentColor"
           className="shrink-0"
         />
-        <Typography.Text className="text-white text-2.75 not-italic font-normal leading-5 truncate">
+        <Typography.Text className="text-inherit text-2.75 not-italic font-normal leading-5 truncate">
           {activeProfileName ?? t(I18nKey.LLM$SELECT_MODEL_PLACEHOLDER)}
         </Typography.Text>
         <ChevronDownSmallIcon
           width={24}
           height={24}
-          color="#ffffff"
+          color="currentColor"
           className="shrink-0"
         />
       </button>

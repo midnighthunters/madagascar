@@ -28,7 +28,7 @@ export function ErrorMessageBanner({
 
   return (
     <div
-      className="w-full rounded-lg p-2 border border-[#FF0006] bg-[#4A0709] flex gap-2 items-start text-white"
+      className="w-full rounded-xl p-2 border border-status-danger bg-status-danger-soft flex gap-2 items-start text-ink"
       data-testid="error-message-banner"
     >
       <div className="min-w-0 flex-1">

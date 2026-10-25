@@ -33,8 +33,8 @@ export function AdminDashboardButton() {
       className={cn(
         "flex items-center justify-center w-[34px] h-[34px] rounded-lg transition-colors",
         isActive
-          ? "bg-[#262626] text-white"
-          : "text-[#8C8C8C] hover:text-white hover:bg-[#1E1E1E]",
+          ? "bg-action-soft text-action"
+          : "text-ink-secondary hover:text-ink hover:bg-surface-muted",
       )}
       title="Usage & Monitoring"
       aria-label="Usage & Monitoring"

@@ -144,8 +144,8 @@ export function FileDiffViewer({ path, type }: FileDiffViewerProps) {
           "editor.foreground": color("--md-text"),
           "editorWidget.background": color("--md-editor-raised"),
           "editorWidget.border": color("--md-border"),
-          "diffEditor.insertedLineBackground": `${withoutHash(color("--md-diff-added"))}AA`,
-          "diffEditor.removedLineBackground": `${withoutHash(color("--md-diff-removed"))}AA`,
+          "diffEditor.insertedLineBackground": `#${withoutHash(color("--md-diff-added"))}AA`,
+          "diffEditor.removedLineBackground": `#${withoutHash(color("--md-diff-removed"))}AA`,
           "diffEditor.border": color("--md-border-strong"),
           "editorUnnecessaryCode.border": "#00000000",
         },
@@ -245,7 +245,13 @@ export function FileDiffViewer({ path, type }: FileDiffViewerProps) {
               ))}
             </span>
           )}
-          <Button data-testid="collapse" type="button" variant="ghost" size="icon" className="size-7">
+          <Button
+            data-testid="collapse"
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="size-7"
+          >
             <ChevronUp
               className={cn(
                 "w-4 h-4 transition-transform",

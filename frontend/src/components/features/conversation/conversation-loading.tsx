@@ -13,12 +13,12 @@ export function ConversationLoading({ className }: ConversationLoadingProps) {
   return (
     <div
       className={cn(
-        "bg-[#25272D] flex flex-col items-center justify-center h-full w-full",
+        "bg-editor flex flex-col items-center justify-center h-full w-full",
         className,
       )}
     >
       <LoaderCircle className="animate-spin w-16 h-16" color="white" />
-      <span className="text-2xl font-normal leading-5 text-white p-4">
+      <span className="text-2xl font-normal leading-5 text-ink p-4">
         {t(I18nKey.HOME$LOADING)}
       </span>
     </div>

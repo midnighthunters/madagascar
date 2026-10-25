@@ -29,7 +29,6 @@ export function Code({
     if (!isMultiline) {
       return (
         <code
-          className={className}
           className={`${className || ""} rounded border border-line bg-[var(--md-code-bg)] px-1.5 py-0.5 text-[var(--md-code-text)]`}
         >
           {children}
@@ -39,9 +38,7 @@ export function Code({
 
     return (
       <CopyableContentWrapper text={codeString}>
-        <pre
-          className="overflow-auto rounded-lg border border-line bg-[var(--md-code-bg)] p-4 text-[var(--md-code-text)]"
-        >
+        <pre className="overflow-auto rounded-lg border border-line bg-[var(--md-code-bg)] p-4 text-[var(--md-code-text)]">
           <code className={className}>{codeString}</code>
         </pre>
       </CopyableContentWrapper>
@@ -61,3 +58,6 @@ export function Code({
     </CopyableContentWrapper>
   );
 }
+
+// Backward-compatible export for existing tests and renderer extensions.
+export const code = Code;

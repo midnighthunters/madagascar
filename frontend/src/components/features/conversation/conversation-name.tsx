@@ -157,11 +157,11 @@ export function ConversationName() {
             onKeyUp={handleKeyUp}
             type="text"
             defaultValue={conversation.title || ""}
-            className="text-[#272B30] leading-5 bg-transparent border-none outline-none text-base font-semibold w-fit max-w-fit field-sizing-content"
+            className="text-ink leading-5 bg-transparent border-none outline-none text-base font-semibold w-fit max-w-fit field-sizing-content"
           />
         ) : (
           <div
-            className="text-[#272B30] leading-5 w-fit max-w-fit truncate font-semibold"
+            className="text-ink leading-5 w-fit max-w-fit truncate font-semibold"
             data-testid="conversation-name-title"
             onDoubleClick={handleDoubleClick}
             title={conversation.title || ""}
@@ -172,12 +172,12 @@ export function ConversationName() {
 
         {titleMode !== "edit" && agentChip && (
           <span
-            className="text-xs text-[#A3A3A3] max-w-[150px] flex items-center gap-1 overflow-hidden"
+            className="text-xs text-ink-muted max-w-[150px] flex items-center gap-1 overflow-hidden"
             title={agentChip.tooltip}
             data-testid="conversation-name-llm-model"
           >
             <AgentChipIcon kind={agentChip.kind} />
-            <Typography.Text className="text-xs text-[#A3A3A3] truncate">
+            <Typography.Text className="text-xs text-ink-muted truncate">
               {agentChip.text}
             </Typography.Text>
           </span>
@@ -185,7 +185,7 @@ export function ConversationName() {
 
         {titleMode !== "edit" && (
           <div className="relative flex items-center">
-            <EllipsisButton fill="#B1B9D3" onClick={handleEllipsisClick} />
+            <EllipsisButton fill="currentColor" onClick={handleEllipsisClick} />
             {contextMenuOpen && (
               <ConversationNameContextMenu
                 onClose={() => setContextMenuOpen(false)}

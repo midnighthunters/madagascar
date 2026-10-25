@@ -24,7 +24,10 @@ export function StyledTooltip({
       content={content}
       closeDelay={closeDelay}
       placement={placement}
-      className={cn("bg-white text-black", tooltipClassName)}
+      className={cn(
+        "border border-line bg-surface-raised text-ink shadow-[var(--md-shadow-card)]",
+        tooltipClassName,
+      )}
       showArrow={showArrow}
     >
       <div className="inline-flex">{children}</div>

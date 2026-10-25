@@ -30,6 +30,7 @@
   --color-assistant-bubble: var(--md-assistant-bubble);
   --color-planning-bubble: var(--md-planning-bubble);
   --color-editor: var(--md-editor);
+  --color-editor-raised: var(--md-editor-raised);
   --color-terminal: var(--md-terminal);
 
   /* COLOR VARIABLES */

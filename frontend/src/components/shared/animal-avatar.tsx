@@ -27,69 +27,46 @@ export interface AgentIdentityProps extends AnimalAvatarProps {
   align?: "start" | "center";
 }
 
-export const ANIMAL_MAP: Record<
-  AnimalType,
-  { name: string; title: string; color: string; bgGlow: string }
-> = {
+export const ANIMAL_MAP: Record<AnimalType, { name: string; title: string }> = {
   owl: {
     name: "Owl agent",
     title: "Lead architect",
-    color: "#F59E0B",
-    bgGlow: "rgba(245, 158, 11, 0.3)",
   },
   dog: {
     name: "Dog agent",
     title: "Code engineer",
-    color: "#3B82F6",
-    bgGlow: "rgba(59, 130, 246, 0.3)",
   },
   monkey: {
     name: "Monkey agent",
     title: "UI inspector",
-    color: "#10B981",
-    bgGlow: "rgba(16, 185, 129, 0.3)",
   },
   rabbit: {
     name: "Rabbit agent",
     title: "Task executor",
-    color: "#EC4899",
-    bgGlow: "rgba(236, 72, 153, 0.3)",
   },
   penguin: {
     name: "Penguin agent",
     title: "Planner",
-    color: "#06B6D4",
-    bgGlow: "rgba(6, 182, 212, 0.3)",
   },
   platypus: {
     name: "Platypus agent",
     title: "Researcher",
-    color: "#8B5CF6",
-    bgGlow: "rgba(139, 92, 246, 0.3)",
   },
   mouse: {
     name: "Mouse agent",
     title: "Terminal operator",
-    color: "#64748B",
-    bgGlow: "rgba(100, 116, 139, 0.3)",
   },
   yellow: {
     name: "Yellow agent",
     title: "Assistant",
-    color: "#EAB308",
-    bgGlow: "rgba(234, 179, 8, 0.3)",
   },
   cow: {
     name: "Cow agent",
     title: "System guard",
-    color: "#14B8A6",
-    bgGlow: "rgba(20, 184, 166, 0.3)",
   },
   pig: {
     name: "Pig agent",
     title: "Build engineer",
-    color: "#F43F5E",
-    bgGlow: "rgba(244, 63, 94, 0.3)",
   },
 };
 
@@ -190,6 +167,8 @@ export function AgentIdentity({
     <div
       className={`inline-flex min-w-0 items-center gap-3 ${align === "center" ? "text-center" : "text-left"}`}
     >
+      {/* Stable avatar composition forwards the public avatar contract. */}
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <AnimalAvatar animal={animal} {...avatarProps} />
       <div className="min-w-0">
         <div className="truncate text-sm font-semibold text-ink">

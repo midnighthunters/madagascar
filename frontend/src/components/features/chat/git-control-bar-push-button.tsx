@@ -35,17 +35,17 @@ export function GitControlBarPushButton({
       onClick={handlePushClick}
       disabled={!isButtonEnabled}
       className={cn(
-        "flex flex-row gap-1 items-center justify-center px-2 py-1 rounded-xl border w-[77px] min-w-[77px] shadow-[0_2px_0_#DFE2E7]",
+        "md-button flex flex-row gap-1 items-center justify-center px-2 py-1 rounded-xl border w-[77px] min-w-[77px] shadow-[var(--md-shadow-control)]",
         isButtonEnabled
-          ? "bg-white border-[#D8DCE2] hover:bg-[#F3F4F6] cursor-pointer"
-          : "bg-[#F0F2F5] border-[#E7E9ED] cursor-not-allowed",
+          ? "bg-surface-raised border-line-strong hover:bg-surface-muted cursor-pointer"
+          : "bg-surface-muted border-line cursor-not-allowed",
       )}
     >
       <div className="w-3 h-3 flex items-center justify-center">
-        <ArrowUpIcon width={12} height={12} color="#6F7680" />
+        <ArrowUpIcon width={12} height={12} color="currentColor" />
       </div>
       <div
-        className="font-medium text-[#555C65] text-xs leading-5 max-w-[77px] truncate"
+        className="font-medium text-ink-secondary text-xs leading-5 max-w-[77px] truncate"
         title={t(I18nKey.COMMON$PUSH)}
       >
         {t(I18nKey.COMMON$PUSH)}

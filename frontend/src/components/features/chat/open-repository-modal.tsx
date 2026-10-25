@@ -113,7 +113,7 @@ export function OpenRepositoryModal({
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-xs text-white/80 font-medium leading-[22px]">
+            <span className="text-xs text-ink-inverse/80 font-medium leading-[22px]">
               {t(I18nKey.CONVERSATION$SELECT_OR_INSERT_LINK)}
             </span>
             {providers.length > 1 && (

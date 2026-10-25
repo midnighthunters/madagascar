@@ -7,7 +7,8 @@ const cardVariants = cva(
   {
     variants: {
       theme: {
-        default: "relative bg-surface border-line rounded-[18px] md-surface-card",
+        default:
+          "relative bg-surface border-line rounded-[18px] md-surface-card",
         outlined:
           "relative bg-surface border-line-strong rounded-[18px] shadow-[var(--md-shadow-control)]",
         dark: "relative bg-editor border-line rounded-[18px] text-ink shadow-[var(--md-shadow-card)]",

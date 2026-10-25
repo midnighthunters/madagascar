@@ -82,10 +82,10 @@ export function ConversationTabsContextMenu({
           <ContextMenuListItem
             key={tab}
             onClick={() => handleTabClick(tab)}
-            className="flex items-center gap-2 p-2 hover:bg-[#F3F4F6] rounded-lg h-[34px] text-[#555C65]"
+            className="flex items-center gap-2 p-2 hover:bg-surface-muted rounded-lg h-[34px] text-ink-secondary"
           >
             <Icon className="w-4 h-4" />
-            <span className="text-[#363B42] text-sm">{t(i18nKey)}</span>
+            <span className="text-ink-secondary text-sm">{t(i18nKey)}</span>
             {pinned ? (
               <PillFillIcon className="w-7 h-7 ml-auto -mr-[5px]" />
             ) : (

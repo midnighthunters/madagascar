@@ -20,9 +20,7 @@ export function ChatSendButton({
       size="icon"
       className={cn(
         "size-9 rounded-full",
-        disabled
-          ? "cursor-not-allowed"
-          : "cursor-pointer",
+        disabled ? "cursor-not-allowed" : "cursor-pointer",
         buttonClassName,
       )}
       data-name="arrow-up-circle-fill"
