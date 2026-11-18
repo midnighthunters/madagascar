@@ -3,7 +3,7 @@
 
 <img src="https://assets.madagascar.dev/logo-whitebackground.png" alt="Madagascar" width="340">
 
-# Madagascar Agent Canvas
+# Madagascar Agent
 
 ### The command center for autonomous software engineering.
 
